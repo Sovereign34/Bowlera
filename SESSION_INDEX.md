@@ -9,20 +9,19 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Ajan yürütme altyapısının 14/14 dosyası üretildi (nihai onay bekliyor —
-          detaylı içerik dökümü aşağıda GEÇMİŞ/ARŞİV bölümünde).
-          Oturum 1 kod üretimi tamamlandı: Next.js iskeleti + Header/Footer/Hero
-          (staggered başlık animasyonu + placeholder görsel) + testler.
-          Kullanıcı Codespaces üzerinden repoya push etti (commit 1ff9e52),
-          npm install + npm run dev başarıyla çalıştı ("Ready in 2.1s").
-          Port 3000 forward adresi bulundu (https://supreme-...app.github.dev).
-          Tarayıcıda görsel doğrulama YAPILMADI — kullanıcı linke tıkladı ama
-          sonucu paylaşmadan sohbeti kapattı.
-Faz:      Oturum 1 — Next.js Kurulumu (kod push edildi, görsel doğrulama bekliyor)
-Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış protokolü
-          (CORE.md §7.1) uygulanıyor.
-Çıktı:    bowlera-oturum1.zip GitHub'a push edildi (main dalı, commit 1ff9e52).
-          Sunucu Codespaces'te çalışır durumda bırakıldı.
+Görev:    Oturum 1 TAMAMLANDI. Kod push edildi (commit 1ff9e52), Codespaces'te
+          npm install + npm run dev başarılı çalıştı, site Vercel'e deploy edildi
+          (...-site.vercel.app) ve ekran görüntüsüyle GÖRSEL OLARAK doğrulandı:
+          Header (logo dahil), Footer (logo dahil), Hero (başlık + 2 CTA buton)
+          doğru render oluyor. Placeholder alanlar (kase fotoğrafı, şube bilgileri)
+          bilinçli olarak etiketli bırakılmış, sorun değil.
+          Ayrıca: logo dosyası (public/images/logo-bowlera.png) base64 yoluyla
+          Codespaces terminaline aktarılıp decode edildi, commit + push edildi
+          (commit 84b144f, ardından merge + push: d4eb85d..5806160).
+Faz:      Oturum 1 — Next.js Kurulumu ✅ TAMAMLANDI. Oturum 2'ye geçilebilir.
+Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
+Çıktı:    Site canlıda ve doğrulanmış durumda. Repo: github.com/Sovereign34/Bowlera_site
+          (main dalı, HEAD: 5806160). Deploy: Vercel.
 ```
 
 ---
@@ -32,9 +31,9 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 | Alan | Değer |
 |---|---|
 | Son Session | 1 — 2026-07-17 |
-| Son Eylem | Oturum 1 kod push edildi, `npm install`+`npm run dev` başarılı, port 3000 forward linki bulundu |
-| Blocker | Yok — sadece görsel doğrulama (screenshot) bekleniyor |
-| Devam Noktası | Yeni sohbette önce `https://supreme-...app.github.dev` linkinin açtığı sayfanın ekran görüntüsü istenmeli — Header/Footer/Hero doğru render oluyor mu kontrol edilecek. Sorun yoksa Oturum 2'ye (Menü sayfası) geçilecek. |
+| Son Eylem | Görsel doğrulama tamamlandı (Vercel deploy üzerinden ekran görüntüsü), logo başarıyla push edildi |
+| Blocker | Yok |
+| Devam Noktası | Yeni sohbette doğrudan Oturum 2'ye (Menü sayfası + `menu-data.json`) başlanabilir |
 
 ---
 
@@ -43,15 +42,16 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 | Alan | Değer |
 |---|---|
 | Proje | Bowlera — Healthy Bowls |
-| Aktif Oturum | Oturum 1 — Next.js Kurulumu |
+| Aktif Oturum | Oturum 1 ✅ Tamamlandı → Oturum 2 başlıyor |
 | Toplam Session | 1 |
-| Sistem Durumu | 🟢 Kod push edildi, sunucu çalışıyor — görsel doğrulama bekliyor |
-| Deploy Durumu | ⬜ Belirlenmedi — Vercel muhtemel, kullanıcıyla netleştirilecek |
-| Next.js Proje İskeleti | ✅ Kuruldu, GitHub'a push edildi (main, commit 1ff9e52) |
+| Sistem Durumu | 🟢 Site canlı ve görsel olarak doğrulanmış |
+| Deploy Durumu | ✅ Vercel (`...-site.vercel.app`) |
+| Next.js Proje İskeleti | ✅ Kuruldu, GitHub'a push edildi (main, HEAD: 5806160) |
 | Repo | `github.com/Sovereign34/Bowlera_site` |
-| Codespace | Aktif — `npm run dev` port 3000'de çalışıyor |
+| Codespace | Aktif (workspace adı: Bowlera_si...) |
+| Logo | ✅ `public/images/logo-bowlera.png` push edildi, Header/Footer'da doğrulandı |
 | Menü Veri Kaynağı | ⬜ `menu-data.json` henüz üretilmedi — Oturum 2 |
-| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — Hero'da placeholder kullanıldı |
+| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — Hero'da placeholder kullanıldı ("Kase fotoğrafı yakında") |
 | Üçüncü Parti Anahtarları | ⬜ Adisyo/SepetTakip, WhatsApp, Twilio — henüz temin edilmedi, ayrı faz |
 
 ---
@@ -60,12 +60,12 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 
 | # | Öncelik | Açıklama | Oturum | Referans |
 |---|---|---|---|---|
-| 1 | 🔴 | Oturum 1 kodu tarayıcıda GÖRSEL OLARAK doğrulanmadı — sonraki sohbette ilk iş bu | Oturum 1 | — |
-| 2 | 🟡 | Deploy platformu netleşmedi | Oturum 1 | CORE.md §2 |
 | 3 | 🟡 | Gerçek menü/görsel verisi yok — Hero'da placeholder kullanıldı | Oturum 2 | MASTER_PLAN §8 |
 | 4 | 🟡 | Üçüncü parti API anahtarları temin edilmedi | Sonraki Faz | MASTER_PLAN §8 |
 | 5 | 🟢 | ARCHITECTURE.md §2.4 `calculateTotals`/`getTotals` isim tutarsızlığı — düzeltme bekliyor | Oturum 0 | DEPENDENCIES.md §1 |
 | 6 | 🟢 | `next-env.d.ts` ve `package-lock.json` Codespaces'te otomatik üretildi, henüz commit edilmedi (2 değişiklik) | Oturum 1 | — |
+
+> Kapatılan sorunlar: #1 (görsel doğrulama — tamamlandı), #2 (deploy platformu — Vercel olarak netleşti).
 
 ---
 
@@ -74,8 +74,8 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 | Oturum | İçerik | Durum |
 |---|---|---|
 | **Oturum 0** | Ajan altyapısı (14 dosya) | ✅ Üretildi — son onay bekliyor |
-| **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | 🟡 Kod push edildi — görsel doğrulama bekliyor |
-| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ⬜ Bekliyor |
+| **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı — görsel doğrulama yapıldı |
+| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ⬜ Sıradaki |
 | **Oturum 3** | Zustand store + BowlCustomizer (4 adım, masaüstü) | ⬜ Bekliyor |
 | **Oturum 4** | VisualPreview, mobil özelleştirici, sepet | ⬜ Bekliyor |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor |
@@ -113,9 +113,10 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 |---|---|---|---|
 | `app/layout.tsx`, `app/page.tsx`, `app/globals.css` | ✅ Üretildi | — | ✅ Push edildi |
 | `tailwind.config.ts`, `lib/fonts.ts` | ✅ Üretildi | — | ✅ Push edildi |
-| `components/layout/Header.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi |
-| `components/layout/Footer.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi |
-| `components/home/Hero.tsx` + alt bileşenler | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi |
+| `components/layout/Header.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
+| `components/layout/Footer.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
+| `components/home/Hero.tsx` + alt bileşenler | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
+| `public/images/logo-bowlera.png` | ✅ Eklendi (base64 → decode) | — | ✅ Push edildi — görsel doğrulandı |
 
 ---
 
@@ -123,10 +124,9 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | Çalışan sitenin ekran görüntüsüyle görsel doğrulama | 🔴 | ⬜ |
-| 2 | `next-env.d.ts` + `package-lock.json` değişikliklerini commit et | 🟡 | ⬜ |
-| 3 | ARCHITECTURE.md §2.4 isim düzeltmesi | 🟡 | ⬜ |
-| 4 | Oturum 2 — Menü sayfası + `menu-data.json` (placeholder) | 🔴 | ⬜ |
+| 1 | `next-env.d.ts` + `package-lock.json` değişikliklerini commit et | 🟡 | ⬜ |
+| 2 | ARCHITECTURE.md §2.4 isim düzeltmesi | 🟡 | ⬜ |
+| 3 | Oturum 2 — Menü sayfası + `menu-data.json` (placeholder) | 🔴 | ⬜ |
 
 ---
 
@@ -182,6 +182,23 @@ Gerekçe:  Kullanıcı başka bir sohbete geçeceğini bildirdi — kapanış pr
   çözüm/önleme formatında.
 - **CONFIG_SCHEMA.md** — `.env.local` şeması, ortam bazlı kapsam (dev/preview/production),
   `.env.local.example` şablonu, yeni değişken ekleme protokolü.
+
+### Oturum 1 — Görsel Doğrulama Süreci (Session 1)
+- Logo dosyası GitHub mobil arayüzünde binary drag-and-drop desteklenmediği için
+  base64 metne çevrilip Codespaces terminalinde `cat > ... << 'EOF'` heredoc yöntemiyle
+  aktarıldı. İlk iki denemede heredoc kapanış satırı (`'EOF'` tırnaklı yazılması) hatalı
+  olduğu için terminal takılı kaldı ve komutlar dosyanın içine metin olarak karıştı —
+  üçüncü denemede tırnaksız `EOF` ile düzgün kapatıldı, `base64 -d` hatasız tamamlandı.
+- İlk push denemesi yanlışlıkla NEXSUS (trading sistemi) reposuna yapılmıştı —
+  `git push` "rejected" hatası vermesi sayesinde uzak repoya hiçbir şey gitmedi;
+  `git reset HEAD~1` ile local commit geri alındı, dosya o repodan temizlendi.
+  Doğru Codespace (Bowlera_site) açılarak işlem baştan yapıldı.
+- Doğru repoda `git push` "rejected (fetch first)" hatası verdi (uzak repoda
+  Header.tsx/Footer.tsx'te local'de olmayan değişiklikler vardı) — `git pull --no-rebase`
+  ile merge yapıldı, ardından push başarılı oldu (d4eb85d..5806160).
+- Site Vercel'e deploy edildi, ekran görüntüsüyle doğrulandı: Header/Footer'da logo
+  doğru render oluyor, Hero başlık+CTA butonları çalışıyor, placeholder alanlar
+  ("Kase fotoğrafı yakında", "Şube bilgileri yakında Oturum 5'te") bilinçli ve etiketli.
 
 ---
 
