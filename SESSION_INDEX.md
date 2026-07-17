@@ -9,23 +9,25 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Session 1'de ajan yürütme sistemi kuruluyor. MASTER_PLAN.md (kullanıcının
-          Bowlera Master Teknik Referans v2.0 belgesi) proje köküne referans olarak
-          yerleştirildi. CORE.md üretildi ve onaylandı — session açılış protokolü,
-          proje kimliği, tetikleyici tablosu, dosya haritası, kritik tasarım/ürün
-          varsayımları tanımlandı. AGENT.md üretildi ve onaylandı — kod kalitesi
-          kuralları (Next.js/React'e uyarlanmış) + BSC (Bowlera Secure Code) 8
-          kural: XSS sanitizasyonu, secret yönetimi, girdi doğrulama, hata yönetimi,
-          sahte veri yasağı, sepet/customizer race condition koruması, üçüncü parti
-          rate limit, entegrasyon kopmasında graceful degradation. Şimdi bu dosya
-          (SESSION_INDEX.md) üretiliyor — çekirdek üçlü tamamlanıyor.
+Görev:    Çekirdek üçlü (CORE.md + AGENT.md + SESSION_INDEX.md) onaylandı.
+          Kullanıcı isteğiyle üretim temposu "üçer üçer" olarak değiştirildi.
+          İlk üçlü referans paketi üretildi: ARCHITECTURE.md (Next.js App
+          Router yapısı, modül kontratları — API route/store/component
+          interface'leri, BowlItem/CartItem veri modeli, deploy/performans/
+          rollback), DESIGN_SYSTEM.md (renk sistemi WCAG tablosu, logo
+          degrade sınırlı kullanım kuralı, tipografi, ikonografi, fotoğraf
+          direktifi, tam animasyon tablosu + erişilebilirlik kuralları),
+          CUSTOMIZER_SPEC.md ("Kâseni Yarat" tam kontratı — 4 adım state
+          makinesi, adım geçiş guard'ı, canlı fiyat/kalori hesaplama,
+          VisualPreview katmanlı CSS/SVG mantığı, mobil sticky çekmece UX,
+          BSC-6 race condition korumalı sepete ekleme).
 Faz:      Oturum 0 — Ajan Altyapısı Kurulumu (kod yazımı henüz başlamadı)
 Gerekçe:  Kullanıcı NEXUS_OS metodolojisini örnek alarak Bowlera'ya özgü ajan
-          yürütme dosyalarının sırayla (çekirdek önce, sonra referans dosyalar
-          tek tek onaylı) üretilmesini istedi. Çekirdek üçlü (CORE+AGENT+
-          SESSION_INDEX) bu sırada tamamlanıyor.
-Çıktı:    MASTER_PLAN.md yerleştirildi. CORE.md ve AGENT.md ONAYLANDI.
-          SESSION_INDEX.md üretim aşamasında — onay bekliyor.
+          yürütme dosyalarının üretilmesini istedi; onay temposu tek tek
+          dosyadan üçlü gruplara güncellendi.
+Çıktı:    MASTER_PLAN.md + CORE.md + AGENT.md + SESSION_INDEX.md ONAYLANDI.
+          ARCHITECTURE.md + DESIGN_SYSTEM.md + CUSTOMIZER_SPEC.md üretim
+          aşamasında — onay bekliyor.
 ```
 
 ---
@@ -93,9 +95,9 @@ Gerekçe:  Kullanıcı NEXUS_OS metodolojisini örnek alarak Bowlera'ya özgü a
 | AGENT.md | ✅ Onaylandı | Session 1 | v1.0 — Kod kalitesi kuralları + BSC modülü (8 güvenlik kuralı) |
 | SESSION_INDEX.md | 🟡 Üretim aşamasında | Session 1 | Bu dosya — onay bekliyor |
 | session_log.md | ⬜ Bekliyor | — | Çekirdek üçlü onaylandıktan sonra ilk blok açılacak |
-| ARCHITECTURE.md | ⬜ Bekliyor | — | Sırada — Next.js yapısı, komponent kontratları, veri modeli |
-| DESIGN_SYSTEM.md | ⬜ Bekliyor | — | Renk/tipografi/animasyon/fotoğraf standartları (MASTER_PLAN §4) |
-| CUSTOMIZER_SPEC.md | ⬜ Bekliyor | — | "Kâseni Yarat" akışı tam kontratı (MASTER_PLAN §3.3, §5.2) |
+| ARCHITECTURE.md | 🟡 Üretim aşamasında | Session 1 | v1.0 — Next.js yapısı, modül kontratları, veri modeli, deploy/rollback — onay bekliyor |
+| DESIGN_SYSTEM.md | 🟡 Üretim aşamasında | Session 1 | v1.0 — Renk/tipografi/animasyon/fotoğraf standartları (MASTER_PLAN §4) — onay bekliyor |
+| CUSTOMIZER_SPEC.md | 🟡 Üretim aşamasında | Session 1 | v1.0 — "Kâseni Yarat" akışı tam kontratı (MASTER_PLAN §3.3, §5.2) — onay bekliyor |
 | CONTENT_GUIDE.md | ⬜ Bekliyor | — | Marka sesi, SEO, JSON-LD (MASTER_PLAN §6, §7) |
 | INTEGRATIONS.md | ⬜ Bekliyor | — | Adisyo/SepetTakip, WhatsApp, QR menü (MASTER_PLAN §5.6) |
 | DEPENDENCIES.md | ⬜ Bekliyor | — | Dosya/bileşen bağımlılık haritası |
@@ -104,7 +106,8 @@ Gerekçe:  Kullanıcı NEXUS_OS metodolojisini örnek alarak Bowlera'ya özgü a
 | TEST_MATRIX.md | ⬜ Bekliyor | — | Modül bazlı test takibi |
 | CONFIG_SCHEMA.md | ⬜ Bekliyor | — | `.env.local` şeması |
 
-> **3/14 dosya tamamlandı** (MASTER_PLAN + CORE + AGENT). SESSION_INDEX onayla 4/14 olacak.
+> **4/14 dosya onaylandı** (MASTER_PLAN + CORE + AGENT + SESSION_INDEX). 3 dosya daha onay bekliyor
+> (ARCHITECTURE + DESIGN_SYSTEM + CUSTOMIZER_SPEC) — onaylanırsa 7/14 olacak.
 
 ---
 
@@ -122,13 +125,13 @@ Gerekçe:  Kullanıcı NEXUS_OS metodolojisini örnek alarak Bowlera'ya özgü a
 |---|---|---|---|
 | 1 | CORE.md üretimi | 🔴 | ✅ |
 | 2 | AGENT.md üretimi | 🔴 | ✅ |
-| 3 | SESSION_INDEX.md üretimi | 🔴 | 🟡 Onay bekliyor |
-| 4 | ARCHITECTURE.md üretimi | 🔴 | ⬜ |
-| 5 | DESIGN_SYSTEM.md üretimi | 🟠 | ⬜ |
-| 6 | CUSTOMIZER_SPEC.md üretimi | 🟠 | ⬜ |
-| 7 | CONTENT_GUIDE.md üretimi | 🟡 | ⬜ |
-| 8 | INTEGRATIONS.md üretimi | 🟡 | ⬜ |
-| 9 | DEPENDENCIES.md üretimi | 🟡 | ⬜ |
+| 3 | SESSION_INDEX.md üretimi | 🔴 | ✅ |
+| 4 | ARCHITECTURE.md üretimi | 🔴 | 🟡 Onay bekliyor |
+| 5 | DESIGN_SYSTEM.md üretimi | 🟠 | 🟡 Onay bekliyor |
+| 6 | CUSTOMIZER_SPEC.md üretimi | 🟠 | 🟡 Onay bekliyor |
+| 7 | CONTENT_GUIDE.md üretimi (sıradaki üçlü) | 🟡 | ⬜ |
+| 8 | INTEGRATIONS.md üretimi (sıradaki üçlü) | 🟡 | ⬜ |
+| 9 | DEPENDENCIES.md üretimi (sıradaki üçlü) | 🟡 | ⬜ |
 | 10 | FAILURE_PATTERNS.md üretimi | 🟡 | ⬜ |
 | 11 | ROADMAP.md üretimi | 🟠 | ⬜ |
 | 12 | TEST_MATRIX.md üretimi | 🟡 | ⬜ |
