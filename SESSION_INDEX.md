@@ -9,19 +9,21 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Oturum 1 TAMAMLANDI. Kod push edildi (commit 1ff9e52), Codespaces'te
-          npm install + npm run dev başarılı çalıştı, site Vercel'e deploy edildi
-          (...-site.vercel.app) ve ekran görüntüsüyle GÖRSEL OLARAK doğrulandı:
-          Header (logo dahil), Footer (logo dahil), Hero (başlık + 2 CTA buton)
-          doğru render oluyor. Placeholder alanlar (kase fotoğrafı, şube bilgileri)
-          bilinçli olarak etiketli bırakılmış, sorun değil.
-          Ayrıca: logo dosyası (public/images/logo-bowlera.png) base64 yoluyla
-          Codespaces terminaline aktarılıp decode edildi, commit + push edildi
-          (commit 84b144f, ardından merge + push: d4eb85d..5806160).
-Faz:      Oturum 1 — Next.js Kurulumu ✅ TAMAMLANDI. Oturum 2'ye geçilebilir.
-Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
-Çıktı:    Site canlıda ve doğrulanmış durumda. Repo: github.com/Sovereign34/Bowlera_site
-          (main dalı, HEAD: 5806160). Deploy: Vercel.
+Görev:    Oturum 2 DEVAM EDİYOR. MenuCard bileşen ailesi (MenuCard, MenuCardImage,
+          MenuCardBadges, MenuCardInfo) ve types/index.ts (BowlItem/CartItem) ile
+          menu-data.json üretildi, test edildi, repoya push edildi. ANCAK bu
+          bileşenler henüz hiçbir sayfaya bağlanmadı — app/menu/page.tsx yok,
+          CategoryNav.tsx ve FilterPanel.tsx henüz yazılmadı. Vercel deploy'unda
+          hâlâ sadece Oturum 1'in Hero sayfası görünüyor, bu BEKLENEN bir durum.
+Faz:      Oturum 2 — Menü sayfası, filtreleme, MenuCard, statik menü verisi.
+          Alt görev tamamlandı: MenuCard bileşen ailesi + testler (13/13 ✅).
+          Kalan: app/menu/page.tsx + CategoryNav.tsx + FilterPanel.tsx.
+Gerekçe:  MenuCard container dosyasında yanlış içerik commit edilmiş bulundu ve
+          düzeltildi; ardından test altyapısında npm peer-dependency çakışması
+          bulunup çözüldü. Şimdi bileşenler doğrulanmış durumda, sayfaya
+          bağlanmayı bekliyor.
+Çıktı:    Repo: github.com/Sovereign34/Bowlera_site (main dalı). Deploy: Vercel
+          (görsel olarak henüz değişmedi — beklenen, çünkü sayfa bağlantısı yapılmadı).
 ```
 
 ---
@@ -30,10 +32,10 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 
 | Alan | Değer |
 |---|---|
-| Son Session | 1 — 2026-07-17 |
-| Son Eylem | Görsel doğrulama tamamlandı (Vercel deploy üzerinden ekran görüntüsü), logo başarıyla push edildi |
-| Blocker | Yok |
-| Devam Noktası | Yeni sohbette doğrudan Oturum 2'ye (Menü sayfası + `menu-data.json`) başlanabilir |
+| Son Session | 2 — 2026-07-17 |
+| Son Eylem | `npm test` → 13/13 test geçti (MenuCard, Hero, Footer, Header), `@vitejs/plugin-react@^4.3.0` sabitlendi |
+| Blocker | Yok — ancak `package.json`/`package-lock.json` değişikliğinin commit+push edildiği teyit edilmedi (kullanıcıya son adım olarak verildi) |
+| Devam Noktası | Yeni sohbette: (1) önce commit/push teyidi al, (2) sonra `app/menu/page.tsx` + `CategoryNav.tsx` + `FilterPanel.tsx` ile Oturum 2'yi tamamla |
 
 ---
 
@@ -42,16 +44,18 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 | Alan | Değer |
 |---|---|
 | Proje | Bowlera — Healthy Bowls |
-| Aktif Oturum | Oturum 1 ✅ Tamamlandı → Oturum 2 başlıyor |
-| Toplam Session | 1 |
-| Sistem Durumu | 🟢 Site canlı ve görsel olarak doğrulanmış |
-| Deploy Durumu | ✅ Vercel (`...-site.vercel.app`) |
-| Next.js Proje İskeleti | ✅ Kuruldu, GitHub'a push edildi (main, HEAD: 5806160) |
+| Aktif Oturum | Oturum 2 devam ediyor |
+| Toplam Session | 2 |
+| Sistem Durumu | 🟢 Test altyapısı sağlıklı, bileşenler doğrulanmış — 🟡 sayfa bağlantısı eksik |
+| Deploy Durumu | ✅ Vercel canlı (henüz Oturum 2 içeriği görünmüyor — beklenen) |
 | Repo | `github.com/Sovereign34/Bowlera_site` |
 | Codespace | Aktif (workspace adı: Bowlera_si...) |
-| Logo | ✅ `public/images/logo-bowlera.png` push edildi, Header/Footer'da doğrulandı |
-| Menü Veri Kaynağı | ⬜ `menu-data.json` henüz üretilmedi — Oturum 2 |
-| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — Hero'da placeholder kullanıldı ("Kase fotoğrafı yakında") |
+| Menü Veri Kaynağı | ✅ `lib/menu-data.json` üretildi (6 signature + 2 içecek, gerçek kalori/protein/fiyat) |
+| Veri Modeli | ✅ `types/index.ts` — `BowlItem`/`CartItem` ilk kez codify edildi |
+| MenuCard Bileşen Ailesi | ✅ `MenuCard.tsx` + `MenuCardImage/Badges/Info.tsx` — 13/13 test geçti |
+| Menü Sayfası | ⬜ `app/menu/page.tsx` henüz yazılmadı |
+| Kategori/Filtre UI | ⬜ `CategoryNav.tsx`, `FilterPanel.tsx` henüz yazılmadı |
+| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — placeholder kullanılıyor |
 | Üçüncü Parti Anahtarları | ⬜ Adisyo/SepetTakip, WhatsApp, Twilio — henüz temin edilmedi, ayrı faz |
 
 ---
@@ -60,12 +64,13 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 
 | # | Öncelik | Açıklama | Oturum | Referans |
 |---|---|---|---|---|
-| 3 | 🟡 | Gerçek menü/görsel verisi yok — Hero'da placeholder kullanıldı | Oturum 2 | MASTER_PLAN §8 |
 | 4 | 🟡 | Üçüncü parti API anahtarları temin edilmedi | Sonraki Faz | MASTER_PLAN §8 |
 | 5 | 🟢 | ARCHITECTURE.md §2.4 `calculateTotals`/`getTotals` isim tutarsızlığı — düzeltme bekliyor | Oturum 0 | DEPENDENCIES.md §1 |
-| 6 | 🟢 | `next-env.d.ts` ve `package-lock.json` Codespaces'te otomatik üretildi, henüz commit edilmedi (2 değişiklik) | Oturum 1 | — |
+| 6 | 🟢 | `next-env.d.ts` ve `package-lock.json` (Oturum 1'den kalan) commit edilmiş mi teyit edilmedi | Oturum 1 | — |
+| 7 | 🟡 | **Allergen gösterimi DESIGN_SYSTEM.md onayı bekliyor.** `MenuCard.tsx`'e geçici bir satırla (`İçerir: ...`) eklendi çünkü `allergens` alanı hiçbir alt bileşende render edilmiyordu — bu bir güvenlik/sağlık gap'iydi (alerjen bilgisi kullanıcıya hiç gösterilmiyordu). DESIGN_SYSTEM.md'de tanımlı bir stil/bileşen varsa ona göre değiştirilmeli. | Oturum 2 | DESIGN_SYSTEM.md §2 (doğrulanmadı) |
+| 8 | 🟡 | `package.json`/`package-lock.json`'daki `@vitejs/plugin-react@^4.3.0` sabitlemesinin commit+push edildiği teyit edilmedi (son mesajda kullanıcıya görev olarak verildi, sonucu görülmedi) | Oturum 2 | — |
 
-> Kapatılan sorunlar: #1 (görsel doğrulama — tamamlandı), #2 (deploy platformu — Vercel olarak netleşti).
+> Kapatılan sorunlar: #1 (görsel doğrulama), #2 (deploy platformu), #3 (MenuCard için menü verisi artık var — placeholder fotoğraf hâlâ geçerli, bkz. yeni #9 değil, aynı kapsamda kalıyor).
 
 ---
 
@@ -75,35 +80,11 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 |---|---|---|
 | **Oturum 0** | Ajan altyapısı (14 dosya) | ✅ Üretildi — son onay bekliyor |
 | **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı — görsel doğrulama yapıldı |
-| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ⬜ Sıradaki |
+| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | 🟡 Devam ediyor — MenuCard ailesi tamam, sayfa bağlantısı kaldı |
 | **Oturum 3** | Zustand store + BowlCustomizer (4 adım, masaüstü) | ⬜ Bekliyor |
 | **Oturum 4** | VisualPreview, mobil özelleştirici, sepet | ⬜ Bekliyor |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor |
 | **Oturum 5** | Hakkımızda, Şubeler, İletişim, SEO, son kontrol | ⬜ Bekliyor |
-
----
-
-## DOKÜMANTASYON DOSYA DURUMU
-
-| Dosya | Durum | Son Güncelleme | Notlar |
-|---|---|---|---|
-| MASTER_PLAN.md | ✅ Onaylandı | 11 Temmuz 2026 (v2.0) | Kullanıcının Bowlera Master Teknik Referans belgesi v2.0 |
-| CORE.md | ✅ Onaylandı | Session 1 | v1.0 — 11 bölüm |
-| AGENT.md | ✅ Onaylandı | Session 1 | v1.0 — Kod kalitesi kuralları + BSC (8 güvenlik kuralı) |
-| SESSION_INDEX.md | ✅ Onaylandı | Session 1 | Bu dosya |
-| session_log.md | ⬜ Bekliyor | — | Çekirdek üçlü onaylandıktan sonra ilk blok açılacak |
-| ARCHITECTURE.md | 🟡 Onay bekliyor | Session 1 | §2.4 isim düzeltmesi bekliyor (Açık Sorun #5) |
-| DESIGN_SYSTEM.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| CUSTOMIZER_SPEC.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| DEPENDENCIES.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| ROADMAP.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| TEST_MATRIX.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| CONTENT_GUIDE.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| INTEGRATIONS.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| FAILURE_PATTERNS.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-| CONFIG_SCHEMA.md | 🟡 Onay bekliyor | Session 1 | v1.0 |
-
-> **14/14 dosya üretildi**, 4/14 onaylı. İçerik detayları için aşağıdaki GEÇMİŞ/ARŞİV bölümüne bakınız.
 
 ---
 
@@ -113,10 +94,21 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 |---|---|---|---|
 | `app/layout.tsx`, `app/page.tsx`, `app/globals.css` | ✅ Üretildi | — | ✅ Push edildi |
 | `tailwind.config.ts`, `lib/fonts.ts` | ✅ Üretildi | — | ✅ Push edildi |
-| `components/layout/Header.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
-| `components/layout/Footer.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
-| `components/home/Hero.tsx` + alt bileşenler | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi — görsel doğrulandı |
+| `components/layout/Header.tsx` | ✅ Üretildi | ✅ 3 test geçti | ✅ Push edildi — görsel doğrulandı |
+| `components/layout/Footer.tsx` | ✅ Üretildi | ✅ 3 test geçti | ✅ Push edildi — görsel doğrulandı |
+| `components/home/Hero.tsx` + alt bileşenler | ✅ Üretildi | ✅ 3 test geçti | ✅ Push edildi — görsel doğrulandı |
 | `public/images/logo-bowlera.png` | ✅ Eklendi (base64 → decode) | — | ✅ Push edildi — görsel doğrulandı |
+| `types/index.ts` (BowlItem/CartItem) | ✅ Üretildi | — | ✅ Push edildi |
+| `lib/menu-data.json` | ✅ Üretildi (6 signature + 2 içecek) | — | ✅ Push edildi |
+| `components/menu/MenuCardImage.tsx` | ✅ Üretildi | ✅ dahil | ✅ Push edildi |
+| `components/menu/MenuCardBadges.tsx` | ✅ Üretildi | ✅ dahil | ✅ Push edildi |
+| `components/menu/MenuCardInfo.tsx` | ✅ Üretildi | ✅ dahil | ✅ Push edildi |
+| `components/menu/MenuCard.tsx` | ✅ Düzeltildi (bkz. GEÇMİŞ) | ✅ 4/4 test geçti | ✅ Push edildi |
+| `components/menu/MenuCard.test.tsx` | ✅ Üretildi | ✅ happy/edge/failure | ✅ Push edildi |
+| `vitest.config.ts` | 🟡 Düzeltildi (`react()` plugin eklendi) | — | ⬜ Push teyidi yok |
+| `app/menu/page.tsx` | ⬜ Henüz yazılmadı | — | — |
+| `components/menu/CategoryNav.tsx` | ⬜ Henüz yazılmadı | — | — |
+| `components/menu/FilterPanel.tsx` | ⬜ Henüz yazılmadı | — | — |
 
 ---
 
@@ -124,9 +116,58 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | `next-env.d.ts` + `package-lock.json` değişikliklerini commit et | 🟡 | ⬜ |
-| 2 | ARCHITECTURE.md §2.4 isim düzeltmesi | 🟡 | ⬜ |
-| 3 | Oturum 2 — Menü sayfası + `menu-data.json` (placeholder) | 🔴 | ⬜ |
+| 1 | `git add package.json package-lock.json && git commit && git push` — `@vitejs/plugin-react` sabitlemesini kalıcı hale getir | 🔴 | ⬜ |
+| 2 | `app/menu/page.tsx` yaz — `menu-data.json`'ı okuyup `MenuCard` grid'i render etsin | 🔴 | ⬜ |
+| 3 | `CategoryNav.tsx` (sticky kategori nav, MASTER_PLAN §3.2) | 🔴 | ⬜ |
+| 4 | `FilterPanel.tsx` (tag bazlı filtreleme) | 🟡 | ⬜ |
+| 5 | Vercel'e deploy + görsel doğrulama (menü sayfası) | 🔴 | ⬜ |
+| 6 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
+| 7 | `next-env.d.ts` + `package-lock.json` (Oturum 1 kalıntısı) commit teyidi | 🟢 | ⬜ |
+| 8 | ARCHITECTURE.md §2.4 isim düzeltmesi | 🟢 | ⬜ |
+
+---
+
+## 📜 GEÇMİŞ / ARŞİV — Oturum 2 Detaylı Kayıt
+
+### MenuCard Container Hatası ve Düzeltmesi
+- `components/menu/MenuCard.tsx` dosyası GitHub'da incelendiğinde, dosya adı doğru
+  olmasına rağmen içeriğinin yanlışlıkla `MenuCardImage.tsx`'in birebir kopyası
+  olduğu tespit edildi (1. satırdaki yorum `// components/menu/MenuCardImage.tsx`
+  yazıyordu). Gerçek container hiç yazılmamıştı — test dosyası (`./MenuCard`'ı
+  `item: BowlItem` prop'uyla import eden) bu yüzden çalışamazdı.
+- Doğru `MenuCard.tsx` üretildi: üç alt bileşeni (`MenuCardImage`, `MenuCardBadges`,
+  `MenuCardInfo`) `item` prop'undan besleyen bir container. Bu sırada ayrı bir gap
+  daha bulundu: `allergens` alanı (BowlItem'da mevcut, menu-data.json'da dolu) hiçbir
+  alt bileşende render edilmiyordu — `MenuCardBadges.tsx`'in kod yorumu alerjen
+  riskinden bahsediyordu ama sadece `tags`'i render ediyordu. Geçici bir çözümle
+  (`İçerir: ...` satırı) kapatıldı, DESIGN_SYSTEM.md onayı bekliyor (Açık Sorun #7).
+- Kullanıcı GitHub web arayüzünden `MenuCard.tsx` içeriğini manuel olarak düzeltip
+  push etti (Codespaces heredoc yöntemi yerine).
+
+### Test Altyapısı — npm Peer-Dependency Çakışması
+- İlk `npm test` denemesinde 4 test dosyasının tamamı (13/13) aynı hatayla çöktü:
+  `ReferenceError: React is not defined`. Kök sebep: `vitest.config.ts`'de
+  `@vitejs/plugin-react` plugin'i hiç tanımlı değildi, sadece `resolve.alias` vardı.
+- `npm install -D @vitejs/plugin-react` (versiyon belirtmeden) çalıştırıldığında npm
+  en son sürümü (6.0.3) kurmaya çalıştı — bu sürüm `vite@^8.0.0` istiyordu, ama
+  proje `vitest@^1.6.0` üzerinden `vite@^5` kullanıyordu. Peer-dependency çakışması
+  nedeniyle kurulum reddedildi (`MODULE_NOT_FOUND` zinciri ile sonraki testlerde
+  tekrar tekrar ortaya çıktı).
+- `--legacy-peer-deps` ile zorlanan bir ara deneme `esbuild` seviyesinde farklı bir
+  çöküşe yol açtı (native binary/paket sürüm uyumsuzluğu).
+- Kalıcı çözüm: `rm -rf node_modules package-lock.json && npm install` ile temiz
+  kurulum yapıldı, ardından `npm install -D @vitejs/plugin-react@^4.3.0` (vite 5 /
+  vitest 1.x ile uyumlu sabit sürüm) ile plugin doğru kuruldu. Sonuç: **13/13 test
+  geçti** (`MenuCard.test.tsx` 4, `Hero.test.tsx` 3, `Footer.test.tsx` 3,
+  `Header.test.tsx` 3).
+- Bu düzeltme, ileride aynı hatanın tekrar yaşanmaması için FAILURE_PATTERNS.md'ye
+  yeni bir kalıp (FP-11 adayı: "vitest/@vitejs-plugin-react sürüm sabitleme")
+  olarak eklenmeyi bekliyor — henüz o dosyaya işlenmedi.
+
+### Sayfa Bağlantısı Henüz Yapılmadı
+- Vercel deploy'unda site kontrol edildiğinde Hero sayfasının Oturum 1'deki haliyle
+  aynı kaldığı görüldü. Bu bir regresyon değil — MenuCard bileşenleri henüz hiçbir
+  route'a bağlanmadı (`app/menu/page.tsx` yok). Kullanıcıya bu netleştirildi.
 
 ---
 
@@ -202,4 +243,4 @@ Gerekçe:  Görsel doğrulama tamamlandı, Açık Sorun #1 ve #2 kapatıldı.
 
 ---
 
-*BOWLERA SESSION_INDEX.md — güncellendi, Session 1 — 2026-07-17*
+*BOWLERA SESSION_INDEX.md — güncellendi, Session 2 — 2026-07-17*
