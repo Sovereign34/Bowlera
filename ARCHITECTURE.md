@@ -148,7 +148,7 @@ interface CustomizerState {
   toppings: string[]        // max 4 ücretsiz
   sauce: string | null
   goToStep: (step: 1 | 2 | 3 | 4) => void   // yalnızca önceki adımlar doluysa izin verir
-  calculateTotals: () => { price: number; calories: number; protein: number }
+  getTotals: () => { price: number; calories: number; protein: number; carbs: number; fat: number }
 }
 ```
 
@@ -261,12 +261,13 @@ type CartItem = {
 | Katman | Sorumlu Dosya | Sorumlu Değil |
 |---|---|---|
 | Veri kaynağı | `lib/menu-data.json` / CMS | Fiyat/kalori hesaplama mantığı |
-| Fiyat/kalori hesaplama | `useCustomizerStore.calculateTotals()` | Render |
+| Fiyat/kalori hesaplama | `useCustomizerStore.getTotals()` | Render |
 | Render | Bileşenler (`MenuCard`, `SummaryPanel`) | State mutasyonu |
 | Sepet kalıcılığı | `useCartStore` (persist) | Checkout/ödeme |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA ARCHITECTURE.md — v1.1 — Session 1 — 2026-07-17*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları)*
+*v1.1: §2.4 ve §5 — `calculateTotals` → `getTotals` olarak düzeltildi (CUSTOMIZER_SPEC.md ile tutarlılık, Açık Sorun #5 kapatıldı).*
