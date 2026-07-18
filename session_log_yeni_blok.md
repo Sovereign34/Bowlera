@@ -1,3 +1,27 @@
+## Session 3 — 2026-07-18
+
+### Yapılanlar
+- store/useCustomizerStore.ts üretildi (Zustand — 5 adımlı customizer state'i)
+- lib/customizer-pricing.ts üretildi (canlı fiyat hesaplama fonksiyonları)
+- lib/customizer-data.ts üretildi (statik customizer verisi)
+- 19 yeni test yazıldı: customizer-pricing.test.ts (10), useCustomizerStore.test.ts (9)
+- npm test: 10 test dosyası, 53 test — tümü ✅
+- Push ve deploy başarılı (kullanıcı raporuna dayanıyor, git log ile teyit edilmedi)
+
+### Kararlar
+- Store ve pricing mantığı CUSTOMIZER_SPEC.md v1.1 (5 adım) kontratına göre üretildi
+  (içerik bu oturumda satır satır teyit edilmedi — Açık Sorun #11)
+
+### Teknik Notlar
+- Bu oturum, session açılışında SESSION_INDEX.md okunmadan başladı; kapanış
+  güncellemesi sohbet özetine dayanılarak geriye dönük yapıldı
+- Sitede görsel değişiklik yok — beklenen durum, çünkü store'u tüketen UI
+  bileşenleri (page.tsx, StepBase.tsx, SummaryPanel.tsx, VisualPreview.tsx)
+  henüz yazılmadı (Oturum 4 kapsamı olabilir, ROADMAP.md ile teyit gerekiyor)
+
+### Açık Kalan
+- Açık Sorun #11, #12, #13 (bkz. SESSION_INDEX.md)
+-----
 ## Session 2 (devam) — 2026-07-18 — Customizer Marka Kararı: 4 Adımdan 5 Adıma Geçiş
 
 ### Yapılanlar
