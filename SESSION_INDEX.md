@@ -17,9 +17,11 @@ Görev:    Oturum 3 (Zustand store + 5 adımlı BowlCustomizer state mantığı)
           basan sayfa/bileşenler (app/menu/customize/[id]/page.tsx,
           StepBase.tsx, SummaryPanel.tsx, VisualPreview.tsx) Oturum 4
           kapsamında.
-Faz:      Oturum 3 — Zustand store + 5 adımlı state makinesi. DEVAM EDİYOR.
-          Kalan: store'u tüketen UI bileşenleri (bunlar resmi ROADMAP
-          sırasına göre Oturum 4'e ait olabilir — teyit edilmeli).
+Faz:      Oturum 3 — Zustand store + Customizer (masaüstü). DEVAM EDİYOR.
+          ROADMAP.md ile teyit edildi: masaüstü UI (adım bileşenleri +
+          SummaryPanel) Oturum 3'ün kendi kapsamı — Oturum 4 değil.
+          Kalan: bu UI bileşenleri henüz yazılmadı, Oturum 3 kabul kriteri
+          bu yüzden tam karşılanmadı.
 Gerekçe:  Oturum 2 tamamlandı (34/34 test, canlı görsel doğrulama) → Oturum 3
           başladı → useCustomizerStore.ts (adım/seçim state'i) ve
           lib/customizer-pricing.ts (canlı fiyat hesabı) + lib/customizer-data.ts
@@ -66,7 +68,7 @@ Bir sonraki oturumda `git log --oneline -5` ve dosya içerikleriyle teyit
 | Son Session | 3 — 2026-07-18 |
 | Son Eylem | `useCustomizerStore.ts`, `lib/customizer-pricing.ts`, `lib/customizer-data.ts` üretildi; 19 yeni test yazıldı (10 test dosyası / 53 test toplam, hepsi ✅); push + deploy başarılı |
 | Blocker | Yok |
-| Devam Noktası | Yeni sohbette CORE.md + AGENT.md + bu SESSION_INDEX ile Oturum 3'ün devamına başlanabilir: store'u tüketecek UI bileşenleri (`app/menu/customize/[id]/page.tsx`, `StepBase.tsx`, `SummaryPanel.tsx`, `VisualPreview.tsx`) — ROADMAP.md'ye göre bunlar Oturum 4 kapsamında olabilir, session açılışında ROADMAP.md ile teyit edilmeli. |
+| Devam Noktası | Yeni sohbette CORE.md + AGENT.md + bu SESSION_INDEX ile Oturum 3'ün devamına başlanabilir: masaüstü UI bileşenleri (`app/menu/customize/[id]/page.tsx`, adım bileşenleri, `SummaryPanel.tsx`) — ROADMAP.md v1.1 ile teyit edildi, bunlar Oturum 3 kapsamında (VisualPreview/mobil/sepet Oturum 4'te kalıyor). |
 
 ---
 
@@ -89,7 +91,8 @@ Bir sonraki oturumda `git log --oneline -5` ve dosya içerikleriyle teyit
 | Customizer Store | ✅ `store/useCustomizerStore.ts` üretildi, 9 test ✅ |
 | Customizer Fiyatlandırma | ✅ `lib/customizer-pricing.ts` üretildi, 10 test ✅ |
 | Customizer Statik Veri | ✅ `lib/customizer-data.ts` üretildi |
-| Customizer UI | ⬜ Henüz yok — `page.tsx`, `StepBase.tsx`, `SummaryPanel.tsx`, `VisualPreview.tsx` bekleniyor |
+| Customizer UI (masaüstü) | ⬜ Henüz yok — `page.tsx`, adım bileşenleri, `SummaryPanel.tsx` bekleniyor. ROADMAP.md v1.1 ile teyit: bu Oturum 3 kapsamı, Oturum 4 değil |
+| Customizer UI (VisualPreview/mobil) | ⬜ Oturum 4 kapsamı — henüz sırada değil |
 | Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor |
 | Customizer Kontratı | ✅ v1.1 — 5 adım, store bu kontrata göre üretildi (satır satır teyit edilmedi) |
 | Üçüncü Parti Anahtarları | ⬜ Henüz temin edilmedi |
@@ -119,7 +122,7 @@ Bir sonraki oturumda `git log --oneline -5` ve dosya içerikleriyle teyit
 | **Oturum 0** | Ajan altyapısı (14 dosya) | ✅ Üretildi — son onay bekliyor |
 | **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı — görsel doğrulama yapıldı |
 | **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ✅ Tamamlandı — 34/34 test, canlıda görsel doğrulandı |
-| **Oturum 3** | Zustand store + BowlCustomizer state mantığı (5 adım — v2.1) | 🟡 **Devam ediyor** — store + pricing + data üretildi, 53/53 test ✅, push/deploy ✅; UI bileşenleri henüz yok |
+| **Oturum 3** | Zustand store + Customizer masaüstü UI (5 adım — v2.1) | 🟡 **Devam ediyor** — store + pricing + data üretildi, 53/53 test ✅, push/deploy ✅; masaüstü UI (adım bileşenleri + SummaryPanel) henüz yok — ROADMAP v1.1'e göre bu da Oturum 3 kapsamı |
 | **Oturum 4** | VisualPreview, mobil özelleştirici, sepete bağlama | ⬜ Bekliyor |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor |
 | **Oturum 5** | Hakkımızda, Şubeler, İletişim, SEO, son kontrol | ⬜ Bekliyor |
@@ -151,8 +154,9 @@ Bir sonraki oturumda `git log --oneline -5` ve dosya içerikleriyle teyit
 | `store/useCustomizerStore.ts` | ✅ Üretildi (Oturum 3) | ✅ 9 test | ✅ Push (bu oturum) | ✅ Deploy edildi (görsel doğrulama N/A) |
 | `lib/customizer-pricing.ts` | ✅ Üretildi (Oturum 3) | ✅ 10 test | ✅ Push (bu oturum) | ✅ Deploy edildi (görsel doğrulama N/A) |
 | `lib/customizer-data.ts` | ✅ Üretildi (Oturum 3) | — (dolaylı, store/pricing testlerine dahil) | ✅ Push (bu oturum) | ✅ Deploy edildi |
-| `app/menu/customize/[id]/page.tsx` | ⬜ Henüz yazılmadı | — | — | — |
-| `components/customizer/StepBase.tsx`, `SummaryPanel.tsx`, `VisualPreview.tsx` vb. | ⬜ Henüz yazılmadı (Oturum 4) | — | — | — |
+| `app/menu/customize/[id]/page.tsx` | ⬜ Henüz yazılmadı (Oturum 3 kapsamı) | — | — | — |
+| `components/customizer/StepBase.tsx` vb. adım bileşenleri, `SummaryPanel.tsx` | ⬜ Henüz yazılmadı (Oturum 3 kapsamı) | — | — | — |
+| `components/customizer/VisualPreview.tsx` | ⬜ Henüz yazılmadı (Oturum 4 kapsamı) | — | — | — |
 
 > Not: Bu oturumun push/deploy durumu kullanıcının paylaştığı test terminali özetine
 > dayanır — `git log` ile kesin teyit edilmedi (Açık Sorun #13).
@@ -163,7 +167,7 @@ Bir sonraki oturumda `git log --oneline -5` ve dosya içerikleriyle teyit
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | Oturum 3'ün devamı: store'u tüketen UI bileşenlerine başla (ROADMAP.md ile Oturum 3/4 sınırı teyit edilerek) | 🔴 | ⬜ |
+| 1 | Oturum 3'ün devamı: masaüstü UI bileşenlerine başla (`page.tsx`, adım bileşenleri, `SummaryPanel.tsx`) — ROADMAP.md v1.1 ile teyit edildi, bu Oturum 3 kapsamı | 🔴 | ⬜ |
 | 2 | `useCustomizerStore.ts`/`customizer-pricing.ts`/`customizer-data.ts` içeriğini CUSTOMIZER_SPEC.md v1.1 ile satır satır teyit et (Açık Sorun #11) | 🟡 | ⬜ |
 | 3 | `types/index.ts`'e `CustomizerSelection` eklendi mi teyit et (Açık Sorun #12) | 🟢 | ⬜ |
 | 4 | `git log --oneline -5` ile push teyidi (Açık Sorun #13) | 🟡 | ⬜ |
