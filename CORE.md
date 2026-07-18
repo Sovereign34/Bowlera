@@ -363,7 +363,7 @@ YYYYMMDDHHMMSS_aciklama.md
 | Kalori/protein zorunlu alan | `BowlItem` tipinde `calories`/`protein` opsiyonel değil (MASTER_PLAN §5.5) |
 | MVP → statik veri, Büyüme → CMS | Geçiş `/api/menu` sözleşmesi bozulmadan yapılmalı |
 | Sepet state Zustand + persist | Tarayıcı kapansa da sepet korunur (`bowlera-cart-storage`) |
-| Customizer 4 adım sırayla ilerler | Taban → Protein → Toppings → Sos — sıra atlanamaz |
+| Customizer 5 adım sırayla ilerler | Base → Main → Garden → Signature Flavor → Finish — sıra atlanamaz (v2.1, bkz. `20260718001123_customizer_5_adim_gecisi.md`) |
 | Özet panel her zaman görünür | Masaüstünde sabit yan panel, mobilde sticky çekmece — asla gizlenmez |
 | Animasyon estetiği paletle tutarlı | Yumuşak/organik easing — sert/mekanik animasyon yasak |
 | Görsel önizleme CSS/SVG katmanlı | MVP'de gerçek fotoğraf kompozisyonu yok — ileride server-side image composition'a geçilebilir |
