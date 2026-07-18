@@ -51,8 +51,10 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | 4 | Finish: ilk 1 seçim ücretsiz, sonrası ücretli | Oturum 2 — 2026-07-18 | Kullanıcı seçimi |
 | 5 | "Make it Yours" ayrı adım değil, Finish'e entegre; "Double Main" `mainPortion` mekanizmasını yeniden kullanır | Oturum 2 — 2026-07-18 | Kullanıcı seçimi + AGENT.md Kural #5 |
 | 6 | Ana sayfa sloganı: **"Sağlıklı Beslen, Sağlıklı Yaşa, Gücünü Hisset"** — eski başlık tamamen bununla değiştirildi, `HeroHeadline.tsx`'in `WORDS` dizisi güncellendi | Oturum 4 — 2026-07-18 | Kullanıcı kararı |
-| 7 | Hero'daki "Kâseni Yarat" CTA'sı **GEÇİCİ** olarak `sig-teriyaki-tavuk`'a yönlendiriliyor | Oturum 4 — 2026-07-18 | menu-data.json'da "build-your-own" kategorili bowl yok — kullanıcı geçici çözüm olarak onayladı, kalıcı çözüm bekliyor (Açık Sorun #18) |
-| 8 | "Özelleştir" butonu MenuCard'da sadece `category !== "içecek"` olan ürünlerde gösteriliyor | Oturum 4 — 2026-07-18 | Kullanıcı kararı — içecekler 5 adımlı Base/Main/Garden akışına uygun değil |
+| 7 | ~~Hero'daki "Kâseni Yarat" CTA'sı GEÇİCİ olarak sig-teriyaki-tavuk'a yönlendiriliyor~~ **GERİ ALINDI (bkz. Karar #12)** | Oturum 4 — 2026-07-18 | Kullanıcı bunun büyük bir hata olduğunu belirtti — customizer sadece kendi ürününde olmalıydı |
+| 8 | ~~"Özelleştir" butonu MenuCard'da tüm imza kaselerde (içecek hariç) gösteriliyor~~ **GERİ ALINDI (bkz. Karar #12)** | Oturum 4 — 2026-07-18 | Kullanıcı bunun büyük bir hata olduğunu belirtti — customizer sadece kendi ürününde olmalıydı |
+| 11 | Nohut/Meksika fasulyesi gibi Main seçenekleri zaten kendi sosu/lezzetiyle birlikte pişiriliyor (wok'lanıyor) — bu tür Main'ler için Signature Flavor adımı **atlanmıyor**, bunun yerine adımın içeriği/etiketi o Main'e göre değişecek (otomatik seçili, "dahil" gösterilecek). Diğer Main'lerde normal sos seçimi kalıyor. Teknik gereksinim: customizerCatalog'daki Main öğelerine "zaten içerdiği lezzet" bilgisini taşıyan opsiyonel bir alan eklenmeli — küçük kapsamlı schema eklemesi. | Oturum 4 — 2026-07-18 | Kullanıcı kararı — adım atlamak yerine isim/içerik değiştirmek tercih edildi |
+| 12 | **DÜZELTME.** "Kâseni Yarat" sadece kendi özel menü ürününde ("Benim Kâsem", id: `build-your-own-kasem`, category: `build-your-own`) olmalı — diğer tüm imza kaseler sabit menü. `MenuCard.tsx`'te `isCustomizable` artık `category === "build-your-own"`. Hero CTA'sı `build-your-own-kasem`'e yönlendirildi. Ürün fiyatı henüz gelmediği için menu-data.json'a EKLENMEDİ — eklenene kadar hiçbir kartta buton görünmez, Hero CTA'sı 404 verir (kasıtlı, site henüz canlı değil). | Oturum 4 — 2026-07-18 | Kullanıcı kararı — Karar #7/#8'in düzeltmesi |
 | 9 | Header sepet ikonu client-side state'e taşındı (`"use client"`); drawer açma/kapama `useState` ile Header'da tutuluyor, sayaç/animasyon mantığı CartBadge içinde kalıyor | Oturum 4 — 2026-07-18 | CartBadge/CartDrawer zaten "use client" idi — tutarlılık ve minimum dokunuş |
 | 10 | VisualPreview illüstrasyon yerine **gerçek ürün fotoğrafı** kullanacak (asset swap, kod değişikliği yok — `customizer-visual-layers.ts` path'leri `/images/layers/{kategori}-{id}.webp` sabit kalıyor) + katmanlı kompozisyonun gerçek tabaktan sapabileceği için önizlemenin altına **"Görsel temsilîdir"** disclaimer'ı eklenecek | Oturum 4 — 2026-07-18 | Kullanıcı "gerçek fotoğrafa geç" dedi; çok malzemeli (garden/finish) seçimlerde katmanlı kompozisyonun gerçek sonucu birebir yansıtamama riski disclaimer ile dengelendi |
 
@@ -110,7 +112,9 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | 15 | 🟢 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md bu sohbette de yüklenmedi/güncellenmedi | Oturum 3→4 | CORE.md §7.1 |
 | 16 | 🟡 | `lib/customizer-summary-format.ts` içeriği hâlâ hiç görülmedi — `MobileSummaryDrawer.tsx`'te geçici yerel kopya var | Oturum 4 | AGENT.md Kural #5 |
 | 17 | 🔴 | `customizerCatalog` boş + Step bileşenleri hiç yazılmadı. Katalog verisi kullanıcıdan gelmeli (BSC-5). **Ayrıca Karar #10 gereği her katalog öğesi için gerçek ürün fotoğrafı da bu veriyle birlikte gelmeli.** | Oturum 4 | `lib/customizer-data.ts`, CUSTOMIZER_SPEC.md §2 |
-| 18 | 🟡 | `menu-data.json`'da "build-your-own" kategorili özel bir bowl yok — Hero CTA'sı geçici olarak `sig-teriyaki-tavuk`'a yönlendiriliyor | Oturum 4 | `lib/menu-data.json`, `components/home/Hero.tsx` |
+| 18 | 🔴 | **GÜNCELLENDİ.** "Benim Kâsem" ürünü (id: `build-your-own-kasem`, category: `build-your-own`) menu-data.json'a eklenmeli — fiyat bekleniyor (kullanıcı "sonra vereceğim" dedi). Eklenene kadar Hero CTA'sı 404 verir, hiçbir kartta "Özelleştir" butonu görünmez. | Oturum 4 | `lib/menu-data.json`, `components/home/Hero.tsx` |
+| **22** | 🟡 | **YENİ.** Signature Flavor adımının Main'e göre koşullu içerik göstermesi (Karar #11) — customizerCatalog veri modeline "zaten içerdiği lezzet" alanı eklenmeli. Step bileşenleri yazılırken (Açık Sorun #17) birlikte ele alınmalı. | Oturum 4 | CUSTOMIZER_SPEC.md §2 |
+| **23** | 🟢 | **YENİ.** Hero CTA'sı şu an kasıtlı olarak 404 veriyor (`build-your-own-kasem` henüz menüde yok). Fiyat gelip ürün eklenene kadar böyle kalacak. | Oturum 4 | `components/home/Hero.tsx` |
 | 20 | 🟢 | `app/menu/customize/[id]/page.tsx` içinde 3 onay bekleyen varsayım var: (a) menu-data.json export şekli — kapatılabilir; (b) sepete ekleme sonrası otomatik `reset()` — onaylanmadı; (c) `notFound()` client component'te 404 davranışı test edilmedi | Oturum 4 | `app/menu/customize/[id]/page.tsx` |
 > Kapanan sorunlar: #11, #12, #14 (önceki oturumlarda). **#19 bu blokta KAPANDI** — `Header.tsx`, `CartBadge.tsx`, `CartDrawer.tsx` bağlandı. **#21 de KAPANDI** — canlıda ekran görüntüsüyle doğrulandı: sepet ikonu tıklanınca çekmece doğru açılıyor, "Sepetiniz boş." mesajı görünüyor, build/deploy sorunsuz. Sepete ürün eklenememesi Açık Sorun #17'nin (Step bileşenleri + boş katalog) doğrudan sonucu — yeni bir hata değil.
 
@@ -152,17 +156,18 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | `Header.tsx` push edildi ve canlıda doğrulandı ✅. Kalan diğer dosyaları push et: `useCustomizerStore.ts`, `Hero.tsx`, `HeroHeadline.tsx`, `MenuCard.tsx`, `app/menu/customize/[id]/page.tsx` | 🔴 | 🟡 kısmen |
-| 2 | `customizerCatalog` için gerçek mutfak verisi sağla (isim/fiyat/kalori/protein) — Claude üretemez (BSC-5) | 🔴 | ⬜ |
-| 3 | Katalog verisi gelince Step bileşenlerini yaz (Açık Sorun #17) | 🔴 | ⬜ |
-| 4 | VisualPreview altına "Görsel temsilîdir" disclaimer metnini ekle (Karar #10) — CONTENT_GUIDE.md marka sesiyle uyumlu tam metin için o dosya istenmeli | 🟡 | ⬜ |
-| 5 | "build-your-own" bowl kararı (Açık Sorun #18) | 🟡 | ⬜ |
-| 6 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
-| 7 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
-| 8 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
-| 9 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
-| 10 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
-| 11 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
+| 1 | `MenuCard.tsx`, `Hero.tsx` düzeltmelerini (Karar #12) push et — bunlar Karar #7/#8'in hatalı davranışını giderir | 🔴 | ⬜ |
+| 2 | `Header.tsx` push edildi ve canlıda doğrulandı ✅. Kalan diğer dosyaları push et: `useCustomizerStore.ts`, `HeroHeadline.tsx`, `app/menu/customize/[id]/page.tsx` | 🔴 | 🟡 kısmen |
+| 3 | "Benim Kâsem" fiyatı gelince `menu-data.json`'a ekle (id: `build-your-own-kasem`, category: `build-your-own`) — Açık Sorun #18 | 🔴 | ⬜ |
+| 4 | `customizerCatalog` için gerçek mutfak verisi sağla (isim/fiyat/kalori/protein) — Claude üretemez (BSC-5) | 🔴 | ⬜ |
+| 5 | Katalog verisi gelince Step bileşenlerini yaz (Açık Sorun #17, #22) | 🔴 | ⬜ |
+| 6 | VisualPreview altına "Görsel temsilîdir" disclaimer metnini ekle (Karar #10) — CONTENT_GUIDE.md marka sesiyle uyumlu tam metin için o dosya istenmeli | 🟡 | ⬜ |
+| 7 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
+| 8 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
+| 9 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
+| 10 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
+| 11 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
+| 12 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
 
 ---
 
