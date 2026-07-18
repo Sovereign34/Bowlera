@@ -10,21 +10,44 @@
 
 ```
 Görev:    Oturum 2 DEVAM EDİYOR. MenuCard bileşen ailesi + app/menu/page.tsx
-          üretildi, test edildi (15/15 ✅) VE Vercel'de GÖRSEL OLARAK doğrulandı:
-          /menu sayfası grid halinde render oluyor, kalori/protein/fiyat doğru,
-          allergen satırı ("İçerir: Soya" vb.) ve "Süper Gıda" rozeti çalışıyor.
-          Kırık resim ikonları bekleniyordu (gerçek fotoğraflar henüz yüklenmedi).
+          üretildi, test edildi (15/15 ✅) VE Vercel'de GÖRSEL OLARAK doğrulandı.
+          Bu oturumun kod tarafı değişmedi — ancak Oturum 3'ü önceden hazırlayan
+          KRİTİK BİR MİMARİ KARAR alındı: "Kâseni Yarat" akışı 4 adımdan 5 adıma
+          çıkarıldı (bkz. 📌 KRİTİK TEKNİK/TASARIM KARARLARI). Bu, henüz kod
+          üretimi gerektirmiyor — MASTER_PLAN.md, CUSTOMIZER_SPEC.md, CORE.md
+          kanon dosyaları güncellendi, Oturum 3 bu yeni kontratla başlayacak.
 Faz:      Oturum 2 — Menü sayfası, filtreleme, MenuCard, statik menü verisi.
           Tamamlanan: MenuCard ailesi + app/menu/page.tsx + deploy doğrulaması.
           Kalan: CategoryNav.tsx (sticky kategori nav) + FilterPanel.tsx (tag filtre).
 Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakışması
           çözüldü → app/menu/page.tsx yazıldı → Vercel build'de tsconfig type-check
-          hatası çıktı (vitest.config.ts'in iki farklı vite paketi arasında tip
-          çakışması) → tsconfig exclude düzeltmesiyle çözüldü → build başarılı,
-          site canlı ve doğrulandı.
+          hatası çıktı → tsconfig exclude düzeltmesiyle çözüldü → build başarılı,
+          site canlı ve doğrulandı. Ardından kullanıcı "Kâseni Yarat" marka
+          anlayışını sorguladı → gurme mutfak mantığına dayalı 5 adımlı öneri
+          getirdi → 3 turlu netleştirme (adım sayısı / dil / ücretlendirme) →
+          resmi şema değişikliği olarak onaylandı ve kanon dosyalara işlendi.
 Çıktı:    Repo: github.com/Sovereign34/Bowlera_site (main dalı, son commit
-          tsconfig fix). Deploy: Vercel — /menu sayfası canlı ve doğrulanmış.
+          tsconfig fix — bu oturumdaki mimari karar henüz repoya push edilmedi,
+          kullanıcı dosyaları kendisi taşıyacak). Deploy: Vercel — /menu sayfası
+          canlı ve doğrulanmış (customizer henüz canlı değil, Oturum 3'te gelecek).
 ```
+
+---
+
+## 📌 KRİTİK TEKNİK/TASARIM KARARLARI
+
+| # | Karar | Tarih | Kaynak/Gerekçe |
+|---|---|---|---|
+| 1 | "Kâseni Yarat" akışı 4 adımdan **5 adıma** çıkarıldı: Base → Main → Garden → Signature Flavor → Finish | Oturum 2 — 2026-07-18 | Kullanıcı önerisi ("şefin düşünme sırası": temel→ana ürün→tazelik→lezzet karakteri→son dokunuş). Şema değişiklik notu: `20260718001123_customizer_5_adim_gecisi.md` |
+| 2 | Adım/malzeme isimleri **tamamen İngilizce** — CONTENT_GUIDE.md §1 Türkçe marka sesi kuralına bilinçli istisna, yalnızca customizer'ı kapsar | Oturum 2 — 2026-07-18 | Premium/global algı kararı, kullanıcı onaylı |
+| 3 | Garden: ilk 4 seçim ücretsiz, Avokado miktarı fark etmeksizin **her zaman ücretli** | Oturum 2 — 2026-07-18 | Kullanıcının orijinal önerisinde Avokado "+" işaretliydi; mevcut Toppings kuralıyla tutarlılık için Claude önerdi, kullanıcı onayladı |
+| 4 | Finish: ilk 1 seçim ücretsiz, sonrası ücretli | Oturum 2 — 2026-07-18 | Kullanıcı seçimi |
+| 5 | "Make it Yours" (Extra Avocado/Sauce/Crunch) **ayrı adım değil**, Finish adımına entegre alt-bileşen; "Double Main" mevcut `mainPortion` mekanizmasını yeniden kullanır | Oturum 2 — 2026-07-18 | Kullanıcı seçimi + AGENT.md Kural #5 (bağımlılık/duplikasyon önleme) |
+
+> Etkilenen dosyalar: `CORE.md` §8, `MASTER_PLAN.md` v2.1 (§3.3, §5.2, §6, §8),
+> `CUSTOMIZER_SPEC.md` v1.1 (tüm dosya). Henüz etkilenmeyen (Oturum 3'te
+> işlenecek): `store/useCustomizerStore.ts`, `types/index.ts`, `lib/menu-data.json`,
+> `ARCHITECTURE.md` §2.4, `DEPENDENCIES.md`.
 
 ---
 
@@ -32,10 +55,10 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 
 | Alan | Değer |
 |---|---|
-| Son Session | 2 — 2026-07-17 |
-| Son Eylem | Vercel build başarılı, `/menu` sayfası ekran görüntüsüyle görsel olarak doğrulandı |
+| Son Session | 2 — 2026-07-18 |
+| Son Eylem | Customizer akışı 4→5 adıma çıkarıldı; CORE.md/MASTER_PLAN.md/CUSTOMIZER_SPEC.md kanon dosyaları güncellendi |
 | Blocker | Yok |
-| Devam Noktası | Yeni sohbette doğrudan `CategoryNav.tsx` + `FilterPanel.tsx` ile Oturum 2'nin geri kalanına başlanabilir |
+| Devam Noktası | Yeni sohbette CORE.md + AGENT.md + bu SESSION_INDEX ile CategoryNav.tsx/FilterPanel.tsx'e (Oturum 2'nin kalanı) VEYA doğrudan Oturum 3'e (yeni 5 adımlı customizer state kurulumu) başlanabilir |
 
 ---
 
@@ -51,11 +74,12 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 | Repo | `github.com/Sovereign34/Bowlera_site` |
 | Codespace | Aktif (workspace adı: Bowlera_si...) |
 | Menü Veri Kaynağı | ✅ `lib/menu-data.json` — 6 signature + 2 içecek, canlıda doğru render oluyor |
-| Veri Modeli | ✅ `types/index.ts` — `BowlItem`/`CartItem` |
+| Veri Modeli | ✅ `types/index.ts` — `BowlItem`/`CartItem`. ⬜ `CustomizerSelection` tipi henüz kodda yok (Oturum 3) |
 | MenuCard Bileşen Ailesi | ✅ Üretildi, test edildi, canlıda görsel doğrulandı |
 | Menü Sayfası (`app/menu/page.tsx`) | ✅ Üretildi, test edildi (2 test), canlıda görsel doğrulandı |
 | Kategori/Filtre UI | ⬜ `CategoryNav.tsx`, `FilterPanel.tsx` henüz yazılmadı |
 | Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — hem Hero'da hem MenuCard'larda placeholder/kırık ikon |
+| Customizer Kontratı | ✅ v1.1 — 5 adıma güncellendi (kod henüz yazılmadı, Oturum 3 kapsamında) |
 | Üçüncü Parti Anahtarları | ⬜ Adisyo/SepetTakip, WhatsApp, Twilio — henüz temin edilmedi, ayrı faz |
 
 ---
@@ -67,10 +91,11 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 | 4 | 🟡 | Üçüncü parti API anahtarları temin edilmedi | Sonraki Faz | MASTER_PLAN §8 |
 | 5 | 🟢 | ARCHITECTURE.md §2.4 `calculateTotals`/`getTotals` isim tutarsızlığı — düzeltme bekliyor | Oturum 0 | DEPENDENCIES.md §1 |
 | 6 | 🟢 | `next-env.d.ts` (Oturum 1'den kalan) hâlâ untracked görünüyor, commit edilmemiş | Oturum 1 | — |
-| 7 | 🟡 | **Allergen gösterimi DESIGN_SYSTEM.md onayı bekliyor.** `MenuCard.tsx`'e geçici bir satırla eklendi ve canlıda görsel olarak çalıştığı doğrulandı ("İçerir: Soya", "İçerir: Kabuklu Deniz Ürünü"), ama DESIGN_SYSTEM.md'de tanımlı resmi bir stil/bileşen olup olmadığı hâlâ teyit edilmedi. | Oturum 2 | DESIGN_SYSTEM.md §2 (doğrulanmadı) |
-| 9 | 🟢 | `vitest.config.ts`'deki `@vitejs/plugin-react` ile Next.js'in kendi `vite` sürümü arasında TS tip çakışması vardı — `tsconfig.json`'ın `exclude` listesine `vitest.config.ts`, `vitest.setup.ts`, `**/*.test.tsx`, `**/*.test.ts` eklenerek çözüldü. Kalıcı bir workaround, ileride `vitest`/`vite` sürümleri güncellenirse tekrar kontrol edilmeli. | Oturum 2 | — |
+| 7 | 🟡 | **Allergen gösterimi DESIGN_SYSTEM.md onayı bekliyor.** `MenuCard.tsx`'e geçici bir satırla eklendi ve canlıda görsel olarak çalıştığı doğrulandı, ama DESIGN_SYSTEM.md'de tanımlı resmi bir stil/bileşen olup olmadığı hâlâ teyit edilmedi. | Oturum 2 | DESIGN_SYSTEM.md §2 (doğrulanmadı) |
+| 9 | 🟢 | `vitest.config.ts`'deki `@vitejs/plugin-react` ile Next.js'in kendi `vite` sürümü arasında TS tip çakışması vardı — `tsconfig.json`'ın `exclude` listesine ekleyerek çözüldü. Kalıcı workaround, ileride tekrar kontrol edilmeli. | Oturum 2 | — |
+| 10 | 🟡 | **YENİ** — `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`, customizer'ın 5 adıma çıkması nedeniyle güncel değil (henüz bu görev kapsamına alınmadı — Oturum 3 açılışında ele alınmalı) | Oturum 2 | `20260718001123_customizer_5_adim_gecisi.md` |
 
-> Kapatılan sorunlar: #1 (görsel doğrulama), #2 (deploy platformu), #3 (menü verisi artık var — sadece fotoğraflar hâlâ eksik, bu kısım #3 kapsamında açık kalmaya devam ediyor), #8 (vitest.config.ts commit+push+build doğrulandı).
+> Kapatılan sorunlar: #1 (görsel doğrulama), #2 (deploy platformu), #3 (menü verisi artık var — sadece fotoğraflar hâlâ eksik), #8 (vitest.config.ts commit+push+build doğrulandı).
 
 ---
 
@@ -80,8 +105,8 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 |---|---|---|
 | **Oturum 0** | Ajan altyapısı (14 dosya) | ✅ Üretildi — son onay bekliyor |
 | **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı — görsel doğrulama yapıldı |
-| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | 🟡 Devam ediyor — MenuCard+page.tsx tamam ve doğrulandı, CategoryNav/FilterPanel kaldı |
-| **Oturum 3** | Zustand store + BowlCustomizer (4 adım, masaüstü) | ⬜ Bekliyor |
+| **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | 🟡 Devam ediyor — MenuCard+page.tsx tamam ve doğrulandı, CategoryNav/FilterPanel kaldı; customizer 5 adım kararı bu oturumda alındı |
+| **Oturum 3** | Zustand store + BowlCustomizer (**5 adım** — v2.1, masaüstü) | ⬜ Bekliyor — kontrat hazır (`CUSTOMIZER_SPEC.md` v1.1) |
 | **Oturum 4** | VisualPreview, mobil özelleştirici, sepet | ⬜ Bekliyor |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor |
 | **Oturum 5** | Hakkımızda, Şubeler, İletişim, SEO, son kontrol | ⬜ Bekliyor |
@@ -111,6 +136,7 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 | `app/menu/page.test.tsx` | ✅ | ✅ happy/edge | ✅ Push | — |
 | `components/menu/CategoryNav.tsx` | ⬜ Henüz yazılmadı | — | — | — |
 | `components/menu/FilterPanel.tsx` | ⬜ Henüz yazılmadı | — | — | — |
+| `store/useCustomizerStore.ts` | ⬜ Henüz yazılmadı (Oturum 3, kontrat v1.1 hazır) | — | — | — |
 
 ---
 
@@ -124,26 +150,49 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 | 4 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
 | 5 | `next-env.d.ts` commit teyidi (Açık Sorun #6) | 🟢 | ⬜ |
 | 6 | ARCHITECTURE.md §2.4 isim düzeltmesi (Açık Sorun #5) | 🟢 | ⬜ |
+| 7 | **YENİ** — `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
 
 ---
 
 ## 📜 GEÇMİŞ / ARŞİV — Oturum 2 Detaylı Kayıt
 
+### Customizer 4→5 Adım Geçişi (bu oturumun ikinci yarısı)
+- Kullanıcı, kategori/filtre çalışmasına başlamadan önce marka anlayışının
+  netleşmediğini belirtti ve "Kâseni Yarat" akışı için 5 adımlı, gurme
+  mutfak mantığına dayalı bir öneri getirdi (Base/Main/Garden/Signature
+  Flavor/Finish + "Make it Yours" ek seçenekleri).
+- MASTER_PLAN.md, CUSTOMIZER_SPEC.md, CONTENT_GUIDE.md okunarak öneri
+  mevcut kanonla karşılaştırıldı; 3 doğrudan çelişki tespit edildi: adım
+  sayısı (4 vs 5), dil (Türkçe vs İngilizce), veri şeması (toppings/sauce
+  vs garden/signatureFlavor/finish).
+- 3 turlu netleştirme yapıldı: (1) adım sayısı → 5 adıma geçildi, (2) dil →
+  tamamen İngilizce, (3) resmi şema değişikliği mi / sadece konsept mi →
+  resmi değişiklik. Ardından Garden/Finish ücretlendirme kuralları ve "Make
+  it Yours" konumlandırması netleştirildi (Garden: sen öner → mevcut
+  Toppings kuralıyla tutarlı 4-ücretsiz + avokado her zaman ücretli önerisi
+  kabul edildi; Finish: 1 ücretsiz; Make it Yours → Finish'e entegre).
+- Şema değişiklik notu (`20260718001123_customizer_5_adim_gecisi.md`)
+  CORE.md §7.4 formatına uygun üretildi. `CORE.md` §8, `MASTER_PLAN.md`
+  (v2.0→v2.1), `CUSTOMIZER_SPEC.md` (v1.0→v1.1) tam dosya olarak güncellendi.
+- `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md` bu kararı henüz yansıtmıyor —
+  bu dosyalar bu oturumda sağlanmadığı için güncellenemedi, Açık Sorun #10
+  olarak kaydedildi.
+
 ### MenuCard Container Hatası ve Düzeltmesi
-- `components/menu/MenuCard.tsx` dosyası GitHub'da incelendiğinde, dosya adı doğru
-  olmasına rağmen içeriğinin yanlışlıkla `MenuCardImage.tsx`'in birebir kopyası
-  olduğu tespit edildi. Gerçek container yazılıp düzeltildi. Bu sırada `allergens`
-  alanının hiçbir alt bileşende render edilmediği (bkz. Açık Sorun #7) bulundu ve
-  geçici bir satırla kapatıldı.
+- `components/menu/MenuCard.tsx` dosyası GitHub'da incelendiğinde, dosya adı
+  doğru olmasına rağmen içeriğinin yanlışlıkla `MenuCardImage.tsx`'in birebir
+  kopyası olduğu tespit edildi. Gerçek container yazılıp düzeltildi. Bu
+  sırada `allergens` alanının hiçbir alt bileşende render edilmediği (bkz.
+  Açık Sorun #7) bulundu ve geçici bir satırla kapatıldı.
 
 ### Test Altyapısı — npm Peer-Dependency Çakışması
-- İlk `npm test` denemesinde 4 test dosyasının tamamı `ReferenceError: React is not
-  defined` hatasıyla çöktü — `vitest.config.ts`'de `@vitejs/plugin-react` hiç
-  tanımlı değildi. Versiyon belirtmeden yapılan kurulum denemesi npm'in en son
-  sürümü (6.0.3, `vite@^8` istiyor) çekmesine ve mevcut `vite@^5` (vitest 1.6
-  üzerinden) ile çakışmasına yol açtı. `rm -rf node_modules package-lock.json &&
-  npm install` ile temiz kurulum + `@vitejs/plugin-react@^4.3.0` sabit sürüm
-  kurulumuyla çözüldü — 13/13 test geçti.
+- İlk `npm test` denemesinde 4 test dosyasının tamamı `ReferenceError: React is
+  not defined` hatasıyla çöktü — `vitest.config.ts`'de `@vitejs/plugin-react`
+  hiç tanımlı değildi. Versiyon belirtmeden yapılan kurulum denemesi npm'in
+  en son sürümü (6.0.3, `vite@^8` istiyor) çekmesine ve mevcut `vite@^5`
+  (vitest 1.6 üzerinden) ile çakışmasına yol açtı. `rm -rf node_modules
+  package-lock.json && npm install` ile temiz kurulum + `@vitejs/plugin-react@^4.3.0`
+  sabit sürüm kurulumuyla çözüldü — 13/13 test geçti.
 
 ### app/menu/page.tsx — Dosya Oluşturma Sorunları
 - İlk `git commit` denemesi "nothing to commit" döndü — `app/menu/page.tsx` ve
@@ -156,14 +205,15 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 - `git push` sonrası Vercel build'i `next build`'in tip kontrolü aşamasında
   `vitest.config.ts:6:13`'te çöktü: `node_modules` içindeki iki farklı `vite`
   paketi (kök + `vitest`'in kendi gömülü kopyası) arasında `Plugin`/`PluginOption`
-  tip uyuşmazlığı. Kök sebep: Next.js'in production type-check'i `vitest.config.ts`'i
-  de kapsıyordu, ama bu dosya build'de hiç kullanılmıyor.
-- Çözüm: `tsconfig.json`'ın `exclude` dizisine `vitest.config.ts`, `vitest.setup.ts`,
-  `**/*.test.tsx`, `**/*.test.ts` eklendi (Açık Sorun #9 olarak kayıtlı — kalıcı
-  workaround, `vitest`/`vite` sürüm güncellemesinde tekrar gözden geçirilmeli).
-  Build başarılı oldu, `/menu` sayfası canlıda görsel olarak doğrulandı: grid,
-  kalori/protein/fiyat, allergen satırı ve "Süper Gıda" rozeti çalışıyor. Kırık
-  resim ikonları beklenen durum (gerçek fotoğraflar henüz yok).
+  tip uyuşmazlığı. Kök sebep: Next.js'in production type-check'i
+  `vitest.config.ts`'i de kapsıyordu, ama bu dosya build'de hiç kullanılmıyor.
+- Çözüm: `tsconfig.json`'ın `exclude` dizisine `vitest.config.ts`,
+  `vitest.setup.ts`, `**/*.test.tsx`, `**/*.test.ts` eklendi (Açık Sorun #9
+  olarak kayıtlı — kalıcı workaround, `vitest`/`vite` sürüm güncellemesinde
+  tekrar gözden geçirilmeli). Build başarılı oldu, `/menu` sayfası canlıda
+  görsel olarak doğrulandı: grid, kalori/protein/fiyat, allergen satırı ve
+  "Süper Gıda" rozeti çalışıyor. Kırık resim ikonları beklenen durum (gerçek
+  fotoğraflar henüz yok).
 
 ---
 
@@ -185,19 +235,20 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 - **ARCHITECTURE.md** — Next.js App Router yapısı, modül kontratları (API route/store/
   component interface'leri), BowlItem/CartItem veri modeli, deploy/performans/rollback.
   ⚠️ §2.4'te `calculateTotals`/`getTotals` isim tutarsızlığı tespit edildi — CUSTOMIZER_SPEC.md
-  esas alınıyor, düzeltme bekliyor (Açık Sorun #5).
+  esas alınıyor, düzeltme bekliyor (Açık Sorun #5). ⚠️ Oturum 2 itibarıyla ayrıca 5 adımlı
+  customizer kontratıyla senkronize edilmeli (Açık Sorun #10).
 - **DESIGN_SYSTEM.md** — Renk sistemi WCAG tablosu, logo degrade sınırlı kullanım kuralı
   (yalnızca 4 izinli yer), tipografi (Cormorant Garamond + Nunito), ikonografi (Lucide React
   + özel SVG imza deseni), fotoğraf direktifi + adlandırma standardı, tam animasyon tablosu
   + erişilebilirlik kuralları (prefers-reduced-motion, transform/opacity only).
-- **CUSTOMIZER_SPEC.md** — "Kâseni Yarat" tam kontratı: 4 adım state makinesi, adım geçiş
-  guard'ı (`maxReachedStep`), canlı fiyat/kalori hesaplama (`getTotals`), VisualPreview
-  katmanlı CSS/SVG mantığı (z-index: kase→taban→protein→topping→sos), mobil sticky çekmece
-  UX, BSC-6 race condition korumalı sepete ekleme.
+- **CUSTOMIZER_SPEC.md** — "Kâseni Yarat" tam kontratı: Oturum 2'de v1.0'dan v1.1'e
+  güncellendi (4 adımdan 5 adıma). Güncel içerik için bkz. yukarıdaki "Oturum 2 Detaylı
+  Kayıt" ve dosyanın kendisi.
 
 ### İkinci Üçlü (Session 1)
 - **DEPENDENCIES.md** — Dosya→dosya, bileşen→store, veri modeli ve üçüncü parti entegrasyon
-  bağımlılık haritaları.
+  bağımlılık haritaları. ⚠️ Oturum 2 itibarıyla 5 adımlı customizer kararını yansıtmıyor
+  (Açık Sorun #10).
 - **ROADMAP.md** — 5 oturumluk inşa sırası + her oturum için kabul kriterleri + lansman
   sonrası kapsam dışı faz listesi.
 - **TEST_MATRIX.md** — Modül bazlı test senaryoları (veri/API, customizer, sepet, tasarım/
@@ -205,7 +256,10 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 
 ### Üçüncü Üçlü (Session 1)
 - **CONTENT_GUIDE.md** — Marka sesi tablosu, hero başlık kalıpları, ürün açıklama kalıbı,
-  alt-text üretim kuralı, SEO anahtar kelimeleri, JSON-LD şema şablonu.
+  alt-text üretim kuralı, SEO anahtar kelimeleri, JSON-LD şema şablonu. Oturum 2'de
+  customizer adım isimleri için bilinçli İngilizce istisnası tanımlandı (bkz. MASTER_PLAN
+  v2.1 §6) — CONTENT_GUIDE.md dosyasının kendisi henüz bu istisnayı içermiyor, bu görev
+  kapsamına alınmadı.
 - **INTEGRATIONS.md** — Adisyo/SepetTakip (rate limit + graceful degradation), WhatsApp
   köprüsü (mesaj şablonu + edge case'ler), QR menü (masa parametresi), SMS/e-posta bildirimi
   (gelecek faz iskeleti).
@@ -234,4 +288,4 @@ Gerekçe:  MenuCard container hatası düzeltildi → npm peer-dependency çakı
 
 ---
 
-*BOWLERA SESSION_INDEX.md — güncellendi, Session 2 — 2026-07-17*
+*BOWLERA SESSION_INDEX.md — güncellendi, Session 2 — 2026-07-18*
