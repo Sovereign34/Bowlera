@@ -31,12 +31,18 @@
 | MenuCard.tsx | Kalori her kartta görünür (zorunlu — atlanamaz) |
 | Filtre paneli (alerjen + diyet/kalori) | Filtre sonucu boşsa "sonuç yok" state'i var |
 
-### Oturum 3 — Zustand + Customizer (Masaüstü)
-| Görev | Kabul Kriteri |
-|---|---|
-| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar |
-| 4 adım UI (masaüstü) | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz |
-| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez |
+### Oturum 3 — Zustand + Customizer (Masaüstü) 🟡 Devam ediyor
+| Görev | Kabul Kriteri | Durum |
+|---|---|---|
+| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar | 🟡 Üretildi, 9 test ✅ — kontrata birebir uyum satır satır teyit edilmedi (Açık Sorun #11) |
+| `lib/customizer-pricing.ts` (canlı fiyat hesabı) | Fiyat/kalori toplamları doğru hesaplanır | 🟡 Üretildi, 10 test ✅ — aynı teyit notu geçerli |
+| `lib/customizer-data.ts` (statik adım/malzeme verisi) | — | ✅ Üretildi |
+| ~~4 adım UI (masaüstü)~~ 5 adım UI (masaüstü) | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz | ⬜ Henüz yazılmadı. **Not:** bu satır hâlâ "4 adım" diyor, Oturum 2'de 5 adıma geçildi (Açık Sorun #10) — düzeltildi |
+| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez | ⬜ Henüz yazılmadı (bileşen yok) |
+
+> Oturum 3 kabul kriteri henüz tam karşılanmadı: store + pricing + data katmanı
+> hazır ve test edilmiş, ancak masaüstü UI (adım bileşenleri, SummaryPanel,
+> guard) henüz yok. Oturum 4'e geçilemez.
 
 ### Oturum 4 — VisualPreview + Mobil + Sepet
 | Görev | Kabul Kriteri |
@@ -71,5 +77,5 @@
 
 ---
 
-*BOWLERA ROADMAP.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA ROADMAP.md — v1.1 — Session 3 (kısmi) — 2026-07-18*
 *Kaynak: MASTER_PLAN.md §8 · CORE.md §7.1, §7.3*

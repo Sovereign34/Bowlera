@@ -33,12 +33,21 @@ useCartStore.ts
 ├── CartDrawer.tsx          (cart okur, removeFromCart çağırır)
 └── Customizer "Sepete Ekle" (addToCart çağırır — CUSTOMIZER_SPEC §7)
 
-useCustomizerStore.ts
-├── StepBase/Protein/Toppings/Sauce.tsx  (selections okur, select* çağırır)
-├── SummaryPanel.tsx         (getTotals() okur — CANLI, her seçimde re-render)
-├── VisualPreview.tsx        (selections okur, katman aktiflik hesaplar)
-└── app/menu/customize/[id]/page.tsx  (currentStep okur, goToStep guard'ı uygular)
+useCustomizerStore.ts  ✅ Oturum 3'te üretildi (aşağıdaki tüketiciler henüz yok)
+├── lib/customizer-pricing.ts  ✅ Oturum 3 — store'un fiyat hesaplama mantığı buradan besleniyor
+├── lib/customizer-data.ts     ✅ Oturum 3 — statik adım/malzeme verisi buradan besleniyor
+├── StepBase/Protein/Toppings/Sauce.tsx  ⬜ Henüz yok (selections okur, select* çağırır)
+├── SummaryPanel.tsx         ⬜ Henüz yok (getTotals() okur — CANLI, her seçimde re-render)
+├── VisualPreview.tsx        ⬜ Henüz yok (selections okur, katman aktiflik hesaplar)
+└── app/menu/customize/[id]/page.tsx  ⬜ Henüz yok (currentStep okur, goToStep guard'ı uygular)
 ```
+
+> ⚠️ Adım isimleri: yukarıdaki liste `StepBase/Protein/Toppings/Sauce.tsx` şeklinde
+> 4 adımı yansıtıyor — Oturum 2'de alınan 5 adım kararına (Base/Main/Garden/
+> Signature Flavor/Finish) göre güncel değil. Açık Sorun #10 kapsamında,
+> `useCustomizerStore.ts` gerçekten üretildiğinde bu liste 5 adıma göre
+> düzeltilmeli — bu oturumda henüz düzeltilmedi (store içeriği satır satır
+> incelenmedi, Açık Sorun #11).
 
 > Bir store'a yeni alan eklenirse: yukarıdaki bağımlı bileşenlerin **hepsi** kontrol edilmeli —
 > CORE.md §7.4 (Veri Şeması Değişiklik Protokolü) devreye girer.
@@ -58,6 +67,11 @@ types/index.ts (BowlItem, CartItem, CustomizerSelection)
 
 > `BowlItem.calories` alanı opsiyonel yapılırsa: MenuCard, CUSTOMIZER_SPEC §4, CONTENT_GUIDE
 > §JSON-LD şeması hepsi kırılır — CORE.md §9 Mutlak Yasaklar'da açıkça engellenmiş.
+
+> ⚠️ Oturum 3'te `store/useCustomizerStore.ts` üretildi — bu store'un `CustomizerSelection`
+> tipini `types/index.ts`'ten mi aldığı, yoksa kendi içinde mi tanımladığı bu oturumda teyit
+> edilmedi (Açık Sorun #12). Teyit edilene kadar bu diyagramda `types/index.ts` satırına
+> `CustomizerSelection` bağımlılığı **varsayımsal** olarak işaretli kalıyor.
 
 ---
 
@@ -85,5 +99,5 @@ app/api/order/route.ts          ← CONFIG_SCHEMA.md'deki env değişkenlerine b
 
 ---
 
-*BOWLERA DEPENDENCIES.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA DEPENDENCIES.md — v1.1 — Session 3 (kısmi) — 2026-07-18*
 *Kaynak: ARCHITECTURE.md §2 · CORE.md §4, §7.4*

@@ -22,9 +22,11 @@
 
 | Test | Durum | Not |
 |---|---|---|
-| Adım geçiş guard'ı — URL manipülasyonuyla atlanamıyor | ⬜ | Oturum 3 |
-| `isStepValid` her adımı doğru kapsıyor | ⬜ | Oturum 3 |
-| `getTotals()` seçim yokken `0`/`"—"` dönüyor, `NaN` yok | ⬜ | Oturum 3 |
+| `useCustomizerStore.ts` — adım/seçim state mantığı (9 test, npm test'te ✅) | ❓ | Oturum 3 — dosya seviyesinde 9/9 test geçti, ancak bu testlerin aşağıdaki satırlarla birebir eşleşmesi (isStepValid/guard/getTotals ayrımı) bu SESSION_INDEX güncellemesinde satır satır teyit edilmedi. Açık Sorun #11. |
+| `lib/customizer-pricing.ts` — fiyat hesaplama (10 test, npm test'te ✅) | ❓ | Oturum 3 — aynı teyit notu geçerli |
+| Adım geçiş guard'ı — URL manipülasyonuyla atlanamıyor | ⬜ | Oturum 3 — henüz UI (`page.tsx`) yok, guard test edilemez |
+| `isStepValid` her adımı doğru kapsıyor | ❓ | Oturum 3 — store testlerine dahil olabilir, teyit gerekiyor |
+| `getTotals()` seçim yokken `0`/`"—"` dönüyor, `NaN` yok | ❓ | Oturum 3 — pricing testlerine dahil olabilir, teyit gerekiyor |
 | VisualPreview katman sırası doğru (kase→taban→protein→topping→sos) | ⬜ | Oturum 4 |
 | Mobil sticky çekmece açık/kapalı geçişi | ⬜ | Oturum 4 |
 | "Sepete Ekle" çift tıklama koruması (BSC-6) | ⬜ | Oturum 4 |
@@ -63,5 +65,6 @@
 
 ---
 
-*BOWLERA TEST_MATRIX.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA TEST_MATRIX.md — v1.1 — Session 3 (kısmi) — 2026-07-18*
 *Kaynak: ARCHITECTURE.md §2 · CUSTOMIZER_SPEC.md §8 · DESIGN_SYSTEM.md §7*
+*Not: Bölüm 1, 3, 4, 5, 6 bu oturumda değişmedi — sadece Bölüm 2 (Customizer) güncellendi.*
