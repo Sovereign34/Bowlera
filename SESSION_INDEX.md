@@ -86,9 +86,9 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | Veri Modeli | ✅ `types/index.ts` — tam içerik görüldü, tüm tipler tanımlı. Açık Sorun #12 KAPANDI. |
 | Customizer Store | ✅ `store/useCustomizerStore.ts` — tam içerik görüldü, `goToStep` bug'ı düzeltildi |
 | Customizer Sepet Store | ✅ `store/useCartStore.ts` — daha önce tam içerik görüldü (zustand persist, `bowlera-cart` localStorage key) |
-| Customizer Statik Veri | 🔴 `lib/customizer-data.ts` — `customizerCatalog` tamamen boş (tüm diziler `[]`) |
-| Customizer UI (Step bileşenleri) | 🔴 **HİÇ YAZILMADI** |
-| Customizer Ana Sayfası | ✅ `app/menu/customize/[id]/page.tsx` — bu sohbette sıfırdan yazıldı ve canlıda doğrulandı. 3 onay bekleyen varsayım kod içinde yorumla işaretli |
+| Customizer Statik Veri | 🟡 `lib/customizer-data.ts` — **TEST VERİSİYLE dolduruldu** (bu sohbette), tüm rakamlar uydurma, PROD öncesi değişmeli (Açık Sorun #24) |
+| Customizer UI (Step bileşenleri) | ✅ **Bu sohbette yazıldı** — StepBase/Main/Garden/SignatureFlavor/Finish, `page.tsx`'e `currentStep`'e göre bağlandı. ⚠️ Katalog verisi TEST/uydurma (Açık Sorun #24). |
+| Customizer Ana Sayfası | ✅ `app/menu/customize/[id]/page.tsx` — **bu sohbette Step bileşenlerine bağlandı**, TODO placeholder kaldırıldı. Canlıda henüz test edilmedi (push bekliyor). |
 | Header (Sepet) | ✅ **Bu sohbette bağlandı ve canlıda doğrulandı** — ekran görüntüsüyle: sepet ikonu tıklanınca çekmece açılıyor, "Sepetiniz boş." doğru görünüyor. Sepete ekleme adımı Açık Sorun #17'ye bağlı (Step bileşenleri yok). |
 | Sepet UI (CartBadge/CartDrawer) | ✅ İçerikleri bu sohbette görüldü ve Header'a bağlandı — `useCartStore`'dan `cart`/`removeFromCart` okuyor |
 | MenuCard | ✅ `MenuCard.tsx` — bu sohbette "Özelleştir" butonu eklendi |
@@ -111,10 +111,11 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | 13 | 🟡 | `git log --oneline` ile push'lar hiç teyit edilmedi | Oturum 3 | — |
 | 15 | 🟢 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md bu sohbette de yüklenmedi/güncellenmedi | Oturum 3→4 | CORE.md §7.1 |
 | 16 | 🟡 | `lib/customizer-summary-format.ts` içeriği hâlâ hiç görülmedi — `MobileSummaryDrawer.tsx`'te geçici yerel kopya var | Oturum 4 | AGENT.md Kural #5 |
-| 17 | 🔴 | `customizerCatalog` boş + Step bileşenleri hiç yazılmadı. Katalog verisi kullanıcıdan gelmeli (BSC-5). **Ayrıca Karar #10 gereği her katalog öğesi için gerçek ürün fotoğrafı da bu veriyle birlikte gelmeli.** | Oturum 4 | `lib/customizer-data.ts`, CUSTOMIZER_SPEC.md §2 |
+| 17 | 🟡 | **GÜNCELLENDİ.** `customizerCatalog` artık TEST VERİSİYLE dolu, 5 Step bileşeni (StepBase/Main/Garden/SignatureFlavor/Finish) yazıldı ve `page.tsx`'e bağlandı — customizer artık uçtan uca layout/akış olarak çalışıyor. ⚠️ Ama tüm fiyat/kalori/protein rakamları UYDURMA TEST DEĞERİ — PROD öncesi gerçek mutfak verisiyle değiştirilmesi ZORUNLU (BSC-5). | Oturum 4 | `lib/customizer-data.ts`, CUSTOMIZER_SPEC.md §2 |
 | 18 | 🔴 | **GÜNCELLENDİ.** "Benim Kâsem" ürünü (id: `build-your-own-kasem`, category: `build-your-own`) menu-data.json'a eklenmeli — fiyat bekleniyor (kullanıcı "sonra vereceğim" dedi). Eklenene kadar Hero CTA'sı 404 verir, hiçbir kartta "Özelleştir" butonu görünmez. | Oturum 4 | `lib/menu-data.json`, `components/home/Hero.tsx` |
 | **22** | 🟡 | **YENİ.** Signature Flavor adımının Main'e göre koşullu içerik göstermesi (Karar #11) — customizerCatalog veri modeline "zaten içerdiği lezzet" alanı eklenmeli. Step bileşenleri yazılırken (Açık Sorun #17) birlikte ele alınmalı. | Oturum 4 | CUSTOMIZER_SPEC.md §2 |
-| **23** | 🟢 | **YENİ.** Hero CTA'sı şu an kasıtlı olarak 404 veriyor (`build-your-own-kasem` henüz menüde yok). Fiyat gelip ürün eklenene kadar böyle kalacak. | Oturum 4 | `components/home/Hero.tsx` |
+| **23** | 🟢 | Hero CTA'sı şu an kasıtlı olarak 404 veriyor (`build-your-own-kasem` henüz menüde gerçek fiyatla yok). Fiyat gelip ürün eklenene kadar böyle kalacak. | Oturum 4 | `components/home/Hero.tsx` |
+| **24** | 🔴 | **YENİ — ÇOK ÖNEMLİ.** `lib/customizer-data.ts` ve `lib/menu-data.json`'daki "Benim Kâsem" satırı TEST VERİSİ içeriyor (uydurma fiyat/kalori/protein). Bunlar PROD deploy'dan ÖNCE gerçek mutfak verisiyle değiştirilmeden canlıya çıkarsa müşteriye yanlış bilgi gider. Deploy checklist'ine eklenmeli. | Oturum 4 | `lib/customizer-data.ts`, `lib/menu-data.json` |
 | 20 | 🟢 | `app/menu/customize/[id]/page.tsx` içinde 3 onay bekleyen varsayım var: (a) menu-data.json export şekli — kapatılabilir; (b) sepete ekleme sonrası otomatik `reset()` — onaylanmadı; (c) `notFound()` client component'te 404 davranışı test edilmedi | Oturum 4 | `app/menu/customize/[id]/page.tsx` |
 > Kapanan sorunlar: #11, #12, #14 (önceki oturumlarda). **#19 bu blokta KAPANDI** — `Header.tsx`, `CartBadge.tsx`, `CartDrawer.tsx` bağlandı. **#21 de KAPANDI** — canlıda ekran görüntüsüyle doğrulandı: sepet ikonu tıklanınca çekmece doğru açılıyor, "Sepetiniz boş." mesajı görünüyor, build/deploy sorunsuz. Sepete ürün eklenememesi Açık Sorun #17'nin (Step bileşenleri + boş katalog) doğrudan sonucu — yeni bir hata değil.
 
@@ -141,12 +142,16 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | `components/layout/Header.tsx` | ✅ **bu sohbette CartBadge/CartDrawer'a bağlandı, `"use client"` oldu** | ⬜ eski testler (statik ikon dönemi) artık geçersiz olabilir | 🟡 Push edilmeli | ⬜ Canlıda doğrulanmadı |
 | `components/cart/CartBadge.tsx` | ✅ bu sohbette içeriği görüldü, değiştirilmedi | ⬜ | ✅ (önceden push edilmiş varsayılıyor) | ⬜ |
 | `components/cart/CartDrawer.tsx` | ✅ bu sohbette içeriği görüldü, değiştirilmedi | ⬜ | ✅ (önceden push edilmiş varsayılıyor) | ⬜ |
-| `app/menu/customize/[id]/page.tsx` | ✅ bu sohbette sıfırdan yazıldı | ⬜ test yok | 🟡 Push edilmeli | ✅ Canlıda doğrulandı |
 | `store/useCustomizerStore.ts` | ✅ `goToStep` bug'ı düzeltildi | 🟡 fix sonrası yeni test eklenmeli | 🟡 Push edilmeli | ⬜ |
 | `components/home/Hero.tsx`, `HeroHeadline.tsx` | ✅ slogan güncellendi | 🟡 eski testler güncellenmedi | 🟡 Push edilmeli | ✅ Canlıda doğrulandı |
 | `components/menu/MenuCard.tsx` | ✅ "Özelleştir" butonu eklendi | 🟡 eski testler güncellenmedi | 🟡 Push edilmeli | ⬜ Canlıda henüz test edilmedi |
-| `lib/customizer-data.ts` | 🔴 `customizerCatalog` BOŞ | — | ✅ Push (önceden) | 🔴 İşlevsel değil |
-| `components/customizer/StepBase.tsx` vb. | 🔴 **HİÇ YAZILMADI** | — | — | — |
+| `lib/customizer-data.ts` | 🟡 **TEST VERİSİYLE dolduruldu (bu sohbette)** — PROD öncesi değişmeli | — | 🟡 Push edilmeli | 🟡 Test verisiyle işlevsel |
+| `components/customizer/StepBase.tsx` | ✅ **bu sohbette yazıldı** | — | 🟡 Push edilmeli | ⬜ |
+| `components/customizer/StepMain.tsx` | ✅ **bu sohbette yazıldı** | — | 🟡 Push edilmeli | ⬜ |
+| `components/customizer/StepGarden.tsx` | ✅ **bu sohbette yazıldı** | — | 🟡 Push edilmeli | ⬜ |
+| `components/customizer/StepSignatureFlavor.tsx` | ✅ **bu sohbette yazıldı** | — | 🟡 Push edilmeli | ⬜ |
+| `components/customizer/StepFinish.tsx` | ✅ **bu sohbette yazıldı** | — | 🟡 Push edilmeli | ⬜ |
+| `app/menu/customize/[id]/page.tsx` | ✅ **bu sohbette Step bileşenlerine bağlandı** | ⬜ test yok | 🟡 Push edilmeli | ⬜ Canlıda doğrulanmadı |
 
 > Diğer tüm dosyaların (Footer, MenuCardImage/Badges/Info, CategoryNav, FilterPanel, SummaryPanel, SummaryTotals, VisualPreview, MobileSummaryDrawer vb.) durumu önceki session bloklarında olduğu gibi — bu sohbette değişmedi.
 
@@ -156,18 +161,17 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | `MenuCard.tsx`, `Hero.tsx` düzeltmelerini (Karar #12) push et — bunlar Karar #7/#8'in hatalı davranışını giderir | 🔴 | ⬜ |
-| 2 | `Header.tsx` push edildi ve canlıda doğrulandı ✅. Kalan diğer dosyaları push et: `useCustomizerStore.ts`, `HeroHeadline.tsx`, `app/menu/customize/[id]/page.tsx` | 🔴 | 🟡 kısmen |
-| 3 | "Benim Kâsem" fiyatı gelince `menu-data.json`'a ekle (id: `build-your-own-kasem`, category: `build-your-own`) — Açık Sorun #18 | 🔴 | ⬜ |
-| 4 | `customizerCatalog` için gerçek mutfak verisi sağla (isim/fiyat/kalori/protein) — Claude üretemez (BSC-5) | 🔴 | ⬜ |
-| 5 | Katalog verisi gelince Step bileşenlerini yaz (Açık Sorun #17, #22) | 🔴 | ⬜ |
-| 6 | VisualPreview altına "Görsel temsilîdir" disclaimer metnini ekle (Karar #10) — CONTENT_GUIDE.md marka sesiyle uyumlu tam metin için o dosya istenmeli | 🟡 | ⬜ |
-| 7 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
-| 8 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
-| 9 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
-| 10 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
-| 11 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
-| 12 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
+| 1 | Bu sohbette yazılan TÜM dosyaları push et: `MenuCard.tsx`, `Hero.tsx`, `Header.tsx`, `useCustomizerStore.ts`, `HeroHeadline.tsx`, `customizer-data.ts`, `Step*.tsx` (5 dosya), `page.tsx`, `menu-data.json` — sonra canlıda 5 adımlı customizer akışının uçtan uca çalıştığını doğrula | 🔴 | ⬜ |
+| 2 | **KRİTİK — unutulmasın:** `customizerCatalog`'daki ve "Benim Kâsem" ürününün TEST verisini gerçek mutfak verisiyle değiştir (Açık Sorun #24) — PROD'a bu haliyle çıkmamalı | 🔴 | ⬜ |
+| 3 | "Benim Kâsem" fiyatı gelince `menu-data.json`'daki TEST satırını gerçek değerle güncelle — Açık Sorun #18 | 🔴 | ⬜ |
+| 4 | Signature Flavor'ın Main'e göre koşullu içerik göstermesini uygula (Karar #11, Açık Sorun #22) | 🟡 | ⬜ |
+| 5 | VisualPreview altına "Görsel temsilîdir" disclaimer metnini ekle (Karar #10) — CONTENT_GUIDE.md marka sesiyle uyumlu tam metin için o dosya istenmeli | 🟡 | ⬜ |
+| 6 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
+| 7 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
+| 8 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
+| 9 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
+| 10 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
+| 11 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
 
 ---
 
