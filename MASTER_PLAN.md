@@ -1,5 +1,5 @@
 # BOWLERA — Master Teknik Referans Belgesi (NİHAİ)
-**Sürüm:** 2.0 · **Tarih:** 11 Temmuz 2026
+**Sürüm:** 2.1 · **Tarih:** 18 Temmuz 2026 (v2.1 — customizer 5 adıma çıkarıldı, bkz. §3.3)
 **Kaynaklar:** (1) Claude'un ilk masaüstü araştırması · (2) Deep Research Raporu A · (3) Deep Research Raporu B — üç kaynak sentezlenmiştir, çelişkiler giderilmiştir.
 **Durum:** Onaylandı — geliştirmeye hazır
 
@@ -74,14 +74,31 @@ tamamlaması** hedefiyle kurgulanmıştır.
 - Kart grid: fotoğraf, gramaj, **kalori (zorunlu, her kartta görünür)**, makro değerler, fiyat, "Özelleştir" butonu
 
 ### 3.3 Kâse Özelleştirme Akışı (en kritik ekran)
-Doğrusal, bilişsel yükü azaltan 4 adım:
+
+> ⚠️ **v2.1 güncellemesi (Oturum 2, 2026-07-18):** Akış 4 adımdan 5 adıma
+> çıkarıldı, isimlendirme İngilizce'ye geçirildi. Gerekçe ve geçiş detayı:
+> `docs/schema-changes/20260718001123_customizer_5_adim_gecisi.md`.
+> Tam kontrat: `CUSTOMIZER_SPEC.md`.
+
+Doğrusal, bilişsel yükü azaltan **5 adım** — bir şefin mutfaktaki düşünme
+sırasına (temel → ana ürün → tazelik → lezzet karakteri → son dokunuş)
+referansla kurgulanmıştır. İsimlendirme bilinçli olarak İngilizce'dir
+(premium/global algı kararı) — bu istisna yalnızca customizer adım ve
+malzeme isimlerini kapsar, sitenin geri kalanındaki Türkçe marka sesi
+(CONTENT_GUIDE.md §1) değişmez.
 
 | Adım | İçerik | Seçim Tipi |
 |---|---|---|
-| 1. Taban | Kinoa, esmer pirinç, Akdeniz yeşillikleri, miks | Tekli |
-| 2. Protein | Somon, ızgara tavuk, fırın tofu, füme antrikot | Tekli/çift porsiyon |
-| 3. Toppings | Edamame, avokado, havuç turşusu, mor lahana | Max 4 ücretsiz, ekstra ücretli |
-| 4. Sos | Acı mayonez, teriyaki, zeytinyağı-limon, tahin | Tekli |
+| 1. Base | Jasmine Rice, Brown Rice, Quinoa, Mixed Greens, Spinach, Half Rice + Half Greens | Tekli |
+| 2. Main | Grilled Chicken, Crispy Chicken, Beef, Falafel, Shrimp, Salmon, Tofu | Tekli/çift porsiyon |
+| 3. Garden | Cherry Tomato, Cucumber, Corn, Pickled Onion, Red Cabbage, Carrot, Avocado | Max 4 ücretsiz, ekstra ücretli — Avokado miktarı ne olursa olsun her zaman ücretli (premium malzeme) |
+| 4. Signature Flavor | Mediterranean Herb, Smoky BBQ, Lemon Garlic, Spicy Harissa, Teriyaki Sesame, Sweet Chili | Tekli — sos+baharat birleşik lezzet profili |
+| 5. Finish | Feta, Parmesan, Roasted Seeds, Crispy Onion, Fresh Herbs, Lime, Chili Flakes | Max 1 ücretsiz, ekstra ücretli |
+
+**"Make it Yours" ek seçenekleri** (ayrı adım değil, Finish adımına
+entegre alt-bölüm): Extra Avocado, Extra Sauce, Extra Crunch. "Double
+Main" için ayrı bir mekanizma açılmadı — 2. adımdaki mevcut çift porsiyon
+seçeneği (`mainPortion: 'double'`) yeniden kullanılır.
 
 Sağ tarafta **sabit özet panel**: canlı kase görseli, **anlık kalori/makro
 toplamı (zorunlu, her zaman görünür)**, güncel fiyat, "Sepete Ekle" butonu.
@@ -196,11 +213,12 @@ Next.js, sade React (Vite) yerine tercih edilmiştir çünkü:
 **VisualPreview teknik kararı:** Three.js/Canvas gibi 3D çözümler bu
 aşama için gereksiz karmaşıklık ve performans yükü getirir. MVP için
 **katmanlı CSS/SVG illüstrasyon** yaklaşımı tercih edilmeli — her
-malzeme (taban, protein, topping, sos) önceden hazırlanmış şeffaf PNG/
-SVG katmanı olarak `z-index` sırasıyla üst üste bindirilir. Kullanıcı
-seçim yaptıkça ilgili katman `opacity`/`display` ile açılır. Hafif,
-hızlı, ek kütüphane gerektirmez; ileride marka bütçesi büyürse gerçek
-ürün fotoğrafı kompozisyonuna (server-side image composition) geçilebilir.
+malzeme (**Base, Main, Garden, Signature Flavor, Finish** — bkz. §3.3
+v2.1) önceden hazırlanmış şeffaf PNG/SVG katmanı olarak `z-index`
+sırasıyla üst üste bindirilir. Kullanıcı seçim yaptıkça ilgili katman
+`opacity`/`display` ile açılır. Hafif, hızlı, ek kütüphane gerektirmez;
+ileride marka bütçesi büyürse gerçek ürün fotoğrafı kompozisyonuna
+(server-side image composition) geçilebilir.
 
 **Mobil özelleştirici UX:** Masaüstünde yan yana duran adım+özet paneli,
 mobilde dikey akışa döner: adımlar tam ekran kart olarak sırayla
@@ -275,6 +293,11 @@ type BowlItem = {
 };
 ```
 
+> ⚠️ Not: "Build Your Bowl" (customizer) için `Garden`/`Signature Flavor`/
+> `Finish` malzeme kategorilerinin `menu-data.json`'a nasıl ekleneceği
+> Oturum 3 kapsamındadır — bu veri modeli değişikliği henüz yapılmadı,
+> yalnızca akış kontratı (`CUSTOMIZER_SPEC.md`) hazırlandı.
+
 ### 5.6 Üçüncü Parti Entegrasyonlar (Türkiye Pazarı)
 - **Pazar yeri toplama:** Adisyo veya SepetTakip API'leri ile Yemeksepeti/Getir Yemek/Trendyol Yemek siparişlerini tek ekranda toplayıp POS/adisyo yazıcısına aktarma
 - **WhatsApp sipariş köprüsü:** Özelleştirilen kase, şablon mesaj olarak şubenin WhatsApp hattına yönlendirilir (`wa.me` linki)
@@ -298,6 +321,11 @@ malzeme odaklı dürüst dil.
 3. *Kişiselleştirme odaklı:* "Senin Kaselerin, Senin Kuralların" — CTA: "Kendi Kâseni Tasarla"
 
 **CTA örnekleri:** "Sağlığı Keşfet" · "Ekspres Sipariş" · "Sepete Ekle" · "Kâseni Onayla"
+
+> Not (v2.1): Customizer adım isimleri (Base/Main/Garden/Signature
+> Flavor/Finish) bu Türkçe marka sesi kuralının **bilinçli bir istisnası**
+> olarak İngilizce bırakılmıştır — bkz. §3.3. CTA'lar ve genel sayfa
+> metinleri bu istisnanın dışındadır, Türkçe kalmaya devam eder.
 
 ---
 
@@ -350,7 +378,7 @@ UX) tek oturumda bitecek kadar hafif değil; ayrı oturuma bölündü.
 |---|---|
 | **1** | Next.js + Tailwind kurulumu, font/renk sistemi, Header/Footer, Ana Sayfa hero |
 | **2** | Menü sayfası, filtreleme, MenuCard (kalori/alerjen dahil), statik menü verisi |
-| **3** | Zustand store kurulumu + BowlCustomizer akışı (4 adım, masaüstü) |
+| **3** | Zustand store kurulumu + BowlCustomizer akışı (**5 adım** — bkz. §3.3 v2.1, masaüstü) |
 | **4** | VisualPreview (katmanlı CSS/SVG), mobil özelleştirici uyarlaması, sepet |
 | **5** | Hakkımızda, Şubeler, İletişim + JSON-LD/SEO etiketleri + performans/responsive son kontrol |
 
@@ -358,7 +386,8 @@ UX) tek oturumda bitecek kadar hafif değil; ayrı oturuma bölündü.
 5–10 kişilik bir grupla test edilmeli (adım netliği, mobilde özet
 panelin fark edilirliği, "Sepete Ekle" adımına kadarki süre ölçülmeli).
 Bu, Oturum 4 sonrası, Oturum 5'ten önce ayrı bir kontrol noktası olarak
-planlanmalı.
+planlanmalı. 5 adıma çıkan akışın 10 saniyelik "ilk kez gören müşteri"
+hedefini karşılayıp karşılamadığı bu testte özellikle ölçülmeli.
 
 Gerçek görsel/menü içeriği (fotoğraflar, fiyatlar, şube adresleri) hazır
 olduğunda süreç hızlanır. Üçüncü parti sipariş entegrasyonları (Adisyo/
@@ -368,3 +397,4 @@ bunlar gerçek API anahtarları ve iş ortaklığı gerektirir.
 ---
 
 *Bu belge üç kaynağın (ilk araştırma + 2 deep research raporu) sentezidir; aralarında çelişki tespit edilmemiştir, bulgular birbirini teyit etmektedir.*
+*v2.1 (18 Temmuz 2026): §3.3, §5.2, §6, §8 — customizer 5 adıma çıkarıldı, İngilizce isimlendirme kararı eklendi. Kaynak: `20260718001123_customizer_5_adim_gecisi.md`.*
