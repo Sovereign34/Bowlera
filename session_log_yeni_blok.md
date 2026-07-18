@@ -1,3 +1,25 @@
+## Session: 4 (devam) — 2026-07-18 — Checkpoint: Header → CartBadge/CartDrawer
+
+### Yapılanlar
+- `Header.tsx`, `CartBadge.tsx`, `CartDrawer.tsx` içerikleri kullanıcıdan alındı.
+- Header client component'e çevrildi (`"use client"`), `useState` ile sepet çekmecesi
+  açık/kapalı state'i eklendi.
+- Sepet ikonuna `CartBadge` (adet göstergesi), header altına koşullu `CartDrawer` bağlandı.
+
+### Kararlar (neden alındı)
+- `useCartStore.ts` içeriği tekrar istenmedi — CartBadge/CartDrawer store erişimini kendi
+  içinde kapsüllüyor, Header sadece UI-local drawer state'ini tutuyor. Bu minimum dokunuş
+  ilkesine (AGENT.md Kural #5 — tek problem, tek çözüm) uygun bulundu.
+- Risk MEDIUM olarak işaretlendi çünkü `touches_cart_state: true` (AGENT.md kuralı gereği
+  taban risk MEDIUM'un altına inemez), gerçek karmaşıklık düşük.
+
+### Teknik notlar
+- Açık Sorun #19 kapandı.
+- Yeni Açık Sorun #21 açıldı: Header'ın `"use client"` olmasının build/performansa etkisi
+  push/deploy sonrası doğrulanmadı.
+- Değişiklik izole: sadece `Header.tsx` dokunuldu, `CartBadge.tsx`/`CartDrawer.tsx` değiştirilmedi.
+
+----
 ## Session 3 — 2026-07-18
 
 ### Yapılanlar
