@@ -31,18 +31,17 @@
 | MenuCard.tsx | Kalori her kartta görünür (zorunlu — atlanamaz) |
 | Filtre paneli (alerjen + diyet/kalori) | Filtre sonucu boşsa "sonuç yok" state'i var |
 
-### Oturum 3 — Zustand + Customizer (Masaüstü) 🟡 Devam ediyor
+### Oturum 3 — Zustand + Customizer (Masaüstü) 🟡 Rapor edilen durum: tamamlandı — TEYİT EDİLMEDİ
+> ⚠️ Bu bölüm v1.0'da "4 adım UI" diyordu. Oturum 2'deki Karar #1 (SESSION_INDEX.md)
+> ile akış 5 adıma çıkarıldı ama bu değişiklik o sırada ROADMAP.md'ye işlenmemişti —
+> burada düzeltiliyor.
+
 | Görev | Kabul Kriteri | Durum |
 |---|---|---|
-| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar | 🟡 Üretildi, 9 test ✅ — kontrata birebir uyum satır satır teyit edilmedi (Açık Sorun #11) |
-| `lib/customizer-pricing.ts` (canlı fiyat hesabı) | Fiyat/kalori toplamları doğru hesaplanır | 🟡 Üretildi, 10 test ✅ — aynı teyit notu geçerli |
-| `lib/customizer-data.ts` (statik adım/malzeme verisi) | — | ✅ Üretildi |
-| ~~4 adım UI (masaüstü)~~ 5 adım UI (masaüstü) | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz | ⬜ Henüz yazılmadı. **Not:** bu satır hâlâ "4 adım" diyor, Oturum 2'de 5 adıma geçildi (Açık Sorun #10) — düzeltildi |
-| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez | ⬜ Henüz yazılmadı (bileşen yok) |
-
-> Oturum 3 kabul kriteri henüz tam karşılanmadı: store + pricing + data katmanı
-> hazır ve test edilmiş, ancak masaüstü UI (adım bileşenleri, SummaryPanel,
-> guard) henüz yok. Oturum 4'e geçilemez.
+| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar | 🟡 Üretildi, 9 test ✅ — spec'e satır satır uyum teyit edilmedi |
+| **5 adım** UI (masaüstü) — Base→Main→Garden→Signature Flavor→Finish | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz | 🟡 Üretildiği bildirildi, kod görülmedi |
+| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez | 🟡 Üretildiği bildirildi, kod görülmedi |
+| "Sepete Ekle" (AddToCartButton) | Çift tıklama koruması (BSC-6) çalışır, geçersiz adımda disabled | 🟡 Üretildiği bildirildi, kod görülmedi. **NOT:** TEST_MATRIX.md bu testi Oturum 4 kapsamında listeliyordu — kapsam bu oturumda fiilen Oturum 3'e kaymış, iki dosya arasında senkron sağlanmalı |
 
 ### Oturum 4 — VisualPreview + Mobil + Sepet
 | Görev | Kabul Kriteri |
@@ -77,5 +76,7 @@
 
 ---
 
-*BOWLERA ROADMAP.md — v1.1 — Session 3 (kısmi) — 2026-07-18*
+*BOWLERA ROADMAP.md — v1.1 — Session 3 — 2026-07-18*
 *Kaynak: MASTER_PLAN.md §8 · CORE.md §7.1, §7.3*
+*Değişiklik: Oturum 3 satırı 4→5 adıma düzeltildi (Karar #1 ile senkron), AddToCartButton
+kabul kriteri eklendi, tüm Oturum 3 satırlarına teyit durumu eklendi.*
