@@ -86,7 +86,7 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | Customizer Statik Veri | 🔴 `lib/customizer-data.ts` — `customizerCatalog` tamamen boş (tüm diziler `[]`) |
 | Customizer UI (Step bileşenleri) | 🔴 **HİÇ YAZILMADI** |
 | Customizer Ana Sayfası | ✅ `app/menu/customize/[id]/page.tsx` — bu sohbette sıfırdan yazıldı ve canlıda doğrulandı. 3 onay bekleyen varsayım kod içinde yorumla işaretli |
-| Header (Sepet) | ✅ **Bu sohbette bağlandı** — `Header.tsx` artık `"use client"`, `useState` ile drawer state'i tutuyor, `CartBadge` ikon üstünde, `CartDrawer` koşullu render ediliyor. Push/canlı deploy doğrulaması bekliyor. |
+| Header (Sepet) | ✅ **Bu sohbette bağlandı ve canlıda doğrulandı** — ekran görüntüsüyle: sepet ikonu tıklanınca çekmece açılıyor, "Sepetiniz boş." doğru görünüyor. Sepete ekleme adımı Açık Sorun #17'ye bağlı (Step bileşenleri yok). |
 | Sepet UI (CartBadge/CartDrawer) | ✅ İçerikleri bu sohbette görüldü ve Header'a bağlandı — `useCartStore`'dan `cart`/`removeFromCart` okuyor |
 | MenuCard | ✅ `MenuCard.tsx` — bu sohbette "Özelleştir" butonu eklendi |
 | Hero | ✅ `Hero.tsx` + `HeroHeadline.tsx` — slogan ana başlık oldu, CTA linki düzeltildi |
@@ -111,9 +111,7 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 | 17 | 🔴 | `customizerCatalog` boş + Step bileşenleri hiç yazılmadı. Katalog verisi kullanıcıdan gelmeli (BSC-5). | Oturum 4 | `lib/customizer-data.ts`, CUSTOMIZER_SPEC.md §2 |
 | 18 | 🟡 | `menu-data.json`'da "build-your-own" kategorili özel bir bowl yok — Hero CTA'sı geçici olarak `sig-teriyaki-tavuk`'a yönlendiriliyor | Oturum 4 | `lib/menu-data.json`, `components/home/Hero.tsx` |
 | 20 | 🟢 | `app/menu/customize/[id]/page.tsx` içinde 3 onay bekleyen varsayım var: (a) menu-data.json export şekli — kapatılabilir; (b) sepete ekleme sonrası otomatik `reset()` — onaylanmadı; (c) `notFound()` client component'te 404 davranışı test edilmedi | Oturum 4 | `app/menu/customize/[id]/page.tsx` |
-| **21** | 🟡 | **YENİ.** Header artık `"use client"` — bu değişikliğin build/performans üzerindeki etkisi push/deploy sonrası doğrulanmadı | Oturum 4 | `components/layout/Header.tsx` |
-
-> Kapanan sorunlar: #11, #12, #14 (önceki oturumlarda). **#19 bu blokta KAPANDI** — `Header.tsx`, `CartBadge.tsx`, `CartDrawer.tsx` bağlandı.
+> Kapanan sorunlar: #11, #12, #14 (önceki oturumlarda). **#19 bu blokta KAPANDI** — `Header.tsx`, `CartBadge.tsx`, `CartDrawer.tsx` bağlandı. **#21 de KAPANDI** — canlıda ekran görüntüsüyle doğrulandı: sepet ikonu tıklanınca çekmece doğru açılıyor, "Sepetiniz boş." mesajı görünüyor, build/deploy sorunsuz. Sepete ürün eklenememesi Açık Sorun #17'nin (Step bileşenleri + boş katalog) doğrudan sonucu — yeni bir hata değil.
 
 ---
 
@@ -153,17 +151,16 @@ gereği katalog verisi (ürün adı/fiyat/kalori/protein) Claude tarafından
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | Bu sohbette üretilen/değiştirilen dosyaları push et: `Header.tsx`, `useCustomizerStore.ts`, `Hero.tsx`, `HeroHeadline.tsx`, `MenuCard.tsx`, `app/menu/customize/[id]/page.tsx` | 🔴 | ⬜ |
-| 2 | Push sonrası Header/sepet akışını canlıda doğrula (drawer açılıyor mu, badge sayı güncelliyor mu) — Açık Sorun #21 | 🔴 | ⬜ |
-| 3 | `customizerCatalog` için gerçek mutfak verisi sağla (isim/fiyat/kalori/protein) — Claude üretemez (BSC-5) | 🔴 | ⬜ |
-| 4 | Katalog verisi gelince Step bileşenlerini yaz (Açık Sorun #17) | 🔴 | ⬜ |
-| 5 | "build-your-own" bowl kararı (Açık Sorun #18) | 🟡 | ⬜ |
-| 6 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
-| 7 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
-| 8 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
-| 9 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
-| 10 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
-| 11 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
+| 1 | `Header.tsx` push edildi ve canlıda doğrulandı ✅. Kalan diğer dosyaları push et: `useCustomizerStore.ts`, `Hero.tsx`, `HeroHeadline.tsx`, `MenuCard.tsx`, `app/menu/customize/[id]/page.tsx` | 🔴 | 🟡 kısmen |
+| 2 | `customizerCatalog` için gerçek mutfak verisi sağla (isim/fiyat/kalori/protein) — Claude üretemez (BSC-5) | 🔴 | ⬜ |
+| 3 | Katalog verisi gelince Step bileşenlerini yaz (Açık Sorun #17) | 🔴 | ⬜ |
+| 4 | "build-your-own" bowl kararı (Açık Sorun #18) | 🟡 | ⬜ |
+| 5 | `lib/customizer-summary-format.ts` içeriğini yükle, konsolide et (Açık Sorun #16) | 🟡 | ⬜ |
+| 6 | `page.tsx`'teki onay bekleyen varsayımları teyit et (Açık Sorun #20) | 🟢 | ⬜ |
+| 7 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
+| 8 | TEST_MATRIX.md, DEPENDENCIES.md, ROADMAP.md, session_log.md güncel hallerini yükle (Açık Sorun #15) | 🟢 | ⬜ |
+| 9 | Allergen gösterim satırını DESIGN_SYSTEM.md ile teyit et (Açık Sorun #7) | 🟡 | ⬜ |
+| 10 | `ARCHITECTURE.md` §2.4 ve `DEPENDENCIES.md`'yi 5 adımlı customizer kontratıyla senkronize et (Açık Sorun #10) | 🟡 | ⬜ |
 
 ---
 
