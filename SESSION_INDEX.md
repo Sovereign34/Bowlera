@@ -18,20 +18,26 @@ Görev:    Oturum 4 (devam ediyor). Bu sohbette (yeni sohbet — önceki Oturum 
           tamamen kaldırıldı ("Benim Kasem" oldu) — menu-data.json ve
           CartDrawer'daki "Özel Kâse" düzeltildi, (5) fonts.ts'e 'latin-ext'
           eklendi (deneysel, â sorununun asıl çözümü olmayabilir — sorun sonra
-          â'yı tamamen kaldırarak çözüldü).
+          â'yı tamamen kaldırarak çözüldü), (6) kullanıcı kaydı/giriş konusu
+          açıldı — global emsal araştırması yapıldı, TASLAK karar (#17)
+          SESSION_INDEX'e işlendi, henüz kod yazılmadı.
 Faz:      Oturum 4 — customizer uçtan uca çalışıyor (test verisiyle), sepet
           artık teslimat kanalı seçtiriyor (CartDrawer içinde, henüz canlıda
           görsel doğrulanmadı). "Benim Kasem" başlığı ve customizer taban/ana
           malzeme isimleri Türkçe olarak canlıda DOĞRULANDI (ekran görüntüsü).
           Hâlâ İngilizce/â kalan 2 yer BİLİNÇLİ OLARAK ERTELENDİ (kullanıcı
           "bu kalsın" dedi): Hero.tsx'teki "Kâseni Yarat" CTA metni ve
-          StepBase.tsx'teki "Kâsenin tabanını seç." açıklaması.
+          StepBase.tsx'teki "Kâsenin tabanını seç." açıklaması. Kullanıcı
+          kaydı/auth + sadakat programı YENİ bir kapsam olarak açıldı, henüz
+          TASLAK aşamasında (kod yok, mimari netleşmedi).
 Gerekçe:  Önceki sohbet bloğunda page.tsx yazılmış, Header/CartBadge/CartDrawer
           bağlanmıştı ama push/deploy doğrulaması yarım kalmıştı. Bu sohbette
           kullanıcı "Push ettim" dedi, ardından yeni görevlere (sepet kanalı,
           Türkçeleştirme, â düzeltmesi) geçildi — her adımda KARAR BİLDİRİMİ
           üretildi, çoğunda onay alındı, bazılarında kullanıcı ekran
-          görüntüsüyle canlı doğrulama sağladı.
+          görüntüsüyle canlı doğrulama sağladı. Son olarak kullanıcı "bu
+          siteye nasıl kayıt yapıyor" sorusunu sordu — mevcut hiçbir oturumda
+          auth hiç ele alınmamıştı, yeni kapsam olarak açıldı.
 Çıktı:    Repo: github.com/Sovereign34/Bowlera_site (main). Deploy: Vercel —
           bu sohbette 3 ekran görüntüsüyle CANLI doğrulandı: (1) "Benim Kasem"
           başlığı â'sız görünüyor, (2) Base adımında "Jasmin Pirinç"/"Esmer
@@ -39,6 +45,8 @@ Gerekçe:  Önceki sohbet bloğunda page.tsx yazılmış, Header/CartBadge/CartD
           canlıda teyitli), (3) Ana sayfada "Kâseni Yarat" CTA'sı hâlâ â
           gösteriyor (bilinçli olarak dokunulmadı). Sepet kanalı seçici
           (FulfillmentChannelSelector) HENÜZ canlıda görsel doğrulanmadı.
+          Auth/kayıt konusunda HENÜZ hiçbir kod/dosya üretilmedi — sadece
+          taslak karar var (#17).
 ```
 
 ⚠️ **DEĞİŞMEYEN KRİTİK BLOKAJ:** `customizerCatalog` ve "Benim Kâsem" ürünündeki
@@ -51,6 +59,11 @@ olarak yeniden adlandırıldı ama bu alanı okuyan/yazan başka dosyalar
 (`SummaryPanel.tsx`, `AddToCartButton.tsx` gibi) bu sohbette hiç görülmedi.
 Push sonrası TypeScript derlemesi bu dosyalarda kırılabilir — kontrol
 edilmeden production'a alınmamalı.
+
+⚠️ **YENİ TASLAK (Karar #17 / Açık Sorun #30):** Kullanıcı kaydı/giriş ve
+sadakat programı yönü belirlendi (telefon + SMS OTP, guest checkout korunuyor)
+ama TEKNİK MİMARİ (OTP sağlayıcısı, auth store, session/DB şeması, hesap
+kurtarma akışı) hiç netleşmedi. Bu haliyle koda geçilemez.
 
 ---
 
@@ -72,6 +85,7 @@ edilmeden production'a alınmamalı.
 | 14 | `â` karakteri (Kâseni/Kâsem) bazı Android/Chrome cihazlarda `å`'ya benzer render ediliyordu. Byte-seviyesi kontrol edildi — kaynak dosyalar (`menu-data.json`) baştan beri doğru UTF-8 (`â`, U+00E2) içeriyordu, bu bir encoding hatası DEĞİLDİ. Kesin kök neden teyit edilemedi (muhtemelen font glyph rendering/FOUT). Denenen ama garantisiz düzeltme: `lib/fonts.ts`'e `latin-ext` subset eklendi. **Asıl çözüm kullanıcı tercihiyle geldi: â karakteri tamamen kaldırıldı** ("Benim Kasem", "Özel Kase") — bkz. Karar #16. | Bu sohbet — 2026-07-18 | Teknik teşhis + kullanıcı nihai tercihi |
 | 15 | (Karar #2'nin geri alınması) `lib/customizer-data.ts`'teki tüm `name` alanları İngilizceden Türkçeye çevrildi (örn. "Grilled Chicken" → "Izgara Tavuk"). `id` alanları BİLİNÇLİ OLARAK değiştirilmedi (store/pricing referans veriyor). Canlıda doğrulandı (Base adımında "Jasmin Pirinç"/"Esmer Pirinç" görünüyor). ⚠️ CUSTOMIZER_SPEC.md §2'deki isim listesi bu değişiklikle senkron DEĞİL — ayrı görev. | Bu sohbet — 2026-07-18 | Kullanıcı: "İngilizce olmayan kelimeler" düzeltilsin |
 | 16 | `â` karakteri `menu-data.json`'da ("Benim Kasem") ve `CartDrawer.tsx`'te ("Özel Kase") kaldırıldı, canlıda doğrulandı. **Hero.tsx'teki "Kâseni Yarat" CTA metni ve StepBase.tsx'teki "Kâsenin tabanını seç." açıklaması BİLİNÇLİ OLARAK ERTELENDİ** — kullanıcı "Bu kalsın başka göreve geç" dedi. Bu iki dosya bu sohbette hiç görülmedi/istenmedi bir daha. | Bu sohbet — 2026-07-18 | Kullanıcı kararı — kapsam dışı bırakıldı |
+| 17 | 🟠 **[TB — TASLAK, henüz kod yazılmadı]** Kullanıcı kaydı/giriş yöntemi: **telefon numarası + SMS OTP, şifresiz (passwordless)** — e-posta/şifre ve sosyal giriş birincil değil. Guest checkout (hesapsız sipariş) korunacak — kayıt zorunlu değil. Sadakat/puan programı telefon numarasını kimlik anahtarı olarak kullanacak (ayrı üyelik ID'si yok); puan mekaniği (harcamaya göre mi, sipariş sayısına göre mi) HENÜZ netleşmedi. Gerekçe: global emsal araştırması — McDonald's/Starbucks/Domino's ve doğrudan Türkiye emsalleri Yemeksepeti/Getir/Trendyol Yemek hepsi telefon+OTP birincil modelini kullanıyor; e-posta/şifre sürtünmesi dönüşümü düşürüyor. ⚠️ Bilinen risk (Yemeksepeti şikayetlerinden görüldü): "1 numara = 1 hesap" kısıtı hesap kurtarma/numara değişikliğinde ciddi kullanıcı sorunlarına yol açıyor — bu akış gün 1'de tasarlanmalı, sonradan yama olarak eklenmemeli. **OTP sağlayıcısı, auth store, session/DB şeması ve hesap kurtarma akışı henüz konuşulmadı → Açık Sorun #30.** | Bu sohbet — 2026-07-19 | Kullanıcı sorusu ("bu siteye nasıl kayıt yapıyor") + global/Türkiye emsal web araştırması + kullanıcı onayı (yöntem + guest checkout) |
 
 ---
 
@@ -79,10 +93,10 @@ edilmeden production'a alınmamalı.
 
 | Alan | Değer |
 |---|---|
-| Son Session | 4 (devam) — 2026-07-18, yeni sohbet penceresi |
-| Son Eylem | ROADMAP.md + MASTER_PLAN.md ile genel ilerleme değerlendirmesi yapıldı (kod değişikliği değil) |
-| Blocker | 🔴 customizerCatalog + "Benim Kâsem" hâlâ TEST VERİSİ (Açık Sorun #24, değişmedi) |
-| Devam Noktası | Bu sohbette üretilen dosyaların push/deploy durumu KISMEN teyitli — aşağıdaki tabloya bak. `unitCalorie7s` rename sonrası kırılan dosya olup olmadığı kontrol edilmeli (Açık Sorun #25). |
+| Son Session | 4 (devam) — 2026-07-19, aynı sohbet |
+| Son Eylem | Kullanıcı kaydı/auth konusunda global emsal araştırması yapıldı, TASLAK karar (#17) SESSION_INDEX'e işlendi (kod değişikliği yok) |
+| Blocker | 🔴 customizerCatalog + "Benim Kâsem" hâlâ TEST VERİSİ (Açık Sorun #24, değişmedi). 🟠 Auth mimarisi tamamen taslak aşamasında (Açık Sorun #30, yeni). |
+| Devam Noktası | Bu sohbette üretilen dosyaların push/deploy durumu KISMEN teyitli — aşağıdaki tabloya bak. `unitCalorie7s` rename sonrası kırılan dosya olup olmadığı kontrol edilmeli (Açık Sorun #25). Auth için henüz hiçbir dosya üretilmedi. |
 
 ---
 
@@ -106,6 +120,8 @@ edilmeden production'a alınmamalı.
 | Hero | 🟡 Slogan + CTA linki önceki blokta düzeltildi; bu sohbette "Kâseni Yarat" metnindeki â bilinçli olarak ERTELENDİ (Açık Sorun #27) |
 | Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — değişmedi |
 | Üçüncü Parti Anahtarları | ⬜ Henüz temin edilmedi — değişmedi |
+| Kullanıcı Kaydı/Auth | 🟠 **TASLAK** — yöntem kararı var (Karar #17: telefon+OTP), mimari/kod yok |
+| Sadakat Programı | 🟠 **TASLAK** — telefon numarasına bağlanacak, puan mekaniği netleşmedi |
 
 ---
 
@@ -129,7 +145,8 @@ edilmeden production'a alınmamalı.
 | 27 | 🟢 | **Bilinçli ertelendi.** Hero.tsx'teki "Kâseni Yarat" CTA'sı ve StepBase.tsx'teki "Kâsenin tabanını seç." hâlâ `â` içeriyor — kullanıcı isteğiyle bu sohbette dokunulmadı. | Bu sohbet | `components/home/Hero.tsx`, `components/customizer/StepBase.tsx` |
 | 28 | 🟢 | Adım başlıkları (Base/Main/Garden/Signature Flavor/Finish) hâlâ İngilizce — Karar #15 kapsamına alınmadı, ayrı onay bekliyor (Türkçeye çevrilsin mi tam netleşmedi, kullanıcı konuyu değiştirdi). | Bu sohbet | `components/customizer/Step*.tsx` |
 | 29 | 🟢 | `CUSTOMIZER_SPEC.md` §2'deki İngilizce isim listesi artık `customizer-data.ts` ile senkron değil (Karar #15 sonrası). | Bu sohbet | `CUSTOMIZER_SPEC.md` |
-> Kapanan sorunlar (bu sohbet öncesi): #5, #6, #9, #11(eski), #12(eski), #14(eski), #19, #21, #23. Bu sohbette yeni açılanlar: #25, #26, #27, #28, #29. **#20 hâlâ açık** — bir önceki taslakta yanlışlıkla silinmişti, düzeltildi.
+| 30 | 🟠 | **[YENİ — TB]** Karar #17 (telefon+OTP auth) sadece yön kararı — teknik mimari hiç konuşulmadı: (a) SMS OTP sağlayıcısı seçilmedi (Netgsm/İletimerkezi/Twilio vb. — Türkiye'de teslimat garantisi ve maliyet karşılaştırması gerekiyor), (b) auth store/session yönetimi tasarlanmadı, (c) kullanıcı/sipariş DB şeması yok, (d) hesap kurtarma / numara değişikliği akışı düşünülmedi (Yemeksepeti'nin yaşadığı bilinen sorun), (e) sadakat puan mekaniği netleşmedi. Koda geçilmeden önce hepsi netleşmeli. | Bu sohbet | Karar #17 |
+> Kapanan sorunlar (bu sohbet öncesi): #5, #6, #9, #11(eski), #12(eski), #14(eski), #19, #21, #23. Önceki sohbette açılanlar: #25, #26, #27, #28, #29. Bu sohbette yeni açılan: #30. **#20 hâlâ açık.**
 
 ---
 
@@ -141,11 +158,11 @@ edilmeden production'a alınmamalı.
 | **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
 | **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ✅ Tamamlandı |
 | **Oturum 3** | Zustand store + Customizer masaüstü UI bileşenleri | ✅ Büyük ölçüde teyit edildi |
-| **Oturum 4** | page.tsx, VisualPreview/Mobil, sepet, + bu sohbette: kanal seçimi, Türkçeleştirme, â düzeltmesi | 🟡 **Devam ediyor** — veri/fotoğraf blokajı sürüyor |
+| **Oturum 4** | page.tsx, VisualPreview/Mobil, sepet, + bu sohbette: kanal seçimi, Türkçeleştirme, â düzeltmesi, auth/kayıt taslak kararı | 🟡 **Devam ediyor** — veri/fotoğraf blokajı sürüyor, auth yeni taslak kapsam |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor — Oturum 4 bitmeden başlamaz |
 | **Oturum 5** | Hakkımızda, Şubeler, İletişim, SEO, son kontrol | ⬜ Bekliyor |
 
-**İlerleme özeti (bu sohbette kullanıcıya verilen değerlendirme):** 5 oturumdan ~3'ü tamam, Oturum 4 yarıda — en kritik blokaj kod değil, gerçek mutfak verisi (fiyat/kalori/protein) ve ürün fotoğrafları eksikliği. Kontrol Noktası ve Oturum 5 hiç başlamadı.
+**İlerleme özeti:** 5 oturumdan ~3'ü tamam, Oturum 4 yarıda — en kritik blokaj kod değil, gerçek mutfak verisi (fiyat/kalori/protein) ve ürün fotoğrafları eksikliği. Kullanıcı kaydı/auth + sadakat programı yeni bir kapsam olarak açıldı, henüz sadece yön kararı var (Karar #17), mimari netleşmedi (Açık Sorun #30). Kontrol Noktası ve Oturum 5 hiç başlamadı.
 
 ---
 
@@ -163,17 +180,18 @@ edilmeden production'a alınmamalı.
 | `components/customizer/StepGarden.tsx` | ✅ Önceki blokta yazıldı | — | 🟡 Push edilmeli | ⬜ |
 | `components/customizer/StepSignatureFlavor.tsx` | ✅ Önceki blokta yazıldı | — | 🟡 Push edilmeli | ⬜ |
 | `components/customizer/StepFinish.tsx` | ✅ Önceki blokta yazıldı | — | 🟡 Push edilmeli | ✅ Canlıda çalıştığı ekran görüntüsüyle görüldü |
-| `app/menu/customize/[id]/page.tsx` | ✅ Önceki blokta yazıldı, **bu sohbette başlık düzeltildi** | ⬜ test yok | ✅ Push edildi (kullanıcı onayladı) | ✅ Canlıda dolaylı doğrulandı |
-| `docs/schema-changes/20260718070000_cartitem_unitcalories_ve_fulfillment_channel.md` | ✅ **Bu sohbette yeni** | — | 🟡 Push edilmeli | — |
-| `types/index.ts` | ✅ **Bu sohbette** `unitCalories` düzeltmesi + `FulfillmentChannel` eklendi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
-| `store/useCartStore.ts` | ✅ **Bu sohbette** `fulfillmentChannel` state + action eklendi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
-| `components/cart/FulfillmentChannelSelector.tsx` | ✅ **Bu sohbette yeni dosya** | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
-| `components/cart/CartDrawer.tsx` | ✅ **Bu sohbette** Selector bağlandı + "Özel Kase" â düzeltmesi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
-| `lib/customizer-data.ts` | ✅ **Bu sohbette** tüm `name` alanları Türkçe | — | ✅ Push edildi | ✅ Canlıda doğrulandı (Jasmin Pirinç/Esmer Pirinç) |
-| `lib/menu-data.json` | ✅ **Bu sohbette** "Benim Kasem" â'sız | — | ✅ Push edildi | ✅ Canlıda doğrulandı |
-| `lib/fonts.ts` | 🟡 **Bu sohbette** `latin-ext` eklendi, etkisi belirsiz | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
+| `app/menu/customize/[id]/page.tsx` | ✅ Önceki blokta yazıldı, başlık düzeltildi | ⬜ test yok | ✅ Push edildi (kullanıcı onayladı) | ✅ Canlıda dolaylı doğrulandı |
+| `docs/schema-changes/20260718070000_cartitem_unitcalories_ve_fulfillment_channel.md` | ✅ Önceki sohbette üretildi | — | 🟡 Push edilmeli | — |
+| `types/index.ts` | ✅ `unitCalories` düzeltmesi + `FulfillmentChannel` eklendi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
+| `store/useCartStore.ts` | ✅ `fulfillmentChannel` state + action eklendi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
+| `components/cart/FulfillmentChannelSelector.tsx` | ✅ Önceki sohbette yeni dosya | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
+| `components/cart/CartDrawer.tsx` | ✅ Selector bağlandı + "Özel Kase" â düzeltmesi | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
+| `lib/customizer-data.ts` | ✅ Tüm `name` alanları Türkçe | — | ✅ Push edildi | ✅ Canlıda doğrulandı (Jasmin Pirinç/Esmer Pirinç) |
+| `lib/menu-data.json` | ✅ "Benim Kasem" â'sız | — | ✅ Push edildi | ✅ Canlıda doğrulandı |
+| `lib/fonts.ts` | 🟡 `latin-ext` eklendi, etkisi belirsiz | — | 🟡 Push/deploy doğrulanmadı | ⬜ |
 
-> Dokunulmayan/ertelenen: `components/home/Hero.tsx`'in CTA metni, `components/customizer/StepBase.tsx`'in açıklama metni — hâlâ `â` içeriyor, kullanıcı isteğiyle bu sohbette işlenmedi (Açık Sorun #27).
+> Auth/kayıt/sadakat için henüz HİÇBİR kod dosyası üretilmedi — sadece Karar #17 (taslak) var.
+> Dokunulmayan/ertelenen: `components/home/Hero.tsx`'in CTA metni, `components/customizer/StepBase.tsx`'in açıklama metni — hâlâ `â` içeriyor (Açık Sorun #27).
 > Diğer tüm dosyaların (Footer, MenuCardImage/Badges/Info, CategoryNav, FilterPanel, SummaryPanel, SummaryTotals, VisualPreview, MobileSummaryDrawer vb.) durumu önceki session bloklarında olduğu gibi — bu sohbette değişmedi.
 
 ---
@@ -186,17 +204,29 @@ edilmeden production'a alınmamalı.
 | 2 | Bu sohbette üretilen dosyaları push et: şema notu, `types/index.ts`, `useCartStore.ts`, `FulfillmentChannelSelector.tsx`, `CartDrawer.tsx`, `fonts.ts` — sonra sepet kanalı seçicisini canlıda görsel doğrula | 🔴 | ⬜ |
 | 3 | `customizerCatalog` + "Benim Kâsem" TEST rakamlarını gerçek mutfak verisiyle değiştir (Açık Sorun #24) | 🔴 | ⬜ |
 | 4 | Teslimat kanalının checkout'ta zorunlu kılınması (Açık Sorun #26) — `app/siparis/page.tsx` yazılırken ele alınmalı | 🟡 | ⬜ |
-| 5 | Signature Flavor'ın Main'e göre koşullu içerik göstermesi (Karar #11, Açık Sorun #22) | 🟡 | ⬜ |
-| 6 | `page.tsx`'teki 3 onay bekleyen varsayımı teyit et (Açık Sorun #20) | 🟢 | ⬜ |
-| 7 | Adım başlıklarının (Base/Main/...) Türkçeleştirilip çevrilmeyeceğine netlik getir (Açık Sorun #28) | 🟢 | ⬜ |
-| 8 | Hero.tsx + StepBase.tsx'teki `â` — kullanıcı isterse ele alınacak (Açık Sorun #27, şu an bilinçli ertelendi) | 🟢 | ⬜ |
-| 9 | VisualPreview altına "Görsel temsilîdir" disclaimer'ı ekle (Karar #10) | 🟡 | ⬜ |
-| 10 | CUSTOMIZER_SPEC.md'yi Türkçe isim listesiyle senkronize et (Açık Sorun #29) | 🟢 | ⬜ |
-| 11 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
+| 5 | Auth mimarisini netleştir: OTP sağlayıcısı seç, auth store/session tasarla, kullanıcı DB şeması çıkar, hesap kurtarma akışını planla (Açık Sorun #30) | 🟠 | ⬜ |
+| 6 | Sadakat puan mekaniğine karar ver (Karar #17'nin eksik kısmı) | 🟠 | ⬜ |
+| 7 | Signature Flavor'ın Main'e göre koşullu içerik göstermesi (Karar #11, Açık Sorun #22) | 🟡 | ⬜ |
+| 8 | `page.tsx`'teki 3 onay bekleyen varsayımı teyit et (Açık Sorun #20) | 🟢 | ⬜ |
+| 9 | Adım başlıklarının (Base/Main/...) Türkçeleştirilip çevrilmeyeceğine netlik getir (Açık Sorun #28) | 🟢 | ⬜ |
+| 10 | Hero.tsx + StepBase.tsx'teki `â` — kullanıcı isterse ele alınacak (Açık Sorun #27, şu an bilinçli ertelendi) | 🟢 | ⬜ |
+| 11 | VisualPreview altına "Görsel temsilîdir" disclaimer'ı ekle (Karar #10) | 🟡 | ⬜ |
+| 12 | CUSTOMIZER_SPEC.md'yi Türkçe isim listesiyle senkronize et (Açık Sorun #29) | 🟢 | ⬜ |
+| 13 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
 
 ---
 
-## 📜 GEÇMİŞ / ARŞİV — Bu Sohbet Detaylı Kayıt
+## 📜 GEÇMİŞ / ARŞİV — Bu Sohbet Detaylı Kayıt (2026-07-19 bloğu)
+
+### Kullanıcı Kaydı / Auth Araştırması (TASLAK)
+- Kullanıcı "bu siteye nasıl kayıt yapıyor" sorusunu sordu — mevcut hiçbir SESSION_INDEX kaydında auth hiç geçmiyordu, tamamen yeni kapsam olarak açıldığı netleşti.
+- Netleştirme soruları soruldu: kayıt kastı checkout için mi, sadakat için mi → kullanıcı ikisini de seçti.
+- Giriş yöntemi için kullanıcı "global markalar nasıl çözmüş" dedi → web araştırması yapıldı.
+- Bulgular: McDonald's, Starbucks, Domino's ve doğrudan Türkiye emsalleri (Yemeksepeti, Getir, Trendyol Yemek) hepsi telefon numarası + SMS OTP'yi birincil, şifresiz giriş yöntemi olarak kullanıyor. E-posta/şifre ikincil veya yok; sosyal giriş ek seçenek.
+- Bilinen risk tespit edildi: Yemeksepeti kullanıcı şikayetlerinde "1 telefon numarası = 1 hesap" kısıtının hesap kurtarma/numara değişikliğinde ciddi sorunlara yol açtığı görüldü — bu akışın baştan tasarlanması gerektiği notu düşüldü.
+- Öneri sunuldu: telefon+OTP birincil, guest checkout korunsun, sadakat programı telefon numarasını kimlik anahtarı olarak kullansın.
+- Kullanıcı onayladı: yöntem = telefon+OTP (global emsale bakılarak), guest checkout korunsun, sadakat puan mekaniği henüz netleşmedi ("sadece altyapıyı kuralım").
+- Kullanıcı bu kararın SESSION_INDEX'e **TB (taslak)** olarak geçirilmesini istedi — kod yazılmadı, sadece yön kararı kayda geçirildi (Karar #17, Açık Sorun #30).
 
 ### Başlık Düzeltmesi
 - `page.tsx`'teki h1, `{bowl.name} — Kâseni Yarat` yerine sadece `{bowl.name}` yapıldı. Tek satırlık izole değişiklik, kullanıcı push etti.
@@ -228,14 +258,14 @@ edilmeden production'a alınmamalı.
 - Kullanıcı "Çok yolumuz kaldı mı?" diye sordu, ROADMAP.md + MASTER_PLAN.md §8 karşılaştırıldı.
 - Dürüst değerlendirme verildi: 5 oturumdan ~3'ü tamam, Oturum 4 yarıda, asıl blokajın kod değil gerçek veri/fotoğraf eksikliği olduğu vurgulandı. Kontrol Noktası ve Oturum 5'in hiç başlamadığı belirtildi.
 
-### SESSION_INDEX.md Düzeltmesi (bu blok)
+### SESSION_INDEX.md Düzeltmesi
 - İlk üretilen SESSION_INDEX.md'nin bir öncekinden belirgin şekilde kısa olduğu kullanıcı tarafından fark edildi.
 - Kontrol edildi: kapanmış kararların/sorunların özetlenmesi kasıtlı ve doğruydu, ama "ÜRETİLEN KOD DOSYALARI" tablosundaki 13 satır (çoğu hâlâ "🟡 Push edilmeli" — yani TAMAMLANMAMIŞ) ve Açık Sorun #20 (hâlâ çözülmemiş) yanlışlıkla silinmişti.
 - Hata kabul edildi, eski + yeni tablo birleştirilerek düzeltildi.
 
 ---
 
-## 📜 GEÇMİŞ / ARŞİV — Önceki Oturum 4 Bloğu (bu sohbetten önce)
+## 📜 GEÇMİŞ / ARŞİV — Önceki Oturum 4 Bloğu
 
 ### Header.tsx → CartBadge/CartDrawer Bağlantısı
 - `Header.tsx` `"use client"` yapıldı, `useState` ile `isCartOpen` eklendi, `CartBadge`/`CartDrawer` bağlandı. Kalite 5/5, Güvenlik 8/8. Checkpoint alındı, canlıda doğrulandı (sepet ikonu → çekmece açılıyor, "Sepetiniz boş." görünüyor).
@@ -287,4 +317,4 @@ edilmeden production'a alınmamalı.
 
 ---
 
-*BOWLERA SESSION_INDEX.md — düzeltildi, Session 4 (devam ediyor) — 2026-07-18*
+*BOWLERA SESSION_INDEX.md — güncellendi, Session 4 (devam ediyor) — 2026-07-19*
