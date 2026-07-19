@@ -9,46 +9,50 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Oturum 4 (devam ediyor). Bu sohbette en son: CartDrawer'da keşfedilen
-          kritik bir görsel bug (Header'daki backdrop-blur, CartDrawer'ın
-          position:fixed'ini viewport yerine Header kutusuna hapsediyordu,
-          içerik Hero'ya taşıyordu) teşhis edildi, React Portal ile düzeltildi,
-          push edildi ve 3 ekran görüntüsüyle CANLI doğrulandı — çakışma
-          tamamen gitti. Bu düzeltmeyle birlikte, daha önce "push edilmeli"
-          olarak bekleyen kanal seçimi altyapısının (FulfillmentChannel tipi,
-          useCartStore alanı, FulfillmentChannelSelector bileşeni) da fiilen
-          çalıştığı canlıda dolaylı olarak teyit edildi (seçici state tutuyor,
-          arayüz tepki veriyor).
-Faz:      Oturum 4 — customizer uçtan uca çalışıyor (test verisiyle), sepet
-          teslimat kanalı seçtiriyor ve CANLIDA TEMİZ görünüyor (görsel bug
-          kapatıldı). "Benim Kasem" başlığı, customizer taban/ana malzeme
-          isimleri Türkçe — hepsi canlıda doğrulandı. Hâlâ İngilizce/â kalan
-          2 yer BİLİNÇLİ OLARAK ERTELENDİ: Hero.tsx'teki "Kâseni Yarat" CTA
-          metni ve StepBase.tsx'teki "Kâsenin tabanını seç." açıklaması
-          (Açık Sorun #27 — değişmedi). Kullanıcı kaydı/auth konusu TASLAK
-          aşamasında bekliyor (Karar #17, Açık Sorun #30).
-Gerekçe:  Önceki turda kullanıcı 3 ekran görüntüsüyle CartDrawer'da Hero
-          içeriğinin çekmeceye sızdığını bildirdi. Kod incelemesi (CartDrawer
-          → Hero → Header sırasıyla) Header.tsx'teki `backdrop-blur`
-          sınıfının CSS containing-block kuralı gereği CartDrawer'ın
-          `fixed inset-0`'ını bozduğunu ortaya çıkardı. KARAR BİLDİRİMİ
-          üretildi (Portal çözümü), onay alındı, kod yazıldı, kullanıcı
-          push etti ve 3 ekran görüntüsüyle doğruladı.
-Çıktı:    Repo: github.com/Sovereign34/Bowlera_site (main). Deploy: Vercel —
-          bu sohbette CANLI doğrulandı: (1) Sepet çekmecesi artık temiz,
-          Hero sızıntısı yok, (2) kanal seçici çalışıyor ve state tutuyor
-          (Masaya Servis seçili kalmış görünüyor), (3) "Benim Kasem" başlığı
-          â'sız, Base adımı Türkçe isimlerle ve kcal ile doğru çalışıyor.
+Görev:    Oturum 4 (devam ediyor). Bu sohbette en son: telefon+OTP kullanıcı girişi
+          (Karar #17) için mimari netleştirildi (Karar #19) — Twilio Verify + Auth.js
+          JWT session, DB kararı bilinçli olarak ERTELENDİ. CONFIG_SCHEMA.md,
+          INTEGRATIONS.md (yeni §5) ve ARCHITECTURE.md (yeni §2.7 + AuthenticatedUser
+          tipi) güncellendi ve dosya olarak teslim edildi. Ürün fotoğrafı çekimine
+          bağlı olan test verisi değişimi (Açık Sorun #18/#24) kullanıcı isteğiyle
+          BİLİNÇLİ OLARAK ERTELENDİ — fotoğraf çekimi tamamlanana kadar dokunulmayacak.
+          Bundan önce (aynı sohbet öncesi bloğu): CartDrawer'da keşfedilen kritik görsel
+          bug (Header'daki backdrop-blur, CartDrawer'ın position:fixed'ini viewport
+          yerine Header kutusuna hapsediyordu) teşhis edildi, React Portal ile
+          düzeltildi, push edildi ve 3 ekran görüntüsüyle CANLI doğrulandı.
+Faz:      Oturum 4 — customizer uçtan uca çalışıyor (test verisiyle), sepet teslimat
+          kanalı seçtiriyor ve CANLIDA TEMİZ görünüyor (görsel bug kapatıldı). "Benim
+          Kasem" başlığı, customizer taban/ana malzeme isimleri Türkçe — hepsi canlıda
+          doğrulandı. Auth artık sadece "yön kararı" değil, somut mimari + dosya
+          kontratı seviyesinde net (ama henüz kod yazılmadı). Hâlâ İngilizce/â kalan
+          2 yer BİLİNÇLİ OLARAK ERTELENDİ: Hero.tsx'teki "Kâseni Yarat" CTA metni ve
+          StepBase.tsx'teki "Kâsenin tabanını seç." açıklaması (Açık Sorun #27).
+Gerekçe:  Önceki turda kullanıcı 3 ekran görüntüsüyle CartDrawer'da Hero içeriğinin
+          çekmeceye sızdığını bildirdi. Kod incelemesi Header.tsx'teki backdrop-blur
+          sınıfının CSS containing-block kuralı gereği CartDrawer'ı bozduğunu ortaya
+          çıkardı — KARAR BİLDİRİMİ, onay, kod, push, canlı doğrulama. Ardından
+          kullanıcı "1) fotoğraf çekimine ertele, 2) auth mimarisine devam et" dedi.
+          OTP sağlayıcı (Twilio Verify) ve session yönetimi (Auth.js JWT) için öneri
+          sunuldu, kullanıcı onayladı ve DB kararını sonraya bırakmayı netleştirdi.
+Çıktı:    Repo: github.com/Sovereign34/Bowlera_site (main). Deploy: Vercel — CartDrawer
+          fix canlıda doğrulandı. Auth mimarisi bu sohbette henüz PUSH EDİLMEDİ —
+          kullanıcı üç kontrat dosyasını (CONFIG_SCHEMA.md, INTEGRATIONS.md,
+          ARCHITECTURE.md) indirip kendi reposuna taşıyacak (AGENT.md Kural #9). Auth
+          kodu (route handler'lar, Auth.js config) henüz yazılmadı — sadece kontrat/
+          mimari seviyesinde.
 ```
 
-⚠️ **DEĞİŞMEYEN KRİTİK BLOKAJ:** `customizerCatalog` ve "Benim Kâsem" ürünündeki
-tüm fiyat/kalori/protein rakamları hâlâ TEST VERİSİ (uydurma). İsimler artık
-Türkçe ama sayılar gerçek değil. PROD'a bu haliyle çıkmamalı (BSC-5, Açık
-Sorun #24 — DEĞİŞMEDİ).
+⚠️ **DEĞİŞMEYEN KRİTİK BLOKAJ (öncelik bu sohbette düşürüldü):** `customizerCatalog` ve
+"Benim Kâsem" ürünündeki tüm fiyat/kalori/protein rakamları hâlâ TEST VERİSİ (uydurma).
+İsimler artık Türkçe ama sayılar gerçek değil. **Bu sohbette kullanıcı isteğiyle
+bilinçli olarak ürün fotoğrafı çekimine kadar ERTELENDİ** — artık aktif blocker değil,
+zamanlaması dışsal bir olaya (fotoğraf çekimi) bağlı (BSC-5, Açık Sorun #24).
 
-⚠️ **TASLAK (Karar #17 / Açık Sorun #30):** Kullanıcı kaydı/giriş yönü belirlendi
-(telefon + SMS OTP, guest checkout korunuyor) ama teknik mimari (OTP sağlayıcısı,
-auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilmedi.
+⚠️ **TASLAKTAN MİMARİYE GEÇTİ (Karar #17 → Karar #19):** Kullanıcı kaydı/giriş yönü
+zaten belirliydi (telefon + SMS OTP, guest checkout korunuyor). Bu sohbette OTP
+sağlayıcısı (Twilio Verify), session yönetimi (Auth.js JWT) ve DB'nin bilinçli olarak
+ertelendiği netleşti. Route handler kontratları ARCHITECTURE.md §2.7 ve INTEGRATIONS.md
+§5'te tanımlı ama KOD HENÜZ YAZILMADI (Açık Sorun #31).
 
 ---
 
@@ -66,12 +70,13 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | 10 | VisualPreview illüstrasyon yerine **gerçek ürün fotoğrafı** kullanacak + "Görsel temsilîdir" disclaimer'ı eklenecek | Oturum 4 — 2026-07-18 | Kullanıcı kararı — henüz uygulanmadı |
 | 11 | Nohut/Meksika fasulyesi gibi Main'lerde Signature Flavor adımı atlanmıyor, içeriği/etiketi değişiyor | Oturum 4 — 2026-07-18 | Kullanıcı kararı — henüz uygulanmadı |
 | 12 | "Kâseni Yarat" sadece "Benim Kâsem" (`build-your-own-kasem`) ürününde | Oturum 4 — 2026-07-18 | Karar #7/#8'in düzeltmesi |
-| 13 | Sepete teslimat kanalı **sepet/oturum seviyesinde tek alan** olarak eklendi (ürün/CartItem bazlı DEĞİL) — global chain pattern'iyle uyumlu. Kanal enum'u: `"pickup"` (Gel-Al) \| `"dine-in"` (Masaya Servis). Yemeksepeti/Getir/Trendyol bilinçli olarak DAHİL EDİLMEDİ. UI yeri: CartDrawer'ın en üstü. Persist ediliyor. **✅ CANLIDA DOĞRULANDI (bu sohbet) — seçici çalışıyor, state tutuyor.** | Bu sohbet — 2026-07-18 | Kullanıcı: "sepete giren ürünün hangi kanaldan teslim edileceği" + "kendi kuryemizi de öngör" |
-| 14 | `â` karakteri render sorunu — kaynak veri doğru UTF-8 idi, encoding hatası değildi. Denenen ama garantisiz düzeltme: `lib/fonts.ts`'e `latin-ext`. **Asıl çözüm: â karakteri tamamen kaldırıldı** ("Benim Kasem", "Özel Kase") — bkz. Karar #16. | Bu sohbet — 2026-07-18 | Teknik teşhis + kullanıcı nihai tercihi |
-| 15 | (Karar #2'nin geri alınması) `lib/customizer-data.ts`'teki tüm `name` alanları Türkçeye çevrildi. `id` alanları değiştirilmedi. **✅ CANLIDA DOĞRULANDI.** ⚠️ CUSTOMIZER_SPEC.md §2 senkron değil — ayrı görev (Açık Sorun #29). | Bu sohbet — 2026-07-18 | Kullanıcı: "İngilizce olmayan kelimeler" düzeltilsin |
-| 16 | `â` karakteri `menu-data.json` ve `CartDrawer.tsx`'ten kaldırıldı, **✅ CANLIDA DOĞRULANDI.** Hero.tsx'teki CTA ve StepBase.tsx'teki açıklama BİLİNÇLİ OLARAK ERTELENDİ (Açık Sorun #27). | Bu sohbet — 2026-07-18 | Kullanıcı kararı — kapsam dışı bırakıldı |
-| 17 | 🟠 **[TB — TASLAK, henüz kod yazılmadı]** Kullanıcı kaydı/giriş yöntemi: telefon numarası + SMS OTP, şifresiz. Guest checkout korunacak. Sadakat programı telefon numarasını kimlik anahtarı olarak kullanacak, puan mekaniği netleşmedi. Gerekçe: global + Türkiye emsal araştırması (McDonald's/Starbucks/Domino's, Yemeksepeti/Getir/Trendyol Yemek). ⚠️ Bilinen risk: "1 numara = 1 hesap" kısıtı hesap kurtarmada sorun yaratıyor (Yemeksepeti şikayetlerinden görüldü) — gün 1'de tasarlanmalı. **OTP sağlayıcısı, auth mimarisi, DB şeması henüz konuşulmadı → Açık Sorun #30.** | Bu sohbet — 2026-07-19 | Kullanıcı sorusu + web araştırması + kullanıcı onayı |
-| 18 | **CartDrawer render bug fix:** `Header.tsx`'teki `backdrop-blur` sınıfı, CSS containing-block kuralı gereği `<header>`'ı `position:fixed` elemanları için yeni bir referans noktası yapıyordu — `CartDrawer`'ın `fixed inset-0`'ı viewport yerine Header'ın küçük kutusuna sıkışıyor, içerik Hero'nun üzerine taşıyordu. Çözüm: `CartDrawer` artık `createPortal` ile doğrudan `document.body`'ye render ediliyor (SSR güvenliği için `isMounted` + `useEffect` kontrolüyle). `Header.tsx`'e hiç dokunulmadı — `backdrop-blur` tasarım kararı korundu. **✅ CANLIDA DOĞRULANDI (3 ekran görüntüsü) — çakışma tamamen gitti.** | Bu sohbet — 2026-07-19 | Kullanıcı ekran görüntüsüyle bug bildirdi → kök neden analizi (CartDrawer→Hero→Header sırasıyla dosya incelemesi) → KARAR BİLDİRİMİ → onay → uygulama → canlı doğrulama |
+| 13 | Sepete teslimat kanalı **sepet/oturum seviyesinde tek alan** olarak eklendi (ürün/CartItem bazlı DEĞİL) — global chain pattern'iyle uyumlu. Kanal enum'u: `"pickup"` (Gel-Al) \| `"dine-in"` (Masaya Servis). Yemeksepeti/Getir/Trendyol bilinçli olarak DAHİL EDİLMEDİ. UI yeri: CartDrawer'ın en üstü. Persist ediliyor. **✅ CANLIDA DOĞRULANDI — seçici çalışıyor, state tutuyor.** | Oturum 4 — 2026-07-18 | Kullanıcı: "sepete giren ürünün hangi kanaldan teslim edileceği" + "kendi kuryemizi de öngör" |
+| 14 | `â` karakteri render sorunu — kaynak veri doğru UTF-8 idi, encoding hatası değildi. Denenen ama garantisiz düzeltme: `lib/fonts.ts`'e `latin-ext`. **Asıl çözüm: â karakteri tamamen kaldırıldı** ("Benim Kasem", "Özel Kase") — bkz. Karar #16. | Oturum 4 — 2026-07-18 | Teknik teşhis + kullanıcı nihai tercihi |
+| 15 | (Karar #2'nin geri alınması) `lib/customizer-data.ts`'teki tüm `name` alanları Türkçeye çevrildi. `id` alanları değiştirilmedi. **✅ CANLIDA DOĞRULANDI.** ⚠️ CUSTOMIZER_SPEC.md §2 senkron değil — ayrı görev (Açık Sorun #29). | Oturum 4 — 2026-07-18 | Kullanıcı: "İngilizce olmayan kelimeler" düzeltilsin |
+| 16 | `â` karakteri `menu-data.json` ve `CartDrawer.tsx`'ten kaldırıldı, **✅ CANLIDA DOĞRULANDI.** Hero.tsx'teki CTA ve StepBase.tsx'teki açıklama BİLİNÇLİ OLARAK ERTELENDİ (Açık Sorun #27). | Oturum 4 — 2026-07-18 | Kullanıcı kararı — kapsam dışı bırakıldı |
+| 17 | 🟠 Kullanıcı kaydı/giriş yöntemi: telefon numarası + SMS OTP, şifresiz. Guest checkout korunacak. Sadakat programı telefon numarasını kimlik anahtarı olarak kullanacak, puan mekaniği netleşmedi. Gerekçe: global + Türkiye emsal araştırması (McDonald's/Starbucks/Domino's, Yemeksepeti/Getir/Trendyol Yemek). ⚠️ Bilinen risk: "1 numara = 1 hesap" kısıtı hesap kurtarmada sorun yaratıyor. **Bu sohbette mimari seviyesinde somutlaştı → Karar #19.** | Oturum 4 — 2026-07-19 | Kullanıcı sorusu + web araştırması + kullanıcı onayı |
+| 18 | **CartDrawer render bug fix:** `Header.tsx`'teki `backdrop-blur` sınıfı, CSS containing-block kuralı gereği `<header>`'ı `position:fixed` elemanları için yeni bir referans noktası yapıyordu — `CartDrawer`'ın `fixed inset-0`'ı viewport yerine Header'ın küçük kutusuna sıkışıyor, içerik Hero'nun üzerine taşıyordu. Çözüm: `CartDrawer` artık `createPortal` ile doğrudan `document.body`'ye render ediliyor (SSR güvenliği için `isMounted` + `useEffect` kontrolüyle). `Header.tsx`'e hiç dokunulmadı — `backdrop-blur` tasarım kararı korundu. **✅ CANLIDA DOĞRULANDI (3 ekran görüntüsü) — çakışma tamamen gitti.** | Oturum 4 — 2026-07-19 | Kullanıcı ekran görüntüsüyle bug bildirdi → kök neden analizi → KARAR BİLDİRİMİ → onay → uygulama → canlı doğrulama |
+| 19 | 🟢 **[Karar #17'nin somutlaşması]** Auth mimarisi: **Twilio Verify** (OTP sağlayıcı — CONFIG_SCHEMA.md'de zaten planlı Twilio hesabıyla paylaşılıyor, mükerrer entegrasyon yok) + **Auth.js (NextAuth) JWT session** (Credentials provider, DB'den bağımsız çalışabiliyor). **Veritabanı kararı BİLİNÇLİ OLARAK ERTELENDİ** — kullanıcı profili/sadakat puanı bu fazda kalıcı saklanmıyor, sadece oturum (JWT) kalıcı. Yeni env: `TWILIO_VERIFY_SERVICE_SID`, `AUTH_SECRET`. Kontrat dosyaları güncellendi: `CONFIG_SCHEMA.md` (§2, §4), `INTEGRATIONS.md` (yeni §5), `ARCHITECTURE.md` (yeni §2.7, `AuthenticatedUser` tipi). **Kod henüz yazılmadı (Açık Sorun #31).** | Oturum 4 — 2026-07-19 | Kullanıcı: "senin önerin" (OTP+session) + "DB'yi sonraya bırakalım" — KARAR BİLDİRİMİ üretildi, onaylandı |
 
 ---
 
@@ -80,9 +85,9 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | Alan | Değer |
 |---|---|
 | Son Session | 4 (devam) — 2026-07-19, aynı sohbet |
-| Son Eylem | CartDrawer/backdrop-blur bug'ı Portal ile düzeltildi, push edildi, 3 ekran görüntüsüyle canlı doğrulandı |
-| Blocker | 🔴 customizerCatalog + "Benim Kâsem" hâlâ TEST VERİSİ (Açık Sorun #24). 🟠 Auth mimarisi taslak (Açık Sorun #30). |
-| Devam Noktası | Kanal seçimi altyapısı (tip, store, bileşen, CartDrawer) artık CANLIDA doğrulanmış sayılıyor. Kalan: `fonts.ts` (düşük öncelik, etkisi belirsiz) ve şema notunun push durumu teyit edilmeli. `unitCalorie7s` taraması bu sohbette 3 dosyada (SummaryPanel, AddToCartButton, MobileSummaryDrawer) yapıldı — temiz çıktı, ama CartItem[] gezen başka dosya olup olmadığı tam kapanmadı. |
+| Son Eylem | Auth mimarisi (Twilio Verify + Auth.js JWT, DB ertelendi) netleştirildi (Karar #19); CONFIG_SCHEMA.md, INTEGRATIONS.md, ARCHITECTURE.md güncellenip dosya olarak teslim edildi. Ürün fotoğrafı bağımlı test verisi düzeltmesi bilinçli ertelendi. Bundan önce: CartDrawer/backdrop-blur bug'ı Portal ile düzeltildi, push edildi, 3 ekran görüntüsüyle canlı doğrulandı. |
+| Blocker | 🟡 customizerCatalog + "Benim Kâsem" hâlâ TEST VERİSİ — fotoğraf çekimine bağlı, bilinçli erteleme (artık aktif blocker değil). 🟢 Auth mimarisi netleşti ama kod yazılmadı — bir sonraki adım route handler + Auth.js config üretimi (Açık Sorun #31). |
+| Devam Noktası | Kanal seçimi altyapısı canlıda doğrulanmış sayılıyor. Kullanıcı üç güncellenmiş kontrat dosyasını indirip reposuna taşımalı. Sonraki görev: bu kontratlara göre gerçek kodu (route handler'lar, Auth.js config, `/giris` sayfası) üretmek — ayrı KARAR BİLDİRİMİ ile, WRITE_CODE intent'iyle. `unitCalorie7s` taraması 3 dosyada (SummaryPanel, AddToCartButton, MobileSummaryDrawer) yapıldı — temiz çıktı, ama CartItem[] gezen başka dosya olup olmadığı tam kapanmadı. |
 
 ---
 
@@ -94,16 +99,16 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | Aktif Oturum | Oturum 4 — devam ediyor |
 | Repo | `github.com/Sovereign34/Bowlera_site` |
 | Menü Veri Kaynağı | ✅ `lib/menu-data.json` — 9 ürün, TEST fiyatlı build-your-own. â düzeltmesi canlıda doğrulandı. |
-| Veri Modeli | ✅ `types/index.ts` — `unitCalories` düzeltildi + `FulfillmentChannel` eklendi. **Canlıda dolaylı doğrulandı** (kanal seçici çalışıyor). |
+| Veri Modeli | ✅ `types/index.ts` — `unitCalories` düzeltildi + `FulfillmentChannel` eklendi. 🟢 `AuthenticatedUser` tipi ARCHITECTURE.md'de tanımlandı, henüz koda geçmedi. |
 | Customizer Sepet Store | ✅ `store/useCartStore.ts` — `fulfillmentChannel` + `setFulfillmentChannel`. **Canlıda doğrulandı.** |
-| Customizer Statik Veri | 🟡 `lib/customizer-data.ts` — isimler Türkçe (canlıda doğrulandı), rakamlar HÂLÂ TEST VERİSİ |
+| Customizer Statik Veri | 🟡 `lib/customizer-data.ts` — isimler Türkçe (canlıda doğrulandı), rakamlar HÂLÂ TEST VERİSİ — fotoğraf çekimine kadar bilinçli ertelendi |
 | Sepet UI | ✅ `CartDrawer.tsx` — Portal fix ile **canlıda temiz doğrulandı**, `FulfillmentChannelSelector` çalışıyor |
 | Font | 🟡 `lib/fonts.ts`'e `latin-ext` eklendi — push durumu teyit edilmedi, düşük öncelik |
 | Header (Sepet) | ✅ Canlıda doğrulandı — sepet ikonu → çekmece açılıyor, artık temiz |
-| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor |
-| Üçüncü Parti Anahtarları | ⬜ Henüz temin edilmedi |
-| Kullanıcı Kaydı/Auth | 🟠 **TASLAK** — yöntem kararı var (Karar #17), mimari yok |
-| Sadakat Programı | 🟠 **TASLAK** — telefon numarasına bağlanacak, puan mekaniği netleşmedi |
+| Görsel/Fotoğraf İçeriği | ⬜ Hâlâ bekleniyor — test verisi düzeltmesi buna bağlı, bilinçli erteleme |
+| Üçüncü Parti Anahtarları | ⬜ Henüz temin edilmedi — 🆕 `TWILIO_VERIFY_SERVICE_SID` + `AUTH_SECRET` de listeye eklendi |
+| Kullanıcı Kaydı/Auth | 🟢 **MİMARİ NET** (Karar #19) — Twilio Verify + Auth.js JWT, DB ertelendi. Kod yazılmadı. |
+| Sadakat Programı | 🟠 **TASLAK** — telefon numarasına bağlanacak, DB olmadan kalıcı puan saklanamıyor, mekanik netleşmedi |
 
 ---
 
@@ -111,24 +116,27 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 
 | # | Öncelik | Açıklama | Oturum | Referans |
 |---|---|---|---|---|
-| 4 | 🟡 | Üçüncü parti API anahtarları temin edilmedi | Sonraki Faz | MASTER_PLAN §8 |
+| 4 | 🟡 | Üçüncü parti API anahtarları temin edilmedi (artık Twilio Verify de dahil) | Sonraki Faz | CONFIG_SCHEMA.md §2 |
 | 7 | 🟡 | Allergen gösterimi DESIGN_SYSTEM.md onayı bekliyor | Oturum 2 | DESIGN_SYSTEM.md §2 |
 | 10 | 🟡 | ARCHITECTURE.md §2.4 ve DEPENDENCIES.md, 5 adımlı customizer'a göre güncel değil | Oturum 2 | `20260718001123_customizer_5_adim_gecisi.md` |
 | 13 | 🟡 | `git log --oneline` ile push'lar hiç teyit edilmedi | Oturum 3 | — |
 | 15 | 🟢 | TEST_MATRIX.md, DEPENDENCIES.md, session_log.md bu sohbette de yüklenmedi | Oturum 3→4 | CORE.md §7.1 |
 | 16 | 🟡 | `lib/customizer-summary-format.ts` içeriği hâlâ hiç görülmedi — `MobileSummaryDrawer.tsx` içinde formatPrice/formatCalories geçici yerel kopya olarak duruyor, konsolide edilmeli | Oturum 4 | AGENT.md Kural #5 |
-| 17 | 🟡 | `customizerCatalog` isimleri Türkçe ama rakamlar TEST VERİSİ | Oturum 4 | `lib/customizer-data.ts` |
-| 18 | 🔴 | "Benim Kâsem" fiyatı hâlâ TEST (₺999) — gerçek fiyat bekleniyor | Oturum 4 | `lib/menu-data.json` |
+| 17 | 🟢 | `customizerCatalog` isimleri Türkçe ama rakamlar TEST VERİSİ — **bilinçli olarak fotoğraf çekimine ertelendi (bu sohbet)** | Oturum 4 | `lib/customizer-data.ts` |
+| 18 | 🟢 | "Benim Kâsem" fiyatı hâlâ TEST (₺999) — **bilinçli olarak fotoğraf çekimine ertelendi (bu sohbet), öncelik düşürüldü** | Oturum 4 | `lib/menu-data.json` |
 | 20 | 🟢 | `app/menu/customize/[id]/page.tsx` içinde hâlâ 3 onay bekleyen varsayım var (menu-data export şekli, otomatik reset(), notFound() client component davranışı) | Oturum 4 | `app/menu/customize/[id]/page.tsx` |
 | 22 | 🟡 | Signature Flavor'ın Main'e göre koşullu içerik göstermesi henüz uygulanmadı (Karar #11) | Oturum 4 | CUSTOMIZER_SPEC.md §2 |
-| 24 | 🔴 | `customizer-data.ts` + `menu-data.json`'daki test rakamları PROD öncesi değiştirilmeli (BSC-5) | Oturum 4 | — |
-| 25 | 🟢 | **KISMEN KAPANDI.** `unitCalorie7s`→`unitCalories` rename sonrası `SummaryPanel.tsx`, `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx` incelendi — hiçbiri `CartItem` tipini kullanmıyor (customizer taslak state'i üzerinden çalışıyorlar), risk yok. `CartDrawer.tsx` da incelendi ve temiz. Diğer olası `CartItem[]` tüketicileri (checkout sayfası gibi, henüz yazılmadı) ortaya çıktıkça tekrar kontrol edilmeli. | Bu sohbet | `types/index.ts` |
-| 26 | 🟡 | Sepette teslimat kanalı seçimi eklendi ama hiçbir yerde zorunlu kılınmıyor — checkout akışı henüz yok | Bu sohbet | `store/useCartStore.ts`, `app/siparis/page.tsx` (henüz yok) |
-| 27 | 🟢 | **Bilinçli ertelendi.** Hero.tsx'teki "Kâseni Yarat" CTA'sı ve StepBase.tsx'teki "Kâsenin tabanını seç." hâlâ `â` içeriyor. | Bu sohbet | `components/home/Hero.tsx`, `components/customizer/StepBase.tsx` |
-| 28 | 🟢 | Adım başlıkları (Base/Main/Garden/Signature Flavor/Finish) hâlâ İngilizce — netlik bekliyor | Bu sohbet | `components/customizer/Step*.tsx` |
-| 29 | 🟢 | `CUSTOMIZER_SPEC.md` §2'deki İngilizce isim listesi `customizer-data.ts` ile senkron değil | Bu sohbet | `CUSTOMIZER_SPEC.md` |
-| 30 | 🟠 | Karar #17 (telefon+OTP auth) sadece yön kararı — OTP sağlayıcısı, auth store/session, DB şeması, hesap kurtarma akışı, sadakat puan mekaniği hiç netleşmedi | Bu sohbet | Karar #17 |
-> **KAPANDI (bu sohbet):** Karar #18 kapsamında CartDrawer/backdrop-blur görsel bug'ı — canlıda doğrulandı, artık açık sorun değil. #25 kısmen kapandı (3 dosya temiz).
+| 24 | 🟡 | `customizer-data.ts` + `menu-data.json`'daki test rakamları PROD öncesi değiştirilmeli (BSC-5) — **fotoğraf çekimine bağlı bilinçli erteleme (bu sohbet), önceliği 🔴→🟡'a düştü** | Oturum 4 | — |
+| 25 | 🟢 | **KISMEN KAPANDI.** `unitCalorie7s`→`unitCalories` rename sonrası `SummaryPanel.tsx`, `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx` incelendi — hiçbiri `CartItem` tipini kullanmıyor, risk yok. `CartDrawer.tsx` da incelendi ve temiz. Diğer olası `CartItem[]` tüketicileri ortaya çıktıkça tekrar kontrol edilmeli. | Önceki sohbet | `types/index.ts` |
+| 26 | 🟡 | Sepette teslimat kanalı seçimi eklendi ama hiçbir yerde zorunlu kılınmıyor — checkout akışı henüz yok | Önceki sohbet | `store/useCartStore.ts`, `app/siparis/page.tsx` (henüz yok) |
+| 27 | 🟢 | **Bilinçli ertelendi.** Hero.tsx'teki "Kâseni Yarat" CTA'sı ve StepBase.tsx'teki "Kâsenin tabanını seç." hâlâ `â` içeriyor. | Önceki sohbet | `components/home/Hero.tsx`, `components/customizer/StepBase.tsx` |
+| 28 | 🟢 | Adım başlıkları (Base/Main/Garden/Signature Flavor/Finish) hâlâ İngilizce — netlik bekliyor | Önceki sohbet | `components/customizer/Step*.tsx` |
+| 29 | 🟢 | `CUSTOMIZER_SPEC.md` §2'deki İngilizce isim listesi `customizer-data.ts` ile senkron değil | Önceki sohbet | `CUSTOMIZER_SPEC.md` |
+| 30 | 🟢 | **KISMEN NETLEŞTİ (bu sohbet).** Karar #17'nin OTP sağlayıcısı (Twilio Verify) ve session yönetimi (Auth.js JWT) netleşti (Karar #19). **Hâlâ açık:** DB seçimi (bilinçli ertelendi), hesap kurtarma akışının detayları ("1 numara = 1 hesap" riski INTEGRATIONS.md §5.4'te not edildi ama tam akış tasarlanmadı), sadakat puan mekaniği. | Bu sohbet | Karar #19, INTEGRATIONS.md §5 |
+| 31 | 🟡 | 🆕 Auth kontratları (CONFIG_SCHEMA/INTEGRATIONS/ARCHITECTURE) tanımlandı ama gerçek kod (route handler'lar, Auth.js config, `/giris` sayfası) hiç yazılmadı | Bu sohbet | ARCHITECTURE.md §2.7, INTEGRATIONS.md §5 |
+> **KAPANDI (önceki sohbet):** Karar #18 kapsamında CartDrawer/backdrop-blur görsel bug'ı — canlıda doğrulandı, artık açık sorun değil. #25 kısmen kapandı (3 dosya temiz).
+> **BU SOHBETTE ÖNCELİK DEĞİŞTİ:** #17, #18, #24 (test verisi) — fotoğraf çekimine bağlı bilinçli erteleme, artık aktif blocker değil.
+> **BU SOHBETTE KISMEN NETLEŞTİ:** #30 (auth mimarisi) — Karar #19 üretildi, kod aşaması hâlâ açık (#31).
 
 ---
 
@@ -140,11 +148,11 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | **Oturum 1** | Next.js+Tailwind, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
 | **Oturum 2** | Menü sayfası, filtreleme, MenuCard, statik menü verisi | ✅ Tamamlandı |
 | **Oturum 3** | Zustand store + Customizer masaüstü UI bileşenleri | ✅ Büyük ölçüde teyit edildi |
-| **Oturum 4** | page.tsx, sepet, kanal seçimi (canlıda doğrulandı), Türkçeleştirme, â düzeltmesi, CartDrawer bugfix (canlıda doğrulandı), auth taslak kararı | 🟡 **Devam ediyor** — veri/fotoğraf blokajı sürüyor |
+| **Oturum 4** | page.tsx, sepet, kanal seçimi (canlıda doğrulandı), Türkçeleştirme, â düzeltmesi, CartDrawer bugfix (canlıda doğrulandı), auth mimarisi (Karar #19, kontrat seviyesinde) | 🟡 **Devam ediyor** — auth kontratları netleşti, kod aşaması ve fotoğraf/veri blokajı sürüyor |
 | **Kontrol Noktası** | Kullanıcı testi (5-10 kişi) | ⬜ Bekliyor |
 | **Oturum 5** | Hakkımızda, Şubeler, İletişim, SEO, son kontrol | ⬜ Bekliyor |
 
-**İlerleme özeti:** 5 oturumdan ~3'ü tamam, Oturum 4 yarıda. Sepet + kanal seçimi artık uçtan uca canlıda çalışıyor ve temiz. En kritik blokaj hâlâ kod değil — gerçek mutfak verisi (fiyat/kalori/protein) ve ürün fotoğrafları eksikliği. Auth/sadakat yeni taslak kapsam olarak açık duruyor.
+**İlerleme özeti:** 5 oturumdan ~3'ü tamam, Oturum 4 yarıda. Sepet + kanal seçimi artık uçtan uca canlıda çalışıyor ve temiz. Auth artık net bir mimariye sahip (Twilio Verify + Auth.js, DB ertelendi) ama kod aşamasına geçilmedi. Test verisi/fotoğraf blokajı bilinçli olarak ertelendi, artık acil değil. Auth/sadakat kısmen netleşti, kod ve DB kararı açık kapsam olarak duruyor.
 
 ---
 
@@ -152,7 +160,7 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 
 | Dosya | Durum | Repo | Deploy |
 |---|---|---|---|
-| `components/layout/Header.tsx` | ✅ Sepet ikonuna bağlı, bu sohbette dokunulmadı (backdrop-blur bilinçli korundu) | ✅ | ✅ Canlıda doğrulandı |
+| `components/layout/Header.tsx` | ✅ Sepet ikonuna bağlı, dokunulmadı (backdrop-blur bilinçli korundu) | ✅ | ✅ Canlıda doğrulandı |
 | `components/cart/CartBadge.tsx` | ✅ Değiştirilmedi | ✅ | ✅ |
 | `store/useCustomizerStore.ts` | ✅ `goToStep` fix | ✅ | ⬜ |
 | `components/home/Hero.tsx`, `HeroHeadline.tsx` | ✅ Slogan güncel | ✅ | ✅ Canlıda doğrulandı — ⚠️ CTA'daki â bilinçli ertelendi (#27) |
@@ -167,13 +175,27 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | `types/index.ts` | ✅ `unitCalories` + `FulfillmentChannel` | ✅ | ✅ Canlıda dolaylı doğrulandı |
 | `store/useCartStore.ts` | ✅ `fulfillmentChannel` state + action | ✅ | ✅ Canlıda doğrulandı |
 | `components/cart/FulfillmentChannelSelector.tsx` | ✅ | ✅ | ✅ Canlıda doğrulandı |
-| `components/cart/CartDrawer.tsx` | ✅ **Bu sohbette Portal fix'i eklendi** (backdrop-blur bug'ı) | ✅ | ✅ **Canlıda doğrulandı, çakışma yok** |
+| `components/cart/CartDrawer.tsx` | ✅ Portal fix'i eklendi (backdrop-blur bug'ı) | ✅ | ✅ **Canlıda doğrulandı, çakışma yok** |
 | `lib/customizer-data.ts` | ✅ Türkçe isimler | ✅ | ✅ Canlıda doğrulandı |
 | `lib/menu-data.json` | ✅ â'sız | ✅ | ✅ Canlıda doğrulandı |
 | `lib/fonts.ts` | 🟡 `latin-ext`, etkisi belirsiz | 🟡 Push durumu teyit edilmedi | ⬜ |
 
 > Dokunulmayan/ertelenen: `Hero.tsx` CTA metni, `StepBase.tsx` açıklama metni — hâlâ `â` içeriyor (Açık Sorun #27).
-> `SummaryPanel.tsx`, `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx` bu sohbette incelendi (unitCalorie7s taraması için) — hiçbiri değiştirilmedi, mevcut halleri temiz.
+> `SummaryPanel.tsx`, `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx` incelendi (unitCalorie7s taraması için) — hiçbiri değiştirilmedi, mevcut halleri temiz.
+
+---
+
+## ÜRETİLEN DOSYALAR — Bu Sohbet (Auth Mimarisi)
+
+| Dosya | Durum | Teslim |
+|---|---|---|
+| `CONFIG_SCHEMA.md` | ✅ v1.0 → v1.1 — `TWILIO_VERIFY_SERVICE_SID`, `AUTH_SECRET` eklendi, Twilio zorunlu statüsü öne çekildi | ✅ Artifact olarak teslim edildi |
+| `INTEGRATIONS.md` | ✅ v1.0 → v1.1 — yeni §5 (Telefon+OTP), §0 faz tablosu güncellendi, self-check'e DB uyarı maddesi eklendi | ✅ Artifact olarak teslim edildi |
+| `ARCHITECTURE.md` | ✅ v1.1 → v1.2 — yeni §2.7 (`app/api/auth/otp/*`), `AuthenticatedUser` tipi, katman kuralı #7 eklendi | ✅ Artifact olarak teslim edildi |
+| `SESSION_INDEX.md` | ✅ Bu dosya — Karar #19, Açık Sorun #30/#31, öncelik değişiklikleri işlendi, TAM DOSYA (arşiv blokları korunarak) | ✅ Artifact olarak teslim edildi |
+
+> Kod dosyası bu sohbette üretilmedi — sadece kontrat/mimari dosyaları. Bir sonraki adımda
+> route handler'lar (`app/api/auth/otp/send`, `verify`) ve Auth.js config yazılacak.
 
 ---
 
@@ -181,9 +203,9 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 
 | Sıra | Görev | Öncelik | Durum |
 |---|---|---|---|
-| 1 | `customizerCatalog` + "Benim Kâsem" TEST rakamlarını gerçek mutfak verisiyle değiştir (Açık Sorun #24) | 🔴 | ⬜ |
-| 2 | Auth mimarisini netleştir: OTP sağlayıcısı seç, auth store/session tasarla, DB şeması çıkar, hesap kurtarma akışını planla (Açık Sorun #30) | 🟠 | ⬜ |
-| 3 | Sadakat puan mekaniğine karar ver (Karar #17'nin eksik kısmı) | 🟠 | ⬜ |
+| 1 | Auth kontratlarına göre gerçek kodu üret: `app/api/auth/otp/send` + `verify` route'ları, Auth.js config, `/giris` sayfası (Açık Sorun #31) | 🟠 | ⬜ |
+| 2 | Hesap kurtarma akışının detaylarını tasarla ("1 numara = 1 hesap" riski) | 🟡 | ⬜ |
+| 3 | Sadakat puan mekaniğine karar ver (DB seçilmeden kalıcı saklanamayacağı netleşti) | 🟡 | ⬜ |
 | 4 | Teslimat kanalının checkout'ta zorunlu kılınması (Açık Sorun #26) | 🟡 | ⬜ |
 | 5 | `fonts.ts` ve şema notunun push durumunu teyit et | 🟡 | ⬜ |
 | 6 | Signature Flavor'ın Main'e göre koşullu içerik göstermesi (Karar #11, Açık Sorun #22) | 🟡 | ⬜ |
@@ -193,6 +215,7 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 | 10 | VisualPreview altına "Görsel temsilîdir" disclaimer'ı ekle (Karar #10) | 🟡 | ⬜ |
 | 11 | CUSTOMIZER_SPEC.md'yi Türkçe isim listesiyle senkronize et (Açık Sorun #29) | 🟢 | ⬜ |
 | 12 | `git log --oneline -10` ile push'ları teyit et (Açık Sorun #13) | 🟡 | ⬜ |
+| 13 | 🔴→🟡 `customizerCatalog` + "Benim Kâsem" TEST rakamlarını gerçek veriyle değiştir — **ürün fotoğrafı çekimi tamamlanınca tetiklenecek** (Açık Sorun #24) | 🟡 (dış olaya bağlı) | ⬜ |
 
 ---
 
@@ -219,9 +242,37 @@ auth store, DB şeması, hesap kurtarma akışı) hiç netleşmedi. Koda geçilm
 - Kullanıcı onayladı: telefon+OTP, guest checkout korunsun, puan mekaniği henüz netleşmedi.
 - Karar #17 (taslak) ve Açık Sorun #30 olarak kayda geçirildi — kod yazılmadı.
 
+### Auth Mimarisi Netleştirme (bu sohbetin ana konusu)
+- Kullanıcı önceki turda AGENT.md/CORE.md'nin doğru dosyalar olduğunu teyit etti, ardından
+  "1) fotoğraf çekimine ertele, 2) auth mimarisine devam et" dedi.
+- Tetikleyici Tablosunda tam eşleşme olmadığı için en yakın üç dosya istendi: `ARCHITECTURE.md`,
+  `CONFIG_SCHEMA.md`, `INTEGRATIONS.md`. Kullanıcı yükledi.
+- Dosyalar incelendi: projede hiç veritabanı olmadığı tespit edildi (sadece `menu-data.json` +
+  Zustand/localStorage). `CONFIG_SCHEMA.md`'de zaten `TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN`'ın
+  "lansman sonrası SMS bildirimi" için planlı olduğu görüldü — OTP için yeniden kullanılabilir.
+- `ask_user_input_v0` ile 3 soru soruldu: OTP sağlayıcısı, session yönetimi, veritabanı.
+- Kullanıcı ilk ikisi için Claude'un önerisini istedi, üçüncüsünde (DB) "henüz karar verme,
+  sadece mimariyi tasarla" dedi.
+- Öneri: **Twilio Verify** (mevcut Twilio hesabıyla paylaşılan, mükerrer olmayan OTP sağlayıcı)
+  + **Auth.js (NextAuth) JWT session** (DB'den bağımsız çalışabilen, Next.js App Router native).
+- KARAR BİLDİRİMİ üretildi (`intent: MODIFY_SCHEMA`, `risk: MEDIUM`, `confidence: MEDIUM` — DB
+  kararı ertelendiği için), akış (OTP gönder → doğrula → Auth.js session) ve yeni env
+  değişkenleri (`TWILIO_VERIFY_SERVICE_SID`, `AUTH_SECRET`) önerildi.
+- Kullanıcı onayladı, DB'nin sonraya bırakılmasını teyit etti.
+- Üç dosya tam metin olarak güncellendi ve artifact halinde teslim edildi:
+  - `CONFIG_SCHEMA.md` → v1.1 (yeni env değişkenleri, `.env.local.example` güncellemesi)
+  - `INTEGRATIONS.md` → v1.1 (yeni §5 — akış, rate limit, edge case'ler, DB uyarısı)
+  - `ARCHITECTURE.md` → v1.2 (yeni §2.7 route kontratı, `AuthenticatedUser` tipi, katman kuralı #7)
+- Kod (route handler içerikleri, Auth.js config dosyası) bu sohbette YAZILMADI — sadece kontrat
+  seviyesinde. Açık Sorun #31 olarak kayda geçirildi.
+- Kullanıcı, önceki SESSION_INDEX.md güncellemesinde arşiv bloklarının kırpılıp "önceki
+  versiyona bakılmalı" notuyla değiştirildiğini fark etti ve sordu — bu AGENT.md Kural #4'ü
+  ("Tam dosya ver — Truncated çıktı yasak") ihlal ediyordu. Hata kabul edildi, tüm arşiv
+  blokları (Oturum 0-4) bu dosyada TAM olarak geri kondu.
+
 ---
 
-## 📜 GEÇMİŞ / ARŞİV — Önceki Oturum 4 Bloğu Detaylı Kayıt (bu sohbetten önce)
+## 📜 GEÇMİŞ / ARŞİV — Önceki Oturum 4 Bloğu Detaylı Kayıt (auth araştırmasından önce)
 
 ### Başlık Düzeltmesi
 - `page.tsx`'teki h1, `{bowl.name} — Kâseni Yarat` yerine sadece `{bowl.name}` yapıldı. Tek satırlık izole değişiklik, kullanıcı push etti.
