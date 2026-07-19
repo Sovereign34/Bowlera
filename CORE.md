@@ -255,6 +255,10 @@ public/
 - Kritik teknik kararlar güncelle — yeni karar varsa ekle
 - Session log haritasına yeni satır ekle
 - **TAM DOSYA olarak ver**
+- ⚠️ "Şişmeyi önle" kuralı SADECE tamamlanmış/güncel-olmayan görev satırlarının silinmesini
+  kapsar. Geçmiş oturumların **arşiv blokları** (📜 GEÇMİŞ / ARŞİV başlıklı bölümler) TAM
+  içerikle korunur — özetlenip "önceki versiyona bakılmalı" gibi bir referansla DEĞİŞTİRİLMEZ.
+  Bu, AGENT.md Kural #4'ün (Truncated çıktı yasak) doğrudan bir uzantısıdır.
 
 **Adım 2 — session_log.md**
 - Yapılanlar + Kararlar (neden alındı) + Teknik notlar
@@ -453,3 +457,5 @@ Claude hemen paketi hazırlar.
 
 *BOWLERA — Bu dosya yaşayan bir referanstır. Her mimari/tasarım kararı SESSION_INDEX.md'ye,
 her büyük değişiklik DEPENDENCIES.md'ye yansıtılmalıdır.*
+*v1.1 — §7.1 Adım 1'e SESSION_INDEX arşiv koruma netleştirmesi eklendi (Session 4 — 2026-07-19,
+AGENT.md v1.1 ile eşleştirildi).*
