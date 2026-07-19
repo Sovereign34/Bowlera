@@ -1,3 +1,56 @@
+## Session: 4 (devam) — 2026-07-19 (dördüncü bölüm — yeni sohbet penceresi)
+
+### Yapılanlar
+
+**1. Menü kartı geçiş animasyonu — iyileştirme (📁 dosya değişti, 🔧 tasarım kararı)**
+- `app/menu/page.tsx`'teki mevcut scroll-reveal animasyonu (fade+slide, DESIGN_SYSTEM §6.1) kullanıcı isteğiyle 3 turda kademeli olarak belirginleştirildi:
+  - Tur 1: `scale` (0.96→1) + index bazlı stagger (`index % 6 * 0.06s`) eklendi.
+  - Tur 2 ("belirginleşmesi gerek"): `y: 24→40`, `scale: 0.96→0.92`, süre `0.5s→0.6s`.
+  - Tur 3 ("biraz daha artırmalısın"): `y: 40→64`, `scale: 0.92→0.85`, süre `0.6s→0.75s`, stagger aralığı `0.06s→0.08s`.
+- Her turda `useReducedMotion()` kontrolü ve `opacity`+`transform`-only kısıtı korundu (§6.2 kural 1/2 hiç bozulmadı).
+- Grid/height/FilterPanel mimarisine (önceki 3 mobil snap-scroll kırılmasının kaynağı) hiç dokunulmadı.
+- Kullanıcı canlıda ekran görüntüsü paylaştı (Vegan kategorisi, "Akdeniz Humuslu Sıcak Kase" kartı) — deploy başarılı, sayfa render ediliyor.
+
+**2. ARCHITECTURE.md senkronizasyonu (📁 dosya güncellendi, 🔧 mimari karar, ✅ Açık Sorun #36 kod tarafı tamamlandı)**
+- Kullanıcı güncel `ARCHITECTURE.md`'yi (v1.2) yükledi, tam metin görülerek düzenlendi.
+- §1 Katman Sınırı Kuralları'na madde 8 (profil route kimliği sadece `session.user.phone`'dan) ve madde 9 (adres checkout'u bloklamaz) eklendi.
+- §2.7 düzeltildi — "DB henüz yok" ifadesi kaldırıldı, Karar #20 (Neon Postgres) durumu işlendi.
+- **Yeni §2.8** eklendi — `app/api/user/profile/route.ts` + `app/hesap/page.tsx` kontratı, bilinen açıklarla (#37, #38, #39) birlikte.
+- §3 Veri Modeli — `AuthenticatedUser.address` eklendi. Ayrıca bu turda **yeni bir eksiklik keşfedildi**: `CartItem` tipinde `fulfillmentChannel` alanı (Karar #13, Oturum 4) hiç işlenmemişti — eklendi.
+- §4.1 (Vercel/Neon deploy durumu) ve §5 (2 yeni sorumluluk satırı) güncellendi.
+- Versiyon v1.2 → **v1.3**, değişiklik geçmişi notu eklendi.
+- Bilinçli dokunulmadı: §2.4 (hâlâ 4 adımlı customizer state'i — 5 adıma hiç güncellenmemiş, #10) ve `BowlItem.category` enum uyuşmazlığı (#35).
+
+**3. Rate-limit entegrasyonu (#37) — KRİTİK KEŞİF: dosya grubu repoda yok (🔴 blokaj/tutarsızlık, 📁 yeni dosya, 🔧 mimari karar)**
+- Kullanıcı `app/api/user/profile/route.ts`'e rate-limit entegrasyonu istedi.
+- Dosya görülmeden değişiklik yapılmadı (Kural #2) — kullanıcıdan istendi.
+- **Keşif:** GitHub'da `app/` klasörü ekran görüntüsüyle tarandı — `api/user` klasörü **hiç yok**. `app/api/user/profile/route.ts` ve muhtemelen aynı gruptaki 7 dosya (Karar #23, önceki sohbet) **hiç push edilmemiş**. SESSION_INDEX.md'nin "7 dosya üretildi ve kullanıcı tarafından repoya kaydedildi" notu bu turda **yanlış olduğu doğrulanan** bir kayıt oldu — SESSION_INDEX/gerçek repo durumu tutarsızlığı.
+- Bağımlı 4 dosya kullanıcıdan tek tek istenip görüldü (tahmin edilmedi, Kural #1/#2): `auth.ts` (session.user.phone kaynağı), `components/account/useProfileForm.ts` (client kontratı), `lib/user/profile-validation.ts` (validasyon kuralları, MAX_ADDRESS_LENGTH=300, MAX_NAME_LENGTH=60), `lib/db/queries/user-profile.ts` (Drizzle sorgu şekli).
+- **KARAR BİLDİRİMİ (kullanıcıya sunulmadan önce gerekçelendirildi):** Mevcut `checkOtpRateLimit` ve muhtemel testine dokunulmadı — riske girilmedi. Ayrı bir bucket (`profileBuckets`) + ayrı fonksiyon (`checkProfileRateLimit`, 5dk'da 10 istek, telefon bazlı anahtar) `lib/auth/rate-limit.ts`'e eklendi.
+- `app/api/user/profile/route.ts` **sıfırdan üretildi** — GET (rate-limitsiz, salt okuma, gerekçe kod içi yorumda), PATCH (rate-limitli, 429 + `Retry-After` header, `session.user.phone` ile kimlik, request body'den phone kabul edilmiyor — BSC-3).
+- İki dosya artifact olarak teslim edildi, kullanıcı henüz kaydedip push etmedi.
+- Kullanıcıya site üzerindeki beklenen etki netleştirildi: **görsel hiçbir değişiklik yok**, sadece PATCH'e 429 koruması eklendi; `/hesap` akışı Twilio kısıtı (#32) yüzünden zaten canlıda test edilemediği için bu katman da fiilen doğrulanamıyor.
+
+### Kararlar (neden alındı)
+
+| Karar | Gerekçe |
+|---|---|
+| Animasyon değerleri 3 turda kademeli artırıldı, tek seferde büyük sıçrama yapılmadı | Kullanıcı geri bildirimi adım adım geldi ("belirginleşmeli" → "biraz daha") — her turda küçük, geri alınabilir değişiklik tercih edildi |
+| `checkOtpRateLimit`'e dokunulmadı, ayrı fonksiyon eklendi | Mevcut fonksiyonun test dosyası görülmedi — imza/davranış değişikliği mevcut testleri kırma riski taşıyordu, bu risk alınmadı |
+| Profil PATCH rate-limit anahtarı IP değil `session.user.phone` | Route zaten auth zorunlu (guest erişemez), phone sahtelenemez (session'dan gelir, body'den değil) — IP bazlı karmaşıklığa gerek yok |
+| GET'e rate-limit eklenmedi | Salt okuma, DB'ye yazma yok, kötüye kullanım maliyeti PATCH'e göre ihmal edilebilir |
+| `app/api/user/profile/route.ts` sıfırdan üretildi (üzerine yazma değil) | Dosya repoda hiç bulunmadığı doğrulandı — "güncelleme" değil "ilk üretim" |
+
+### Teknik Notlar
+
+- 🔴 **SESSION_INDEX/repo tutarsızlığı doğrulandı:** Karar #23 kapsamında "üretildi ve kaydedildi" denen 7 dosyadan en az 1'i (`app/api/user/profile/route.ts`) repoda yok. Diğer 6'sının (`ProfileForm.tsx`, `useProfileForm.ts`, `app/hesap/page.tsx` dahil) durumu bu sohbette TEK TEK doğrulanmadı — `useProfileForm.ts` ve `profile-validation.ts` ve `user-profile.ts` kullanıcı tarafından GitHub'dan kopyalanıp paylaşıldığı için bunların var olduğu dolaylı olarak teyit edildi, ama `ProfileForm.tsx` ve `app/hesap/page.tsx`'in repo varlığı hâlâ doğrulanmadı.
+- İki dosya (`lib/auth/rate-limit.ts`, `app/api/user/profile/route.ts`) kullanıcıya artifact olarak teslim edildi, **push edilmedi** — bir sonraki session'da veya bu sohbetin devamında teyit edilmeli.
+- ARCHITECTURE.md v1.3 de push edilmedi.
+
+### Sembol Özeti
+📁 (3 dosya değişti/üretildi: `page.tsx`, `ARCHITECTURE.md`, `rate-limit.ts`) · 🔧 (3 mimari/tasarım kararı) · 🔴 (SESSION_INDEX/repo tutarsızlığı keşfi — çözülmedi, kaydedildi)
+
+------
 ## Session: 4 (devam) — 2026-07-18 — Checkpoint: Header → CartBadge/CartDrawer
 
 ### Yapılanlar
