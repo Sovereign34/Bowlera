@@ -579,6 +579,7 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 | Customizer sıra atlandı | Adım sırası validasyonsuz atlanabilir bırakıldı | Dur — guard ekle |
 | Sepet race condition | Çift tıklama/eşzamanlı state koruması yazılmadı | Dur — BSC-6 uygula |
 | Truncated dosya | Kod veya dosya kesildi | Hemen devam et — tam ver |
+| SESSION_INDEX arşivi kırpıldı | Eski oturum/arşiv bloğu içerik yerine "önceki versiyona bakılmalı" gibi bir referansla değiştirildi | Dur — arşiv bloğunu TAM içerikle alta taşı, asla dışarıya referansla değiştirme |
 | Dosya chat içine düz metin olarak yapıştırıldı | Artifact yerine kod bloğu/markdown metni verildi | Dur — dosyayı artifact olarak yeniden üret |
 | session_log TAM DOSYA | Yeni blok yerine tam dosya verildi | Sadece yeni bloğu ver |
 | SESSION_INDEX güncellenmedi | Session kapanışında index verilmedi | Hemen üret ve sun |
@@ -604,6 +605,7 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 | Sepete ekleme işlemini race condition korumasız bırak (BSC-6) |
 | Üçüncü parti entegrasyonu (WhatsApp/Adisyo/QR) fallback'siz canlıya al |
 | Truncated dosya ver |
+| SESSION_INDEX.md arşiv bloklarını (Oturum kayıtları) özetleyip "önceki versiyona bakılmalı" gibi bir referansla değiştir — "şişmeyi önle" kuralı sadece TAMAMLANMIŞ görevleri silmeyi kapsar, geçmiş oturum arşivini kapsamaz |
 | Üretilen dosyayı artifact yerine chat içi düz metin olarak ver |
 | Onaysız birden fazla bileşen/modülü aynı anda değiştir |
 | Context eksikken HIGH confidence ver |
@@ -650,12 +652,14 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 1 | 2026-07-17 | BSC Modülü eklendi — 8 Bowlera'ya özgü güvenlik kuralı |
 | Session 1 | 2026-07-17 | KURAL ÖNCELİK SIRASI eklendi |
 | Session 1 | 2026-07-17 | SELF-CORRECTION tablosu eklendi |
+| Session 4 | 2026-07-19 | SELF-CORRECTION ve YASAK LİSTE'ye "SESSION_INDEX arşivi kırpıldı" maddesi eklendi — arşiv bloklarının özetlenip dışarıya referans verilmesi (örn. "önceki versiyona bakılmalı") artık açıkça yasak, Kural #4'ün (Truncated çıktı yasak) SESSION_INDEX.md'ye özgü bir netleştirmesi olarak eklendi. Gerekçe: bu sohbette gerçekten yaşanan bir ihlal. |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.0*
+*BOWLERA AGENT.md — v1.1*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
+*v1.1: SELF-CORRECTION + YASAK LİSTE — SESSION_INDEX arşiv kırpma ihlali eklendi (Session 4, 2026-07-19).*
