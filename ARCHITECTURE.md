@@ -40,6 +40,16 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
                                                                                               ▼
                                                                           lib/integrations/whatsapp.ts | marketplace.ts
                                                                           (wa.me linki | Adisyo/SepetTakip API — server-side)
+
+app/giris/page.tsx ──► app/api/auth/otp/{send,verify}/route.ts ──► auth.ts (Auth.js JWT session)
+                                                                                │
+                                                                                ▼
+                                                                lib/db/client.ts (Neon Postgres, Drizzle ORM)
+                                                                                │
+                                              ┌─────────────────────────────────┴─────────────────────────────────┐
+                                              ▼                                                                     ▼
+                                   users tablosu (phone, address,                                    app/hesap/page.tsx ──► app/api/user/profile/route.ts
+                                   displayName, loyaltyPoints, verifiedAt)                            (GET/PATCH — sadece session.user.phone kullanır)
 ```
 
 ### Katman Sınırı Kuralları
@@ -52,6 +62,8 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
 5. Customizer adım sırası useCustomizerStore'daki currentStep ile kontrol edilir — URL manipülasyonuyla atlanamaz
 6. Tasarım sistemi token'ları (renk/tipografi) sadece tailwind.config.ts üzerinden kullanılır — inline hex kod yasak (DESIGN_SYSTEM.md)
 7. Auth (telefon+OTP) katmanı sepet akışından bağımsızdır — guest checkout her zaman geçerli kalır, useCartStore auth durumuna göre dallanmaz (INTEGRATIONS.md §5)
+8. Kullanıcı profili/adres verisi SADECE app/api/user/profile/route.ts üzerinden okunur/yazılır — bu route request body'den phone KABUL ETMEZ, kimlik her zaman session'dan (session.user.phone) alınır (BSC-3 kritik sınır, Karar #23)
+9. Adres alanı sipariş akışını (checkout) BLOKLAMAZ — FulfillmentChannel ("pickup" | "dine-in") delivery içermediği için adres sadece profil/sadakat verisidir, opsiyonel olarak /hesap sayfasında toplanır (Karar #23)
 ```
 
 ---
@@ -153,6 +165,9 @@ interface CustomizerState {
 }
 ```
 
+> ⚠️ Bu blok hâlâ 4 adımlı eski şemayı yansıtıyor — 5 adımlı geçiş (Karar #1, Oturum 2) bu
+> dosyaya işlenmedi. Açık Sorun #10/#36 kapsamında, bu güncellemenin dışında bırakıldı.
+
 ### 2.5 `components/menu/MenuCard.tsx`
 
 ```tsx
@@ -183,13 +198,52 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 ```ts
 // app/api/auth/otp/send/route.ts + verify/route.ts
 // Amaç:    Twilio Verify ile telefon+OTP girişi, başarılı doğrulamada Auth.js JWT session açar
-// Bağlı:   /giris sayfası, Header'daki hesap ikonu (henüz üretilmedi)
-// Risk:    DB henüz yok — session (JWT) kalıcı ama kullanıcı profili/sadakat verisi DEĞİL
+// Bağlı:   /giris sayfası, Header'daki hesap ikonu (canlı doğrulandı — Oturum 4)
+// Risk:    Twilio trial hesabı Türkiye'yi SMS için "restricted country" işaretliyor — bu route'lar
+//          kod seviyesinde tamam ama canlıda uçtan uca fonksiyonel test edilemedi (Açık Sorun #32)
 // Dokunma: INTEGRATIONS.md §5 — tam kontrat, edge case'ler ve rate limit orada
 ```
 
 > ⚠️ Guest checkout bu akıştan bağımsızdır — `useCartStore` hiç dokunulmaz (§2.3).
 > Auth katmanı sepetin üzerine kurulmaz, yanına eklenir.
+
+> **DB durumu (Karar #20 ile güncellendi):** Bu belgenin önceki sürümü "DB henüz yok, session
+> sadece JWT'de kalıcı" diyordu — bu artık DOĞRU DEĞİL. Neon Postgres (Vercel Marketplace)
+> kuruldu, Drizzle ORM ile `users` tablosu (`phone`, `address`, `displayName`, `loyaltyPoints`,
+> `verifiedAt`, `createdAt`) oluşturuldu. JWT session artık DB'deki kalıcı kayıtla birlikte
+> çalışıyor — kullanıcı farklı cihaz/tarayıcıdan tekrar giriş yaptığında telefon numarasıyla
+> eşleşen profil verisi DB'den okunur, sadece o oturuma özgü kalmaz.
+
+### 2.8 `app/api/user/profile/route.ts` + `app/hesap/page.tsx` — Kullanıcı Profili/Adres
+
+```ts
+// app/api/user/profile/route.ts
+// Amaç:    GET — oturum sahibinin profilini (address, displayName) döner.
+//          PATCH — oturum sahibinin profilini günceller.
+// Bağlı:   app/hesap/page.tsx, components/account/{useProfileForm,ProfileForm}.tsx,
+//          lib/db/queries/user-profile.ts, lib/user/profile-validation.ts
+// Risk:    Kimlik SADECE session.user.phone'dan alınır — request body'den phone kabul
+//          edilirse başka bir kullanıcının profili üzerine yazılabilir (BSC-3, kritik sınır,
+//          bkz. Katman Sınırı Kuralı §1 madde 8)
+// Dokunma: lib/db/schema.ts'teki users tablosu şeması değişirse lib/user/profile-validation.ts
+//          ve lib/db/queries/user-profile.ts da güncellenmeli
+```
+
+```tsx
+// app/hesap/page.tsx
+// Amaç:    Server component — oturum yoksa /giris'e redirect eder, varsa ProfileForm'u render eder
+// Bağlı:   auth.ts (session kontrolü), components/account/ProfileForm.tsx
+// Risk:    Adres toplama checkout'u BLOKLAMAZ (Karar #23, Katman Sınırı Kuralı §1 madde 9) —
+//          bu sayfa tamamen opsiyonel, sepet/sipariş akışından bağımsızdır
+```
+
+> ⚠️ Bilinen açıklar (kod içi yorumla işaretlendi, tahmin edilmedi — AGENT.md Kural #2):
+> `route.ts` şu an rate-limit'siz — `lib/auth/rate-limit.ts`'in gerçek export imzası görülmeden
+> entegre edilmedi (Açık Sorun #37). `ProfileForm.tsx`'teki Tailwind renk sınıfları
+> DESIGN_SYSTEM.md görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38).
+>
+> ⚠️ Bu iki dosya kod seviyesinde tamam ama Twilio kısıtı (#32) yüzünden canlıda hiç
+> fonksiyonel test edilemedi — giriş yapıp adres kaydetme akışı doğrulanmadı (Açık Sorun #39).
 
 ---
 
@@ -226,21 +280,26 @@ type CartItem = {
   quantity: number
   unitPrice: number
   unitCalories: number
+  fulfillmentChannel: "pickup" | "dine-in"   // sepet/oturum seviyesinde tek alan — Karar #13
 }
 
 type AuthenticatedUser = {
   phone: string                  // kimlik anahtarı — Karar #17, "1 numara = 1 hesap"
   verifiedAt: string             // ISO timestamp — son OTP doğrulama zamanı
-  // ⚠️ DB kararı ertelendi (bu sohbet) — aşağıdaki alanlar TASARLANDI ama henüz
-  // KALICI SAKLANMIYOR. Auth.js JWT session bu alanları taşır ama tarayıcı/oturum
-  // kapanınca kaybolur. DB seçilince bu tip Prisma/Drizzle şemasına birebir taşınacak.
+  // Karar #20 ile bu alanlar artık KALICI OLARAK SAKLANIYOR — Neon Postgres, users tablosu.
+  // Auth.js JWT session, DB'deki bu kayıtla senkronize çalışır (bkz. §2.7 not).
+  address?: string                // Karar #23 — SADECE profil/sadakat verisi, checkout'u bloklamaz
   displayName?: string
-  loyaltyPoints?: number         // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
+  loyaltyPoints?: number          // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
 }
 ```
 
 > Kaynak: MASTER_PLAN §5.5 — kalori/protein alanı zorunlu, opsiyonel değil.
-> `AuthenticatedUser` — INTEGRATIONS.md §5 kaynaklı, DB-agnostic tasarım notuyla birlikte okunmalı.
+> `AuthenticatedUser` — INTEGRATIONS.md §5 kaynaklı, Karar #20 (DB) ve Karar #23 (adres modeli)
+> ile birlikte okunmalı.
+>
+> ⚠️ `BowlItem.category` enum'ı MASTER_PLAN §3.2'deki kategori isimleriyle (İmza Kaseler, Sıcak
+> Tahıl Kaseleri, Vegan, İçecekler) senkron değil — Açık Sorun #35, bu güncellemenin kapsamı dışında.
 
 ---
 
@@ -249,8 +308,9 @@ type AuthenticatedUser = {
 ### 4.1 Deploy
 | Alan | Değer |
 |---|---|
-| Platform | ⬜ Netleşmedi — Vercel önerilir (Next.js native ISR/Edge desteği) |
-| Ortam Değişkenleri | CONFIG_SCHEMA.md'de tanımlı, platform dashboard'undan girilir |
+| Platform | ✅ Vercel — proje `bowlera-site` olarak bağlı, deploy yeşil |
+| Ortam Değişkenleri | CONFIG_SCHEMA.md'de tanımlı (v1.2 — `DATABASE_URL` dahil), platform dashboard'undan girilir |
+| Veritabanı | ✅ Neon Postgres (Vercel Marketplace, Frankfurt region) — Karar #20 |
 | Build Komutu | `next build` |
 | Önizleme | Her PR için otomatik preview deploy önerilir |
 
@@ -275,7 +335,7 @@ type AuthenticatedUser = {
 ```
 1. Vercel/hosting panelinden önceki başarılı deploy'a "Instant Rollback"
 2. Git: son commit'i revert et → otomatik yeniden deploy tetiklenir
-3. Kritik veri değişikliği (menu-data.json şeması) varsa CORE.md §7.4 protokolü izlenir
+3. Kritik veri değişikliği (menu-data.json şeması VEYA lib/db/schema.ts) varsa CORE.md §7.4 protokolü izlenir
 4. Rollback sonrası SESSION_INDEX.md güncellenir, session_log'a 🔴 ile kaydedilir
 ```
 
@@ -289,14 +349,25 @@ type AuthenticatedUser = {
 | Fiyat/kalori hesaplama | `useCustomizerStore.getTotals()` | Render |
 | Render | Bileşenler (`MenuCard`, `SummaryPanel`) | State mutasyonu |
 | Sepet kalıcılığı | `useCartStore` (persist) | Checkout/ödeme |
+| Kullanıcı kimliği/oturum | `auth.ts`, `app/api/auth/otp/*` | Sepet/checkout akışı (bağımsız kalır) |
+| Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.2 — Session 4 — 2026-07-19*
+*BOWLERA ARCHITECTURE.md — v1.3 — Session 4 — 2026-07-19*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları)*
 *v1.1: §2.4 ve §5 — `calculateTotals` → `getTotals` olarak düzeltildi (CUSTOMIZER_SPEC.md ile tutarlılık, Açık Sorun #5 kapatıldı).*
 *v1.2: §1 Katman Sınırı Kuralları'na madde 7 (auth/sepet bağımsızlığı) eklendi. Yeni §2.7 —
 `app/api/auth/otp/*` kontratı. §3 Veri Modeli'ne `AuthenticatedUser` tipi + DB-agnostic uyarı
 notu eklendi (Karar #17/#19, INTEGRATIONS.md §5). ⚠️ Bu dosya hâlâ 5 adımlı customizer'a ve
 FulfillmentChannel'a göre senkron değil — Açık Sorun #10, bu güncellemenin kapsamı dışında.*
+*v1.3 (bu güncelleme, Açık Sorun #36 kapatıldı): Karar #20 (Neon Postgres kuruldu, DB artık
+KALICI) ve Karar #23 (adres/profil akışı) ile senkronize edildi. §1'e madde 8/9 eklendi. §2.7
+"DB henüz yok" ifadesi düzeltildi. Yeni §2.8 — `app/api/user/profile/route.ts` +
+`app/hesap/page.tsx` kontratı. §3'e `CartItem.fulfillmentChannel` ve `AuthenticatedUser.address`
+eklendi, DB-agnostic uyarı notu "artık kalıcı saklanıyor" şeklinde güncellendi. §4.1'e Vercel/Neon
+deploy durumu eklendi. §5'e iki yeni satır (kullanıcı kimliği, kullanıcı profili) eklendi.
+⚠️ Bu güncelleme #36'yı kapatır ama #10 (5 adımlı customizer/FulfillmentChannel enum senkronu,
+§2.4/§3 category) ve #35 (BowlItem.category enum uyuşmazlığı) hâlâ AÇIK — bu turun kapsamı dışında
+bırakıldı, bilinçli olarak dokunulmadı.*
