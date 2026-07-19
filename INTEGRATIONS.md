@@ -17,6 +17,7 @@
 | WhatsApp sipariş köprüsü | ⬜ Şube telefon numaraları bekleniyor |
 | Masaya QR menü | ⬜ Kod üretimi Oturum 5 sonrası |
 | SMS/e-posta bildirimi (Twilio) | ⬜ Lansmandan sonraki faz, POS ile birlikte |
+| Telefon + OTP kullanıcı girişi (Twilio Verify + Auth.js) | ⬜ Mimari onaylandı (Karar #17/#19), kod yazılmadı — Twilio Verify Service SID bekleniyor |
 
 ---
 
@@ -135,7 +136,81 @@ const tableId = searchParams.table   // örn. "14"
 
 ---
 
-## 5. KALİTE KONTROL — INTEGRATIONS SELF-CHECK
+## 5. TELEFON + OTP KULLANICI GİRİŞİ (AUTH)
+
+**Amaç:** Şifresiz, telefon numarası + SMS OTP ile kullanıcı girişi. Guest checkout
+korunur — bu akış zorunlu değil, kullanıcı isterse hesapsız sipariş vermeye devam eder.
+Sadakat programı ileride bu kimliğe (telefon numarası) bağlanacak (Karar #17).
+
+> ⚠️ Veritabanı kararı bilinçli olarak ERTELENDİ. Bu bölümdeki tasarım DB-agnostic'tir:
+> Auth.js JWT stratejisiyle oturumun kendisi DB gerektirmez, ama kullanıcı profili/sadakat
+> puanı DB seçilene kadar KALICI SAKLANAMAZ. Bu bilinçli bir MVP sınırıdır, hata değildir.
+
+**Sağlayıcı seçimi:** Twilio Verify — CONFIG_SCHEMA.md'de zaten planlı olan
+`TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN` bildirim (§4) ile paylaşılır, mükerrer
+üçüncü parti eklenmez. Session yönetimi: Auth.js (NextAuth) Credentials provider + JWT.
+
+### 5.1 OTP Gönderme
+
+```ts
+// app/api/auth/otp/send/route.ts
+// Amaç:    Girilen telefon numarasına Twilio Verify ile OTP kodu gönderir
+// Bağlı:   /giris sayfası telefon formu
+// Risk:    Rate limit yoksa SMS bombalama / kota tükenmesi (BSC-7)
+// Dokunma: CONFIG_SCHEMA.md → TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_VERIFY_SERVICE_SID
+
+export async function POST(req: Request) {
+  const { phone } = await req.json()
+  if (!isValidTurkishPhone(phone)) {
+    return new Response('Geçersiz telefon numarası', { status: 400 })   // BSC-3
+  }
+  await verifyClient.verifications.create({ to: phone, channel: 'sms' })
+  return Response.json({ status: 'SENT' })
+}
+```
+
+### 5.2 OTP Doğrulama + Oturum Açma
+
+```ts
+// app/api/auth/otp/verify/route.ts
+// Amaç:    Girilen kodu Twilio Verify'a doğrular, başarılıysa Auth.js session'ı tetikler
+// Bağlı:   /giris sayfası kod formu → Auth.js Credentials provider
+// Risk:    Doğrulama idempotent olmalı — aynı kod çift gönderimde çift oturum açmamalı
+
+export async function POST(req: Request) {
+  const { phone, code } = await req.json()
+  const check = await verifyClient.verificationChecks.create({ to: phone, code })
+  if (check.status !== 'approved') {
+    return new Response('Kod hatalı veya süresi dolmuş', { status: 401 })
+  }
+  // Auth.js signIn('credentials', { phone }) → httpOnly JWT session cookie set edilir
+}
+```
+
+### 5.3 Rate Limit (BSC-7)
+```
+/api/auth/otp/send çağrıları IP + telefon numarası bazlı token-bucket rate limiter'dan
+geçer — SMS bombalama ve Twilio kotasının aşılmasını önlemek için (Adisyo/SepetTakip §1.1
+ile aynı desen).
+```
+
+### 5.4 Edge Case'ler (AGENT.md §3)
+```
+1. Kod süresi doldu (Twilio varsayılan 10dk)     → "Yeni kod iste" akışı, eski kod geçersiz
+2. Yanlış kod 3+ deneme                          → geçici kilitleme, Twilio Verify kendi
+                                                    max-attempt kontrolünü de uygular
+3. Aynı telefon numarasıyla ikinci kayıt denemesi → mevcut hesaba giriş yönlendirilir
+                                                    ("1 numara = 1 hesap" — bilinen risk,
+                                                    hesap kurtarma akışı Açık Sorun #30'da
+                                                    ayrıca netleşecek)
+4. DB yokken profil/sadakat verisi                → yalnızca oturum (JWT) kalıcı, profil
+                                                    verisi bu fazda saklanmıyor — kullanıcıya
+                                                    UI'da netleştirilmeli (yanıltıcı olmasın)
+```
+
+---
+
+## 6. KALİTE KONTROL — INTEGRATIONS SELF-CHECK
 
 ```
 [ ] Üçüncü parti çağrısı server-side mi?     → Route Handler içinde mi? (ARCHITECTURE §1 Kural 4)
@@ -143,9 +218,14 @@ const tableId = searchParams.table   // örn. "14"
 [ ] Kopma senaryosu ele alındı mı?            → BSC-8 fallback var mı?
 [ ] API key client kodda mı?                  → CONFIG_SCHEMA.md env'den mi okunuyor? (BSC-2)
 [ ] Gerçek anahtar/test olmadan "tamamlandı" mı deniyor? → CORE.md §9 ihlali mi?
+[ ] Auth akışına dokunuluyor mu?              → DB henüz yok, profil/sadakat verisi kalıcı
+                                                 saklanamıyor uyarısı UI'da netleştirildi mi? (§5.4)
 ```
 
 ---
 
-*BOWLERA INTEGRATIONS.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA INTEGRATIONS.md — v1.1 — Session 4 — 2026-07-19*
 *Kaynak: MASTER_PLAN.md §5.6 · AGENT.md BSC-7, BSC-8 · ARCHITECTURE.md §1, §2.6*
+*v1.1: §0 faz tablosuna auth satırı eklendi. Yeni §5 — Telefon+OTP kullanıcı girişi
+(Twilio Verify + Auth.js JWT, DB-agnostic tasarım, Karar #17 uyarınca) eklendi. Eski §5
+(Kalite Kontrol) §6'ya kaydı, DB kısıtı self-check maddesi eklendi.*

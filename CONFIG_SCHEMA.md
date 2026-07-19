@@ -24,8 +24,10 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 | `SEPETTAKIP_API_KEY` | ⬜ (sonraki faz) | Server-only | SepetTakip pazaryeri entegrasyon anahtarı | INTEGRATIONS.md §1 |
 | `MARKETPLACE_WEBHOOK_SECRET` | ⬜ (sonraki faz) | Server-only | Webhook imza doğrulama secret'ı (BSC-3) | INTEGRATIONS.md §1 |
 | `WHATSAPP_BRANCH_PHONE_[ŞUBE_KODU]` | ⬜ (Oturum 5) | Server-only | Şube başına WhatsApp numarası | INTEGRATIONS.md §2 |
-| `TWILIO_ACCOUNT_SID` | ⬜ (lansman sonrası) | Server-only | SMS bildirim servisi | INTEGRATIONS.md §4 |
-| `TWILIO_AUTH_TOKEN` | ⬜ (lansman sonrası) | Server-only | SMS bildirim servisi | INTEGRATIONS.md §4 |
+| `TWILIO_ACCOUNT_SID` | ✅ (auth için öne çekildi) | Server-only | Twilio hesap kimliği — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
+| `TWILIO_AUTH_TOKEN` | ✅ (auth için öne çekildi) | Server-only | Twilio hesap secret'ı — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
+| `TWILIO_VERIFY_SERVICE_SID` | ✅ | Server-only | Twilio Verify servis kimliği — telefon+OTP kullanıcı girişi | INTEGRATIONS.md §5 |
+| `AUTH_SECRET` | ✅ | Server-only | Auth.js (NextAuth) JWT imzalama secret'ı — oturum bütünlüğü | INTEGRATIONS.md §5 |
 | `CMS_API_TOKEN` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful erişim anahtarı | ARCHITECTURE.md §2.2 |
 | `CMS_PROJECT_ID` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful proje kimliği | ARCHITECTURE.md §2.2 |
 
@@ -58,9 +60,16 @@ MARKETPLACE_WEBHOOK_SECRET=
 # WhatsApp Köprüsü (Oturum 5 — INTEGRATIONS.md §2)
 WHATSAPP_BRANCH_PHONE_KADIKOY=
 
-# Bildirim (lansman sonrası — INTEGRATIONS.md §4)
+# Telefon + OTP Kullanıcı Girişi (INTEGRATIONS.md §5)
+# NOT: TWILIO_ACCOUNT_SID/TWILIO_AUTH_TOKEN artık burada da zorunlu —
+# aşağıdaki §4 bildirim kullanımıyla AYNI Twilio hesabı paylaşılır, mükerrer değil.
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
+TWILIO_VERIFY_SERVICE_SID=
+AUTH_SECRET=
+
+# Bildirim (lansman sonrası — INTEGRATIONS.md §4)
+# TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN yukarıda tanımlı, tekrar eklenmez
 
 # CMS (büyüme fazı — ARCHITECTURE.md §2.2)
 CMS_API_TOKEN=
@@ -94,5 +103,8 @@ CMS_PROJECT_ID=
 
 ---
 
-*BOWLERA CONFIG_SCHEMA.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA CONFIG_SCHEMA.md — v1.1 — Session 4 — 2026-07-19*
 *Kaynak: INTEGRATIONS.md · ARCHITECTURE.md §4.1 · AGENT.md BSC-2*
+*v1.1: §2 — Telefon+OTP auth (Karar #17) için `TWILIO_VERIFY_SERVICE_SID` ve `AUTH_SECRET` eklendi.
+`TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN` zorunlu statüsüne öne çekildi (auth + gelecekteki SMS
+bildirimi aynı hesabı paylaşıyor, mükerrer değil). §4 şablonu güncellendi. Kaynak: INTEGRATIONS.md §5.*

@@ -51,6 +51,7 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
 4. Üçüncü parti API çağrıları (Adisyo/SepetTakip/Twilio) sadece app/api/ Route Handler'larından yapılır — client component'ten asla
 5. Customizer adım sırası useCustomizerStore'daki currentStep ile kontrol edilir — URL manipülasyonuyla atlanamaz
 6. Tasarım sistemi token'ları (renk/tipografi) sadece tailwind.config.ts üzerinden kullanılır — inline hex kod yasak (DESIGN_SYSTEM.md)
+7. Auth (telefon+OTP) katmanı sepet akışından bağımsızdır — guest checkout her zaman geçerli kalır, useCartStore auth durumuna göre dallanmaz (INTEGRATIONS.md §5)
 ```
 
 ---
@@ -177,6 +178,19 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 }
 ```
 
+### 2.7 `app/api/auth/otp/*` — Telefon + OTP Girişi
+
+```ts
+// app/api/auth/otp/send/route.ts + verify/route.ts
+// Amaç:    Twilio Verify ile telefon+OTP girişi, başarılı doğrulamada Auth.js JWT session açar
+// Bağlı:   /giris sayfası, Header'daki hesap ikonu (henüz üretilmedi)
+// Risk:    DB henüz yok — session (JWT) kalıcı ama kullanıcı profili/sadakat verisi DEĞİL
+// Dokunma: INTEGRATIONS.md §5 — tam kontrat, edge case'ler ve rate limit orada
+```
+
+> ⚠️ Guest checkout bu akıştan bağımsızdır — `useCartStore` hiç dokunulmaz (§2.3).
+> Auth katmanı sepetin üzerine kurulmaz, yanına eklenir.
+
 ---
 
 ## 3. VERİ MODELİ
@@ -213,9 +227,20 @@ type CartItem = {
   unitPrice: number
   unitCalories: number
 }
+
+type AuthenticatedUser = {
+  phone: string                  // kimlik anahtarı — Karar #17, "1 numara = 1 hesap"
+  verifiedAt: string             // ISO timestamp — son OTP doğrulama zamanı
+  // ⚠️ DB kararı ertelendi (bu sohbet) — aşağıdaki alanlar TASARLANDI ama henüz
+  // KALICI SAKLANMIYOR. Auth.js JWT session bu alanları taşır ama tarayıcı/oturum
+  // kapanınca kaybolur. DB seçilince bu tip Prisma/Drizzle şemasına birebir taşınacak.
+  displayName?: string
+  loyaltyPoints?: number         // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
+}
 ```
 
 > Kaynak: MASTER_PLAN §5.5 — kalori/protein alanı zorunlu, opsiyonel değil.
+> `AuthenticatedUser` — INTEGRATIONS.md §5 kaynaklı, DB-agnostic tasarım notuyla birlikte okunmalı.
 
 ---
 
@@ -268,6 +293,10 @@ type CartItem = {
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.1 — Session 1 — 2026-07-17*
+*BOWLERA ARCHITECTURE.md — v1.2 — Session 4 — 2026-07-19*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları)*
 *v1.1: §2.4 ve §5 — `calculateTotals` → `getTotals` olarak düzeltildi (CUSTOMIZER_SPEC.md ile tutarlılık, Açık Sorun #5 kapatıldı).*
+*v1.2: §1 Katman Sınırı Kuralları'na madde 7 (auth/sepet bağımsızlığı) eklendi. Yeni §2.7 —
+`app/api/auth/otp/*` kontratı. §3 Veri Modeli'ne `AuthenticatedUser` tipi + DB-agnostic uyarı
+notu eklendi (Karar #17/#19, INTEGRATIONS.md §5). ⚠️ Bu dosya hâlâ 5 adımlı customizer'a ve
+FulfillmentChannel'a göre senkron değil — Açık Sorun #10, bu güncellemenin kapsamı dışında.*
