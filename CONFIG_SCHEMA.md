@@ -24,15 +24,20 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 | `SEPETTAKIP_API_KEY` | ⬜ (sonraki faz) | Server-only | SepetTakip pazaryeri entegrasyon anahtarı | INTEGRATIONS.md §1 |
 | `MARKETPLACE_WEBHOOK_SECRET` | ⬜ (sonraki faz) | Server-only | Webhook imza doğrulama secret'ı (BSC-3) | INTEGRATIONS.md §1 |
 | `WHATSAPP_BRANCH_PHONE_[ŞUBE_KODU]` | ⬜ (Oturum 5) | Server-only | Şube başına WhatsApp numarası | INTEGRATIONS.md §2 |
-| `TWILIO_ACCOUNT_SID` | ✅ (auth için öne çekildi) | Server-only | Twilio hesap kimliği — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
-| `TWILIO_AUTH_TOKEN` | ✅ (auth için öne çekildi) | Server-only | Twilio hesap secret'ı — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
+| `TWILIO_ACCOUNT_SID` | ✅ | Server-only | Twilio hesap kimliği — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
+| `TWILIO_AUTH_TOKEN` | ✅ | Server-only | Twilio hesap secret'ı — OTP (§5) + gelecekte SMS bildirimi (§4) ortak kullanır | INTEGRATIONS.md §4, §5 |
 | `TWILIO_VERIFY_SERVICE_SID` | ✅ | Server-only | Twilio Verify servis kimliği — telefon+OTP kullanıcı girişi | INTEGRATIONS.md §5 |
 | `AUTH_SECRET` | ✅ | Server-only | Auth.js (NextAuth) JWT imzalama secret'ı — oturum bütünlüğü | INTEGRATIONS.md §5 |
+| `DATABASE_URL` | ✅ | Server-only | Neon Postgres bağlantı string'i — kullanıcı (`users`) tablosu: phone, address, loyaltyPoints | ARCHITECTURE.md §3 (AuthenticatedUser), Karar #20 |
 | `CMS_API_TOKEN` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful erişim anahtarı | ARCHITECTURE.md §2.2 |
 | `CMS_PROJECT_ID` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful proje kimliği | ARCHITECTURE.md §2.2 |
 
 > `NEXT_PUBLIC_` prefix'i **yalnızca** client'a güvenle açılabilecek değerler için kullanılır —
 > hiçbir API key bu prefix'i almaz (BSC-2).
+
+> `DATABASE_URL`, Vercel Marketplace Neon entegrasyonu tarafından Production ve Preview
+> environment'larına **otomatik enjekte edilir** (Custom Prefix: `DATABASE` → `DATABASE_URL`).
+> Lokal geliştirmede `vercel env pull` ile `.env.local`'e çekilir, elle girilmez.
 
 ---
 
@@ -43,6 +48,10 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 | Development (`.env.local`) | Lokal test, gerçek anahtarlar yerine test/sandbox anahtarları önerilir |
 | Preview (PR deploy) | Sadece `NEXT_PUBLIC_SITE_URL` ve sandbox anahtarları — üretim anahtarı asla |
 | Production | Tüm zorunlu değişkenler platform dashboard'unda, gerçek anahtarlarla |
+
+> `DATABASE_URL` istisnadır: Neon entegrasyonu Development environment'ına dahil edilmedi
+> (bilinçli seçim, bkz. kurulum kaydı) — lokal geliştirme `vercel env pull` ile Preview/Production
+> bağlantısını kullanır. İleride ayrı bir dev branch gerekirse bu satır güncellenir.
 
 ---
 
@@ -67,6 +76,10 @@ TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_VERIFY_SERVICE_SID=
 AUTH_SECRET=
+
+# Veritabanı (Neon Postgres — Vercel Marketplace entegrasyonu, Karar #20)
+# Elle doldurulmaz — `vercel env pull` ile çekilir.
+DATABASE_URL=
 
 # Bildirim (lansman sonrası — INTEGRATIONS.md §4)
 # TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN yukarıda tanımlı, tekrar eklenmez
@@ -103,8 +116,11 @@ CMS_PROJECT_ID=
 
 ---
 
-*BOWLERA CONFIG_SCHEMA.md — v1.1 — Session 4 — 2026-07-19*
-*Kaynak: INTEGRATIONS.md · ARCHITECTURE.md §4.1 · AGENT.md BSC-2*
+*BOWLERA CONFIG_SCHEMA.md — v1.2 — Session 4 — 2026-07-19*
+*Kaynak: INTEGRATIONS.md · ARCHITECTURE.md §4.1, §3 · AGENT.md BSC-2*
+*v1.2: §2'ye `DATABASE_URL` eklendi (Neon Postgres, Vercel Marketplace entegrasyonu, Karar #20 —
+DB kararının kısmi revizyonu: kullanıcı adresi/sadakat puanı artık kalıcı saklanıyor). §3'e Development
+environment istisnası notu eklendi. §4 şablonuna `DATABASE_URL` eklendi.*
 *v1.1: §2 — Telefon+OTP auth (Karar #17) için `TWILIO_VERIFY_SERVICE_SID` ve `AUTH_SECRET` eklendi.
 `TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN` zorunlu statüsüne öne çekildi (auth + gelecekteki SMS
 bildirimi aynı hesabı paylaşıyor, mükerrer değil). §4 şablonu güncellendi. Kaynak: INTEGRATIONS.md §5.*
