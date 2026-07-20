@@ -38,8 +38,12 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
                                    (logo-degrade pulse animasyonu)             (sepet içeriği, checkout'a yönlendirme)
                                                                                               │
                                                                                               ▼
+                                                                          app/siparis/page.tsx (checkout — kanal ZORUNLU)
+                                                                                              │
+                                                                                              ▼
                                                                           lib/integrations/whatsapp.ts | marketplace.ts
                                                                           (wa.me linki | Adisyo/SepetTakip API — server-side)
+                                                                          ⚠️ WhatsApp köprüsü şube numarası bekleniyor (§2.9)
 
 app/giris/page.tsx ──► app/api/auth/otp/{send,verify}/route.ts ──► auth.ts (Auth.js JWT session)
                                                                                 │
@@ -64,6 +68,8 @@ app/giris/page.tsx ──► app/api/auth/otp/{send,verify}/route.ts ──► a
 7. Auth (telefon+OTP) katmanı sepet akışından bağımsızdır — guest checkout her zaman geçerli kalır, useCartStore auth durumuna göre dallanmaz (INTEGRATIONS.md §5)
 8. Kullanıcı profili/adres verisi SADECE app/api/user/profile/route.ts üzerinden okunur/yazılır — bu route request body'den phone KABUL ETMEZ, kimlik her zaman session'dan (session.user.phone) alınır (BSC-3 kritik sınır, Karar #23)
 9. Adres alanı sipariş akışını (checkout) BLOKLAMAZ — FulfillmentChannel ("pickup" | "dine-in") delivery içermediği için adres sadece profil/sadakat verisidir, opsiyonel olarak /hesap sayfasında toplanır (Karar #23)
+10. Teslimat kanalı (fulfillmentChannel) app/siparis/page.tsx'te ZORUNLU seçim haline getirilir — kanal seçilmeden WhatsApp sipariş CTA'sı aktif olamaz (Açık Sorun #26, bu güncelleme)
+11. Üçüncü parti entegrasyon için gerekli kimlik bilgisi (ör. şube telefon numarası) eksikken ilgili CTA gerçek işlevle bağlanamaz — sahte/placeholder değer YASAK (BSC-5, CORE §9); bunun yerine CTA bilinçli olarak devre dışı + açıklamalı bırakılır
 ```
 
 ---
@@ -115,19 +121,22 @@ export async function GET() {
 
 ```ts
 // store/useCartStore.ts
-// Amaç:    Sepet öğelerini yönetir, tarayıcı kapansa da korur
-// Bağlı:   CartBadge, CartDrawer, Customizer "Sepete Ekle" butonu
-// Risk:    Hatalı state güncelleme → yanlış fiyat/miktar sepette görünür
+// Amaç:    Sepet öğelerini ve teslimat kanalını yönetir, tarayıcı kapansa da korur
+// Bağlı:   CartBadge, CartDrawer, Customizer "Sepete Ekle" butonu, app/siparis/page.tsx
+// Risk:    Hatalı state güncelleme → yanlış fiyat/miktar sepette görünür.
+//          fulfillmentChannel boş kalırsa teslimat şekli belirsizleşir (Açık Sorun #26)
 // Dokunma: BSC-6 (race condition) kontrolü — çift tıklama koruması component tarafında
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { CartItem } from '@/types'
+import type { CartItem, FulfillmentChannel } from '@/types'
 
 interface CartState {
   cart: CartItem[]
+  fulfillmentChannel: FulfillmentChannel | null   // sepet/oturum seviyesinde TEK alan — Karar #13
   addToCart: (item: CartItem) => void
   removeFromCart: (cartId: string) => void
+  setFulfillmentChannel: (channel: FulfillmentChannel) => void
   clearCart: () => void
 }
 
@@ -135,15 +144,23 @@ export const useCartStore = create<CartState>()(
   persist(
     (set) => ({
       cart: [],
+      fulfillmentChannel: null,
       addToCart: (item) => set((state) => ({ cart: [...state.cart, item] })),
       removeFromCart: (cartId) =>
         set((state) => ({ cart: state.cart.filter((i) => i.cartId !== cartId) })),
-      clearCart: () => set({ cart: [] }),
+      setFulfillmentChannel: (channel) => set({ fulfillmentChannel: channel }),
+      clearCart: () => set({ cart: [] }),   // fulfillmentChannel BİLİNÇLİ olarak sıfırlanmıyor
     }),
-    { name: 'bowlera-cart-storage' }
+    { name: 'bowlera-cart' }
   )
 )
 ```
+
+> ⚠️ **Bu güncelleme, önceki v1.3'te yapılan bir HATAYI düzeltir:** `fulfillmentChannel`
+> önceki sürümde yanlışlıkla `CartItem` tipine (§3) eklenmişti — ama gerçek kod
+> (`store/useCartStore.ts`) bunun `CartState` seviyesinde **tek bir alan** olduğunu
+> gösteriyor, her `CartItem`'da tekrarlanmıyor. Kaynak: kullanıcının paylaştığı gerçek
+> dosya içeriği, bu turda görüldü.
 
 ### 2.4 `store/useCustomizerStore.ts` — Kâseni Yarat State
 
@@ -167,6 +184,7 @@ interface CustomizerState {
 
 > ⚠️ Bu blok hâlâ 4 adımlı eski şemayı yansıtıyor — 5 adımlı geçiş (Karar #1, Oturum 2) bu
 > dosyaya işlenmedi. Açık Sorun #10/#36 kapsamında, bu güncellemenin dışında bırakıldı.
+> Gerçek kontrat için: `CUSTOMIZER_SPEC.md §3.1` (5 adımlı, güncel).
 
 ### 2.5 `components/menu/MenuCard.tsx`
 
@@ -183,15 +201,19 @@ interface CustomizerState {
 ```ts
 // lib/integrations/whatsapp.ts
 // Amaç:    Özelleştirilen kaseyi wa.me linkine dönüştürür
-// Bağlı:   CartDrawer "WhatsApp ile Sipariş Ver" butonu
+// Bağlı:   components/order/WhatsAppOrderButton.tsx (§2.9) — HENÜZ BAĞLANMADI
 // Risk:    Encode hatası → şubeye eksik/bozuk sipariş mesajı gider
-// Dokunma: INTEGRATIONS.md §WhatsApp Köprüsü — mesaj şablonu orada tanımlı
+// Dokunma: INTEGRATIONS.md §2 — mesaj şablonu orada tanımlı
 
 export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): string {
   const message = formatOrderMessage(cart)   // INTEGRATIONS.md şablonuna göre
   return `https://wa.me/${branchPhone}?text=${encodeURIComponent(message)}`
 }
 ```
+
+> ⚠️ Bu fonksiyon var ama **hiçbir UI bileşeninden çağrılmıyor** — `INTEGRATIONS.md §0`
+> "Şube telefon numaraları bekleniyor" diyor. `WhatsAppOrderButton.tsx` (§2.9) bilinçli
+> olarak bu fonksiyona bağlanmadı (Katman Sınırı Kuralı madde 11).
 
 ### 2.7 `app/api/auth/otp/*` — Telefon + OTP Girişi
 
@@ -205,14 +227,12 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 ```
 
 > ⚠️ Guest checkout bu akıştan bağımsızdır — `useCartStore` hiç dokunulmaz (§2.3).
-> Auth katmanı sepetin üzerine kurulmaz, yanına eklenir.
+> Auth katmanı sepetin üzerine kurulmaz, yanına eklenir. `app/siparis/page.tsx` (§2.9)
+> oturum kontrolü YAPMAZ — bu bilinçli bir tasarım kararıdır.
 
-> **DB durumu (Karar #20 ile güncellendi):** Bu belgenin önceki sürümü "DB henüz yok, session
-> sadece JWT'de kalıcı" diyordu — bu artık DOĞRU DEĞİL. Neon Postgres (Vercel Marketplace)
-> kuruldu, Drizzle ORM ile `users` tablosu (`phone`, `address`, `displayName`, `loyaltyPoints`,
-> `verifiedAt`, `createdAt`) oluşturuldu. JWT session artık DB'deki kalıcı kayıtla birlikte
-> çalışıyor — kullanıcı farklı cihaz/tarayıcıdan tekrar giriş yaptığında telefon numarasıyla
-> eşleşen profil verisi DB'den okunur, sadece o oturuma özgü kalmaz.
+> **DB durumu (Karar #20 ile güncellendi):** Neon Postgres (Vercel Marketplace) kuruldu,
+> Drizzle ORM ile `users` tablosu oluşturuldu. JWT session artık DB'deki kalıcı kayıtla
+> birlikte çalışıyor.
 
 ### 2.8 `app/api/user/profile/route.ts` + `app/hesap/page.tsx` — Kullanıcı Profili/Adres
 
@@ -221,10 +241,10 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 // Amaç:    GET — oturum sahibinin profilini (address, displayName) döner.
 //          PATCH — oturum sahibinin profilini günceller.
 // Bağlı:   app/hesap/page.tsx, components/account/{useProfileForm,ProfileForm}.tsx,
-//          lib/db/queries/user-profile.ts, lib/user/profile-validation.ts
+//          lib/db/queries/user-profile.ts, lib/user/profile-validation.ts, lib/auth/rate-limit.ts
 // Risk:    Kimlik SADECE session.user.phone'dan alınır — request body'den phone kabul
 //          edilirse başka bir kullanıcının profili üzerine yazılabilir (BSC-3, kritik sınır,
-//          bkz. Katman Sınırı Kuralı §1 madde 8)
+//          bkz. Katman Sınırı Kuralı §1 madde 8). PATCH `checkProfileRateLimit` ile korunur (BSC-7).
 // Dokunma: lib/db/schema.ts'teki users tablosu şeması değişirse lib/user/profile-validation.ts
 //          ve lib/db/queries/user-profile.ts da güncellenmeli
 ```
@@ -237,13 +257,26 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 //          bu sayfa tamamen opsiyonel, sepet/sipariş akışından bağımsızdır
 ```
 
-> ⚠️ Bilinen açıklar (kod içi yorumla işaretlendi, tahmin edilmedi — AGENT.md Kural #2):
-> `route.ts` şu an rate-limit'siz — `lib/auth/rate-limit.ts`'in gerçek export imzası görülmeden
-> entegre edilmedi (Açık Sorun #37). `ProfileForm.tsx`'teki Tailwind renk sınıfları
-> DESIGN_SYSTEM.md görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38).
->
-> ⚠️ Bu iki dosya kod seviyesinde tamam ama Twilio kısıtı (#32) yüzünden canlıda hiç
-> fonksiyonel test edilemedi — giriş yapıp adres kaydetme akışı doğrulanmadı (Açık Sorun #39).
+> ⚠️ Bilinen açıklar: `ProfileForm.tsx`'teki Tailwind renk sınıfları DESIGN_SYSTEM.md
+> görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38). Bu iki dosya + rate-limit
+> kod seviyesinde tamam ama Twilio kısıtı (#32) yüzünden canlıda hiç fonksiyonel test
+> edilemedi (Açık Sorun #39). Ayrıca bu dosya grubunun (7 dosya, Karar #23) gerçekten
+> repoda mevcut olup olmadığı tek tek doğrulanmalı — bir tutarsızlık bu turda keşfedildi.
+
+### 2.9 `app/siparis/page.tsx` — Checkout (Paket Servis / Gel Al)
+
+```tsx
+// app/siparis/page.tsx
+// Amaç:    Sepet özeti + ZORUNLU teslimat kanalı seçimi + sipariş CTA'sı
+// Bağlı:   store/useCartStore.ts, components/order/{OrderSummary,FulfillmentGate,WhatsAppOrderButton}.tsx
+// Risk:    Kanal seçimi zorunlu kılınmazsa teslimat şekli belirsiz sipariş oluşur (Açık Sorun #26 — KAPANDI)
+// Dokunma: Katman Sınırı Kuralı madde 7 — guest checkout burada da korunmalı, auth ZORUNLU KILINAMAZ
+```
+
+> **Karar (bu güncelleme):** WhatsApp CTA'sı bilinçli olarak devre dışı bırakıldı —
+> `INTEGRATIONS.md §0`'daki şube telefon numarası blokajı çözülene kadar
+> `lib/integrations/whatsapp.ts`'e bağlanmayacak (Katman Sınırı Kuralı madde 11, CORE §9).
+> Sayfa boş sepette mesaj gösterir, kanal seçilene kadar CTA'nın nedenini açıkça belirtir.
 
 ---
 
@@ -273,6 +306,8 @@ type CustomizerSelection = {
   sauce: string
 }
 
+type FulfillmentChannel = "pickup" | "dine-in"
+
 type CartItem = {
   cartId: string                 // uuid — sepet içi benzersiz kimlik
   bowlItem: BowlItem | null      // imza kase ise dolu, custom ise null
@@ -280,14 +315,14 @@ type CartItem = {
   quantity: number
   unitPrice: number
   unitCalories: number
-  fulfillmentChannel: "pickup" | "dine-in"   // sepet/oturum seviyesinde tek alan — Karar #13
+  // ⚠️ fulfillmentChannel BURADA DEĞİL — düzeltme: bkz. §2.3 notu. Kanal, CartState
+  // seviyesinde tek bir alan, her CartItem'da tekrarlanmıyor (Karar #13).
 }
 
 type AuthenticatedUser = {
   phone: string                  // kimlik anahtarı — Karar #17, "1 numara = 1 hesap"
   verifiedAt: string             // ISO timestamp — son OTP doğrulama zamanı
   // Karar #20 ile bu alanlar artık KALICI OLARAK SAKLANIYOR — Neon Postgres, users tablosu.
-  // Auth.js JWT session, DB'deki bu kayıtla senkronize çalışır (bkz. §2.7 not).
   address?: string                // Karar #23 — SADECE profil/sadakat verisi, checkout'u bloklamaz
   displayName?: string
   loyaltyPoints?: number          // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
@@ -295,11 +330,9 @@ type AuthenticatedUser = {
 ```
 
 > Kaynak: MASTER_PLAN §5.5 — kalori/protein alanı zorunlu, opsiyonel değil.
-> `AuthenticatedUser` — INTEGRATIONS.md §5 kaynaklı, Karar #20 (DB) ve Karar #23 (adres modeli)
-> ile birlikte okunmalı.
 >
-> ⚠️ `BowlItem.category` enum'ı MASTER_PLAN §3.2'deki kategori isimleriyle (İmza Kaseler, Sıcak
-> Tahıl Kaseleri, Vegan, İçecekler) senkron değil — Açık Sorun #35, bu güncellemenin kapsamı dışında.
+> ⚠️ `BowlItem.category` enum'ı MASTER_PLAN §3.2'deki kategori isimleriyle senkron değil —
+> Açık Sorun #35, bu güncellemenin kapsamı dışında.
 
 ---
 
@@ -330,7 +363,6 @@ type AuthenticatedUser = {
 - Font `next/font` ile self-host edilir, layout shift önlenir
 
 ### 4.3 Rollback / Geri Alma
-> NEXUS'taki ayrı ROLLBACK.md dosyasının yerine — Bowlera'nın deploy ölçeğinde tek bölüm yeterli.
 
 ```
 1. Vercel/hosting panelinden önceki başarılı deploy'a "Instant Rollback"
@@ -348,26 +380,22 @@ type AuthenticatedUser = {
 | Veri kaynağı | `lib/menu-data.json` / CMS | Fiyat/kalori hesaplama mantığı |
 | Fiyat/kalori hesaplama | `useCustomizerStore.getTotals()` | Render |
 | Render | Bileşenler (`MenuCard`, `SummaryPanel`) | State mutasyonu |
-| Sepet kalıcılığı | `useCartStore` (persist) | Checkout/ödeme |
+| Sepet kalıcılığı + teslimat kanalı | `useCartStore` (persist) | Checkout UI, ödeme |
+| Checkout / kanal zorunluluğu | `app/siparis/page.tsx`, `components/order/*` | Ödeme işlemi (henüz yok), WhatsApp gönderimi (blokajlı) |
 | Kullanıcı kimliği/oturum | `auth.ts`, `app/api/auth/otp/*` | Sepet/checkout akışı (bağımsız kalır) |
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
-| Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI |
+| Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.3 — Session 4 — 2026-07-19*
+*BOWLERA ARCHITECTURE.md — v1.4 — Session 4 — 2026-07-19*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları)*
-*v1.1: §2.4 ve §5 — `calculateTotals` → `getTotals` olarak düzeltildi (CUSTOMIZER_SPEC.md ile tutarlılık, Açık Sorun #5 kapatıldı).*
-*v1.2: §1 Katman Sınırı Kuralları'na madde 7 (auth/sepet bağımsızlığı) eklendi. Yeni §2.7 —
-`app/api/auth/otp/*` kontratı. §3 Veri Modeli'ne `AuthenticatedUser` tipi + DB-agnostic uyarı
-notu eklendi (Karar #17/#19, INTEGRATIONS.md §5). ⚠️ Bu dosya hâlâ 5 adımlı customizer'a ve
-FulfillmentChannel'a göre senkron değil — Açık Sorun #10, bu güncellemenin kapsamı dışında.*
-*v1.3 (bu güncelleme, Açık Sorun #36 kapatıldı): Karar #20 (Neon Postgres kuruldu, DB artık
-KALICI) ve Karar #23 (adres/profil akışı) ile senkronize edildi. §1'e madde 8/9 eklendi. §2.7
-"DB henüz yok" ifadesi düzeltildi. Yeni §2.8 — `app/api/user/profile/route.ts` +
-`app/hesap/page.tsx` kontratı. §3'e `CartItem.fulfillmentChannel` ve `AuthenticatedUser.address`
-eklendi, DB-agnostic uyarı notu "artık kalıcı saklanıyor" şeklinde güncellendi. §4.1'e Vercel/Neon
-deploy durumu eklendi. §5'e iki yeni satır (kullanıcı kimliği, kullanıcı profili) eklendi.
-⚠️ Bu güncelleme #36'yı kapatır ama #10 (5 adımlı customizer/FulfillmentChannel enum senkronu,
-§2.4/§3 category) ve #35 (BowlItem.category enum uyuşmazlığı) hâlâ AÇIK — bu turun kapsamı dışında
-bırakıldı, bilinçli olarak dokunulmadı.*
+*v1.3: Karar #20/#23 senkronu (Açık Sorun #36 kapatıldı) — §2.7/§2.8 DB durumu, §3 AuthenticatedUser.address.*
+*v1.4 (bu güncelleme — İKİ DEĞİŞİKLİK): (1) SELF-CORRECTION — v1.3'te `fulfillmentChannel`
+yanlışlıkla `CartItem` tipine eklenmişti, gerçek `useCartStore.ts` kodu görülünce bunun
+`CartState` seviyesinde tek alan olduğu doğrulandı ve düzeltildi (§2.3, §3). (2) Açık Sorun
+#26 kapatıldı — yeni §2.9 `app/siparis/page.tsx` kontratı: sepet özeti + ZORUNLU kanal seçimi.
+WhatsApp CTA'sı, şube telefon numarası blokajı (INTEGRATIONS.md §0) çözülene kadar BİLİNÇLİ
+olarak devre dışı bırakıldı — sahte veri kullanılmadı (Katman Sınırı Kuralı yeni madde 10/11).
+⚠️ #10 (5 adımlı customizer/§2.4 senkronu) ve #35 (category enum) hâlâ AÇIK, bu turun
+kapsamı dışında bırakıldı.*
