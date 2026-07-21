@@ -20,24 +20,21 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Oturum 4 devam ediyor. #41 ve #37 önceki turda kapandı. Bu turda
-          #36 araştırılırken ARCHITECTURE.md'nin GERÇEKTEN v1.2 olduğu
-          (v1.3 hiç push edilmemiş) doğrulandı. Ardından kullanıcı bambaşka
-          bir v1.4 taslağı paylaştı — bu taslak `app/siparis/page.tsx` +
-          3 yeni bileşen (`OrderSummary`, `FulfillmentGate`,
-          `WhatsAppOrderButton`) ve Açık Sorun #26'nın kapandığını iddia
-          ediyordu. Kaynağı belirsiz olduğu için 5 kod dosyası tek tek
-          istenip görüldü — HEPSİ doğrulandı, v1.4'ün iddialarıyla birebir
-          örtüşüyor (checkout sayfası çalışıyor, WhatsApp CTA'sı bilinçli
-          devre dışı, sahte şube numarası kullanılmamış, test seti var).
-          Açık Sorun #26 bu doğrulamayla KAPANDI.
-Blokaj:   🟡 ARCHITECTURE.md v1.4'ün kendisinin repoya push edilip
-          edilmediği HÂLÂ doğrulanmadı (#36 açık kalmaya devam ediyor) —
-          kod dosyaları doğrulandı ama doküman farklı bir konu, kullanıcıdan
-          netleştirme bekleniyor. 🟠 Twilio TR SMS kısıtı (#32) — en büyük
-          tekil darboğaz, değişmedi.
-Sıradaki: (1) ARCHITECTURE.md v1.4'ün push durumunu netleştir (#36),
-          (2) Twilio kararı (#32), (3) npm test ile Header.test.tsx teyidi (#40).
+Görev:    Oturum 4 devam ediyor. Bu sohbette sırayla #41, #37, #26, #36, #33,
+          #40 kapandı — hepsi kod/doküman karşılaştırmasıyla ve/veya canlı
+          test çıktısıyla tek tek doğrulandı (tahmin edilmedi). Son olarak:
+          Header hesap ikonu artık oturum-farkında (`SessionProvider` +
+          `useSession()`), bu değişiklik `Header.test.tsx`'i kırmıştı,
+          `vi.mock('next-auth/react')` ile düzeltildi VE aynı testte
+          gizli kalmış eski bir stale-assertion sorunu (#40'ın 2. parçası)
+          da bu vesileyle bulunup düzeltildi — 3/3 canlı doğrulandı.
+Blokaj:   🟠 Twilio TR SMS kısıtı (#32) — artık projenin TEK KALAN büyük
+          darboğazı, kullanıcı ödemeyi henüz yapmadığı için bilinçli
+          parklı. Auth + /hesap'ın gerçek kullanıcıyla uçtan uca testi
+          hâlâ bu kısıta takılıyor.
+Sıradaki: (1) Twilio kararı (#32, kullanıcı zamanı geldiğinde), (2) küçük
+          öncelikli açıklar: ARCHITECTURE.md §2.4'ü 5 adıma güncelle (#10),
+          kategori enum uyuşmazlığı (#35), ProfileForm Tailwind teyidi (#38).
 ```
 
 ---
@@ -62,25 +59,32 @@ Sıradaki: (1) ARCHITECTURE.md v1.4'ün push durumunu netleştir (#36),
 
 | # | Öncelik | Açıklama | Referans |
 |---|---|---|---|
-| 10/36 | 🟡 | ARCHITECTURE.md §2.4 hâlâ 4 adımlı customizer state'ini yansıtıyor (5 adıma güncellenmedi). §2.7/§3 (DB/address) bu sohbette v1.3 ile düzeltildi ama **push edilmedi**. | `ARCHITECTURE.md` |
+| 10 | 🟡 | ARCHITECTURE.md §2.4 hâlâ 4 adımlı customizer state'ini yansıtıyor — 5 adıma (Karar #1) hiç güncellenmedi. v1.4'te bilinçli olarak bu güncellemenin dışında bırakıldı. | `ARCHITECTURE.md` §2.4, `CUSTOMIZER_SPEC.md` §3.1 (güncel referans) |
 | 24/17/18 | 🟡 | `customizerCatalog` + "Benim Kâsem" fiyatı hâlâ TEST VERİSİ — fotoğraf çekimine bilinçli ertelendi | `lib/customizer-data.ts`, `lib/menu-data.json` |
 | 27 | 🟢 | Hero.tsx CTA'sı ve StepBase.tsx açıklaması hâlâ `â` içeriyor (bilinçli ertelendi) | `components/home/Hero.tsx`, `StepBase.tsx` |
 | 28/29 | 🟢 | Customizer adım başlıkları hâlâ İngilizce; `CUSTOMIZER_SPEC.md` §2 senkron değil | `components/customizer/Step*.tsx` |
 | 32 | 🟠 | Twilio TR SMS kısıtı — hem auth hem `/hesap` akışını canlıda test edilemez kılıyor. Çözüm: ücretli plan veya Netgsm/İleti Merkezi gibi yerel sağlayıcı. Kullanıcı kararıyla parklandı. | Twilio Console |
-| 33 | 🟡 | Header hesap ikonu oturum durumunu yansıtmıyor — `SessionProvider` gerekiyor | `Header.tsx`, `app/layout.tsx` |
 | 35 | 🟡 | `BowlItem.category` enum'ı MASTER_PLAN §3.2 ile uyuşmuyor | `types/index.ts`, `lib/menu-filters.ts` |
 | 38 | 🟢 | `ProfileForm.tsx` Tailwind sınıfları (`bg-olive-600` vb.) DESIGN_SYSTEM.md ile teyit edilmedi (kod içi yorumla açıkça işaretli) | `components/account/ProfileForm.tsx` |
 | 39 | 🟠 | `/hesap` akışı Twilio kısıtı yüzünden canlıda hiç fonksiyonel test edilemedi | `app/hesap/page.tsx` |
-| 40 | 🟢 | `Header.test.tsx` düzeltmesi üretildi ama izole doğrulanmadı, bir sonraki `npm test`'te teyit edilmeli | `components/layout/Header.test.tsx` |
 
-> **KAPANDI (bu sohbet, önceki turlar):** #41 (repo/SESSION_INDEX tutarsızlığı) — 4 dosya da (route.ts,
+> **KAPANDI (önceki turlar):** #41 (repo/SESSION_INDEX tutarsızlığı) — 4 dosya da (route.ts,
 > ProfileForm.tsx, page.tsx, rate-limit.ts) repoda doğrulandı. #37 (profile route
 > rate-limit'siz) — `checkProfileRateLimit` route.ts'e entegre halde bulundu, fiilen çözülmüş.
-> **KAPANDI (bu sohbet, bu tur):** #26 (teslimat kanalı checkout'ta zorunlu değil) —
-> `app/siparis/page.tsx` + `OrderSummary.tsx` + `FulfillmentGate.tsx` + `WhatsAppOrderButton.tsx`
-> (+ test dosyası) tek tek görülüp doğrulandı, kanal seçilmeden CTA aktif olamıyor, sahte şube
-> numarası kullanılmamış. ⚠️ **Kaynağı belirsiz:** Bu dosyalar ARCHITECTURE.md v1.4 taslağıyla
-> birlikte geldi ama v1.4'ün push durumu hâlâ netleşmedi — #36 bu yüzden açık tutuluyor.
+> #26 (teslimat kanalı checkout'ta zorunlu değil) — `app/siparis/page.tsx` + `OrderSummary.tsx`
+> + `FulfillmentGate.tsx` + `WhatsAppOrderButton.tsx` (+ test dosyası) tek tek görülüp
+> doğrulandı, kanal seçilmeden CTA aktif olamıyor, sahte şube numarası kullanılmamış.
+> #36 (ARCHITECTURE.md senkron değil) — v1.4'ün güncel repo hâli olduğu teyit edildi, kod
+> tarafıyla (checkout, adres/profil, DB, fulfillmentChannel) tam örtüşüyor. #10 (5 adımlı
+> customizer/§2.4 senkronu) AYRI bir açık sorun olarak kalmaya devam ediyor.
+> #33 (Header hesap ikonu oturum-farkında değildi) — `SessionProvider` `app/layout.tsx`'e
+> eklendi, `Header.tsx`'e `useSession()` entegre edildi, kullanıcı push etti.
+> **KAPANDI (bu sohbet, bu tur):** #40 (Header.test.tsx) — iki ayrı sorun vardı: (1) `useSession()`
+> eklenmesi (#33) sonrası `SessionProvider` olmadan test 3/3 fail veriyordu, `vi.mock('next-auth/react')`
+> ile çözüldü; (2) sepet butonu testi hâlâ eski tam-string `'Sepet'` bekliyordu (gerçek aria-label
+> `"Sepeti aç"`) — bu, önceki oturumda "üretildi ama izole doğrulanmadı" denen düzeltmenin repoya
+> hiç yansımadığını gösterdi (SESSION_INDEX/repo tutarsızlığının bir başka örneği). Regex'e
+> (`/sepet/i`) çevrilerek düzeltildi. 3/3 ✅ canlı ekran görüntüsüyle doğrulandı.
 
 ---
 
@@ -101,12 +105,12 @@ Sıradaki: (1) ARCHITECTURE.md v1.4'ün push durumunu netleştir (#36),
 | Alan | Değer |
 |---|---|
 | Repo | `github.com/Sovereign34/Bowlera_site` — ✅ adres/profil dosyaları (4/4) + checkout dosyaları (5/5) doğrulandı |
-| Test Suite | 🟡 96/98 geçiyor. Açık: `useCustomizerStore.test.ts` (bilinçli, #17/#24'e bağlı), `Header.test.tsx` (izole doğrulanmadı, #40). Yeni: `WhatsAppOrderButton.test.tsx` görüldü, izole çalıştırılmadı. |
+| Test Suite | 🟢 `Header.test.tsx` 3/3 canlı doğrulandı. Açık: `useCustomizerStore.test.ts` (bilinçli, #17/#24'e bağlı). `WhatsAppOrderButton.test.tsx` görüldü (kod sağlam), izole çalıştırılmadı. Genel suite (`npm test`) bu turda tekrar çalıştırılmadı — bir sonraki tam çalıştırmada güncel sayı teyit edilmeli. |
 | Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı. 🟠 OTP fonksiyonel test Twilio kısıtı yüzünden yapılamıyor (#32) |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı (route.ts + rate-limit dahil). 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu, WhatsApp CTA'sı bilinçli devre dışı (şube no. eksik) |
 | Veritabanı | 🟢 Neon Postgres çalışıyor |
-| ARCHITECTURE.md | 🟡 v1.4 taslağı içerik olarak doğrulandı ama push durumu belirsiz (#36) |
+| ARCHITECTURE.md | 🟢 v1.4 güncel ve repoda doğrulandı — kod tarafıyla tam senkron. §2.4 (5 adım) ve category enum (#35) bilinçli kapsam dışı |
 
 ---
 
@@ -114,14 +118,13 @@ Sıradaki: (1) ARCHITECTURE.md v1.4'ün push durumunu netleştir (#36),
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 1 | ARCHITECTURE.md v1.4'ün push durumunu netleştir/doğrula (#36) | 🟡 |
-| 2 | Twilio kararı: ücretli plan veya yerel sağlayıcı (#32) | 🟠 |
-| 3 | `npm test` tekrar çalıştır, `Header.test.tsx` + `WhatsAppOrderButton.test.tsx` teyit et (#40) | 🟡 |
-| 4 | Header hesap ikonunu oturum-farkında yap — `SessionProvider` (#33) | 🟡 |
-| 5 | Kategori enum uyuşmazlığı (#35) | 🟡 |
-| 6 | `customizerCatalog` + fiyat verisi — fotoğraf çekimine bağlı (#24) | 🟡 (dış olay) |
-| 7 | ProfileForm Tailwind sınıflarını DESIGN_SYSTEM.md ile teyit et (#38) | 🟢 |
-| 8 | INTEGRATIONS.md §0 — şube telefon numaraları netleşince WhatsAppOrderButton'ı gerçek entegrasyona bağla | 🟡 (dış olay) |
+| 1 | Twilio kararı: ücretli plan veya yerel sağlayıcı — TEK büyük darboğaz (#32, parklandı — kullanıcı ödemeyi henüz yapmadı) | 🟠 |
+| 2 | ARCHITECTURE.md §2.4'ü 5 adımlı customizer'a güncelle (#10) | 🟡 |
+| 3 | Kategori enum uyuşmazlığı (#35) | 🟡 |
+| 4 | `customizerCatalog` + fiyat verisi — fotoğraf çekimine bağlı (#24) | 🟡 (dış olay) |
+| 5 | ProfileForm Tailwind sınıflarını DESIGN_SYSTEM.md ile teyit et (#38) | 🟢 |
+| 6 | INTEGRATIONS.md §0 — şube telefon numaraları netleşince WhatsAppOrderButton'ı gerçek entegrasyona bağla | 🟡 (dış olay) |
+| 7 | Genel `npm test` çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
 
 ---
 
