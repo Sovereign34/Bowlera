@@ -20,13 +20,13 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
                                               "Özelleştir" tıklanınca ──► app/menu/customize/[id]/page.tsx
                                                                      │
                                                                      ▼
-                                              store/useCustomizerStore.ts (Zustand — adım state'i)
+                                              store/useCustomizerStore.ts (Zustand — 5 adımlı state makinesi)
                                                                      │
                                               ┌──────────────────────┼──────────────────────┐
                                               ▼                      ▼                      ▼
                                    components/customizer/  components/customizer/  components/customizer/
-                                   StepBase/Protein/...     VisualPreview.tsx        SummaryPanel.tsx
-                                   (seçim UI)                (katmanlı CSS/SVG)      (fiyat/kalori canlı toplam)
+                                   StepBase/Main/Garden/    VisualPreview.tsx        SummaryPanel.tsx
+                                   SignatureFlavor/Finish    (katmanlı CSS/SVG)      (fiyat/kalori canlı toplam)
                                                                      │
                                                           "Sepete Ekle" tıklanınca
                                                                      ▼
@@ -68,7 +68,7 @@ app/giris/page.tsx ──► app/api/auth/otp/{send,verify}/route.ts ──► a
 7. Auth (telefon+OTP) katmanı sepet akışından bağımsızdır — guest checkout her zaman geçerli kalır, useCartStore auth durumuna göre dallanmaz (INTEGRATIONS.md §5)
 8. Kullanıcı profili/adres verisi SADECE app/api/user/profile/route.ts üzerinden okunur/yazılır — bu route request body'den phone KABUL ETMEZ, kimlik her zaman session'dan (session.user.phone) alınır (BSC-3 kritik sınır, Karar #23)
 9. Adres alanı sipariş akışını (checkout) BLOKLAMAZ — FulfillmentChannel ("pickup" | "dine-in") delivery içermediği için adres sadece profil/sadakat verisidir, opsiyonel olarak /hesap sayfasında toplanır (Karar #23)
-10. Teslimat kanalı (fulfillmentChannel) app/siparis/page.tsx'te ZORUNLU seçim haline getirilir — kanal seçilmeden WhatsApp sipariş CTA'sı aktif olamaz (Açık Sorun #26, bu güncelleme)
+10. Teslimat kanalı (fulfillmentChannel) app/siparis/page.tsx'te ZORUNLU seçim haline getirilir — kanal seçilmeden WhatsApp sipariş CTA'sı aktif olamaz (Açık Sorun #26, KAPANDI)
 11. Üçüncü parti entegrasyon için gerekli kimlik bilgisi (ör. şube telefon numarası) eksikken ilgili CTA gerçek işlevle bağlanamaz — sahte/placeholder değer YASAK (BSC-5, CORE §9); bunun yerine CTA bilinçli olarak devre dışı + açıklamalı bırakılır
 ```
 
@@ -80,24 +80,29 @@ app/giris/page.tsx ──► app/api/auth/otp/{send,verify}/route.ts ──► a
 
 ```tsx
 // app/layout.tsx
-// Amaç:    Tüm sayfalar için ortak iskelet — font, tema, Header/Footer, global provider'lar
+// Amaç:    Tüm sayfalar için ortak iskelet — font, tema, Header/Footer, oturum context'i
 // Bağlı:   Her sayfa buradan render edilir
-// Risk:    Hatalı font/tema yüklemesi → tüm site etkilenir
+// Risk:    Hatalı font/tema yüklemesi → tüm site etkilenir.
+//          SessionProvider olmadan Header/diğer client component'ler useSession() çağıramaz.
 // Dokunma: DESIGN_SYSTEM.md §Tipografi kontrol et
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr">
       <body className={`${cormorantGaramond.variable} ${nunito.variable}`}>
-        <Header />
-        {children}
-        <Footer />
-        <CartDrawer />
+        <SessionProvider>
+          <Header />
+          {children}
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   )
 }
 ```
+
+> Açık Sorun #33 (Header hesap ikonu oturum-farkında değildi) bu yapıyla KAPANDI —
+> `SessionProvider` (next-auth/react) eklendi, `Header.tsx` `useSession()` ile okuyor.
 
 ### 2.2 `app/api/menu/route.ts` — Menü Veri Endpoint'i (MVP)
 
@@ -124,7 +129,7 @@ export async function GET() {
 // Amaç:    Sepet öğelerini ve teslimat kanalını yönetir, tarayıcı kapansa da korur
 // Bağlı:   CartBadge, CartDrawer, Customizer "Sepete Ekle" butonu, app/siparis/page.tsx
 // Risk:    Hatalı state güncelleme → yanlış fiyat/miktar sepette görünür.
-//          fulfillmentChannel boş kalırsa teslimat şekli belirsizleşir (Açık Sorun #26)
+//          fulfillmentChannel boş kalırsa teslimat şekli belirsizleşir (Açık Sorun #26, KAPANDI)
 // Dokunma: BSC-6 (race condition) kontrolü — çift tıklama koruması component tarafında
 
 import { create } from 'zustand'
@@ -156,35 +161,61 @@ export const useCartStore = create<CartState>()(
 )
 ```
 
-> ⚠️ **Bu güncelleme, önceki v1.3'te yapılan bir HATAYI düzeltir:** `fulfillmentChannel`
-> önceki sürümde yanlışlıkla `CartItem` tipine (§3) eklenmişti — ama gerçek kod
-> (`store/useCartStore.ts`) bunun `CartState` seviyesinde **tek bir alan** olduğunu
-> gösteriyor, her `CartItem`'da tekrarlanmıyor. Kaynak: kullanıcının paylaştığı gerçek
-> dosya içeriği, bu turda görüldü.
-
 ### 2.4 `store/useCustomizerStore.ts` — Kâseni Yarat State
 
 ```ts
 // store/useCustomizerStore.ts
-// Amaç:    4 adımlı özelleştirme akışının state makinesi (adım + seçimler + canlı toplam)
-// Bağlı:   StepBase/Protein/Toppings/Sauce, SummaryPanel, VisualPreview
+// Amaç:    5 adımlı özelleştirme akışının state makinesi (adım + seçimler + canlı toplam)
+// Bağlı:   StepBase/Main/Garden/SignatureFlavor/Finish, SummaryPanel, VisualPreview
 // Risk:    Hatalı adım geçişi → kullanıcı eksik seçimle sepete ekleyebilir
-// Dokunma: CUSTOMIZER_SPEC.md — adım sırası ve validasyon kuralları burada tanımlı
+// Dokunma: CUSTOMIZER_SPEC.md §3 — adım sırası, guard mantığı ve validasyon kuralları
+//          birebir buradan alınmıştır; bu iki dosya SENKRON tutulmalı
+
+interface CustomizerSelection {
+  base: string | null
+  main: string | null
+  mainPortion: 'single' | 'double'
+  garden: string[]              // max 4 ücretsiz (avokado hariç), sonrası ücretli
+  signatureFlavor: string | null
+  finish: string[]              // max 1 ücretsiz, sonrası ücretli
+  extras: {
+    extraAvocado: boolean
+    extraSauce: boolean
+    extraCrunch: boolean
+  }
+}
 
 interface CustomizerState {
-  currentStep: 1 | 2 | 3 | 4
-  base: string | null
-  protein: string | null
-  toppings: string[]        // max 4 ücretsiz
-  sauce: string | null
-  goToStep: (step: 1 | 2 | 3 | 4) => void   // yalnızca önceki adımlar doluysa izin verir
+  currentStep: 1 | 2 | 3 | 4 | 5
+  selections: CustomizerSelection
+  maxReachedStep: 1 | 2 | 3 | 4 | 5   // guard için — ileri atlama kontrolü
+
+  selectBase: (id: string) => void
+  selectMain: (id: string, portion: 'single' | 'double') => void
+  toggleGardenItem: (id: string) => void
+  selectSignatureFlavor: (id: string) => void
+  toggleFinishItem: (id: string) => void
+  toggleExtra: (key: keyof CustomizerSelection['extras']) => void
+  goToStep: (step: 1 | 2 | 3 | 4 | 5) => void   // step <= maxReachedStep+1 değilse no-op
+  nextStep: () => void                           // mevcut adım validasyonunu geçmeden ilerlemez
+  previousStep: () => void
+  reset: () => void
+
   getTotals: () => { price: number; calories: number; protein: number; carbs: number; fat: number }
+  isStepValid: (step: 1 | 2 | 3 | 4 | 5) => boolean
 }
 ```
 
-> ⚠️ Bu blok hâlâ 4 adımlı eski şemayı yansıtıyor — 5 adımlı geçiş (Karar #1, Oturum 2) bu
-> dosyaya işlenmedi. Açık Sorun #10/#36 kapsamında, bu güncellemenin dışında bırakıldı.
-> Gerçek kontrat için: `CUSTOMIZER_SPEC.md §3.1` (5 adımlı, güncel).
+> Adım sırası: 1. Base → 2. Main → 3. Garden → 4. Signature Flavor → 5. Finish
+> (Karar #1, Oturum 2). `goToStep` guard'ı `step <= maxReachedStep + 1` kuralına uyar,
+> URL manipülasyonuyla atlanamaz (§1 Katman Sınırı Kuralı madde 5, CUSTOMIZER_SPEC.md §3.2).
+> "Sepete Ekle" YALNIZCA `isStepValid(5)` true olduğunda aktiftir — yani base + main +
+> signatureFlavor doldurulmuş olmalı; Garden ve Finish opsiyonel olduğu için o adımların
+> kendisi her zaman "valid" sayılır (CUSTOMIZER_SPEC.md §7).
+>
+> ✅ **Açık Sorun #10 bu güncellemeyle KAPANDI** — önceki sürümde bu blok hâlâ 4 adımlı eski
+> şemayı (`currentStep: 1|2|3|4`, düz `base/protein/toppings/sauce` alanları) yansıtıyordu.
+> Gerçek kaynak: `CUSTOMIZER_SPEC.md §3.1` (v1.1, güncel).
 
 ### 2.5 `components/menu/MenuCard.tsx`
 
@@ -220,7 +251,7 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 ```ts
 // app/api/auth/otp/send/route.ts + verify/route.ts
 // Amaç:    Twilio Verify ile telefon+OTP girişi, başarılı doğrulamada Auth.js JWT session açar
-// Bağlı:   /giris sayfası, Header'daki hesap ikonu (canlı doğrulandı — Oturum 4)
+// Bağlı:   /giris sayfası, Header'daki hesap ikonu (oturum-farkında — Açık Sorun #33, KAPANDI)
 // Risk:    Twilio trial hesabı Türkiye'yi SMS için "restricted country" işaretliyor — bu route'lar
 //          kod seviyesinde tamam ama canlıda uçtan uca fonksiyonel test edilemedi (Açık Sorun #32)
 // Dokunma: INTEGRATIONS.md §5 — tam kontrat, edge case'ler ve rate limit orada
@@ -260,8 +291,7 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 > ⚠️ Bilinen açıklar: `ProfileForm.tsx`'teki Tailwind renk sınıfları DESIGN_SYSTEM.md
 > görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38). Bu iki dosya + rate-limit
 > kod seviyesinde tamam ama Twilio kısıtı (#32) yüzünden canlıda hiç fonksiyonel test
-> edilemedi (Açık Sorun #39). Ayrıca bu dosya grubunun (7 dosya, Karar #23) gerçekten
-> repoda mevcut olup olmadığı tek tek doğrulanmalı — bir tutarsızlık bu turda keşfedildi.
+> edilemedi (Açık Sorun #39).
 
 ### 2.9 `app/siparis/page.tsx` — Checkout (Paket Servis / Gel Al)
 
@@ -273,7 +303,7 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 // Dokunma: Katman Sınırı Kuralı madde 7 — guest checkout burada da korunmalı, auth ZORUNLU KILINAMAZ
 ```
 
-> **Karar (bu güncelleme):** WhatsApp CTA'sı bilinçli olarak devre dışı bırakıldı —
+> **Karar:** WhatsApp CTA'sı bilinçli olarak devre dışı bırakıldı —
 > `INTEGRATIONS.md §0`'daki şube telefon numarası blokajı çözülene kadar
 > `lib/integrations/whatsapp.ts`'e bağlanmayacak (Katman Sınırı Kuralı madde 11, CORE §9).
 > Sayfa boş sepette mesaj gösterir, kanal seçilene kadar CTA'nın nedenini açıkça belirtir.
@@ -299,24 +329,17 @@ type BowlItem = {
   fat?: number
 }
 
-type CustomizerSelection = {
-  base: string
-  protein: string
-  toppings: string[]            // max 4 ücretsiz, ekstra ücretli
-  sauce: string
-}
-
 type FulfillmentChannel = "pickup" | "dine-in"
 
 type CartItem = {
   cartId: string                 // uuid — sepet içi benzersiz kimlik
   bowlItem: BowlItem | null      // imza kase ise dolu, custom ise null
-  customization?: CustomizerSelection
+  customization?: CustomizerSelection   // §2.4'teki 5 adımlı seçim şeması — özel kase ise dolu
   quantity: number
   unitPrice: number
   unitCalories: number
-  // ⚠️ fulfillmentChannel BURADA DEĞİL — düzeltme: bkz. §2.3 notu. Kanal, CartState
-  // seviyesinde tek bir alan, her CartItem'da tekrarlanmıyor (Karar #13).
+  // ⚠️ fulfillmentChannel BURADA DEĞİL — kanal, CartState seviyesinde tek bir alan,
+  // her CartItem'da tekrarlanmıyor (Karar #13, bkz. §2.3).
 }
 
 type AuthenticatedUser = {
@@ -330,6 +353,8 @@ type AuthenticatedUser = {
 ```
 
 > Kaynak: MASTER_PLAN §5.5 — kalori/protein alanı zorunlu, opsiyonel değil.
+> `CustomizerSelection` tipinin tam tanımı için: §2.4 (bu dosya) ve CUSTOMIZER_SPEC.md §3.1
+> — iki dosya senkron tutulmalı, tip burada tekrar edilmiyor (AGENT.md Kural #5).
 >
 > ⚠️ `BowlItem.category` enum'ı MASTER_PLAN §3.2'deki kategori isimleriyle senkron değil —
 > Açık Sorun #35, bu güncellemenin kapsamı dışında.
@@ -388,14 +413,16 @@ type AuthenticatedUser = {
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.4 — Session 4 — 2026-07-19*
+*BOWLERA ARCHITECTURE.md — v1.5 — Session 4 — 2026-07-21*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları)*
-*v1.3: Karar #20/#23 senkronu (Açık Sorun #36 kapatıldı) — §2.7/§2.8 DB durumu, §3 AuthenticatedUser.address.*
-*v1.4 (bu güncelleme — İKİ DEĞİŞİKLİK): (1) SELF-CORRECTION — v1.3'te `fulfillmentChannel`
-yanlışlıkla `CartItem` tipine eklenmişti, gerçek `useCartStore.ts` kodu görülünce bunun
-`CartState` seviyesinde tek alan olduğu doğrulandı ve düzeltildi (§2.3, §3). (2) Açık Sorun
-#26 kapatıldı — yeni §2.9 `app/siparis/page.tsx` kontratı: sepet özeti + ZORUNLU kanal seçimi.
-WhatsApp CTA'sı, şube telefon numarası blokajı (INTEGRATIONS.md §0) çözülene kadar BİLİNÇLİ
-olarak devre dışı bırakıldı — sahte veri kullanılmadı (Katman Sınırı Kuralı yeni madde 10/11).
-⚠️ #10 (5 adımlı customizer/§2.4 senkronu) ve #35 (category enum) hâlâ AÇIK, bu turun
-kapsamı dışında bırakıldı.*
+*v1.3: Karar #20/#23 senkronu — §2.7/§2.8 DB durumu, §3 AuthenticatedUser.address.*
+*v1.4: (1) SELF-CORRECTION — fulfillmentChannel'ın CartState seviyesinde tek alan olduğu
+düzeltildi (§2.3, §3). (2) Açık Sorun #26 kapatıldı — yeni §2.9 app/siparis/page.tsx kontratı.*
+*v1.5 (bu güncelleme): Açık Sorun #10 kapatıldı — §2.4, CUSTOMIZER_SPEC.md §3.1'deki gerçek
+5 adımlı state şemasıyla (CustomizerSelection + CustomizerState, currentStep: 1|2|3|4|5,
+goToStep guard'ı, isStepValid) birebir senkronize edildi. Eski 4 adımlı taslak (currentStep:
+1|2|3|4, düz base/protein/toppings/sauce alanları) kaldırıldı. §1 madde 10 ve §2.3/§2.9'daki
+"Açık Sorun #26" referansları "KAPANDI" olarak güncellendi (dokümanlar arası tutarlılık).
+Ayrıca §2.1'e SessionProvider notu, §2.7'ye Açık Sorun #33 kapanış notu eklendi (v1.4'te
+kod tarafında yapılmış ama dokümana hiç yansımamış değişiklikler — geriye dönük senkron).
+⚠️ #35 (category enum) hâlâ AÇIK, bu turun kapsamı dışında bırakıldı.*
