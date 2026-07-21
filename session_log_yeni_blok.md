@@ -259,19 +259,35 @@
 ### Sembol Özeti
 📁 (3 dosya) · 🔧 (3 mimari/tasarım kararı) · 🔴 (SESSION_INDEX/repo tutarsızlığı keşfi — bu turda çözülmedi)
 
-## Session 4 (devam) — Beşinci Bölüm ⚠️ ÖZET DÜZEYİNDE, TURN-BY-TURN KAYIT YOK
+## Session 4 (devam) — 2026-07-20 (Beşinci Bölüm) — Repo Doğrulama Turu: #41/#37/#26/#36/#33/#40 Kapanışları
 
-> Bu blok, kuralları ihlal eden önceki v2 SESSION_INDEX dosyasının CURRENT FOCUS metnidir —
-> olduğu gibi, uydurma eklenmeden buraya taşınmıştır. Gerçek session_log verisi bulunursa bu
-> blok onunla değiştirilmelidir. Açık Sorun #42 olarak SESSION_INDEX.md'de takip ediliyor.
+> ⚠️ Bu blok, `session_log.md`'de önceden "ÖZET DÜZEYİNDE, TURN-BY-TURN KAYIT YOK" olarak
+> işaretlenmiş Beşinci Bölüm notunun YERİNE geçer. Gerçek gerekçeler, kullanıcının ayrıca
+> yüklediği v2 (sıkıştırılmış) SESSION_INDEX dosyasında bulundu ve buraya taşındı — Açık
+> Sorun #42 bu blokla KAPANDI olarak işaretlenmiştir.
 
-Header hesap ikonu oturum-farkında hale getirildi (`SessionProvider` + `useSession()`), bu
-değişiklik `Header.test.tsx`'i kırdı, `vi.mock('next-auth/react')` ile düzeltildi VE aynı testte
-gizli kalmış eski bir stale-assertion sorunu (#40'ın 2. parçası) da bu vesileyle bulunup
-düzeltildi — 3/3 canlı doğrulandı. Bu sohbette sırayla #41, #37, #26, #36, #33, #40 kapandı
-olarak işaretlendi — hepsinin "kod/doküman karşılaştırmasıyla ve/veya canlı test çıktısıyla tek
-tek doğrulandığı" belirtildi, ancak bu doğrulamaların ayrıntılı dökümü (hangi dosya hangi
-komutla, hangi ekran görüntüsüyle doğrulandı) hiçbir kaynakta mevcut değil. Ayrıca `app/siparis/page.tsx`
-+ `OrderSummary.tsx` + `FulfillmentGate.tsx` + `WhatsAppOrderButton.tsx` (+test) dosyalarının
-var olduğu ve kanal seçilmeden CTA aktif olamadığı belirtildi (#26 kapandı) — bu dosyaların ne
-zaman/nasıl üretildiği hiçbir arşiv bloğunda yok.
+### Header — Oturum Farkındalığı
+- Header hesap ikonu oturum-farkında hale getirildi: `app/layout.tsx`'e `SessionProvider` eklendi, `Header.tsx`'e `useSession()` entegre edildi. Kullanıcı push etti. → **Açık Sorun #33 kapandı.**
+
+### Header.test.tsx — İki Ayrı Sorunun Tespiti ve Düzeltmesi
+- `useSession()` eklenmesi `Header.test.tsx`'i kırdı: `SessionProvider` olmadan test 3/3 fail veriyordu → `vi.mock('next-auth/react')` ile çözüldü.
+- Aynı testte, önceki bir oturumda "düzeltme üretildi ama izole doğrulanmadı" denen eski bir sorun da bu vesileyle ortaya çıktı: sepet butonu testi hâlâ eski tam-string `'Sepet'` bekliyordu (gerçek `aria-label`: `"Sepeti aç"`) — bu, o eski düzeltmenin repoya hiç yansımadığını gösterdi. `/sepet/i` regex'ine çevrilerek düzeltildi.
+- 3/3 ✅ canlı ekran görüntüsüyle doğrulandı. → **Açık Sorun #40 kapandı.**
+
+### Repo Doğrulama Turu — Kod/Doküman Karşılaştırmasıyla Tek Tek Teyit
+- **#41 (SESSION_INDEX/repo tutarsızlığı) kapandı:** Karar #23 kapsamında "üretildi" denen 4 dosya (`app/api/user/profile/route.ts`, `components/account/ProfileForm.tsx`, `app/hesap/page.tsx`, `lib/auth/rate-limit.ts`) tek tek repoda görülüp doğrulandı — hepsi mevcut.
+- **#37 (profile route rate-limit'siz) kapandı:** `checkProfileRateLimit` fonksiyonunun `route.ts`'e fiilen entegre edilmiş olduğu bulundu — önceki oturumda "bilinçli atlandı" denen entegrasyon bu arada tamamlanmış.
+- **#26 (teslimat kanalı checkout'ta zorunlu değil) kapandı:** `app/siparis/page.tsx` + `OrderSummary.tsx` + `FulfillmentGate.tsx` + `WhatsAppOrderButton.tsx` (+ test dosyası) tek tek görülüp doğrulandı — kanal seçilmeden CTA aktif olamıyor, sahte/hardcode şube numarası kullanılmamış (BSC-5 temiz).
+- **#36 (ARCHITECTURE.md senkron değil) kapandı:** `ARCHITECTURE.md` v1.4'ün repodaki güncel hâli olduğu, kod tarafıyla (checkout, adres/profil, DB, `fulfillmentChannel`) tam örtüştüğü teyit edildi. **Not:** §2.4 (5 adımlı customizer state'i) bu doğrulamanın kapsamı DIŞINDA bırakıldı — Açık Sorun #10 ayrı bir madde olarak açık kalmaya devam ediyor, #36 ile karıştırılmamalı.
+
+### Teknik Notlar
+- Bu turun kapanışları, önceki bir sohbette üretilmiş sıkıştırılmış (v2) bir SESSION_INDEX dosyasında kayıtlıydı; o dosya `session_log.md`'ye hiç taşınmamıştı — arşiv kırpma riski bu şekilde ortaya çıktı ve düzeltildi.
+- Genel `npm test` bu turda tekrar çalıştırılmadı — sadece `Header.test.tsx` izole doğrulandı. `WhatsAppOrderButton.test.tsx` görüldü (kod sağlam) ama izole çalıştırılmadı.
+
+### Açık Kalan (bu turda KAPANMAYAN, netliğe kavuşan)
+- #10 — ARCHITECTURE.md §2.4 hâlâ 4 adımlı customizer state'ini yansıtıyor, v1.4'te bilinçli olarak bu güncellemenin dışında bırakıldı.
+- #32 — Twilio TR SMS kısıtı, projenin tek kalan büyük darboğazı.
+- #38, #39, #35, #24/#17/#18, #27, #28/#29 — değişmedi.
+
+### ⚠️ Bu Turda da Fark Edilmeyen Ayrı Bir Sorun (sonradan tespit edildi)
+- v2 SESSION_INDEX dosyası, bu turun ürünüydü ve kendi içinde AÇIK/GEÇERLİ KARARLAR ile AÇIK SORUNLAR tablolarını "hâlâ etkili olanlar" gerekçesiyle sıkıştırırken, hiçbir kapanış notu olmadan 7 açık sorunu (#4, #7, #15, #16, #20, #22, #34) ve 2 kararı (#11, #12) tablolardan düşürmüştür. Bu, ayrı bir sonraki oturumda (bkz. SESSION_INDEX.md güncel sürüm) fark edilip düzeltilmiştir.
