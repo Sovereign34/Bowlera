@@ -259,6 +259,22 @@ public/
   kapsar. Geçmiş oturumların **arşiv blokları** (📜 GEÇMİŞ / ARŞİV başlıklı bölümler) TAM
   içerikle korunur — özetlenip "önceki versiyona bakılmalı" gibi bir referansla DEĞİŞTİRİLMEZ.
   Bu, AGENT.md Kural #4'ün (Truncated çıktı yasak) doğrudan bir uzantısıdır.
+- ⚠️ **400 SATIR EŞİĞİ — session_log.md'ye taşıma zorunluluğu:** Kapanışta güncellenmiş
+  SESSION_INDEX.md **400 satırı geçerse**, dosya "sıkıştırılarak" küçültülemez. Bunun yerine:
+  1. Artık aktif olmayan içerik (kapanmış Açık Sorunlar, süresi geçmiş/uygulanmış Kararlar,
+     eski CURRENT FOCUS metinleri) **session_log.md'ye TAŞINIR** — silinmez, özetlenmez.
+  2. Taşınan HER madde için session_log.md'de en az 1-2 cümlelik **kapanış gerekçesi**
+     bırakılır. Gerekçesiz "artık etkili değil" diyerek satırı silmek KESİNLİKLE YASAKTIR
+     — bu, 2026-07-20'de yaşanan gerçek bir ihlaldi: bir "sıkıştırılmış" SESSION_INDEX
+     sürümü 7 açık sorunu (#4/7/15/16/20/22/34) ve 2 kararı (#11/#12) hiçbir kapanış notu
+     olmadan tablolardan düşürmüştü.
+  3. Taşıma işlemi kendi başına bir session kapanışı gerektirir: SESSION_INDEX.md'nin
+     400 satırın ALTINA inmiş TAM güncel hâli + session_log.md'ye eklenen taşıma bloğu
+     **aynı turda birlikte** verilir — biri verilip diğeri sonraya bırakılamaz.
+  4. SESSION_INDEX.md'nin en üstündeki uyarı notuna, taşımanın tarihi ve kaç madde
+     taşındığı tek satırla kaydedilir.
+  5. Bu adım atlanırsa Self-Correction tetiklenir — bkz. AGENT.md SELF-CORRECTION tablosu,
+     "SESSION_INDEX 400 satır eşiği atlandı" satırı.
 
 **Adım 2 — session_log.md**
 - Yapılanlar + Kararlar (neden alındı) + Teknik notlar
@@ -459,3 +475,6 @@ Claude hemen paketi hazırlar.
 her büyük değişiklik DEPENDENCIES.md'ye yansıtılmalıdır.*
 *v1.1 — §7.1 Adım 1'e SESSION_INDEX arşiv koruma netleştirmesi eklendi (Session 4 — 2026-07-19,
 AGENT.md v1.1 ile eşleştirildi).*
+*v1.2 — §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi: SESSION_INDEX.md 400 satırı geçince
+sıkıştırılamaz, gerekçeli olarak session_log.md'ye taşınır. Gerekçe: 2026-07-20'de yaşanan
+gerekçesiz madde kaybı (7 açık sorun + 2 karar) — AGENT.md v1.2 ile eşleştirildi (2026-07-21).*

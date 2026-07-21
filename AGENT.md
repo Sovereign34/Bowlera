@@ -587,6 +587,8 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 | Niyet yorumu yok | Dosya başında yorum bloğu yok | Dur — bloğu ekle |
 | Edge case atlandı | 3-5 senaryo düşünülmedi | Dur — edge case listele |
 | BSC ihlali | 8 güvenlik kuralından biri çiğnendi | Dur — ihlali bildir, düzeltilmiş kodu sun |
+| SESSION_INDEX 400 satır eşiği atlandı | Dosya 400 satırı geçti ama sıkıştırılıp/silinip session_log.md'ye taşınmadı (CORE.md §7.1 Adım 1) | Dur — gerekçeli taşımayı yap, ikisini aynı turda ver |
+| Gerekçesiz madde düşürüldü | Açık Sorun/Karar, session_log.md'de kapanış gerekçesi bırakılmadan tablodan kayboldu | Dur — maddeyi "teyit edilmeli" olarak geri ekle, gerekçe ara |
 
 **Sapma fark edilince Claude şunu söyler:**
 > "⚠️ Kural sapması tespit ettim — [ne yaptım]. Düzeltiyorum: [doğru adım]."
@@ -624,6 +626,8 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 | Edge case analizi atlanmış özellik yaz |
 | Test seti olmadan modülü "tamamlandı" say |
 | Yeni npm paketi kullanıcı onayı olmadan ekle |
+| SESSION_INDEX.md 400 satırı geçtiğinde "sıkıştırma" yap — gerekçesiz madde sil/özetle (CORE.md §7.1 Adım 1) |
+| Açık Sorun/Karar'ı session_log.md'de kapanış gerekçesi bırakmadan tablodan düşür |
 
 ---
 
@@ -653,13 +657,15 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 1 | 2026-07-17 | KURAL ÖNCELİK SIRASI eklendi |
 | Session 1 | 2026-07-17 | SELF-CORRECTION tablosu eklendi |
 | Session 4 | 2026-07-19 | SELF-CORRECTION ve YASAK LİSTE'ye "SESSION_INDEX arşivi kırpıldı" maddesi eklendi — arşiv bloklarının özetlenip dışarıya referans verilmesi (örn. "önceki versiyona bakılmalı") artık açıkça yasak, Kural #4'ün (Truncated çıktı yasak) SESSION_INDEX.md'ye özgü bir netleştirmesi olarak eklendi. Gerekçe: bu sohbette gerçekten yaşanan bir ihlal. |
+| Session 4 | 2026-07-21 | CORE.md §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi (SESSION_INDEX.md 400 satırı geçince gerekçeli olarak session_log.md'ye taşınır, sıkıştırılamaz); SELF-CORRECTION ve YASAK LİSTE'ye karşılık gelen 2 satır eklendi. Gerekçe: 2026-07-20'de bir "sıkıştırılmış" SESSION_INDEX sürümünün 7 açık sorunu + 2 kararı gerekçesiz düşürmesi (kullanıcı tarafından fark edildi, sonraki sohbette düzeltildi). |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.1*
+*BOWLERA AGENT.md — v1.2*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
 *v1.1: SELF-CORRECTION + YASAK LİSTE — SESSION_INDEX arşiv kırpma ihlali eklendi (Session 4, 2026-07-19).*
+*v1.2: SELF-CORRECTION + YASAK LİSTE — CORE.md'deki "400 satır eşiği" kuralına çapraz referans eklendi (Session 4, 2026-07-21).*
