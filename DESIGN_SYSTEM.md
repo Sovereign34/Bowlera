@@ -143,7 +143,76 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 
 ---
 
-## 7. KALİTE KONTROL — DESIGN_SYSTEM SELF-CHECK
+## 7. ALERJEN GÖSTERİM SİSTEMİ
+
+> Kaynak: Açık Sorun #7 (SESSION_INDEX.md) — Session 4, 2026-07-21 onaylandı.
+> Veri modeli (`menu-data.json`, `types/index.ts`) alerjen bilgisini zaten destekliyor;
+> bu bölüm sadece UI gösterim kuralını tanımlar.
+
+### 7.0 Zorunluluk Seviyesi
+
+```
+Kalori/protein ile AYNI statü: bir üründe alerjen verisi varsa
+MenuCard / Customizer / SummaryPanel-Sepet'te GİZLENEMEZ, opsiyonel yapılamaz.
+```
+
+> ⚠️ Bu kural CORE.md §8 "Kalori/protein zorunlu alan" varsayımının alerjene
+> genişletilmiş halidir. Alerjen verisi olmayan ürünlerde bölüm sessizce boş kalır
+> (yanıltıcı "alerjen yok" ibaresi zorunlu değildir, sadece gösterilmez).
+
+### 7.1 Gösterim Yerleri
+
+| Yer | Biçim |
+|---|---|
+| `MenuCard.tsx` | Kalori satırının hemen altında küçük ikon şeridi (max 4 ikon, taşarsa `+N`) |
+| Customizer (malzeme seçimi) | Her malzemenin yanında tekil ikon + tooltip/tap |
+| `SummaryPanel` / Sepet | Kâsedeki TÜM malzemelerin birleşik/tekilleştirilmiş alerjen listesi (malzeme malzeme değil, konsolide tek liste) |
+
+### 7.2 İkonografi
+
+- Lucide React'te alerjen ikonu yok → imza yaprak/zeytin motifiyle aynı stil:
+  ince çizgisel (outline), **2px stroke**, **Primary Olive (`#53502A`)** renginde,
+  Bölüm 4'teki özel SVG setiyle aynı üretim kalıbı.
+- Kapsanan alerjenler (MVP): **Gluten, Süt, Yumurta, Fındık/Kuruyemiş, Soya,
+  Balık/Kabuklu Deniz Ürünü, Susam.**
+- İkon dosya adlandırma: `allergen-icon-[ad].svg` (Bölüm 5.1 ile tutarlı kebab-case).
+
+### 7.3 Renk Kararı
+
+```
+Logo degrade KULLANILMAZ (Bölüm 2.1'deki 4 izinli yer dışında bir yer daha açmaz).
+Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
+İkon: Primary Olive · Metin/tooltip: Charcoal Black (birincil) veya Espresso Brown (ikincil)
+```
+
+> Gerekçe: alerjen bilgisi her zaman görünür ve gizlenemez olduğu için ayrı bir
+> alarm rengine ihtiyaç yoktur; görünürlük zaten renkten değil, zorunluluk
+> kuralından (7.0) gelir.
+
+### 7.4 Etkileşim & Animasyon
+
+- Masaüstü: hover'da tooltip (malzeme/ikon adı + "İçerir: [alerjen]")
+- Mobil: tap'te genişleyen chip
+- Animasyon: VisualPreview katmanıyla aynı desen — **250ms, `ease-out`, fade-in +
+  hafif scale (0.9→1)** — Bölüm 6.2 kurallarına tabi (`prefers-reduced-motion`
+  kontrolü zorunlu, yalnızca `transform`/`opacity`).
+
+### 7.5 Alerjen Self-Check
+
+```
+[ ] Üründe alerjen verisi var mı?        → MenuCard/customizer/sepette gösteriliyor mu?
+[ ] Alerjen bilgisi gizleniyor/opsiyonel mi? → EVET: kesinlikle yasak — DUR (7.0)
+[ ] Yeni bir alarm rengi/logo degrade mi kullanıldı? → EVET: yasak — Primary Olive'e çevir (7.3)
+[ ] SummaryPanel'deki liste konsolide mi, malzeme malzeme mi? → Malzeme malzeme ise DUR, birleştir (7.1)
+```
+
+> Not: AGENT.md'deki genel SELF-CHECK/YASAK LİSTE tablosuna karşılık gelen satırın
+> eklenmesi ayrı bir onay gerektirir (Kural #5 — tek problem, tek çözüm), bu
+> değişikliğin kapsamı dışındadır.
+
+---
+
+## 8. KALİTE KONTROL — DESIGN_SYSTEM SELF-CHECK
 
 ```
 [ ] Yeni renk kullanılıyor mu?          → Bölüm 2 tablosunda var mı?
@@ -152,11 +221,15 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 [ ] Yeni animasyon ekleniyor mu?         → prefers-reduced-motion kontrolü var mı?
 [ ] Animasyon width/height/top mu tetikliyor? → transform/opacity'e çevrildi mi?
 [ ] Yeni görsel ekleniyor mu?            → Adlandırma standardına uygun mu? (Bölüm 5.1)
+[ ] Alerjen gösterimi eklendi/değişti mi? → Bölüm 7 Self-Check'i geçti mi?
 ```
 
-**Format:** `"Tasarım skoru: 5/6 — [eksik kriter] nedeniyle 1 puan düştü."`
+**Format:** `"Tasarım skoru: 6/7 — [eksik kriter] nedeniyle 1 puan düştü."`
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA DESIGN_SYSTEM.md — v1.1 — Session 1 (2026-07-17), Session 4 (2026-07-21)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
+*v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
+2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
+maddesi eklendi.*
