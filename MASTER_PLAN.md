@@ -1,5 +1,5 @@
 # BOWLERA — Master Teknik Referans Belgesi (NİHAİ)
-**Sürüm:** 2.1 · **Tarih:** 18 Temmuz 2026 (v2.1 — customizer 5 adıma çıkarıldı, bkz. §3.3)
+**Sürüm:** 2.2 · **Tarih:** 22 Temmuz 2026 (v2.2 — sitemap auth/hesap ile senkronlandı, bkz. §3)
 **Kaynaklar:** (1) Claude'un ilk masaüstü araştırması · (2) Deep Research Raporu A · (3) Deep Research Raporu B — üç kaynak sentezlenmiştir, çelişkiler giderilmiştir.
 **Durum:** Onaylandı — geliştirmeye hazır
 
@@ -51,12 +51,25 @@ Ana Sayfa
 │   ├── Kâseni Yarat (Bowl Customizer)
 │   └── İçecekler & Atıştırmalıklar
 ├── Sipariş Ver
-│   ├── Paket Servis
-│   └── Gel Al
+│   ├── Gel Al (pickup)
+│   └── Masada (dine-in)
+├── Giriş (/giris) 🆕 v2.2
+├── Hesabım (/hesap) 🆕 v2.2
 ├── Hakkımızda
 ├── Şubeler / Konum Bulucu
 └── İletişim
 ```
+
+> 🆕 **v2.2 notu:** `/giris` ve `/hesap`, Oturum 4'te (bu belgenin ilk sürümünden
+> sonra) eklenen bir alt sistemdir — Twilio Verify + Auth.js JWT ile telefon bazlı
+> giriş, Neon Postgres'te kalıcı `users` tablosu (adres/profil/sadakat puanı).
+> Checkout'u bloklamaz — adres/profil tamamen opsiyonel, sadakat verisi amaçlıdır.
+> Tam gerekçe/kararlar: `SESSION_INDEX.md` Karar #17, #19, #20, #23.
+>
+> **Sipariş kanalı ismi netleştirildi:** Kod tarafında `FulfillmentChannel =
+> "pickup" | "dine-in"` — "Paket Servis" ifadesi kaldırıldı (delivery/paket servis
+> ile karıştırılabiliyordu; Yemeksepeti/Getir/Trendyol marketplace entegrasyonları
+> bilinçli olarak ayrı tutuluyor, kendi sepetimizin parçası değil).
 
 Bilgi mimarisi, kullanıcının **en fazla 3 tıklamayla siparişini
 tamamlaması** hedefiyle kurgulanmıştır.
@@ -398,3 +411,10 @@ bunlar gerçek API anahtarları ve iş ortaklığı gerektirir.
 
 *Bu belge üç kaynağın (ilk araştırma + 2 deep research raporu) sentezidir; aralarında çelişki tespit edilmemiştir, bulgular birbirini teyit etmektedir.*
 *v2.1 (18 Temmuz 2026): §3.3, §5.2, §6, §8 — customizer 5 adıma çıkarıldı, İngilizce isimlendirme kararı eklendi. Kaynak: `20260718001123_customizer_5_adim_gecisi.md`.*
+*v2.2 (22 Temmuz 2026): §3 — Sitemap'e `/giris` ve `/hesap` eklendi (Oturum 4'te inşa edilen
+auth/hesap alt sistemi, önceki sürümde hiç yoktu). Sipariş kanalı isimlendirmesi kod ile
+senkron edildi ("Paket Servis/Gel Al" → "Gel Al (pickup)/Masada (dine-in)"). Main listesi
+(§3.3) ve alt-varyant detayları BİLİNÇLİ OLARAK bu belgeye taşınmadı — CUSTOMIZER_SPEC.md
+zaten "tam kontrat" olarak referans veriliyor, aynı bilginin iki yerde bakımı gereksiz
+çoğaltmadır (AGENT.md Kural #5). Kaynak: bu sohbette yapılan MASTER_PLAN/ROADMAP tutarlılık
+denetimi, `SESSION_INDEX.md` Karar #17-23.*

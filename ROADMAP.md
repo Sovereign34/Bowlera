@@ -31,24 +31,31 @@
 | MenuCard.tsx | Kalori her kartta görünür (zorunlu — atlanamaz) |
 | Filtre paneli (alerjen + diyet/kalori) | Filtre sonucu boşsa "sonuç yok" state'i var |
 
-### Oturum 3 — Zustand + Customizer (Masaüstü) 🟡 Rapor edilen durum: tamamlandı — TEYİT EDİLMEDİ
+### Oturum 3 — Zustand + Customizer (Masaüstü) 🟢 Tamamlandı — TEYİT EDİLDİ (2026-07-22)
 > ⚠️ Bu bölüm v1.0'da "4 adım UI" diyordu. Oturum 2'deki Karar #1 (SESSION_INDEX.md)
 > ile akış 5 adıma çıkarıldı ama bu değişiklik o sırada ROADMAP.md'ye işlenmemişti —
 > burada düzeltiliyor.
 
 | Görev | Kabul Kriteri | Durum |
 |---|---|---|
-| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar | 🟡 Üretildi, 9 test ✅ — spec'e satır satır uyum teyit edilmedi |
-| **5 adım** UI (masaüstü) — Base→Main→Garden→Signature Flavor→Finish | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz | 🟡 Üretildiği bildirildi, kod görülmedi |
-| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez | 🟡 Üretildiği bildirildi, kod görülmedi |
-| "Sepete Ekle" (AddToCartButton) | Çift tıklama koruması (BSC-6) çalışır, geçersiz adımda disabled | 🟡 Üretildiği bildirildi, kod görülmedi. **NOT:** TEST_MATRIX.md bu testi Oturum 4 kapsamında listeliyordu — kapsam bu oturumda fiilen Oturum 3'e kaymış, iki dosya arasında senkron sağlanmalı |
+| `useCustomizerStore.ts` | CUSTOMIZER_SPEC.md §3'teki tam kontrata uyar | 🟢 Oturum 4'te dosya bizzat görüldü, satır satır CUSTOMIZER_SPEC.md §3 ile teyit edildi. Ayrıca Bitkisel Protein alt-varyant mekanizması (§3.4/§3.5, Karar #11) bu store'a eklendi. |
+| **5 adım** UI (masaüstü) — Base→Main→Garden→Signature Flavor→Finish | Adım geçiş guard'ı çalışır — URL manipülasyonuyla atlanamaz | 🟢 `StepMain.tsx` görüldü, guard mantığı (`maxReachedStep`) store tarafında teyit edildi. |
+| SummaryPanel canlı hesaplama | Seçim yokken `"—"` gösterir, `NaN` üretmez | 🟢 `lib/customizer-pricing.ts` görüldü ve düzeltildi (Bitkisel Protein variant-aware olmama bug'ı giderildi, Karar #11). `lib/customizer-summary-format.ts` de görülüp `MobileSummaryDrawer.tsx` ile konsolide edildi (Açık Sorun #43 kapandı). |
+| "Sepete Ekle" (AddToCartButton) | Çift tıklama koruması (BSC-6) çalışır, geçersiz adımda disabled | 🟡 `AddToCartButton.tsx` bu sohbette hiç görülmedi — `MobileSummaryDrawer.tsx` içinde referans olarak geçiyor ama BSC-6 koruması bu oturumda doğrulanmadı. **NOT:** TEST_MATRIX.md senkron kontrolü hâlâ açık. |
 
-### Oturum 4 — VisualPreview + Mobil + Sepet
-| Görev | Kabul Kriteri |
-|---|---|
-| VisualPreview (katmanlı CSS/SVG) | Katman sırası: kase→taban→protein→topping→sos |
-| Mobil sticky çekmece | Açık/kapalı durumları CUSTOMIZER_SPEC §6'ya uyar |
-| `useCartStore.ts` + CartDrawer/CartBadge | Sepet tarayıcı kapansa da korunur (persist) |
+### Oturum 4 — VisualPreview + Mobil + Sepet 🟡 Devam ediyor
+| Görev | Kabul Kriteri | Durum |
+|---|---|---|
+| VisualPreview (katmanlı CSS/SVG) | Katman sırası: kase→taban→protein→topping→sos | 🟡 Bileşen bu sohbette görülmedi, sadece `MobileSummaryDrawer.tsx` içindeki referansı (className davranışı) incelendi (Açık Sorun #34) |
+| Mobil sticky çekmece | Açık/kapalı durumları CUSTOMIZER_SPEC §6'ya uyar | 🟢 `MobileSummaryDrawer.tsx` görüldü, açık/kapalı davranışı §6 ile tutarlı; format hatası düzeltildi (Açık Sorun #43) |
+| `useCartStore.ts` + CartDrawer/CartBadge | Sepet tarayıcı kapansa da korunur (persist) | 🟡 CartDrawer portal bug'ı (backdrop-blur containing-block) düzeltildiği raporlandı, ama `useCartStore.ts` bu sohbette hiç görülmedi — persist davranışı teyit edilmedi |
+
+> 🆕 **Planlanmamış ek kapsam (v1.2 notu):** Oturum 4 sırasında, orijinal 5 oturumluk
+> planda hiç yer almayan bir **Auth/Hesap alt sistemi** eklendi (Twilio Verify + Auth.js
+> JWT, Neon Postgres, `/giris`, `/hesap`, adres/profil formu). Bu MASTER_PLAN.md v2.2'de
+> sitemap'e işlendi ama ROADMAP'in oturum tablosunda kendi satırı yok — kabul kriterleri
+> tanımsız kaldı. Bir sonraki güncellemede ya Oturum 4'e ek satır olarak ya da ayrı bir
+> "Oturum 4.5" olarak eklenmesi önerilir. Kaynak: `SESSION_INDEX.md` Karar #17-23.
 
 ### 🛑 Kontrol Noktası — Kullanıcı Testi
 | Görev | Kabul Kriteri |
@@ -76,7 +83,12 @@
 
 ---
 
-*BOWLERA ROADMAP.md — v1.1 — Session 3 — 2026-07-18*
+*BOWLERA ROADMAP.md — v1.2 — Session 4 — 2026-07-22*
 *Kaynak: MASTER_PLAN.md §8 · CORE.md §7.1, §7.3*
-*Değişiklik: Oturum 3 satırı 4→5 adıma düzeltildi (Karar #1 ile senkron), AddToCartButton
+*Değişiklik (v1.1): Oturum 3 satırı 4→5 adıma düzeltildi (Karar #1 ile senkron), AddToCartButton
 kabul kriteri eklendi, tüm Oturum 3 satırlarına teyit durumu eklendi.*
+*Değişiklik (v1.2): Oturum 3 satırları bu sohbette görülen dosyalarla (useCustomizerStore.ts,
+customizer-pricing.ts, customizer-summary-format.ts) teyit edilip 🟢'ye güncellendi; sadece
+AddToCartButton.tsx görülmediği için 🟡 kaldı. Oturum 4'e durum sütunu eklendi. Planlanmamış
+Auth/Hesap alt sistemi (Karar #17-23) not olarak eklendi — kendi oturum satırı henüz yok,
+takip gerekiyor. Kaynak: bu sohbette yapılan MASTER_PLAN/ROADMAP tutarlılık denetimi.*
