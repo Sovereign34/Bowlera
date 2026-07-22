@@ -50,12 +50,17 @@
 | Mobil sticky çekmece | Açık/kapalı durumları CUSTOMIZER_SPEC §6'ya uyar | 🟢 `MobileSummaryDrawer.tsx` görüldü, açık/kapalı davranışı §6 ile tutarlı; format hatası düzeltildi (Açık Sorun #43) |
 | `useCartStore.ts` + CartDrawer/CartBadge | Sepet tarayıcı kapansa da korunur (persist) | 🟡 CartDrawer portal bug'ı (backdrop-blur containing-block) düzeltildiği raporlandı, ama `useCartStore.ts` bu sohbette hiç görülmedi — persist davranışı teyit edilmedi |
 
-> 🆕 **Planlanmamış ek kapsam (v1.2 notu):** Oturum 4 sırasında, orijinal 5 oturumluk
-> planda hiç yer almayan bir **Auth/Hesap alt sistemi** eklendi (Twilio Verify + Auth.js
-> JWT, Neon Postgres, `/giris`, `/hesap`, adres/profil formu). Bu MASTER_PLAN.md v2.2'de
-> sitemap'e işlendi ama ROADMAP'in oturum tablosunda kendi satırı yok — kabul kriterleri
-> tanımsız kaldı. Bir sonraki güncellemede ya Oturum 4'e ek satır olarak ya da ayrı bir
-> "Oturum 4.5" olarak eklenmesi önerilir. Kaynak: `SESSION_INDEX.md` Karar #17-23.
+### Oturum 4.5 — Auth/Hesap Sistemi (Planlanmamış Ek Kapsam) ✅ Büyük ölçüde tamamlandı
+> Orijinal 5 oturumluk planda (MASTER_PLAN.md v2.1 §8) bu alt sistem hiç yoktu.
+> Oturum 4 sırasında ihtiyaç doğdu, MASTER_PLAN.md v2.2'de sitemap'e işlendi.
+> Kaynak: `SESSION_INDEX.md` Karar #17, #19, #20, #21-23.
+
+| Görev | Kabul Kriteri | Durum |
+|---|---|---|
+| Twilio Verify + Auth.js JWT kurulumu | Build yeşil, `/giris` render edilir | ✅ Kod tamam, `/giris` canlı doğrulandı |
+| Neon Postgres + `users` tablosu (phone, address, displayName, loyaltyPoints, verifiedAt) | Migration çalışır, DB'ye kalıcı yazar | ✅ Kurulum tamam |
+| Adres/Profil formu (`/hesap`) | Checkout'u bloklamaz, opsiyonel toplanır | ✅ Kod tamam VE repo varlığı (4/4 dosya) doğrulandı |
+| OTP fonksiyonel uçtan uca test | Gerçek SMS ile giriş tamamlanır | 🟠 **BLOKAJ:** Twilio TR SMS kısıtı (Açık Sorun #32) — canlıda hiç test edilemedi. Kullanıcı kararıyla bilinçli parklı. |
 
 ### 🛑 Kontrol Noktası — Kullanıcı Testi
 | Görev | Kabul Kriteri |
@@ -83,7 +88,7 @@
 
 ---
 
-*BOWLERA ROADMAP.md — v1.2 — Session 4 — 2026-07-22*
+*BOWLERA ROADMAP.md — v1.3 — Session 4 — 2026-07-22*
 *Kaynak: MASTER_PLAN.md §8 · CORE.md §7.1, §7.3*
 *Değişiklik (v1.1): Oturum 3 satırı 4→5 adıma düzeltildi (Karar #1 ile senkron), AddToCartButton
 kabul kriteri eklendi, tüm Oturum 3 satırlarına teyit durumu eklendi.*
@@ -92,3 +97,5 @@ customizer-pricing.ts, customizer-summary-format.ts) teyit edilip 🟢'ye günce
 AddToCartButton.tsx görülmediği için 🟡 kaldı. Oturum 4'e durum sütunu eklendi. Planlanmamış
 Auth/Hesap alt sistemi (Karar #17-23) not olarak eklendi — kendi oturum satırı henüz yok,
 takip gerekiyor. Kaynak: bu sohbette yapılan MASTER_PLAN/ROADMAP tutarlılık denetimi.*
+*Değişiklik (v1.3): Auth/Hesap için geçici not, kalıcı "Oturum 4.5" tablosuna dönüştürüldü —
+kabul kriterleriyle birlikte. Twilio SMS kısıtı (#32) tek açık blokaj olarak işaretlendi.*
