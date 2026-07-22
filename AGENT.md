@@ -249,6 +249,7 @@ Tüm checkları geç → sonra [KARAR BİLDİRİMİ] üret.
 
 ### Marka & Tasarım Katmanı
 - [ ] Kalori/protein bilgisi menü kartı/customizer/sepette gizleniyor mu? → EVET: kesinlikle yasak — DUR
+- [ ] Alerjen bilgisi menü kartı/customizer/sepette gizleniyor veya opsiyonel yapılıyor mu? → EVET: kesinlikle yasak — DUR (DESIGN_SYSTEM.md §7.0, kalori/protein ile aynı zorunluluk statüsü)
 - [ ] Logo degrade site arka planında mı kullanılıyor? → EVET: DESIGN_SYSTEM.md ihlali — DUR
 - [ ] Bronze rengi küçük gövde metninde mi? → EVET: yasak — DUR
 - [ ] Animasyon `prefers-reduced-motion` kontrolü yapıyor mu? → HAYIR: ekle
@@ -600,6 +601,7 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 | ❌ Asla yapma |
 |---|
 | Kalori/protein bilgisini menü kartı/customizer/sepetten gizle veya opsiyonel yap |
+| Alerjen bilgisini menü kartı/customizer/sepetten gizle veya opsiyonel yap (DESIGN_SYSTEM.md §7.0) |
 | Logo degrade'ini site arka planında veya büyük yüzeylerde kullan |
 | Bronze rengini küçük gövde metninde kullan |
 | API key / secret client bundle'a veya loglara yaz |
@@ -658,14 +660,16 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 1 | 2026-07-17 | SELF-CORRECTION tablosu eklendi |
 | Session 4 | 2026-07-19 | SELF-CORRECTION ve YASAK LİSTE'ye "SESSION_INDEX arşivi kırpıldı" maddesi eklendi — arşiv bloklarının özetlenip dışarıya referans verilmesi (örn. "önceki versiyona bakılmalı") artık açıkça yasak, Kural #4'ün (Truncated çıktı yasak) SESSION_INDEX.md'ye özgü bir netleştirmesi olarak eklendi. Gerekçe: bu sohbette gerçekten yaşanan bir ihlal. |
 | Session 4 | 2026-07-21 | CORE.md §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi (SESSION_INDEX.md 400 satırı geçince gerekçeli olarak session_log.md'ye taşınır, sıkıştırılamaz); SELF-CORRECTION ve YASAK LİSTE'ye karşılık gelen 2 satır eklendi. Gerekçe: 2026-07-20'de bir "sıkıştırılmış" SESSION_INDEX sürümünün 7 açık sorunu + 2 kararı gerekçesiz düşürmesi (kullanıcı tarafından fark edildi, sonraki sohbette düzeltildi). |
+| Session 4 | 2026-07-22 | SELF-CHECK (Marka & Tasarım Katmanı) ve YASAK LİSTE'ye alerjen bilgisi satırı eklendi — DESIGN_SYSTEM.md §7.0'daki "alerjen, kalori/protein ile aynı zorunluluk statüsünde, gizlenemez/opsiyonel yapılamaz" kararının AGENT.md tarafındaki karşılığı. Açık Sorun #44 kapandı. |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.2*
+*BOWLERA AGENT.md — v1.3*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
 *v1.1: SELF-CORRECTION + YASAK LİSTE — SESSION_INDEX arşiv kırpma ihlali eklendi (Session 4, 2026-07-19).*
 *v1.2: SELF-CORRECTION + YASAK LİSTE — CORE.md'deki "400 satır eşiği" kuralına çapraz referans eklendi (Session 4, 2026-07-21).*
+*v1.3: SELF-CHECK + YASAK LİSTE — alerjen bilgisi satırı eklendi, DESIGN_SYSTEM.md §7.0 ile senkron (Session 4, 2026-07-22, Açık Sorun #44 kapandı).*

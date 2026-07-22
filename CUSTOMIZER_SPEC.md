@@ -229,6 +229,26 @@ const nextStep = () => set((state) => {
 > ⚠️ Diğer 6 Main için bu blok hiç tetiklenmez — `main !== 'plant-based-protein'`
 > koşulu erken çıkış sağlar, mevcut davranış hiçbir şekilde etkilenmez.
 
+### 3.5 selectMain — mainVariant Sıfırlama Kuralı (YENİ — v1.2, Açık Sorun #49)
+
+> Kaynak: `StepMain.tsx` implementasyonu sırasında bulunan edge case (Double Main
+> checkbox'ı ile Bitkisel Protein varyant seçimi çakışması), spec'e geriye dönük işlendi.
+
+```
+selectMain(id, portion) çağrıldığında:
+  main id GERÇEKTEN DEĞİŞİYORSA        → mainVariant null'a sıfırlanır
+  main id AYNI KALIYORSA (sadece portion değişiyorsa) → mainVariant KORUNUR
+```
+
+**Gerekçe:** "Double Main" checkbox'ı (§2, Karar #5) `mainPortion`'ı değiştirmek için
+aynı `selectMain(main, yeniPortion)`'ı **aynı main id'siyle** tekrar çağırır. Eğer
+`mainVariant` her çağrıda koşulsuz sıfırlansaydı, kullanıcı Bitkisel Protein +
+Meksika Fasulyesi seçip sonra Double Main'i işaretlerse seçtiği varyant sessizce
+silinir, mutfağa yanlış (varsayılan) varyant giderdi. Bu yüzden sıfırlama SADECE
+main id değişimine bağlıdır — kullanıcı gerçekten başka bir Main'e geçtiğinde eski
+varyantın state'te asılı kalmaması (§2.1'deki asıl amaç) korunurken, aynı Main
+içindeki portion değişikliği varyantı etkilemez.
+
 ---
 
 ## 4. CANLI FİYAT/KALORİ HESAPLAMA
