@@ -18,7 +18,28 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev (2026-08-01, yeni tur):    VisualPreview.tsx mimarisi denetlendi — kritik bir
+Görev (2026-08-01, ikinci tur):    Pazaryeri müşteri verisi erişimi araştırıldı.
+          Yemeksepeti'nin resmi openapi.json şeması incelendi — `order.Customer`
+          şemasındaki TÜM kişisel alanlar (isim, telefon, ulusal kimlik, teslimat
+          adresi) açıkça "Masked for identity protection" olarak işaretli, sadece
+          platformun ürettiği anonim müşteri ID'si veriliyor. Bu, bilinçli bir
+          platform politikası — teknik eksiklik değil. Trendyol Go/Migros Yemek
+          için de aynı mantığın geçerli olduğu varsayılıyor (ayrı ayrı teyit
+          edilmedi).
+          **Bulunan gerçek yol:** Adisyo'nun "BOOSTFEEL Müşteri Sadakat
+          Entegrasyonu" pazaryeri API'sinden veri ÇEKMİYOR — QR kod tabanlı,
+          müşterinin FİZİKSEL ziyarette (gel-al) kendi isteğiyle dijital sadakat
+          kartına kaydolmasına dayanıyor (Apple/Google Wallet, Adisyo/Simpra POS
+          entegrasyonu üzerinden). Önerilen pratik yöntem: pazaryeri paket
+          siparişlerine "QR ile üye ol, indirim kazan" kartı eklemek — platform
+          ToS'unu ihlal etmeyen, müşteriyi kendi isteğiyle veri paylaşmaya davet
+          eden meşru yol.
+          Bu bulgu, Karar #12'deki (loyaltyPoints mekaniği henüz netleşmedi) açık
+          soruyla doğrudan bağlantılı — sadakat mekaniği tasarlanırken Boostfeel
+          benzeri bir QR-kayıt akışı ile `users.loyaltyPoints` alanının nasıl
+          besleneceği birlikte düşünülmeli.
+
+Önceki tur (2026-08-01, ilk tur):    VisualPreview.tsx mimarisi denetlendi — kritik bir
           mimari çelişki bulundu (#52, yeni). Kod, `/public/images/layers/` altında
           her malzeme için gerçek görsel dosyası (`base-jasmine-rice.webp` gibi)
           bekliyor, ama bu klasör TAMAMEN BOŞ — hiçbir katman görseli yok. Bu,
@@ -81,7 +102,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 5 | "Make it Yours" → Finish'e entegre, "Double Main" → `mainPortion` yeniden kullanır | ✅ Uygulandı |
 | 6 | Slogan: "Sağlıklı Beslen, Sağlıklı Yaşa, Gücünü Hisset" | ✅ |
 | 11 | "Bitkisel Protein" tek Main kartı + 2 alt-varyant, inline genişleme, flavor filtreleme | ✅ Uygulandı, canlıda doğrulandı, spec tam senkron. MASTER_PLAN'a bilinçli taşınmadı (spec referansı korundu). |
-| 12 | "Kâseni Yarat" sadece "Benim Kâsem" (`build-your-own-kasem`) ürününde | ⚠️ Bağlayıcı kapsam kuralı, ayrıca test edilmedi — hâlâ geçerli varsayılıyor |
+| 12 | "Kâseni Yarat" sadece "Benim Kâsem" (`build-your-own-kasem`) ürününde | ⚠️ Bağlayıcı kapsam kuralı, ayrıca test edilmedi — hâlâ geçerli varsayılıyor. **[Not, 2026-08-01]:** `loyaltyPoints` mekaniği hâlâ netleşmedi — pazaryeri müşteri verisinin erişilemez olduğu bu turda doğrulandığı için, mekanik muhtemelen QR-tabanlı fiziksel kayıt akışına (Boostfeel model) dayanmalı. |
 | 13 | `FulfillmentChannel`: `"pickup"` \| `"dine-in"` (delivery yok), sepet/oturum seviyesinde tek alan | ✅ Canlıda doğrulandı VE MASTER_PLAN.md v2.2 sitemap'i artık bu isimlendirmeyle senkron |
 | 14-16 | `â` karakteri kaldırıldı (menu-data.json, CartDrawer). Hero.tsx/StepBase.tsx bilinçli ertelendi (#27) | ✅ `menu-data.json` içeriği görülüp `â` yokluğu doğrulandı |
 | 15 | Customizer malzeme isimleri Türkçeye çevrildi (id'ler değişmedi) | ✅ Canlıda doğrulandı |
@@ -152,7 +173,8 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, statik veri, CategoryNav+FilterPanel, customizer 4→5 adım kararı | ✅ Tamamlandı |
 | 3 | 2026-07-18 | Zustand store + pricing + customizer data, masaüstü UI bileşenleri (kesintiye uğradı) | ✅ Büyük ölçüde tamam, bu sohbette dosya-dosya teyit edildi |
 | 4 (devam) | 2026-07-18 → 07-22 (11 bölüm) | Sepet/kanal seçimi, Türkçeleştirme, â düzeltmesi, CartDrawer bugfix, auth mimarisi+kod+DB+UI, adres/profil (#23), test triyajı, menü animasyonu, ARCHITECTURE.md v1.3→v1.4, rate-limit üretimi, repo tutarsızlığı keşfi (#42 kapandı), v2 sıkıştırma turunda düşen maddelerin geri bulunması, DESIGN_SYSTEM.md §7 (#7 kapandı), Karar #11/#22 Bitkisel Protein uçtan uca (canlıda doğrulandı), MobileSummaryDrawer format konsolidasyonu (#43), AGENT.md v1.3 alerjen self-check (#44), CUSTOMIZER_SPEC.md §3.5 (#49), **MASTER_PLAN.md v2.2 + ROADMAP.md v1.3 tutarlılık denetimi ve güncellemesi** (Auth/Hesap sitemap'e ve Oturum 4.5'e işlendi, #50/#51 yeni fark edildi) | 🟡 Devam ediyor — Twilio (#32) TEK gerçek darboğaz |
-| 5 | 2026-08-01 | Netgsm sözleşmesi onaylandı (vergi levhası pazartesi yüklenecek — Twilio/#32 çözümü netleşiyor). Menü içerik/görsel yükleme süreci netleştirildi (CMS yok, kod+deploy ile — 40-50 ürün tek seferlik iş). **VisualPreview.tsx mimari denetimi:** `/public/images/layers/` klasörünün boş olduğu ve PHOTOGRAPHY_GUIDE.md §8 notuyla çeliştiği tespit edildi (#52, yeni). Fotoğraf katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı olarak çözüldü (v2 = kayıtlı ihlalin kendisi, kullanılmayacak). | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #52 yeni açıldı |
+| 5 | 2026-08-01 | Netgsm sözleşmesi onaylandı (vergi levhası pazartesi yüklenecek — Twilio/#32 çözümü netleşiyor). Menü içerik/görsel yükleme süreci netleştirildi (CMS yok, kod+deploy ile — 40-50 ürün tek seferlik iş). **VisualPreview.tsx mimari denetimi:** `/public/images/layers/` klasörünün boş olduğu ve PHOTOGRAPHY_GUIDE.md §8 notuyla çeliştiği tespit edildi (#52, yeni). Fotoğraf katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı olarak çözüldü (v2 = kayıtlı ihlalin kendisi, kullanılmayacak). | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #52 yeni açıldı 
+| 5 (devam) | 2026-08-01 | Pazaryeri müşteri verisi erişimi araştırıldı — Yemeksepeti openapi.json şeması üzerinden tüm kişisel alanların ("Masked for identity protection") bilinçli olarak maskelendiği kanıtlandı. Gerçek yol olarak Boostfeel benzeri QR-tabanlı fiziksel sadakat kaydı bulundu (pazaryeri API'sinden değil, müşterinin gel-al sırasında kendi isteğiyle QR okutmasından geliyor). Karar #12'deki `loyaltyPoints` açık sorusuyla ilişkilendirildi. | 🟡 Devam ediyor |
 
 *(Tam turn-by-turn detay: `session_log.md`.)*
 
@@ -186,6 +208,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 1 | Twilio kararı: ücretli plan veya yerel sağlayıcı — TEK büyük darboğaz (#32, parklandı) | 🟠 |
 | 1b | Vektörel ikon seti üretimi (25-30 malzeme, marka paletiyle uyumlu) — kullanıcı üretici bulacak/Claude taslak üretecek, netleşmedi (#52, yeni) | 🟡 |
 | 1c | PHOTOGRAPHY_GUIDE.md §8 notu düzeltilmeli — "CSS/SVG yeterli" ifadesi kodla çelişiyor (#52 ile bağlantılı) | 🟢 |
+| 1d | **Pazaryeri müşteri verisi erişilemez (araştırma tamamlandı, 2026-08-01):** Boostfeel (ya da benzeri QR tabanlı sadakat çözümü) değerlendirilmeli — Karar #12'deki loyaltyPoints mekaniği bu bulguyla birlikte netleştirilmeli | 🟡 |
 | 2 | `AddToCartButton.tsx` + `useCartStore.ts` paylaşılırsa BSC-6 ve persist davranışını teyit et (#50/#51, yeni) | 🟢 |
 | 3 | ARCHITECTURE.md §2.4'ü 5 adımlı customizer'a (Bitkisel Protein dahil) güncelle (#10) | 🟡 |
 | 4 | DESIGN_SYSTEM.md §7'ye göre alerjen gösterimini MenuCard/Customizer/SummaryPanel'de fiilen uygula | 🟡 |
@@ -198,12 +221,14 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v11. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
+*BOWLERA SESSION_INDEX.md — v12. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
 ve Session 5 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil).
 v10'da (2026-07-22) MASTER_PLAN.md ve ROADMAP.md kod ile hizalanmış, #50/#51 açılmıştı.
-Bu turda (2026-08-01, Session 5): Netgsm/vergi levhası ilerlemesi kaydedildi, menü içerik
-yükleme süreci netleşti, **#52 (VisualPreview mimari çelişkisi) açıldı** — fotoğraf
-katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı, kod değişikliği
-gerekmiyor. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı çözüldü.
+Session 5, iki turda ilerledi (2026-08-01): (1) Netgsm/vergi levhası ilerlemesi, menü
+içerik süreci netleşti, **#52 (VisualPreview mimari çelişkisi)** açıldı — vektörel ikon
+sistemine geçiş kararlaştırıldı. (2) Pazaryeri müşteri verisi erişimi araştırıldı —
+maskelendiği kanıtlandı, Boostfeel/QR-tabanlı sadakat modeli gerçek yol olarak bulundu,
+Karar #12 ile ilişkilendirildi. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı
+kalıcı çözüldü.
 Kalan açık sorunlar: #10, #24, #27, #28/29, #32, #34, #38, #39, #50, #51, #52.
 Güncellenme: 2026-08-01.*
