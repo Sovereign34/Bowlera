@@ -18,7 +18,29 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev:    Oturum 4 devam ediyor. Bu turda MASTER_PLAN.md ve ROADMAP.md — kod ile
+Görev (2026-08-01, yeni tur):    VisualPreview.tsx mimarisi denetlendi — kritik bir
+          mimari çelişki bulundu (#52, yeni). Kod, `/public/images/layers/` altında
+          her malzeme için gerçek görsel dosyası (`base-jasmine-rice.webp` gibi)
+          bekliyor, ama bu klasör TAMAMEN BOŞ — hiçbir katman görseli yok. Bu,
+          PHOTOGRAPHY_GUIDE.md §8'deki "VisualPreview CSS/SVG katman mantığıyla
+          çalışıyor, gerçek fotoğraf gerekmez" notuyla doğrudan çelişiyor. Şu an
+          müşteri customizer'da herhangi bir malzeme seçse bile önizleme boş krem
+          renkli daire olarak kalıyor.
+          **Karar (kullanıcı onayı ile):** Fotoğraf katmanlama yerine markaya uygun
+          (Warm Cream/Espresso Brown/Primary Olive) vektörel ikon seti kullanılacak —
+          global rakip modeli: Chipotle (metin-only, görsel yok) / Cava-Sweetgreen
+          (düz ikon seti). Kod tarafında DEĞİŞİKLİK GEREKMİYOR — VisualPreview.tsx
+          zaten dosya yolunu id'den esnek türetiyor, sadece ikon dosyaları
+          `/public/images/layers/` altına eklenecek (üretici: kullanıcı bir
+          tasarımcı bulacak ya da Claude AI ile taslak üretecek — netleşmedi).
+          Ayrıca: dosyanın en üstündeki "GEÇMİŞ İHLAL KAYDI" notu (v2 sıkıştırma
+          olayı) bu turda tekrar teyit edildi — kullanıcıya SESSION_INDEX.md'nin
+          (bu dosya) doğru/güncel kaynak olduğu, SESSION_INDEX_v2.md'nin ise
+          kayıttaki ihlalin ta kendisi olduğu için kullanılmaması gerektiği
+          açıkça bildirildi.
+
+Önceki tur (2026-07-22):
+          Oturum 4 devam ediyor. Bu turda MASTER_PLAN.md ve ROADMAP.md — kod ile
           tutarlılık denetiminden geçirildi ve güncellendi:
           - MASTER_PLAN.md v2.1 → v2.2: Sitemap'e /giris ve /hesap eklendi (Auth/Hesap
             alt sistemi önceki sürümde hiç yoktu). Sipariş kanalı isimlendirmesi kodla
@@ -89,6 +111,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 39 | 🟠 | `/hesap` akışı Twilio kısıtı yüzünden canlıda hiç fonksiyonel test edilemedi (aslında #32'nin bir sonucu) | `app/hesap/page.tsx` |
 | 50 | 🆕 🟢 | `AddToCartButton.tsx` bu sohbette hiç görülmedi — BSC-6 (çift tıklama koruması) ve geçersiz adımda disabled davranışı teyit edilmedi. ROADMAP.md Oturum 3 denetimi sırasında fark edildi. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🆕 🟢 | `useCartStore.ts` bu sohbette hiç görülmedi — CartDrawer portal fix'inin (Karar #18) hâlâ geçerli olduğu ve persist davranışının çalıştığı raporlanmış ama dosya üzerinden teyit edilmemiş. ROADMAP.md Oturum 4 denetimi sırasında fark edildi. | `store/useCartStore.ts` |
+| 52 | 🆕 🟡 | **Mimari çelişki:** VisualPreview.tsx + `lib/customizer-visual-layers.ts`, `/public/images/layers/` altında her malzeme için gerçek görsel dosyası bekliyor — klasör tamamen boş, PHOTOGRAPHY_GUIDE.md §8'in "CSS/SVG yeterli" notuyla çelişiyor. Karar: vektörel ikon seti üretilecek (fotoğraf değil), kod değişmeyecek. PHOTOGRAPHY_GUIDE.md §8 notu da bu karara göre düzeltilmeli (ayrı bir açık iş). | `components/customizer/VisualPreview.tsx`, `lib/customizer-visual-layers.ts`, `PHOTOGRAPHY_GUIDE.md` §8 |
 
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49 —
 > detaylar önceki SESSION_INDEX sürümlerinde ve bu sohbetin geçmişinde.
@@ -108,7 +131,15 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 >   sohbette hiç görülmedi, sadece raporlanan durumlarına güvenildi.
 >
 > Detaylı gerekçe/dosya alıntıları bu sohbetin geçmişinde; bir sonraki turda `session_log.md`'ye
-> taşınmalı (henüz taşınmadı).
+> taşınmalı (henüz taşınmadı, bu tur da dahil).
+>
+> **BU TUR (2026-08-01):**
+> - VisualPreview.tsx incelendi, #52 (yeni, yukarıda) açıldı — fotoğraf katmanlama yerine
+>   vektörel ikon sistemine geçiş kararlaştırıldı, kod değişikliği gerekmiyor.
+> - SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı çözüldü — v2'nin kayıtlı ihlalin
+>   kendisi olduğu (bu dosyanın en üstündeki not) kullanıcıya tekrar doğrulandı, bu dosyanın
+>   (SESSION_INDEX.md) tek geçerli kaynak olduğu teyit edildi. Yeni bir kapanış gerekmedi,
+>   zaten var olan uyarı notu geçerliliğini korudu.
 
 ---
 
@@ -121,6 +152,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, statik veri, CategoryNav+FilterPanel, customizer 4→5 adım kararı | ✅ Tamamlandı |
 | 3 | 2026-07-18 | Zustand store + pricing + customizer data, masaüstü UI bileşenleri (kesintiye uğradı) | ✅ Büyük ölçüde tamam, bu sohbette dosya-dosya teyit edildi |
 | 4 (devam) | 2026-07-18 → 07-22 (11 bölüm) | Sepet/kanal seçimi, Türkçeleştirme, â düzeltmesi, CartDrawer bugfix, auth mimarisi+kod+DB+UI, adres/profil (#23), test triyajı, menü animasyonu, ARCHITECTURE.md v1.3→v1.4, rate-limit üretimi, repo tutarsızlığı keşfi (#42 kapandı), v2 sıkıştırma turunda düşen maddelerin geri bulunması, DESIGN_SYSTEM.md §7 (#7 kapandı), Karar #11/#22 Bitkisel Protein uçtan uca (canlıda doğrulandı), MobileSummaryDrawer format konsolidasyonu (#43), AGENT.md v1.3 alerjen self-check (#44), CUSTOMIZER_SPEC.md §3.5 (#49), **MASTER_PLAN.md v2.2 + ROADMAP.md v1.3 tutarlılık denetimi ve güncellemesi** (Auth/Hesap sitemap'e ve Oturum 4.5'e işlendi, #50/#51 yeni fark edildi) | 🟡 Devam ediyor — Twilio (#32) TEK gerçek darboğaz |
+| 5 | 2026-08-01 | Netgsm sözleşmesi onaylandı (vergi levhası pazartesi yüklenecek — Twilio/#32 çözümü netleşiyor). Menü içerik/görsel yükleme süreci netleştirildi (CMS yok, kod+deploy ile — 40-50 ürün tek seferlik iş). **VisualPreview.tsx mimari denetimi:** `/public/images/layers/` klasörünün boş olduğu ve PHOTOGRAPHY_GUIDE.md §8 notuyla çeliştiği tespit edildi (#52, yeni). Fotoğraf katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı olarak çözüldü (v2 = kayıtlı ihlalin kendisi, kullanılmayacak). | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #52 yeni açıldı |
 
 *(Tam turn-by-turn detay: `session_log.md`.)*
 
@@ -143,6 +175,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | Alerjen Gösterim Sistemi | ✅ `DESIGN_SYSTEM.md` §7 VE `AGENT.md` v1.3 protokol karşılığı tam. 🟡 UI implementasyonu henüz yazılmadı. |
 | Bitkisel Protein (Main alt-varyant) | ✅ Kod + spec + canlı doğrulama tam. MASTER_PLAN'a bilinçli taşınmadı (spec referansı). |
 | Sepet (`useCartStore.ts`, `AddToCartButton.tsx`) | 🟡 Bu sohbette hiç görülmedi — CartDrawer bugfix'i raporlandı ama teyit edilmedi (#50, #51 yeni) |
+| Customizer Görsel Önizleme (VisualPreview) | 🔴 Kod çalışıyor ama görsel katmanların hepsi eksik (`/public/images/layers/` boş) — şu an boş daire gösteriyor. Vektörel ikon seti üretimi bekleniyor (#52, yeni) |
 
 ---
 
@@ -151,6 +184,8 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 1 | Twilio kararı: ücretli plan veya yerel sağlayıcı — TEK büyük darboğaz (#32, parklandı) | 🟠 |
+| 1b | Vektörel ikon seti üretimi (25-30 malzeme, marka paletiyle uyumlu) — kullanıcı üretici bulacak/Claude taslak üretecek, netleşmedi (#52, yeni) | 🟡 |
+| 1c | PHOTOGRAPHY_GUIDE.md §8 notu düzeltilmeli — "CSS/SVG yeterli" ifadesi kodla çelişiyor (#52 ile bağlantılı) | 🟢 |
 | 2 | `AddToCartButton.tsx` + `useCartStore.ts` paylaşılırsa BSC-6 ve persist davranışını teyit et (#50/#51, yeni) | 🟢 |
 | 3 | ARCHITECTURE.md §2.4'ü 5 adımlı customizer'a (Bitkisel Protein dahil) güncelle (#10) | 🟡 |
 | 4 | DESIGN_SYSTEM.md §7'ye göre alerjen gösterimini MenuCard/Customizer/SummaryPanel'de fiilen uygula | 🟡 |
@@ -163,10 +198,12 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v10. Arşiv `session_log.md`'ye taşınmayı bekliyor (bu turun
-detayları henüz taşınmadı). v9'da #43/#44/#49 kapanmıştı; bu turda MASTER_PLAN.md ve
-ROADMAP.md kod ile hizalandı — Auth/Hesap sistemi artık her iki planlama belgesinde de
-resmi, sipariş kanalı isimlendirmesi tutarlı. Denetim sırasında 2 yeni düşük öncelikli
-açık uç bulundu (#50 AddToCartButton, #51 useCartStore — ikisi de hiç görülmedi). Kalan
-açık sorunlar: #10, #24, #27, #28/29, #32, #34, #38, #39, #50, #51.
-Güncellenme: 2026-07-22.*
+*BOWLERA SESSION_INDEX.md — v11. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
+ve Session 5 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil).
+v10'da (2026-07-22) MASTER_PLAN.md ve ROADMAP.md kod ile hizalanmış, #50/#51 açılmıştı.
+Bu turda (2026-08-01, Session 5): Netgsm/vergi levhası ilerlemesi kaydedildi, menü içerik
+yükleme süreci netleşti, **#52 (VisualPreview mimari çelişkisi) açıldı** — fotoğraf
+katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı, kod değişikliği
+gerekmiyor. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı çözüldü.
+Kalan açık sorunlar: #10, #24, #27, #28/29, #32, #34, #38, #39, #50, #51, #52.
+Güncellenme: 2026-08-01.*
