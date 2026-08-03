@@ -12,13 +12,40 @@
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
 > tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_log.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+> ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
+> kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
+> belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
+> Net etki: kural DEĞİŞMEDİ. Governance dosyalarında büyük kural değişikliği istenirse
+> önce açıkça onay alınmalı, geri dönüşü kolay olmayan varsayımlar yapılmamalı.
 
 ---
 
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev (2026-08-01, ikinci tur):    Pazaryeri müşteri verisi erişimi araştırıldı.
+Görev (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıfırdan
+          oluşturuldu — MASTER_PLAN.md §3 sitemap girdisi karşılandı, önceki site
+          denetiminde tespit edilen 404 kapandı. 6 dosya üretildi: page.tsx,
+          AboutHero.tsx, AboutStory.tsx, AboutValues.tsx, AboutImagePlaceholder.tsx,
+          page.test.tsx. Test sonucu kullanıcı tarafından koşuldu ve doğrulandı:
+          Vitest, 2/2 test geçti (happy path + edge case).
+          **Gerçek veri işlendi:** Kullanıcı gerçek şube adresini paylaştı — Çağlayan
+          Park Sokak No:30, Kağıthane, İstanbul. AboutStory.tsx'e kuruluş anlatısı
+          olarak işlendi (global marka VİZYONU olarak çerçevelendi, mevcut durummuş
+          gibi sunulmadı). ⚠️ Bu adres HENÜZ Şubeler sayfası/Footer.tsx/JSON-LD
+          şemasına işlenmedi — CONTENT_GUIDE.md §4 NAP tutarlılık kuralı gereği bu
+          senkron zorunlu, yeni açık iş olarak eklendi (#54).
+          **Site-geneli yazım kararı:** Kullanıcı onayıyla "kâse"→"kase" (â kaldırma)
+          kararı alındı. Hero.tsx'te uygulandı (CTA: "Kaseni Oluştur", alt paragraf
+          sağlıklı beslenme odaklı yeniden yazıldı — tedarikçi vurgusu kaldırıldı).
+          CONTENT_GUIDE.md'deki "Kâseni Yarat" örnekleri ve StepBase.tsx HENÜZ
+          güncellenmedi — karar kısmen uygulandı (#27 kısmen kapandı, #53 yeni açıldı).
+          **Governance düzeltmesi:** AGENT.md/CORE.md'deki "400 satır eşiği" kuralı
+          bir yanlış anlaşılma sonucu kısa süreliğine kaldırılıp aynı gün içinde
+          AYNEN geri getirildi (bkz. dosya üstü not). Net kural değişikliği yok,
+          sadece versiyon numaraları arttı (AGENT.md v1.5, CORE.md v1.4).
+
+Önceki tur (2026-08-01, ikinci tur):    Pazaryeri müşteri verisi erişimi araştırıldı.
           Yemeksepeti'nin resmi openapi.json şeması incelendi — `order.Customer`
           şemasındaki TÜM kişisel alanlar (isim, telefon, ulusal kimlik, teslimat
           adresi) açıkça "Masked for identity protection" olarak işaretli, sadece
@@ -60,35 +87,19 @@ Görev (2026-08-01, ikinci tur):    Pazaryeri müşteri verisi erişimi araştı
           kayıttaki ihlalin ta kendisi olduğu için kullanılmaması gerektiği
           açıkça bildirildi.
 
-Önceki tur (2026-07-22):
-          Oturum 4 devam ediyor. Bu turda MASTER_PLAN.md ve ROADMAP.md — kod ile
-          tutarlılık denetiminden geçirildi ve güncellendi:
-          - MASTER_PLAN.md v2.1 → v2.2: Sitemap'e /giris ve /hesap eklendi (Auth/Hesap
-            alt sistemi önceki sürümde hiç yoktu). Sipariş kanalı isimlendirmesi kodla
-            senkronlandı ("Paket Servis/Gel Al" → "Gel Al (pickup)/Masada (dine-in)").
-            Main listesi detayına BİLİNÇLİ dokunulmadı — CUSTOMIZER_SPEC.md zaten "tam
-            kontrat" olarak referans veriliyor.
-          - ROADMAP.md v1.1 → v1.3: Oturum 3 satırları bu sohbette bizzat görülen
-            dosyalarla (useCustomizerStore.ts, customizer-pricing.ts,
-            customizer-summary-format.ts) teyit edilip 🟢'ye güncellendi (AddToCartButton.tsx
-            hâlâ görülmedi, 🟡 kaldı). Oturum 4'e durum sütunu eklendi. YENİ: "Oturum 4.5 —
-            Auth/Hesap Sistemi" formal tablo olarak eklendi (kabul kriterleriyle) — Twilio
-            SMS kısıtı (#32) buradaki tek açık blokaj olarak işaretlendi.
-          Denetimde bulunan gerçek boşluklar kapatıldı: (1) Auth/DB/Hesap sistemi hiçbir
-          üst-seviye plan belgesinde yoktu, artık MASTER_PLAN + ROADMAP'te var. (2) Bitkisel
-          Protein Main listesi MASTER_PLAN'a bilinçli olarak taşınmadı (spec'e referans
-          korundu, çoğaltma önlendi).
 Blokaj:   🟠 Twilio TR SMS kısıtı (#32) — hâlâ TEK büyük darboğaz, artık hem SESSION_INDEX
           hem ROADMAP'te (Oturum 4.5) açıkça blokaj olarak işaretli.
-Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
-          (1) ARCHITECTURE.md §2.4'ü 5 adıma (+ Bitkisel Protein) güncelle (#10),
-          (2) customizerCatalog + "Benim Kâsem" fiyatı — fotoğraf çekimine bağlı (#24),
-          (3) Hero.tsx/StepBase.tsx'teki `â` karakteri (#27),
-          (4) Customizer adım başlıklarının Türkçeleştirilmesi/spec senkronu (#28/29),
-          (5) VisualPreview.tsx çağıranlarının tam repo taraması (#34),
-          (6) ProfileForm.tsx Tailwind sınıflarının DESIGN_SYSTEM.md ile teyidi (#38),
-          (7) AddToCartButton.tsx — hiç görülmedi, BSC-6 (çift tıklama koruması) teyit
-          edilmeli (ROADMAP.md Oturum 3 satırından yeni fark edilen açık uç — #50, yeni).
+Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, öncelikli —
+          "yayına vereceğiz" ifadesiyle aciliyet belirtildi),
+          (2) CONTENT_GUIDE.md'deki â örneklerini ve StepBase.tsx'i güncelle (#53, yeni),
+          (3) AboutValues.tsx ile ValueProps.tsx senkronunu teyit et (#55, yeni),
+          (4) ARCHITECTURE.md §2.4'ü 5 adıma (+ Bitkisel Protein) güncelle (#10),
+          (5) customizerCatalog + "Benim Kâsem" fiyatı — fotoğraf çekimine bağlı (#24),
+          (6) Customizer adım başlıklarının Türkçeleştirilmesi/spec senkronu (#28/29),
+          (7) VisualPreview.tsx çağıranlarının tam repo taraması (#34),
+          (8) ProfileForm.tsx Tailwind sınıflarının DESIGN_SYSTEM.md ile teyidi (#38),
+          (9) AddToCartButton.tsx — hiç görülmedi, BSC-6 (çift tıklama koruması) teyit
+          edilmeli (#50).
 ```
 
 ---
@@ -113,6 +124,8 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 23 | Adres/profil modeli: adres SADECE profil/sadakat verisi, checkout'u bloklamaz, `/hesap`'ta opsiyonel toplanır | ✅ Kod üretildi VE repo varlığı (route.ts, ProfileForm.tsx, page.tsx, rate-limit.ts — 4/4) doğrulandı (#41 kapandı) |
 | 🆕 | CategoryNav sekmeleri `BowlItem.category` enum'unu genişletmez — "vegan"/"sicak-tahil" sekmeleri `tags[]` üzerinden sanal filtrelenir (şema değişikliği yok) | ✅ `lib/menu-filters.ts`'te kod-içi gerekçesiyle doğrulandı (#35 kapandı) |
 | 🆕 | Alerjen gösterimi: kalori/protein ile aynı zorunluluk statüsü, gizlenemez/opsiyonel yapılamaz | ✅ `DESIGN_SYSTEM.md` §7 VE `AGENT.md` v1.3 protokol karşılığı tam (#7 ve #44 kapandı) |
+| 🆕 | Site-geneli "kâse"→"kase" yazım kararı (â kaldırıldı) — CTA'lar ve marka metinlerinde uygulanacak | ⚠️ Kısmen uygulandı: Hero.tsx tamam (2026-08-02). CONTENT_GUIDE.md örnekleri, StepBase.tsx henüz güncellenmedi (#53). |
+| 🆕 | Gerçek şube adresi: Çağlayan Park Sokak No:30, Kağıthane, İstanbul | ⚠️ Kısmen uygulandı: AboutStory.tsx'e kuruluş anlatısı olarak işlendi (2026-08-02). Şubeler/Footer/JSON-LD'ye henüz işlenmedi (#54). |
 
 *(Tam gerekçe/tarih dökümü için: `session_log.md`.)*
 
@@ -124,7 +137,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 |---|---|---|---|
 | 10 | 🟡 | ARCHITECTURE.md §2.4 hâlâ 4 adımlı customizer state'ini yansıtıyor — 5 adıma (+ Bitkisel Protein alt-varyantına) hiç güncellenmedi | `ARCHITECTURE.md` §2.4, `CUSTOMIZER_SPEC.md` §3.1 |
 | 24/17/18 | 🟡 | `customizerCatalog` + "Benim Kâsem" fiyatı hâlâ TEST VERİSİ — fotoğraf çekimine bilinçli ertelendi | `lib/customizer-data.ts`, `lib/menu-data.json` |
-| 27 | 🟢 | Hero.tsx CTA'sı ve StepBase.tsx açıklaması hâlâ `â` içeriyor (bilinçli ertelendi) | `components/home/Hero.tsx`, `StepBase.tsx` |
+| 27 | 🟢 | Hero.tsx KAPANDI (2026-08-02, â→a uygulandı). StepBase.tsx hâlâ â içeriyor — site-geneli karar kısmen uygulandı | `components/customizer/StepBase.tsx` |
 | 28/29 | 🟢 | Customizer adım başlıkları hâlâ İngilizce; `CUSTOMIZER_SPEC.md` §2 senkron değil | `components/customizer/Step*.tsx` |
 | 32 | 🟠 | Twilio TR SMS kısıtı — hem auth hem `/hesap` akışını canlıda test edilemez kılıyor. Çözüm: ücretli plan veya Netgsm/İleti Merkezi. Kullanıcı kararıyla bilinçli PARKLANDI. ROADMAP.md Oturum 4.5'te de blokaj olarak işaretli. | Twilio Console, `ROADMAP.md` Oturum 4.5 |
 | 34 | 🟢 | `VisualPreview.tsx`'in `className` davranışı — kısmi teyit edildi, tam repo taraması eksik | `components/customizer/VisualPreview.tsx` |
@@ -133,34 +146,29 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 50 | 🆕 🟢 | `AddToCartButton.tsx` bu sohbette hiç görülmedi — BSC-6 (çift tıklama koruması) ve geçersiz adımda disabled davranışı teyit edilmedi. ROADMAP.md Oturum 3 denetimi sırasında fark edildi. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🆕 🟢 | `useCartStore.ts` bu sohbette hiç görülmedi — CartDrawer portal fix'inin (Karar #18) hâlâ geçerli olduğu ve persist davranışının çalıştığı raporlanmış ama dosya üzerinden teyit edilmemiş. ROADMAP.md Oturum 4 denetimi sırasında fark edildi. | `store/useCartStore.ts` |
 | 52 | 🆕 🟡 | **Mimari çelişki:** VisualPreview.tsx + `lib/customizer-visual-layers.ts`, `/public/images/layers/` altında her malzeme için gerçek görsel dosyası bekliyor — klasör tamamen boş, PHOTOGRAPHY_GUIDE.md §8'in "CSS/SVG yeterli" notuyla çelişiyor. Karar: vektörel ikon seti üretilecek (fotoğraf değil), kod değişmeyecek. PHOTOGRAPHY_GUIDE.md §8 notu da bu karara göre düzeltilmeli (ayrı bir açık iş). | `components/customizer/VisualPreview.tsx`, `lib/customizer-visual-layers.ts`, `PHOTOGRAPHY_GUIDE.md` §8 |
+| 53 | 🆕 🟢 | CONTENT_GUIDE.md §1/§2'deki "Kâseni Yarat" örnekleri, site-geneli â→a kararına göre henüz güncellenmedi — sadece Hero.tsx yapıldı (#27 ile bağlantılı) | `CONTENT_GUIDE.md` §1, §2 |
+| 54 | 🆕 🟡 | Gerçek şube adresi (Çağlayan Park Sokak No:30, Kağıthane, İstanbul) AboutStory.tsx'e işlendi ama Şubeler sayfası/Footer.tsx/JSON-LD şemasına henüz işlenmedi — CONTENT_GUIDE.md §4 NAP tutarlılık kuralı gereği zorunlu. Kullanıcı "yayına vereceğiz" diyerek aciliyet belirtti. | `Footer.tsx`, Şubeler sayfası (henüz yok), JSON-LD şeması |
+| 55 | 🆕 🟢 | `AboutValues.tsx`'teki 3 değer listesi (MASTER_PLAN §3.1'den alındı), `components/home/ValueProps.tsx` ile senkron teyit edilmedi — o dosya bu sohbette hiç görülmedi | `components/about/AboutValues.tsx`, `components/home/ValueProps.tsx` |
 
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49 —
 > detaylar önceki SESSION_INDEX sürümlerinde ve bu sohbetin geçmişinde.
 >
-> **KAPANDI (bu sohbet, bu tur — 2026-07-22):**
-> - **Doküman tutarlılık denetimi** — Kullanıcı isteğiyle MASTER_PLAN.md ve ROADMAP.md,
->   kodun (CUSTOMIZER_SPEC.md, types, store) güncel durumuyla karşılaştırıldı. 3 gerçek
->   boşluk bulundu: (1) Auth/Hesap sistemi hiçbir üst-seviye plan belgesinde yoktu —
->   MASTER_PLAN.md v2.2 sitemap'ine ve ROADMAP.md'ye (yeni "Oturum 4.5" tablosu, kabul
->   kriterleriyle) işlendi. (2) Sipariş kanalı isimlendirmesi ("Paket Servis/Gel Al")
->   kodla ("pickup"/"dine-in") uyuşmuyordu — MASTER_PLAN.md'de netleştirildi. (3) ROADMAP.md
->   çok eskiydi (v1.1, 18 Temmuz) — Oturum 3 satırları bu sohbette görülen dosyalarla teyit
->   edilip güncellendi, Oturum 4'e durum sütunu eklendi. Bitkisel Protein Main listesi
->   BİLİNÇLİ olarak MASTER_PLAN'a taşınmadı (CUSTOMIZER_SPEC.md zaten "tam kontrat"
->   referansı — Kural #5, gereksiz çoğaltma önlendi). Bu denetim sırasında 2 yeni açık
->   uç fark edildi: AddToCartButton.tsx (#50) ve useCartStore.ts (#51) — ikisi de bu
->   sohbette hiç görülmedi, sadece raporlanan durumlarına güvenildi.
+> **KAPANDI (bu sohbet, bu tur — 2026-08-02):**
+> - **Hakkımızda sayfası (404 kapandı):** `/hakkimizda` 6 dosyayla oluşturuldu, test
+>   edildi (Vitest, 2/2 geçti — kullanıcı tarafından koşulup teyit edildi). Gerçek
+>   şube adresi içeriğe işlendi.
+> - **Hero.tsx â→a (site-geneli kararın ilk uygulaması):** CTA "Kaseni Oluştur", alt
+>   paragraf sağlıklı beslenme odaklı yeniden yazıldı.
+> - **AGENT.md/CORE.md dosya karışıklığı:** AGENT.md yanlışlıkla PUSULA projesinin
+>   dosyasıyla yeniden yüklenmişti, fark edilip doğru (Bowlera web sitesi) sürüm
+>   tekrar istenip teyit edildi.
+> - **"400 satır eşiği" kuralı — kaldırılıp geri getirildi:** Kullanıcı önce kuralı
+>   kaldırmayı istedi (CORE.md §7.1, AGENT.md 3 referans), sonra aynı gün bunun
+>   yanlış anlaşılma olduğunu belirtti — kural AYNEN eski hâline döndürüldü
+>   (AGENT.md v1.4→v1.5, CORE.md v1.3→v1.4). Net kural değişikliği yok.
 >
 > Detaylı gerekçe/dosya alıntıları bu sohbetin geçmişinde; bir sonraki turda `session_log.md`'ye
 > taşınmalı (henüz taşınmadı, bu tur da dahil).
->
-> **BU TUR (2026-08-01):**
-> - VisualPreview.tsx incelendi, #52 (yeni, yukarıda) açıldı — fotoğraf katmanlama yerine
->   vektörel ikon sistemine geçiş kararlaştırıldı, kod değişikliği gerekmiyor.
-> - SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı çözüldü — v2'nin kayıtlı ihlalin
->   kendisi olduğu (bu dosyanın en üstündeki not) kullanıcıya tekrar doğrulandı, bu dosyanın
->   (SESSION_INDEX.md) tek geçerli kaynak olduğu teyit edildi. Yeni bir kapanış gerekmedi,
->   zaten var olan uyarı notu geçerliliğini korudu.
 
 ---
 
@@ -173,8 +181,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, statik veri, CategoryNav+FilterPanel, customizer 4→5 adım kararı | ✅ Tamamlandı |
 | 3 | 2026-07-18 | Zustand store + pricing + customizer data, masaüstü UI bileşenleri (kesintiye uğradı) | ✅ Büyük ölçüde tamam, bu sohbette dosya-dosya teyit edildi |
 | 4 (devam) | 2026-07-18 → 07-22 (11 bölüm) | Sepet/kanal seçimi, Türkçeleştirme, â düzeltmesi, CartDrawer bugfix, auth mimarisi+kod+DB+UI, adres/profil (#23), test triyajı, menü animasyonu, ARCHITECTURE.md v1.3→v1.4, rate-limit üretimi, repo tutarsızlığı keşfi (#42 kapandı), v2 sıkıştırma turunda düşen maddelerin geri bulunması, DESIGN_SYSTEM.md §7 (#7 kapandı), Karar #11/#22 Bitkisel Protein uçtan uca (canlıda doğrulandı), MobileSummaryDrawer format konsolidasyonu (#43), AGENT.md v1.3 alerjen self-check (#44), CUSTOMIZER_SPEC.md §3.5 (#49), **MASTER_PLAN.md v2.2 + ROADMAP.md v1.3 tutarlılık denetimi ve güncellemesi** (Auth/Hesap sitemap'e ve Oturum 4.5'e işlendi, #50/#51 yeni fark edildi) | 🟡 Devam ediyor — Twilio (#32) TEK gerçek darboğaz |
-| 5 | 2026-08-01 | Netgsm sözleşmesi onaylandı (vergi levhası pazartesi yüklenecek — Twilio/#32 çözümü netleşiyor). Menü içerik/görsel yükleme süreci netleştirildi (CMS yok, kod+deploy ile — 40-50 ürün tek seferlik iş). **VisualPreview.tsx mimari denetimi:** `/public/images/layers/` klasörünün boş olduğu ve PHOTOGRAPHY_GUIDE.md §8 notuyla çeliştiği tespit edildi (#52, yeni). Fotoğraf katmanlama yerine vektörel ikon sistemine geçiş kararlaştırıldı. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı kalıcı olarak çözüldü (v2 = kayıtlı ihlalin kendisi, kullanılmayacak). | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #52 yeni açıldı 
-| 5 (devam) | 2026-08-01 | Pazaryeri müşteri verisi erişimi araştırıldı — Yemeksepeti openapi.json şeması üzerinden tüm kişisel alanların ("Masked for identity protection") bilinçli olarak maskelendiği kanıtlandı. Gerçek yol olarak Boostfeel benzeri QR-tabanlı fiziksel sadakat kaydı bulundu (pazaryeri API'sinden değil, müşterinin gel-al sırasında kendi isteğiyle QR okutmasından geliyor). Karar #12'deki `loyaltyPoints` açık sorusuyla ilişkilendirildi. | 🟡 Devam ediyor |
+| 5 | 2026-08-01 → 08-02 (3 tur) | (1) 2026-08-01: Netgsm sözleşmesi onaylandı, VisualPreview.tsx mimari denetimi (#52 açıldı, vektörel ikon kararı). (2) 2026-08-01: Pazaryeri müşteri verisi erişimi araştırıldı, Boostfeel/QR-tabanlı sadakat modeli bulundu (Karar #12 ile ilişkilendirildi). (3) 2026-08-02: Hakkımızda sayfası oluşturuldu (gerçek adresle, test edildi), Hero.tsx â→a uygulandı, AGENT.md/CORE.md "400 satır eşiği" kuralı kaldırılıp aynı gün geri getirildi (yanlış anlaşılma), AGENT.md dosya karışıklığı (PUSULA/Bowlera) çözüldü. | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #53/#54/#55 yeni açıldı |
 
 *(Tam turn-by-turn detay: `session_log.md`.)*
 
@@ -186,7 +193,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 |---|---|
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel, Vercel Production'da deploy'lar Ready |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 artık kod ile hizalı (Auth/Hesap, kanal isimlendirmesi, Oturum 3/4 durumları) |
-| Test Suite | 🟢 `Header.test.tsx`, `customizer-summary-format.test.ts`, `menu-filters.test.ts` doğrulandı. Genel `npm test` bu aralıkta tekrar çalıştırılmadı. |
+| Test Suite | 🟢 `Header.test.tsx`, `customizer-summary-format.test.ts`, `menu-filters.test.ts`, `app/hakkimizda/page.test.tsx` (yeni, 2/2 geçti — Vitest, kullanıcı tarafından koşuldu) doğrulandı. Genel `npm test` bu aralıkta tekrar çalıştırılmadı. |
 | Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı, artık MASTER_PLAN/ROADMAP'te resmi. 🟠 OTP fonksiyonel test Twilio kısıtı yüzünden yapılamıyor (#32) |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu |
@@ -198,6 +205,7 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | Bitkisel Protein (Main alt-varyant) | ✅ Kod + spec + canlı doğrulama tam. MASTER_PLAN'a bilinçli taşınmadı (spec referansı). |
 | Sepet (`useCartStore.ts`, `AddToCartButton.tsx`) | 🟡 Bu sohbette hiç görülmedi — CartDrawer bugfix'i raporlandı ama teyit edilmedi (#50, #51 yeni) |
 | Customizer Görsel Önizleme (VisualPreview) | 🔴 Kod çalışıyor ama görsel katmanların hepsi eksik (`/public/images/layers/` boş) — şu an boş daire gösteriyor. Vektörel ikon seti üretimi bekleniyor (#52, yeni) |
+| Hakkımızda Sayfası (`/hakkimizda`) | 🟢 Kod tamam, test geçti (2/2). Gerçek adres var; kuruluş yılı/kurucu notu yok (içerik kısmen taslak). Şubeler/Footer/JSON-LD adres senkronu bekleniyor (#54) |
 
 ---
 
@@ -206,29 +214,33 @@ Sıradaki: Kalan açık sorunların hepsi 🟡/🟢 düşük öncelikli:
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 1 | Twilio kararı: ücretli plan veya yerel sağlayıcı — TEK büyük darboğaz (#32, parklandı) | 🟠 |
-| 1b | Vektörel ikon seti üretimi (25-30 malzeme, marka paletiyle uyumlu) — kullanıcı üretici bulacak/Claude taslak üretecek, netleşmedi (#52, yeni) | 🟡 |
-| 1c | PHOTOGRAPHY_GUIDE.md §8 notu düzeltilmeli — "CSS/SVG yeterli" ifadesi kodla çelişiyor (#52 ile bağlantılı) | 🟢 |
-| 1d | **Pazaryeri müşteri verisi erişilemez (araştırma tamamlandı, 2026-08-01):** Boostfeel (ya da benzeri QR tabanlı sadakat çözümü) değerlendirilmeli — Karar #12'deki loyaltyPoints mekaniği bu bulguyla birlikte netleştirilmeli | 🟡 |
-| 2 | `AddToCartButton.tsx` + `useCartStore.ts` paylaşılırsa BSC-6 ve persist davranışını teyit et (#50/#51, yeni) | 🟢 |
-| 3 | ARCHITECTURE.md §2.4'ü 5 adımlı customizer'a (Bitkisel Protein dahil) güncelle (#10) | 🟡 |
-| 4 | DESIGN_SYSTEM.md §7'ye göre alerjen gösterimini MenuCard/Customizer/SummaryPanel'de fiilen uygula | 🟡 |
-| 5 | `customizerCatalog` + fiyat verisi — fotoğraf çekimine bağlı (#24) | 🟡 (dış olay) |
-| 6 | VisualPreview çağıranlarının tam repo taraması ile #34'ü kesin kapat | 🟢 |
-| 7 | ProfileForm Tailwind sınıflarını DESIGN_SYSTEM.md ile teyit et (#38) | 🟢 |
-| 8 | Hero.tsx/StepBase.tsx'teki `â` karakterini düzelt (#27) | 🟢 |
-| 9 | Customizer adım başlıklarını Türkçeleştir / spec ile senkronla (#28/29) | 🟢 |
-| 10 | Genel `npm test` çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
+| 2 | Gerçek şube adresini Şubeler sayfası/Footer.tsx/JSON-LD şemasına işle (#54, yeni — kullanıcı "yayına vereceğiz" ifadesiyle aciliyet belirtti) | 🟡 |
+| 3 | CONTENT_GUIDE.md §1/§2'deki â örneklerini ve StepBase.tsx'i güncelle (#53, yeni) | 🟢 |
+| 4 | AboutValues.tsx ile ValueProps.tsx senkronunu teyit et (#55, yeni) | 🟢 |
+| 5 | Vektörel ikon seti üretimi (25-30 malzeme, marka paletiyle uyumlu) — kullanıcı üretici bulacak/Claude taslak üretecek, netleşmedi (#52) | 🟡 |
+| 6 | PHOTOGRAPHY_GUIDE.md §8 notu düzeltilmeli — "CSS/SVG yeterli" ifadesi kodla çelişiyor (#52 ile bağlantılı) | 🟢 |
+| 7 | **Pazaryeri müşteri verisi erişilemez (araştırma tamamlandı):** Boostfeel (ya da benzeri QR tabanlı sadakat çözümü) değerlendirilmeli — Karar #12'deki loyaltyPoints mekaniği bu bulguyla birlikte netleştirilmeli | 🟡 |
+| 8 | `AddToCartButton.tsx` + `useCartStore.ts` paylaşılırsa BSC-6 ve persist davranışını teyit et (#50/#51) | 🟢 |
+| 9 | ARCHITECTURE.md §2.4'ü 5 adımlı customizer'a (Bitkisel Protein dahil) güncelle (#10) | 🟡 |
+| 10 | DESIGN_SYSTEM.md §7'ye göre alerjen gösterimini MenuCard/Customizer/SummaryPanel'de fiilen uygula | 🟡 |
+| 11 | `customizerCatalog` + fiyat verisi — fotoğraf çekimine bağlı (#24) | 🟡 (dış olay) |
+| 12 | VisualPreview çağıranlarının tam repo taraması ile #34'ü kesin kapat | 🟢 |
+| 13 | ProfileForm Tailwind sınıflarını DESIGN_SYSTEM.md ile teyit et (#38) | 🟢 |
+| 14 | Customizer adım başlıklarını Türkçeleştir / spec ile senkronla (#28/29) | 🟢 |
+| 15 | Genel `npm test` çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v12. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
-ve Session 5 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil).
-v10'da (2026-07-22) MASTER_PLAN.md ve ROADMAP.md kod ile hizalanmış, #50/#51 açılmıştı.
-Session 5, iki turda ilerledi (2026-08-01): (1) Netgsm/vergi levhası ilerlemesi, menü
-içerik süreci netleşti, **#52 (VisualPreview mimari çelişkisi)** açıldı — vektörel ikon
-sistemine geçiş kararlaştırıldı. (2) Pazaryeri müşteri verisi erişimi araştırıldı —
-maskelendiği kanıtlandı, Boostfeel/QR-tabanlı sadakat modeli gerçek yol olarak bulundu,
-Karar #12 ile ilişkilendirildi. SESSION_INDEX.md vs SESSION_INDEX_v2.md karışıklığı
-kalıcı çözüldü.
-Kalan açık sorunlar: #10, #24, #27, #28/29, #32, #34, #38, #39, #50, #51, #52.
-Güncellenme: 2026-08-01.*
+*BOWLERA SESSION_INDEX.md — v13. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
+ve Session 5 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil,
+bkz. dosya sonu satır sayımı).
+v12'den değişenler (2026-08-02, Session 5 üçüncü tur): Hakkımızda sayfası oluşturuldu ve
+test edildi (2/2 geçti); Hero.tsx â→a kararına göre güncellendi; gerçek şube adresi
+(Çağlayan Park Sokak No:30, Kağıthane, İstanbul) AboutStory.tsx'e işlendi ama Şubeler/
+Footer/JSON-LD'ye henüz işlenmedi (#54, yeni, öncelikli); AGENT.md/CORE.md'deki "400
+satır eşiği" kuralı bir yanlış anlaşılma sonucu kaldırılıp aynı gün geri getirildi (net
+değişiklik yok); AGENT.md dosya karışıklığı (PUSULA/Bowlera) çözüldü. Yeni açık sorunlar:
+#53 (CONTENT_GUIDE.md â güncellemesi), #54 (adres senkronu), #55 (ValueProps senkronu).
+Kalan açık sorunlar: #10, #24, #27 (kısmen), #28/29, #32, #34, #38, #39, #50, #51, #52,
+#53, #54, #55.
+Güncellenme: 2026-08-02.*
