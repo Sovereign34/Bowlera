@@ -33,7 +33,11 @@ Görev (2026-08-05, Session 6):    Netgsm SMS başlık başvurusu esnaf odası (
           gerekmiyor. `verify/route.ts` DEĞİŞMEDİ (kanaldan bağımsız doğrulama).
           **Kod üretildi:** `lib/auth/send-otp.ts` (yeni, fallback zinciri), `app/api/auth/otp/send/route.ts`
           (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test — happy/edge/failure).
-          Kalite 5/5, Güvenlik 8/8. **Kullanıcı tarafından henüz koşulmadı/push edilmedi.**
+          Kalite 5/5, Güvenlik 8/8. **Test koşuldu ve ekran görüntüsüyle doğrulandı: 3/3 PASS**
+          (`npx vitest run lib/auth/send-otp.test.ts` — happy path, edge case, failure path).
+          Loglardaki `OTP_CHANNEL_FAILED` satırları failure-path testinin kasıtlı çift-kanal
+          hatası senaryosuna ait, BSC-4 loglamasının çalıştığının kanıtı — hata değil. **Kod
+          HENÜZ push edilmedi.**
           Yeni Açık Sorun #56: Twilio WhatsApp Business Sender onay durumu bilinmiyor.
 
 Önceki tur (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıfırdan
@@ -103,8 +107,9 @@ Görev (2026-08-05, Session 6):    Netgsm SMS başlık başvurusu esnaf odası (
 Blokaj:   🟠 Twilio TR SMS kısıtı (#32) + Netgsm esnaf odası engeli — WhatsApp fallback koduyla
           paralel bir çözüm yolu açıldı ama canlı test edilmedi. #56 (WhatsApp Sender onayı)
           netleşmeden kesin çözüldü sayılamaz.
-Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, kod push et, Twilio
-          Console'da WhatsApp Business Sender onayını kontrol et (#56),
+Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts` 3/3 PASS teyit edildi ✅ (ekran görüntüsü) —
+          kalan adım: kod push et, Twilio Console'da WhatsApp Business Sender onayını
+          kontrol et (#56),
           (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, öncelikli —
           "yayına vereceğiz" ifadesiyle aciliyet belirtildi),
           (2) CONTENT_GUIDE.md'deki â örneklerini ve StepBase.tsx'i güncelle (#53, yeni),
@@ -189,7 +194,7 @@ Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, k
 
 ---
 
-## SESSION ÖZET (son 5)
+## SESSION ÖZET (tümü — 0'dan 6'ya)
 
 | Session | Tarih | Ana içerik | Durum |
 |---|---|---|---|
@@ -199,7 +204,7 @@ Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, k
 | 3 | 2026-07-18 | Zustand store + pricing + customizer data, masaüstü UI bileşenleri (kesintiye uğradı) | ✅ Büyük ölçüde tamam, bu sohbette dosya-dosya teyit edildi |
 | 4 (devam) | 2026-07-18 → 07-22 (11 bölüm) | Sepet/kanal seçimi, Türkçeleştirme, â düzeltmesi, CartDrawer bugfix, auth mimarisi+kod+DB+UI, adres/profil (#23), test triyajı, menü animasyonu, ARCHITECTURE.md v1.3→v1.4, rate-limit üretimi, repo tutarsızlığı keşfi (#42 kapandı), v2 sıkıştırma turunda düşen maddelerin geri bulunması, DESIGN_SYSTEM.md §7 (#7 kapandı), Karar #11/#22 Bitkisel Protein uçtan uca (canlıda doğrulandı), MobileSummaryDrawer format konsolidasyonu (#43), AGENT.md v1.3 alerjen self-check (#44), CUSTOMIZER_SPEC.md §3.5 (#49), **MASTER_PLAN.md v2.2 + ROADMAP.md v1.3 tutarlılık denetimi ve güncellemesi** (Auth/Hesap sitemap'e ve Oturum 4.5'e işlendi, #50/#51 yeni fark edildi) | 🟡 Devam ediyor — Twilio (#32) TEK gerçek darboğaz |
 | 5 | 2026-08-01 → 08-02 (3 tur) | (1) 2026-08-01: Netgsm sözleşmesi onaylandı, VisualPreview.tsx mimari denetimi (#52 açıldı, vektörel ikon kararı). (2) 2026-08-01: Pazaryeri müşteri verisi erişimi araştırıldı, Boostfeel/QR-tabanlı sadakat modeli bulundu (Karar #12 ile ilişkilendirildi). (3) 2026-08-02: Hakkımızda sayfası oluşturuldu (gerçek adresle, test edildi), Hero.tsx â→a uygulandı, AGENT.md/CORE.md "400 satır eşiği" kuralı kaldırılıp aynı gün geri getirildi (yanlış anlaşılma), AGENT.md dosya karışıklığı (PUSULA/Bowlera) çözüldü. | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #53/#54/#55 yeni açıldı |
-| 6 | 2026-08-05 | Netgsm'in de esnaf odası/marka tescili istediği keşfedildi (Session 5'teki "sözleşme onaylandı" notuyla çelişiyor — netleştirilmeli). SMS başlık onay hiyerarşisi araştırıldı (vergi levhası/işyeri ruhsatı yeterli olabilir). Kullanıcı onayıyla WhatsApp OTP birincil + SMS fallback kararı alındı, Twilio Verify'ın `channel` parametresiyle tek entegrasyonla çözülebildiği bulundu. `lib/auth/send-otp.ts` + güncellenmiş `send/route.ts` + test dosyası üretildi (5/5, 8/8). #56 yeni açıldı. | 🟡 Devam ediyor — kod push/test bekliyor, #32 WhatsApp'la aşılabilir ama doğrulanmadı |
+| 6 | 2026-08-05 | Netgsm'in de esnaf odası/marka tescili istediği keşfedildi (Session 5'teki "sözleşme onaylandı" notuyla çelişiyor — netleştirilmeli). SMS başlık onay hiyerarşisi araştırıldı (vergi levhası/işyeri ruhsatı yeterli olabilir). Kullanıcı onayıyla WhatsApp OTP birincil + SMS fallback kararı alındı, Twilio Verify'ın `channel` parametresiyle tek entegrasyonla çözülebildiği bulundu. `lib/auth/send-otp.ts` + güncellenmiş `send/route.ts` + test dosyası üretildi (5/5, 8/8). Test koşuldu, 3/3 PASS ekran görüntüsüyle doğrulandı. #56 yeni açıldı. | 🟡 Devam ediyor — kod push bekliyor, #32 WhatsApp'la aşılabilir ama canlı doğrulanmadı |
 
 *(Tam turn-by-turn detay: `session_log.md`.)*
 
@@ -211,8 +216,8 @@ Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, k
 |---|---|
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel, Vercel Production'da deploy'lar Ready |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 artık kod ile hizalı (Auth/Hesap, kanal isimlendirmesi, Oturum 3/4 durumları) |
-| Test Suite | 🟢 `Header.test.tsx`, `customizer-summary-format.test.ts`, `menu-filters.test.ts`, `app/hakkimizda/page.test.tsx` (yeni, 2/2 geçti — Vitest, kullanıcı tarafından koşuldu) doğrulandı. Genel `npm test` bu aralıkta tekrar çalıştırılmadı. |
-| Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı, artık MASTER_PLAN/ROADMAP'te resmi. 🟡 WhatsApp→SMS fallback koda eklendi (2026-08-05), henüz push/test edilmedi — OTP fonksiyonel test hâlâ yapılamıyor (#32, #56) |
+| Test Suite | 🟢 `Header.test.tsx`, `customizer-summary-format.test.ts`, `menu-filters.test.ts`, `app/hakkimizda/page.test.tsx` (2/2), `lib/auth/send-otp.test.ts` (yeni, 3/3 PASS — kullanıcı tarafından koşuldu ve ekran görüntüsüyle doğrulandı, 2026-08-05) doğrulandı. Genel `npm test` bu aralıkta tekrar çalıştırılmadı. |
+| Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı, artık MASTER_PLAN/ROADMAP'te resmi. 🟡 WhatsApp→SMS fallback koda eklendi VE unit test 3/3 doğrulandı (2026-08-05), henüz PUSH edilmedi — canlı/fonksiyonel OTP testi hâlâ yapılamıyor (#32, #56) |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu |
 | Veritabanı | 🟢 Neon Postgres çalışıyor |
@@ -249,16 +254,23 @@ Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, k
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v14. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4,
-5 ve 6 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil,
-bkz. dosya sonu satır sayımı).
+*BOWLERA SESSION_INDEX.md — v15. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4,
+5 ve 6 detayları henüz taşınmadı — dosya ~265 satır, 400 satır eşiğinin altında, taşıma
+zorunlu değil).
+v14'ten değişenler (2026-08-05, Session 6, bu tur): `lib/auth/send-otp.test.ts` kullanıcı
+tarafından koşuldu ve ekran görüntüsüyle DOĞRULANDI — 3/3 PASS (happy path, edge case,
+failure path). Loglardaki `OTP_CHANNEL_FAILED` girdileri failure-path testinin kasıtlı
+senaryosu, hata değil — BSC-4 loglaması çalışıyor. Sıradaki liste ve GENEL DURUM tablosu
+buna göre güncellendi. Kalan tek adım: kod push + Twilio Console'da WhatsApp Sender
+onay kontrolü (#56). Ayrıca dosya-içi tutarsızlık düzeltildi: "SESSION ÖZET (son 5)"
+başlığı 7 satır (Session 0-6) içeriyordu, başlık içerikle uyumlu hale getirildi.
 v13'ten değişenler (2026-08-05, Session 6): Netgsm SMS başlık başvurusu esnaf odası (9000 TL)/
 marka tescili istediği için bloke oldu (⚠️ Session 5'teki "Netgsm sözleşmesi onaylandı" notuyla
 çelişiyor, netleştirilmeli). WhatsApp OTP birincil + SMS fallback kararı alındı (Twilio Verify
 `channel` parametresiyle tek entegrasyon, ayrı Meta entegrasyonu gerekmiyor). `lib/auth/send-otp.ts`
 (yeni), `app/api/auth/otp/send/route.ts` (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test)
-üretildi — Kalite 5/5, Güvenlik 8/8, KULLANICI TARAFINDAN HENÜZ KOŞULMADI/PUSH EDİLMEDİ.
-`verify/route.ts` DEĞİŞMEDİ. Yeni açık sorun: #56 (Twilio WhatsApp Sender onay durumu bilinmiyor).
+üretildi — Kalite 5/5, Güvenlik 8/8. `verify/route.ts` DEĞİŞMEDİ. Yeni açık sorun: #56 (Twilio
+WhatsApp Sender onay durumu bilinmiyor).
 #32 KAPANMADI ama WhatsApp fallback'le fiilen aşılabilir hâle geldi — canlı doğrulama bekliyor.
 Kalan açık sorunlar: #10, #24, #27 (kısmen), #28/29, #32, #34, #38, #39, #50, #51, #52,
 #53, #54, #55, #56.
