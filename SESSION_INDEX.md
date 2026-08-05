@@ -23,7 +23,20 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıfırdan
+Görev (2026-08-05, Session 6):    Netgsm SMS başlık başvurusu esnaf odası (9000 TL)/marka tescili
+          istediği için bloke oldu. Araştırma: SMS başlık onayı hiyerarşisi netleştirildi — vergi
+          levhasında ticari ünvan varsa veya işyeri açma ruhsatında ticari ünvan yazıyorsa esnaf
+          odası/marka tescili GEREKMİYOR. Kullanıcı, ruhsat aşamasında Bowlera adını kullanabileceğini
+          teyit etti (Netgsm konusu bu turda kesin KAPANMADI, paralel yol açıldı).
+          **Karar (kullanıcı onayı ile):** WhatsApp OTP birincil, SMS fallback ikincil kanal. Kritik
+          bulgu: Twilio Verify zaten `channel: "whatsapp"` destekliyor — ayrı Meta entegrasyonu
+          gerekmiyor. `verify/route.ts` DEĞİŞMEDİ (kanaldan bağımsız doğrulama).
+          **Kod üretildi:** `lib/auth/send-otp.ts` (yeni, fallback zinciri), `app/api/auth/otp/send/route.ts`
+          (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test — happy/edge/failure).
+          Kalite 5/5, Güvenlik 8/8. **Kullanıcı tarafından henüz koşulmadı/push edilmedi.**
+          Yeni Açık Sorun #56: Twilio WhatsApp Business Sender onay durumu bilinmiyor.
+
+Önceki tur (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıfırdan
           oluşturuldu — MASTER_PLAN.md §3 sitemap girdisi karşılandı, önceki site
           denetiminde tespit edilen 404 kapandı. 6 dosya üretildi: page.tsx,
           AboutHero.tsx, AboutStory.tsx, AboutValues.tsx, AboutImagePlaceholder.tsx,
@@ -87,9 +100,12 @@ Görev (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıf
           kayıttaki ihlalin ta kendisi olduğu için kullanılmaması gerektiği
           açıkça bildirildi.
 
-Blokaj:   🟠 Twilio TR SMS kısıtı (#32) — hâlâ TEK büyük darboğaz, artık hem SESSION_INDEX
-          hem ROADMAP'te (Oturum 4.5) açıkça blokaj olarak işaretli.
-Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, öncelikli —
+Blokaj:   🟠 Twilio TR SMS kısıtı (#32) + Netgsm esnaf odası engeli — WhatsApp fallback koduyla
+          paralel bir çözüm yolu açıldı ama canlı test edilmedi. #56 (WhatsApp Sender onayı)
+          netleşmeden kesin çözüldü sayılamaz.
+Sıradaki: (0) YENİ, en öncelikli: `send-otp.test.ts`'i koşup 3/3 teyit et, kod push et, Twilio
+          Console'da WhatsApp Business Sender onayını kontrol et (#56),
+          (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, öncelikli —
           "yayına vereceğiz" ifadesiyle aciliyet belirtildi),
           (2) CONTENT_GUIDE.md'deki â örneklerini ve StepBase.tsx'i güncelle (#53, yeni),
           (3) AboutValues.tsx ile ValueProps.tsx senkronunu teyit et (#55, yeni),
@@ -139,7 +155,7 @@ Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, �
 | 24/17/18 | 🟡 | `customizerCatalog` + "Benim Kâsem" fiyatı hâlâ TEST VERİSİ — fotoğraf çekimine bilinçli ertelendi | `lib/customizer-data.ts`, `lib/menu-data.json` |
 | 27 | 🟢 | Hero.tsx KAPANDI (2026-08-02, â→a uygulandı). StepBase.tsx hâlâ â içeriyor — site-geneli karar kısmen uygulandı | `components/customizer/StepBase.tsx` |
 | 28/29 | 🟢 | Customizer adım başlıkları hâlâ İngilizce; `CUSTOMIZER_SPEC.md` §2 senkron değil | `components/customizer/Step*.tsx` |
-| 32 | 🟠 | Twilio TR SMS kısıtı — hem auth hem `/hesap` akışını canlıda test edilemez kılıyor. Çözüm: ücretli plan veya Netgsm/İleti Merkezi. Kullanıcı kararıyla bilinçli PARKLANDI. ROADMAP.md Oturum 4.5'te de blokaj olarak işaretli. | Twilio Console, `ROADMAP.md` Oturum 4.5 |
+| 32 | 🟠 | Twilio TR SMS kısıtı — hem auth hem `/hesap` akışını canlıda test edilemez kılıyor. **[Güncelleme, 2026-08-05]:** Netgsm alternatifi de esnaf odası (9000 TL)/marka tescili istiyor — ayrı bir blokaj. Paralel çözüm olarak WhatsApp OTP fallback'i KODLANDI (aynı Twilio Verify Service, `channel: "whatsapp"`) — bu kısıtı fiilen aşabilir ama canlı test edilmedi, KAPANMADI. Bkz. #56. | Twilio Console, `ROADMAP.md` Oturum 4.5, `lib/auth/send-otp.ts` |
 | 34 | 🟢 | `VisualPreview.tsx`'in `className` davranışı — kısmi teyit edildi, tam repo taraması eksik | `components/customizer/VisualPreview.tsx` |
 | 38 | 🟢 | `ProfileForm.tsx` Tailwind sınıfları (`bg-olive-600` vb.) DESIGN_SYSTEM.md ile teyit edilmedi | `components/account/ProfileForm.tsx` |
 | 39 | 🟠 | `/hesap` akışı Twilio kısıtı yüzünden canlıda hiç fonksiyonel test edilemedi (aslında #32'nin bir sonucu) | `app/hesap/page.tsx` |
@@ -149,6 +165,7 @@ Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, �
 | 53 | 🆕 🟢 | CONTENT_GUIDE.md §1/§2'deki "Kâseni Yarat" örnekleri, site-geneli â→a kararına göre henüz güncellenmedi — sadece Hero.tsx yapıldı (#27 ile bağlantılı) | `CONTENT_GUIDE.md` §1, §2 |
 | 54 | 🆕 🟡 | Gerçek şube adresi (Çağlayan Park Sokak No:30, Kağıthane, İstanbul) AboutStory.tsx'e işlendi ama Şubeler sayfası/Footer.tsx/JSON-LD şemasına henüz işlenmedi — CONTENT_GUIDE.md §4 NAP tutarlılık kuralı gereği zorunlu. Kullanıcı "yayına vereceğiz" diyerek aciliyet belirtti. | `Footer.tsx`, Şubeler sayfası (henüz yok), JSON-LD şeması |
 | 55 | 🆕 🟢 | `AboutValues.tsx`'teki 3 değer listesi (MASTER_PLAN §3.1'den alındı), `components/home/ValueProps.tsx` ile senkron teyit edilmedi — o dosya bu sohbette hiç görülmedi | `components/about/AboutValues.tsx`, `components/home/ValueProps.tsx` |
+| 56 | 🆕 🟡 | Twilio hesabında WhatsApp Business Sender'ın onaylı/aktif olup olmadığı bilinmiyor (Meta Business doğrulaması gerektiren ayrı bir ön koşul, esnaf odası/patent süreciyle ilgisi yok). Onaylanmadan `whatsapp` denemesi başarısız olur, kod otomatik SMS'e düşer — sistem kırılmaz ama WhatsApp avantajı devreye girmez. | Twilio Console → WhatsApp Senders, `lib/auth/send-otp.ts` |
 
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49 —
 > detaylar önceki SESSION_INDEX sürümlerinde ve bu sohbetin geçmişinde.
@@ -182,6 +199,7 @@ Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, �
 | 3 | 2026-07-18 | Zustand store + pricing + customizer data, masaüstü UI bileşenleri (kesintiye uğradı) | ✅ Büyük ölçüde tamam, bu sohbette dosya-dosya teyit edildi |
 | 4 (devam) | 2026-07-18 → 07-22 (11 bölüm) | Sepet/kanal seçimi, Türkçeleştirme, â düzeltmesi, CartDrawer bugfix, auth mimarisi+kod+DB+UI, adres/profil (#23), test triyajı, menü animasyonu, ARCHITECTURE.md v1.3→v1.4, rate-limit üretimi, repo tutarsızlığı keşfi (#42 kapandı), v2 sıkıştırma turunda düşen maddelerin geri bulunması, DESIGN_SYSTEM.md §7 (#7 kapandı), Karar #11/#22 Bitkisel Protein uçtan uca (canlıda doğrulandı), MobileSummaryDrawer format konsolidasyonu (#43), AGENT.md v1.3 alerjen self-check (#44), CUSTOMIZER_SPEC.md §3.5 (#49), **MASTER_PLAN.md v2.2 + ROADMAP.md v1.3 tutarlılık denetimi ve güncellemesi** (Auth/Hesap sitemap'e ve Oturum 4.5'e işlendi, #50/#51 yeni fark edildi) | 🟡 Devam ediyor — Twilio (#32) TEK gerçek darboğaz |
 | 5 | 2026-08-01 → 08-02 (3 tur) | (1) 2026-08-01: Netgsm sözleşmesi onaylandı, VisualPreview.tsx mimari denetimi (#52 açıldı, vektörel ikon kararı). (2) 2026-08-01: Pazaryeri müşteri verisi erişimi araştırıldı, Boostfeel/QR-tabanlı sadakat modeli bulundu (Karar #12 ile ilişkilendirildi). (3) 2026-08-02: Hakkımızda sayfası oluşturuldu (gerçek adresle, test edildi), Hero.tsx â→a uygulandı, AGENT.md/CORE.md "400 satır eşiği" kuralı kaldırılıp aynı gün geri getirildi (yanlış anlaşılma), AGENT.md dosya karışıklığı (PUSULA/Bowlera) çözüldü. | 🟡 Devam ediyor — #32 çözüme yaklaşıyor, #53/#54/#55 yeni açıldı |
+| 6 | 2026-08-05 | Netgsm'in de esnaf odası/marka tescili istediği keşfedildi (Session 5'teki "sözleşme onaylandı" notuyla çelişiyor — netleştirilmeli). SMS başlık onay hiyerarşisi araştırıldı (vergi levhası/işyeri ruhsatı yeterli olabilir). Kullanıcı onayıyla WhatsApp OTP birincil + SMS fallback kararı alındı, Twilio Verify'ın `channel` parametresiyle tek entegrasyonla çözülebildiği bulundu. `lib/auth/send-otp.ts` + güncellenmiş `send/route.ts` + test dosyası üretildi (5/5, 8/8). #56 yeni açıldı. | 🟡 Devam ediyor — kod push/test bekliyor, #32 WhatsApp'la aşılabilir ama doğrulanmadı |
 
 *(Tam turn-by-turn detay: `session_log.md`.)*
 
@@ -194,7 +212,7 @@ Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, �
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel, Vercel Production'da deploy'lar Ready |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 artık kod ile hizalı (Auth/Hesap, kanal isimlendirmesi, Oturum 3/4 durumları) |
 | Test Suite | 🟢 `Header.test.tsx`, `customizer-summary-format.test.ts`, `menu-filters.test.ts`, `app/hakkimizda/page.test.tsx` (yeni, 2/2 geçti — Vitest, kullanıcı tarafından koşuldu) doğrulandı. Genel `npm test` bu aralıkta tekrar çalıştırılmadı. |
-| Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı, artık MASTER_PLAN/ROADMAP'te resmi. 🟠 OTP fonksiyonel test Twilio kısıtı yüzünden yapılamıyor (#32) |
+| Auth | 🟢 Kod tamam, `/giris` canlı doğrulandı, artık MASTER_PLAN/ROADMAP'te resmi. 🟡 WhatsApp→SMS fallback koda eklendi (2026-08-05), henüz push/test edilmedi — OTP fonksiyonel test hâlâ yapılamıyor (#32, #56) |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu |
 | Veritabanı | 🟢 Neon Postgres çalışıyor |
@@ -231,16 +249,17 @@ Sıradaki: (1) Şubeler/Footer.tsx/JSON-LD'ye gerçek adresi işle (#54, yeni, �
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v13. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4
-ve Session 5 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil,
+*BOWLERA SESSION_INDEX.md — v14. Arşiv `session_log.md`'ye taşınmayı bekliyor (Session 4,
+5 ve 6 detayları henüz taşınmadı — dosya 400 satırın altında, taşıma zorunlu değil,
 bkz. dosya sonu satır sayımı).
-v12'den değişenler (2026-08-02, Session 5 üçüncü tur): Hakkımızda sayfası oluşturuldu ve
-test edildi (2/2 geçti); Hero.tsx â→a kararına göre güncellendi; gerçek şube adresi
-(Çağlayan Park Sokak No:30, Kağıthane, İstanbul) AboutStory.tsx'e işlendi ama Şubeler/
-Footer/JSON-LD'ye henüz işlenmedi (#54, yeni, öncelikli); AGENT.md/CORE.md'deki "400
-satır eşiği" kuralı bir yanlış anlaşılma sonucu kaldırılıp aynı gün geri getirildi (net
-değişiklik yok); AGENT.md dosya karışıklığı (PUSULA/Bowlera) çözüldü. Yeni açık sorunlar:
-#53 (CONTENT_GUIDE.md â güncellemesi), #54 (adres senkronu), #55 (ValueProps senkronu).
+v13'ten değişenler (2026-08-05, Session 6): Netgsm SMS başlık başvurusu esnaf odası (9000 TL)/
+marka tescili istediği için bloke oldu (⚠️ Session 5'teki "Netgsm sözleşmesi onaylandı" notuyla
+çelişiyor, netleştirilmeli). WhatsApp OTP birincil + SMS fallback kararı alındı (Twilio Verify
+`channel` parametresiyle tek entegrasyon, ayrı Meta entegrasyonu gerekmiyor). `lib/auth/send-otp.ts`
+(yeni), `app/api/auth/otp/send/route.ts` (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test)
+üretildi — Kalite 5/5, Güvenlik 8/8, KULLANICI TARAFINDAN HENÜZ KOŞULMADI/PUSH EDİLMEDİ.
+`verify/route.ts` DEĞİŞMEDİ. Yeni açık sorun: #56 (Twilio WhatsApp Sender onay durumu bilinmiyor).
+#32 KAPANMADI ama WhatsApp fallback'le fiilen aşılabilir hâle geldi — canlı doğrulama bekliyor.
 Kalan açık sorunlar: #10, #24, #27 (kısmen), #28/29, #32, #34, #38, #39, #50, #51, #52,
-#53, #54, #55.
-Güncellenme: 2026-08-02.*
+#53, #54, #55, #56.
+Güncellenme: 2026-08-05.*
