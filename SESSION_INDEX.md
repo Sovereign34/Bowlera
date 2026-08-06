@@ -23,174 +23,22 @@
 ## 🎯 CURRENT FOCUS
 
 ```
-Görev (2026-08-05, Session 6):    Netgsm SMS başlık başvurusu esnaf odası (9000 TL)/marka tescili
-          istediği için bloke oldu. Araştırma: SMS başlık onayı hiyerarşisi netleştirildi — vergi
-          levhasında ticari ünvan varsa veya işyeri açma ruhsatında ticari ünvan yazıyorsa esnaf
-          odası/marka tescili GEREKMİYOR. Kullanıcı, ruhsat aşamasında Bowlera adını kullanabileceğini
-          teyit etti (Netgsm konusu bu turda kesin KAPANMADI, paralel yol açıldı).
-          **Karar (kullanıcı onayı ile):** WhatsApp OTP birincil, SMS fallback ikincil kanal. Kritik
-          bulgu: Twilio Verify zaten `channel: "whatsapp"` destekliyor — ayrı Meta entegrasyonu
-          gerekmiyor. `verify/route.ts` DEĞİŞMEDİ (kanaldan bağımsız doğrulama).
-          **Kod üretildi:** `lib/auth/send-otp.ts` (yeni, fallback zinciri), `app/api/auth/otp/send/route.ts`
-          (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test — happy/edge/failure).
-          Kalite 5/5, Güvenlik 8/8. **Test koşuldu ve ekran görüntüsüyle doğrulandı: 3/3 PASS**
-          (`npx vitest run lib/auth/send-otp.test.ts` — happy path, edge case, failure path).
-          Loglardaki `OTP_CHANNEL_FAILED` satırları failure-path testinin kasıtlı çift-kanal
-          hatası senaryosuna ait, BSC-4 loglamasının çalıştığının kanıtı — hata değil. **Kod
-          HENÜZ push edilmedi.**
-          Yeni Açık Sorun #56: Twilio WhatsApp Business Sender onay durumu bilinmiyor.
+Görev (GÜNCEL — 2026-08-05, Session 6 KAPANIŞI):    Auth mimarisi büyük bir pivot geçirdi.
+          Twilio ($20 Upgrade gerekiyor) ve Netgsm (9000 TL, esnaf odası/Ticaret Sicili) PARKLANDI
+          — ikisi de maliyetli, acil değil. Yerine, kullanıcı onayıyla DENEME aşamasında yeni bir
+          mimari kararlaştırıldı: zorunlu kayıt (ad+telefon+rıza/KVKK, adres opsiyonel) → 3 kanal
+          seçimi (Masaya Servis/Gel-Al/Online Sipariş) → fiziksel kanallarda sepet tamamlanınca
+          TEK merkezi normal WhatsApp numarasına yönlendirme (Business API DEĞİL) → online
+          platform siparişleri otomatik doğrulanamadığı için kayıt sonrası manuel WhatsApp→SMS
+          teyidiyle kesinleştirilir. Kritik keşif: `WhatsAppOrderButton.tsx` ZATEN REPODA VAR
+          (Session 4, Beşinci Bölüm'de üretilip doğrulanmış) — bilinçli disabled bırakılmış bir
+          iskelet, şube numarası + `lib/integrations/whatsapp.ts`/`buildWhatsAppOrderLink()`
+          eksik olduğu için. #58 sıfırdan UI değil, iskelet tamamlama işi.
+          **Tam gerekçe, elenen alternatifler (Google/online platform sosyal girişi), marka/UX
+          risk değerlendirmesi ve kullanıcı onayının tam metni → `session_log.md`, Session 6.**
 
-Görev (2026-08-05, Session 6, devam — bu tur):    Twilio Upgrade denendi, hesap Trial modunda
-          ($15.50 kredi) — WhatsApp Sender kurulumu için min. $20 gerekiyor, kullanıcı şu an
-          bu tutarı ödemek istemiyor. Alternatif olarak Netgsm SMS başlığı için "vergi levhasına
-          ticari ünvan işletme" yolu araştırıldı — bunun da Ticaret Sicili ilanı gerektirdiği
-          (yani gerçekte ~9000 TL'ye eşdeğer olduğu) kullanıcı tarafından netleştirildi; "ücretsiz
-          alternatif" iddiası bu turda GERİ ÇEKİLDİ. Google/sosyal giriş araştırıldı — Google OAuth
-          kullanıcının telefon numarasını PAYLAŞMIYOR (API'de bu scope yok, doğrulanmış üçüncü
-          parti kaynaklarla teyit edildi) — bu yüzden Google girişi telefon toplama ihtiyacını
-          çözmüyor, elendi. Online yemek platformları (Yemeksepeti vb.) üzerinden "sosyal giriş"
-          benzeri bir kimlik doğrulama da araştırıldı — BU PLATFORMLAR KİMLİK SAĞLAYICI DEĞİL,
-          resmi/genel bir "___ ile giriş yap" API'leri yok, bu yol da tamamen elendi.
-
-          **🔧 YENİ MİMARİ KARAR (kullanıcı onayı ile, bu tur):** Twilio ($20 Upgrade) ve Netgsm
-          (9000 TL, Ticaret Sicili ilanı) yolları PARKLANDI — ikisi de şu an maliyetli, acil
-          değil. Yerine GEÇİCİ/deneme aşamasında yeni bir mimari benimsendi:
-
-          1. **Sipariş kanalına göre ayrım:** Online yemek platformlarından (Yemeksepeti/Trendyol/
-             Getir) gelen siparişlerde kimlik doğrulama sorunu yok — platform kendi kullanıcısını
-             yönetiyor. Gel-al (pickup, doğrudan site) siparişlerinde müşteri SİTEDE customizer'la
-             bowl'unu oluşturur (mevcut sistem DEĞİŞMİYOR), checkout'ta kendi WhatsApp'ından
-             işletme numarasına yönlendirilir (`wa.me` linki, sipariş özeti önceden dolu) —
-             kullanıcı KENDİ hesabından mesaj attığı için numara doğal yoldan teyit edilmiş olur,
-             ayrıca kod göndermeye gerek kalmaz.
-          2. **Merkezi kullanıcı kaydı (kanal-bağımsız):** Kanal fark etmeksizin (site formu /
-             WhatsApp / platform siparişi), ilk temasta telefon + adres + AÇIK RIZA (KVKK) ile
-             toplanır — SMS/WhatsApp doğrulama KODU gönderilmez, rıza checkbox'ı (önceden
-             işaretli DEĞİL, aktif onay) yeterli görülüyor. Opsiyonel: yaş, cinsiyet (pazarlama
-             segmentasyonu). Aynı telefon numarasıyla her yeni siparişte mevcut kayıt güncellenir,
-             yoksa yeni kayıt açılır (`upsertUserFromOrder()` benzeri tek fonksiyon, kanal
-             bağımsız). `verifiedAt` alanı "rıza onay zamanı" olarak yeniden yorumlanacak.
-          3. **Twilio Verify/OTP akışı DEVRE DIŞI bırakılacak, kod SİLİNMEYECEK** — Netgsm onayı
-             ileride gelirse (ya da Twilio Upgrade'e karar verilirse) `send-otp.ts` mimarisi
-             hazır katman olarak geri eklenebilir.
-
-          ⚠️ **Not (dürüstlük kaydı):** Bu, kullanıcının "zaman geçtikçe karara varırız" dediği
-          bir DENEME aşaması — kesin/nihai mimari kararı değil, ama şu an aktif geliştirme yönü
-          budur. Hukuki taraf (KVKK aydınlatma metni, rıza checkbox metni) ayrı ve dikkatli
-          ele alınması gereken bir iş olarak işaretlendi, bu turda hazırlanmadı.
-
-          Yeni Açık Sorun #57: Rıza esaslı telefon+adres toplama formu (KVKK aydınlatma metni +
-          checkbox + backend format doğrulama) henüz KODLANMADI. Yeni Açık Sorun #58: Gel-al
-          WhatsApp yönlendirme akışı (`wa.me` linki + sipariş özeti ön-doldurma) henüz KODLANMADI —
-          `lib/integrations/whatsapp.ts` (CORE.md dosya haritasında zaten planlıydı) bu iş için
-          kullanılacak.
-
-Görev (2026-08-05, Session 6, KAPANIŞ turu — MİMARİ NİHAİLEŞTİ):    #57/#58'in tam kapsamı
-          netleşti, kullanıcı onayı alındı. **Kritik keşif:** `WhatsAppOrderButton.tsx` zaten
-          repoda var (Session 4, Bölüm 5'te üretilip doğrulanmış) — bilinçli olarak kalıcı
-          disabled bırakılmış, sebep: şube telefon numarası tanımlanmamış + `lib/integrations/
-          whatsapp.ts`/`buildWhatsAppOrderLink()` henüz yazılmamış. Yani #58 sıfırdan UI değil,
-          var olan iskeleti tamamlama işi.
-
-          **NİHAİ AKIŞ (onaylandı):**
-          1. Kayıt İKİ tetikleyiciden biriyle başlar: (a) kullanıcı kendi isteğiyle "Kayıt Ol",
-             (b) customizer'da ürün seçimine başlarken henüz kayıtlı değilse otomatik yönlendirme.
-          2. Kayıt formu ZORUNLU alanlar: ad-soyad, telefon, rıza (KVKK) checkbox. Adres
-             OPSİYONEL kalır (Karar #23 ile ÇAKIŞMIYOR — kayıt zorunlu ile adres opsiyonel
-             farklı şeyler; adresin amacı zamanla çoklu-şube güçlü veri tabanı oluşturmak).
-             Opsiyonel: yaş, cinsiyet.
-          3. Kayıt adı sitede "Merhaba, [isim]" olarak header'da gösterilir.
-          4. Kayıt tamamlanınca 3 kanal seçimi sunulur: Masaya Servis / Gel-Al / Online Sipariş.
-          5. Masaya Servis + Gel-Al: kullanıcı isim-gösterir halde sitede gezinir, customizer'la
-             ürün seçer, sepete ekler. Sepet tamamlanınca `WhatsAppOrderButton.tsx` üzerinden
-             TEK, merkezi işletme WhatsApp numarasına (normal/kişisel WhatsApp, Business API
-             DEĞİL — düşük hacim, fiziksel gelen müşteri profiliyle sınırlı, risk düşük
-             değerlendirildi) yönlendirilir. Bu tamamlanma anı = DB yazma tetikleyicisi.
-          6. Online Sipariş: kullanıcı Yemeksepeti/Getir/Trendyol'a yönlendirilir. Platform API'leri
-             (Session 5'te doğrulandı, Yemeksepeti openapi.json) müşteri verisini maskeliyor —
-             OTOMATİK doğrulama teknik olarak KAPALI. Bunun yerine: kayıt sonrası aynı merkezi
-             numaradan MANUEL teyit — önce WhatsApp denenir, kanal çalışmazsa SMS'e düşülür (aynı
-             fallback deseni #56/send-otp.ts'teki gibi, ama OTP kodu değil, teyit mesajı).
-          7. Rıza metnine eklenecek zorunlu not: "Online platform siparişleriniz otomatik
-             doğrulanamadığından, kaydınızı teyit etmek için önce WhatsApp, olmazsa SMS yoluyla
-             tarafınızla iletişime geçilecektir."
-          8. Şube numarası: şu an TEK aktif şube (Kağıthane) olduğu için TEK merkezi numara
-             yeterli — hem sipariş tamamlama hem manuel teyit aynı numaradan. Çoklu şube
-             senaryosu (merkezi mi, şube-bazlı mı) İLERİYE ERTELENDİ, ayrı karar gerektirecek.
-
-          **Marka/UX değerlendirmesi (kullanıcı istedi, yapıldı):** İlk değerlendirmede "sepet
-          terki" ve "WhatsApp hacim/spam" riskleri öne sürüldü; kullanıcı haklı olarak düzeltti —
-          gel-al/masaya servis müşterisi zaten FİZİKSEL olarak gelecek (online-platform anonim
-          kullanıcı davranışıyla kıyaslamak yanlıştı), ve normal/kişisel WhatsApp + düşük/fiziksel-
-          sınırlı hacim = Business API'nin çözmeye çalıştığı ölçek sorunu burada geçerli değil.
-          Onaylanan risk: ileride hacim büyürse (başarı senaryosu) resmi WhatsApp Business API'ye
-          geçiş "ne zaman" sorusu olacak, ayrı bir gelecekteki karar.
-
-          Kod aşamasına GEÇİLİYOR — bir sonraki adım.
-
-Önceki tur (2026-08-02, üçüncü tur):    Hakkımızda sayfası (/hakkimizda) sıfırdan
-          oluşturuldu — MASTER_PLAN.md §3 sitemap girdisi karşılandı, önceki site
-          denetiminde tespit edilen 404 kapandı. 6 dosya üretildi: page.tsx,
-          AboutHero.tsx, AboutStory.tsx, AboutValues.tsx, AboutImagePlaceholder.tsx,
-          page.test.tsx. Test sonucu kullanıcı tarafından koşuldu ve doğrulandı:
-          Vitest, 2/2 test geçti (happy path + edge case).
-          **Gerçek veri işlendi:** Kullanıcı gerçek şube adresini paylaştı — Çağlayan
-          Park Sokak No:30, Kağıthane, İstanbul. AboutStory.tsx'e kuruluş anlatısı
-          olarak işlendi (global marka VİZYONU olarak çerçevelendi, mevcut durummuş
-          gibi sunulmadı). ⚠️ Bu adres HENÜZ Şubeler sayfası/Footer.tsx/JSON-LD
-          şemasına işlenmedi — CONTENT_GUIDE.md §4 NAP tutarlılık kuralı gereği bu
-          senkron zorunlu, yeni açık iş olarak eklendi (#54).
-          **Site-geneli yazım kararı:** Kullanıcı onayıyla "kâse"→"kase" (â kaldırma)
-          kararı alındı. Hero.tsx'te uygulandı (CTA: "Kaseni Oluştur", alt paragraf
-          sağlıklı beslenme odaklı yeniden yazıldı — tedarikçi vurgusu kaldırıldı).
-          CONTENT_GUIDE.md'deki "Kâseni Yarat" örnekleri ve StepBase.tsx HENÜZ
-          güncellenmedi — karar kısmen uygulandı (#27 kısmen kapandı, #53 yeni açıldı).
-          **Governance düzeltmesi:** AGENT.md/CORE.md'deki "400 satır eşiği" kuralı
-          bir yanlış anlaşılma sonucu kısa süreliğine kaldırılıp aynı gün içinde
-          AYNEN geri getirildi (bkz. dosya üstü not). Net kural değişikliği yok,
-          sadece versiyon numaraları arttı (AGENT.md v1.5, CORE.md v1.4).
-
-Önceki tur (2026-08-01, ikinci tur):    Pazaryeri müşteri verisi erişimi araştırıldı.
-          Yemeksepeti'nin resmi openapi.json şeması incelendi — `order.Customer`
-          şemasındaki TÜM kişisel alanlar (isim, telefon, ulusal kimlik, teslimat
-          adresi) açıkça "Masked for identity protection" olarak işaretli, sadece
-          platformun ürettiği anonim müşteri ID'si veriliyor. Bu, bilinçli bir
-          platform politikası — teknik eksiklik değil. Trendyol Go/Migros Yemek
-          için de aynı mantığın geçerli olduğu varsayılıyor (ayrı ayrı teyit
-          edilmedi).
-          **Bulunan gerçek yol:** Adisyo'nun "BOOSTFEEL Müşteri Sadakat
-          Entegrasyonu" pazaryeri API'sinden veri ÇEKMİYOR — QR kod tabanlı,
-          müşterinin FİZİKSEL ziyarette (gel-al) kendi isteğiyle dijital sadakat
-          kartına kaydolmasına dayanıyor (Apple/Google Wallet, Adisyo/Simpra POS
-          entegrasyonu üzerinden). Önerilen pratik yöntem: pazaryeri paket
-          siparişlerine "QR ile üye ol, indirim kazan" kartı eklemek — platform
-          ToS'unu ihlal etmeyen, müşteriyi kendi isteğiyle veri paylaşmaya davet
-          eden meşru yol.
-          Bu bulgu, Karar #12'deki (loyaltyPoints mekaniği henüz netleşmedi) açık
-          soruyla doğrudan bağlantılı — sadakat mekaniği tasarlanırken Boostfeel
-          benzeri bir QR-kayıt akışı ile `users.loyaltyPoints` alanının nasıl
-          besleneceği birlikte düşünülmeli.
-
-Önceki tur (2026-08-01, ilk tur):    VisualPreview.tsx mimarisi denetlendi — kritik bir
-          mimari çelişki bulundu (#52, yeni). Kod, `/public/images/layers/` altında
-          her malzeme için gerçek görsel dosyası (`base-jasmine-rice.webp` gibi)
-          bekliyor, ama bu klasör TAMAMEN BOŞ — hiçbir katman görseli yok. Bu,
-          PHOTOGRAPHY_GUIDE.md §8'deki "VisualPreview CSS/SVG katman mantığıyla
-          çalışıyor, gerçek fotoğraf gerekmez" notuyla doğrudan çelişiyor. Şu an
-          müşteri customizer'da herhangi bir malzeme seçse bile önizleme boş krem
-          renkli daire olarak kalıyor.
-          **Karar (kullanıcı onayı ile):** Fotoğraf katmanlama yerine markaya uygun
-          (Warm Cream/Espresso Brown/Primary Olive) vektörel ikon seti kullanılacak —
-          global rakip modeli: Chipotle (metin-only, görsel yok) / Cava-Sweetgreen
-          (düz ikon seti). Kod tarafında DEĞİŞİKLİK GEREKMİYOR — VisualPreview.tsx
-          zaten dosya yolunu id'den esnek türetiyor, sadece ikon dosyaları
-          `/public/images/layers/` altına eklenecek (üretici: kullanıcı bir
-          tasarımcı bulacak ya da Claude AI ile taslak üretecek — netleşmedi).
-          Ayrıca: dosyanın en üstündeki "GEÇMİŞ İHLAL KAYDI" notu (v2 sıkıştırma
-          olayı) bu turda tekrar teyit edildi — kullanıcıya SESSION_INDEX.md'nin
-          (bu dosya) doğru/güncel kaynak olduğu, SESSION_INDEX_v2.md'nin ise
-          kayıttaki ihlalin ta kendisi olduğu için kullanılmaması gerektiği
-          açıkça bildirildi.
+Blokaj/Sıradaki için hâlâ bekleyen dosyalar (kodlamaya başlamak için istendi, henüz gelmedi):
+          `INTEGRATIONS.md` §0, `app/siparis/page.tsx`, gerçek merkezi WhatsApp numarası (format).
 
 Blokaj:   🟡 Twilio TR SMS kısıtı (#32) + Netgsm esnaf odası engeli (#56, 9000 TL) — İKİSİ DE
           PARKLANDI bu tur, hemen çözülmeyecek. Yerine #57/#58 (rıza esaslı toplama + WhatsApp
@@ -355,45 +203,15 @@ Sıradaki: (0) YENİ, en öncelikli — #57 rıza esaslı telefon+adres formu:
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v17. ⚠️ Dosya 390 satır — 400 satır eşiğine ÇOK YAKIN. Arşiv
-`session_log.md`'ye taşıma bir sonraki oturumda ZORUNLU hale gelecek (Session 4/5/6 detayları
-henüz taşınmadı). Bu turda taşınmadı çünkü kullanıcı onayı önce mimari kapanışa odaklandı.
-v16'dan değişenler (2026-08-05, Session 6, KAPANIŞ turu): #57/#58 mimarisi TAMAMEN
-netleşti ve onaylandı. Kritik keşif: `WhatsAppOrderButton.tsx` zaten repoda var (Session 4,
-bilinçli disabled bırakılmış iskelet) — #58 sıfırdan UI değil, iskelet tamamlama işi. Nihai
-akış: zorunlu kayıt (ad+telefon+rıza, adres opsiyonel) → 3 kanal seçimi (Masaya Servis/Gel-Al/
-Online Sipariş) → fiziksel kanallar WhatsApp'a yönlenir (tek merkezi normal WhatsApp numarası,
-Business API DEĞİL) → online platform siparişleri otomatik doğrulanamadığı için kayıt sonrası
-manuel WhatsApp→SMS teyidiyle kesinleştirilir. Marka/UX riskleri (sepet terki, WhatsApp hacim)
-değerlendirildi, kullanıcı gerekçeyle düzeltti (fiziksel müşteri profili + düşük hacim yüzünden
-risk düşük) — kabul edildi. Kod aşamasına geçiliyor.
-v15'ten değişenler (2026-08-05, Session 6, bu tur — BÜYÜK MİMARİ KARAR): Kod push edildi.
-Twilio Upgrade denendi, Trial hesabı min. $20 istiyor — kullanıcı ödemedi, PARKLANDI.
-Netgsm'in "vergi levhası" yolunun da Ticaret Sicili ilanı (~9000 TL) gerektirdiği netleşti —
-"ücretsiz alternatif" iddiası GERİ ÇEKİLDİ. Google OAuth ve online yemek platformu "sosyal
-girişi" araştırıldı, ikisi de telefon toplama ihtiyacını çözmediği için ELENDİ. Sonuç:
-Twilio (#56) ve Netgsm (#32) PARKLANDI — yerine DENEME aşamasında yeni mimari kararlaştırıldı:
-(1) rıza (KVKK) esaslı, SMS/WhatsApp kodu OLMADAN telefon+adres toplama, kanal-bağımsız
-merkezi `users` kaydı (opsiyonel yaş/cinsiyet), (2) gel-al siparişlerde müşteriyi kendi
-WhatsApp'ından işletme numarasına yönlendirme (`wa.me` linki, doğal numara teyidi). Kullanıcı
-açıkça "nihai karar değil, zamanla netleşecek" dedi — bu not korunmalı. Yeni açık sorunlar:
-#57 (rıza formu, henüz kodlanmadı), #58 (WhatsApp yönlendirme akışı, henüz kodlanmadı).
-Öncelik sıralaması buna göre değişti — Twilio/Netgsm artık en düşük öncelik, #57/#58 en üstte.
-v14'ten değişenler (2026-08-05, Session 6): `lib/auth/send-otp.test.ts` kullanıcı
-tarafından koşuldu ve ekran görüntüsüyle DOĞRULANDI — 3/3 PASS (happy path, edge case,
-failure path). Loglardaki `OTP_CHANNEL_FAILED` girdileri failure-path testinin kasıtlı
-senaryosu, hata değil — BSC-4 loglaması çalışıyor. Sıradaki liste ve GENEL DURUM tablosu
-buna göre güncellendi. Kalan tek adım: kod push + Twilio Console'da WhatsApp Sender
-onay kontrolü (#56). Ayrıca dosya-içi tutarsızlık düzeltildi: "SESSION ÖZET (son 5)"
-başlığı 7 satır (Session 0-6) içeriyordu, başlık içerikle uyumlu hale getirildi.
-v13'ten değişenler (2026-08-05, Session 6): Netgsm SMS başlık başvurusu esnaf odası (9000 TL)/
-marka tescili istediği için bloke oldu (⚠️ Session 5'teki "Netgsm sözleşmesi onaylandı" notuyla
-çelişiyor, netleştirilmeli). WhatsApp OTP birincil + SMS fallback kararı alındı (Twilio Verify
-`channel` parametresiyle tek entegrasyon, ayrı Meta entegrasyonu gerekmiyor). `lib/auth/send-otp.ts`
-(yeni), `app/api/auth/otp/send/route.ts` (güncellendi), `lib/auth/send-otp.test.ts` (yeni, 3 test)
-üretildi — Kalite 5/5, Güvenlik 8/8. `verify/route.ts` DEĞİŞMEDİ. Yeni açık sorun: #56 (Twilio
-WhatsApp Sender onay durumu bilinmiyor).
-#32 KAPANMADI ama WhatsApp fallback'le fiilen aşılabilir hâle geldi — canlı doğrulama bekliyor.
-Kalan açık sorunlar: #10, #24, #27 (kısmen), #28/29, #32, #34, #38, #39, #50, #51, #52,
-#53, #54, #55, #56.
+*BOWLERA SESSION_INDEX.md — v18. ✅ ARŞİVLEME TAMAMLANDI (bu tur): Session 4'ün kalan
+bölümleri (özet düzeyinde, dürüstçe işaretli), Session 5 (3 tur, tam detay), Session 6 (tam
+detay — Netgsm blokajı, hibrit OTP kararı, Twilio $20 engeli, Google/platform elemesi, büyük
+mimari pivot, WhatsAppOrderButton keşfi, dosyalama sorunu) `session_log.md`'ye TAM olarak
+taşındı. CURRENT FOCUS 169 satırlık detaydan ~15 satırlık güncel-durum özetine indirildi.
+Dosya artık 247 satır — 400 eşiğinin rahatça altında.
+v17'den değişenler: Yukarıdaki arşivleme dışında içerik DEĞİŞMEDİ — Kritik Kararlar, Açık
+Sorunlar, SESSION ÖZET, GENEL DURUM ve SIRADAKİ GÖREVLER tabloları aynen korundu (bunlar zaten
+özet niteliğinde, turn-by-turn değil, arşivlenmeye gerek yoktu).
+Tam turn-by-turn gerekçe/karar dökümü için: `session_log.md` (artık ~500 satır, Session 0'dan
+Session 6 kapanışına kadar tam).
 Güncellenme: 2026-08-05.*
