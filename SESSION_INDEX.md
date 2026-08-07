@@ -76,6 +76,30 @@ Görev (GÜNCEL — 2026-08-07, Session 9):    Kullanıcı canlı kayıt akış�
           - Bu konuşma çok uzadığı (CORE.md re-injection eşiği aşıldığı) için #62'nin mimari
             tasarımı YENİ BİR SOHBETTE ele alınacak — kullanıcı onayladı.
 
+Görev (GÜNCEL — 2026-08-07, Session 10):    ⚠️ NOT: Bu session'ın SADECE bir kısmı
+          (sohbetin devamı) Claude'a sağlandı — başlangıcı görülmedi. Aşağıdaki madde
+          SADECE görülen kısımdan çıkarılmıştır, TAHMİN eklenmemiştir (Kural #1).
+          Görülen kısım #62 (Personel Sipariş Paneli) ile ilgili DB şeması çalışmasıydı:
+          - `dotenv` paketi kuruldu. `npm install` çıktısında 12 güvenlik açığı (3 kritik)
+            uyarısı çıktı — `npm audit fix --force` KOŞULMADI (kırıcı değişiklik riski,
+            migration'ın ortasında ele alınmadı) → #63 (yeni, açık sorun olarak kaydedildi).
+          - `drizzle.config.ts` kalıcı olarak düzeltildi: `defineConfig` importundan önce
+            `import { config } from "dotenv"; config({ path: ".env.local" })` eklendi —
+            önceden `.env.local`'i doğru okumuyordu. Bu düzeltme ileride başka migration'larda
+            da geçerli olacak.
+          - Yeni `order_history` tablosu şemaya eklendi (alanlar: `customer_phone`, `channel`,
+            `items`, `total_price`, `ordered_at`) ve `npx drizzle-kit push` ile canlı Neon
+            veritabanına BAŞARIYLA uygulandı. Drizzle Studio ile görsel olarak doğrulandı
+            (tablo + sütunlar mevcut, henüz veri yok).
+          - ⚠️ VARSAYIM (kullanıcı teyidi gerekiyor): `order_history` tablosunun #62'nin
+            "sepetten bağımsız yeni DB şeması" ihtiyacını karşılamak için oluşturulduğu
+            görülen bağlamdan çıkarılmıştır — ama personel auth yöntemi ve real-time
+            güncelleme teknolojisi (WebSocket/SSE/polling) kararları HENÜZ görülen kısımda
+            YOK. #62 bu nedenle hâlâ KAPANMADI, sadece DB şeması alt-parçası ilerledi.
+          - Konuşma, kullanıcı onayıyla **giriş/kayıt ve diğer akışlar** konusuna geçti —
+            bu başlığın içeriği bu turda Claude'a sağlanmadı, bir sonraki güncellemede
+            eklenecek.
+
 Blokaj/Sıradaki için hâlâ bekleyen:
           Neon DB şifresi (`npg_8baAZqWogI1u`) süreç içinde 3 kez ekran görüntüsünde açığa
           çıktı — Reset password önerisi kullanıcıya 2 kez yapıldı, HENÜZ ONAYLANMADI.
@@ -145,6 +169,8 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 | 🆕 | **[Session 7]** Yeni `RegistrationChannel` tipi (`masaya-siparis`\|`gel-al`\|`online-platform`), `FulfillmentChannel`'DAN AYRI ve onu DEĞİŞTİRMEDEN eklendi | ✅ Kod+şema+test tamam. Kayıt sonrası seçim `fulfillmentChannel`'i ön-doldurur (dine-in/pickup); `online-platform` sepete hiç girmez. |
 | 🆕 | **[Session 7]** `/siparis`'teki `FulfillmentGate` (2 kanal) SİLİNMEDİ — kayıt sonrası kanal seçimi bir ÖN-TERCİH, checkout'taki gate SON ONAY olarak kalıyor | ✅ Kod tarafında `FulfillmentGate`'e hiç dokunulmadı. |
 | 🆕 | **[Session 8]** `RegistrationForm.tsx` buton rengi `bg-olive-600`'dan (tahmin, geçersiz) `bg-olive-primary`'ye (kanıtlanmış, `app/giris/page.tsx`'ten) düzeltildi | ✅ Canlıda doğrulandı — buton artık görünür. #38'in TAM DESIGN_SYSTEM.md teyidi hâlâ ayrı ve açık. |
+| 🆕 | **[Session 10]** `drizzle.config.ts`'e kalıcı `dotenv` yüklemesi eklendi (`config({ path: ".env.local" })`, `defineConfig` importundan önce) — önceki migration'larda `.env.local`'in okunmaması sorununu kalıcı çözer | ✅ Canlıda doğrulandı — `order_history` migration'ı bu düzeltmeyle BAŞARILI oldu |
+| 🆕 | **[Session 10, VARSAYIM — teyit bekliyor]** `order_history` tablosu (#62'nin sepetten bağımsız DB şeması ihtiyacı için) oluşturuldu: `customer_phone`, `channel`, `items`, `total_price`, `ordered_at` | 🟡 Şema Neon'a migrate edildi VE Drizzle Studio ile görsel doğrulandı. Personel auth + real-time teknoloji kararı henüz yok — #62 hâlâ açık |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md`.)*
 
@@ -173,7 +199,8 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme (`wa.me` linki) henüz kodlanmadı — `INTEGRATIONS.md` §0 + gerçek numara bekliyor. `WhatsAppOrderButton.tsx` zaten repoda var (disabled iskelet), sıfırdan yazılmayacak. | `lib/integrations/whatsapp.ts` (henüz yok), `components/order/WhatsAppOrderButton.tsx` |
 | 59 | 🟡 | [YENİ, Session 8] Kayıt sonrası kullanıcı adı/oturum durumu hiçbir yerde görünmüyor — Header hesap ikonu giriş-yapılmamış görünümünde kalıyor. Bu akışta gerçek session/cookie var mı, kök neden araştırılmadı. | `components/layout/Header.tsx`, kayıt akışı auth mekanizması (araştırılacak) |
 | 60 | 🟠 | [YENİ, Session 8] Neon DB şifresi (`npg_8baAZqWogI1u`) sorun giderme sürecinde 3 kez ekran görüntüsünde açığa çıktı — Reset password önerisi 2 kez yapıldı, HENÜZ ONAYLANMADI/YAPILMADI. | Neon console, `.env.local` |
-| 62 | 🔴 | [YENİ, Session 9] Personel Sipariş Paneli — "Masaya Sipariş" kanalında sepet tamamlanınca #58 (WhatsApp) DEĞİL, ayrı parola korumalı + gerçek-zamanlı + sepetten bağımsız bir personel paneline yazılmalı. Mimari tasarım (auth, real-time teknoloji, şema) HENÜZ YAPILMADI — kapsamlı, yeni sohbette ele alınacak. | Yeni: personel auth sistemi, real-time katman, yeni DB tablosu (henüz yok) |
+| 62 | 🔴 | Personel Sipariş Paneli — "Masaya Sipariş" kanalında sepet tamamlanınca #58 (WhatsApp) DEĞİL, ayrı parola korumalı + gerçek-zamanlı + sepetten bağımsız bir personel paneline yazılmalı. **[Session 10]:** DB şeması alt-parçası İLERLEDİ — `order_history` tablosu (`customer_phone`,`channel`,`items`,`total_price`,`ordered_at`) oluşturulup canlı Neon'a migrate edildi, Drizzle Studio ile doğrulandı. Personel auth yöntemi VE real-time güncelleme teknolojisi (WebSocket/SSE/polling) kararları HÂLÂ YAPILMADI — #62 KAPANMADI. | `order_history` (Neon, migrate edildi), personel auth sistemi (henüz yok), real-time katman (henüz yok) |
+| 63 | 🟠 | [YENİ, Session 10] `npm install` çıktısında 12 güvenlik açığı (3 kritik) uyarısı — `npm audit fix --force` bilinçli olarak KOŞULMADI (kırıcı değişiklik riski, migration'ın ortasındaydı). Ayrı, sakin bir zamanda ele alınmalı. | `package.json`, `npm audit` çıktısı |
 | 61 | 🟢 | [YENİ, Session 8] `app/kayit-ol/page.tsx` alt başlığı ("Bilgilerini bırak, seni arayalım.") Claude tarafından CONTENT_GUIDE.md görülmeden uydurulmuştu — kullanıcı karar bekliyor (sil / yeniden yaz). | `app/kayit-ol/page.tsx`, `CONTENT_GUIDE.md` |
 
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49 —
@@ -198,6 +225,7 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 | 8 | 2026-08-06/07 | Kullanıcı canlıda kırık Twilio giriş akışını keşfetti (ekran görüntüsü). `/kayit-ol` ve `/kvkk` route'ları oluşturulup bağlandı, Header.tsx güncellendi, eski `/giris` redirect'e çevrildi. `RegistrationForm.tsx`'teki görünmez buton bug'ı (`bg-olive-600`→`bg-olive-primary`) düzeltildi. `consentRegistrations` migration'ı (DATABASE_URL eksikliği giderilerek) canlı Neon DB'sinde koşuldu. Kayıt formu canlıda uçtan uca test edildi, BAŞARILI. Yeni açık uçlar keşfedildi: kayıt sonrası oturum/kullanıcı adı gösterimi eksik (#59), Neon şifresi 3 kez açığa çıktı/reset bekliyor (#60), Claude'un kendi uydurduğu alt başlık karar bekliyor (#61). **#57 hâlâ kapanmadı** — sadece `/online-siparis` kaldı. | 🟡 Devam ediyor — #57'nin son açık ucu + 3 yeni madde |
 
 | 9 | 2026-08-07 | Kullanıcı canlı kayıt akışını "Masaya Sipariş" kanalıyla test etti — çalışıyor doğrulandı. Fiziksel akış netleşti: tek genel QR → `/kayit-ol` → `/menu` (masa-bazlı QR YOK, önceki turdaki "masa no eksik" endişesi geri çekildi). **Büyük keşif:** "Masaya Sipariş" tamamlanınca #58 (WhatsApp) değil, ayrı bir personel Sipariş Paneli (parola korumalı, gerçek-zamanlı, sepetten bağımsız) gerektiği netleşti — #62 olarak açıldı, mimari tasarımı henüz yapılmadı. Ayrıca bu session'da kullanıcı `session_log.md` (eski isim) mekanizmasını sorguladı; CORE.md/AGENT.md'nin gerçek yazılı kuralı (400 satır eşiği, ayrı anlatı bloğu YOK) doğru şekilde bulunup uygulandı, isim/mekanizma karışıklığı giderildi — CORE.md v1.3, AGENT.md v1.4'e güncellendi. Kullanıcının tek seferlik istisna (tam dosya birleştirmesini Claude'un üretmesi) talebi, aynı sohbette onaylanan kurala dayanarak reddedildi; bunun yerine ayrı bloklar (Session 7 + Session 8) verildi, birleştirme kullanıcıya bırakıldı. | 🟡 Devam ediyor — #62 yeni sohbette |
+| 10 | 2026-08-07 | ⚠️ Session_INDEX bu session'ın sonunda güncellenmemişti, sonraki sohbette geriye dönük tamamlandı — sadece sohbetin sağlanan (son) kısmı işlendi, başlangıcı görülmedi. Görülen kısım #62'nin DB şeması alt-parçası: `dotenv` kuruldu (npm audit 12/3-kritik uyarısı görüldü ama ele alınmadı → #63 yeni), `drizzle.config.ts`'e kalıcı `.env.local` yüklemesi eklendi, yeni `order_history` tablosu (`customer_phone`,`channel`,`items`,`total_price`,`ordered_at`) canlı Neon'a migrate edildi ve Drizzle Studio ile doğrulandı. #62 hâlâ KAPANMADI — personel auth + real-time teknoloji kararı yok. Konuşma sonra giriş/kayıt akışları konusuna geçti (içeriği bu turda sağlanmadı). | 🟡 Devam ediyor — #62 kısmi ilerleme, #63 yeni |
 
 *(Tam turn-by-turn detay: `session_arşiv.md`.)*
 
@@ -214,7 +242,8 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Kullanıcı Kaydı (rıza esaslı) | 🟡 **[Session 8]** Backend + Frontend TAMAM, `/kayit-ol`'a BAĞLANDI, DB migration KOŞULDU, canlı uçtan uca test BAŞARILI. Kayıt sonrası oturum göstergesi eksik (#59). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu, `FulfillmentGate` dokunulmadan doğrulandı |
-| Veritabanı | 🟢 Neon Postgres çalışıyor. **[Session 8]:** `consentRegistrations` tablosu migration'ı BAŞARIYLA koşuldu, tablo canlıda var. ⚠️ DB şifresi 3 kez açığa çıktı, reset bekliyor (#60). |
+| Veritabanı | 🟢 Neon Postgres çalışıyor. **[Session 8]:** `consentRegistrations` tablosu migration'ı BAŞARIYLA koşuldu, tablo canlıda var. **[Session 10]:** `order_history` tablosu (#62 için) migrate edildi ve doğrulandı; `drizzle.config.ts` artık `.env.local`'i kalıcı olarak doğru okuyor. ⚠️ DB şifresi 3 kez açığa çıktı, reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik, ele alınmadı (#63). |
+| Personel Sipariş Paneli (#62) | 🔴 **[Session 10]** DB şeması alt-parçası ilerledi: `order_history` tablosu canlıda var. Personel auth yöntemi + real-time teknoloji (WebSocket/SSE/polling) seçimi HÂLÂ YAPILMADI. |
 | ARCHITECTURE.md | 🟢 v1.4 güncel. §2.4 (#10) bilinçli kapsam dışı |
 | Menü Filtreleme | 🟢 `lib/menu-filters.ts` — kod+test ile doğrulandı |
 | Customizer Özet Formatlama | ✅ `lib/customizer-summary-format.ts` — kod+test ile doğrulandı |
@@ -232,8 +261,10 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 1 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri: Yemeksepeti/Getir/Trendyol) | 🔴 |
+| 1b | [DEVAM] #62 Personel Sipariş Paneli — DB şeması (`order_history`) hazır, kalan: personel auth yöntemi + real-time teknoloji kararı | 🔴 |
 | 2 | [YENİ] Kayıt sonrası oturum/kullanıcı adı gösterimini araştır ve çöz (#59) | 🟡 |
 | 3 | [YENİ] Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
+| 3b | [YENİ, Session 10] `npm audit fix` — 12 açık/3 kritik güvenlik açığını ayrı, sakin bir oturumda ele al (#63) | 🟠 |
 | 4 | [YENİ] `app/kayit-ol/page.tsx` alt başlığı kararı — sil ya da CONTENT_GUIDE.md ile yeniden yaz (#61) | 🟢 |
 | 5 | `/kvkk` sayfasını hukuk danışmanına incelettir (kullanıcı eylemi, Claude'un kapsamı dışı) | 🟡 |
 | 6 | #58 Gel-al WhatsApp yönlendirme (`wa.me` linki, `WhatsAppOrderButton.tsx` iskeletini tamamla) — `INTEGRATIONS.md` §0 + gerçek numara bekliyor | 🟡 |
@@ -255,18 +286,21 @@ Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mi
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v21. Session 8 (2026-08-06/07) işlendi: kullanıcı canlı
-production'da kırık Twilio giriş akışını keşfetti; #57'nin 2 açık ucu (`/kayit-ol`
-tetikleyici route'u, `/kvkk` sayfası) bu turda kapatıldı, sadece `/online-siparis` kaldı.
-`RegistrationForm.tsx`'teki görünmez buton bug'ı (tahmin edilmiş geçersiz Tailwind rengi)
-kanıta dayalı olarak düzeltildi. `consentRegistrations` migration'ı canlı DB'de koşuldu ve
-kayıt akışı uçtan uca canlı doğrulandı. 3 yeni açık madde eklendi (#59 oturum gösterimi,
-#60 DB şifre resetleme, #61 Claude'un uydurduğu alt başlık kararı). Yeni bir "GEÇMİŞ İHLAL
-KAYDI" (Üçüncü Ders) eklendi: "kod+test tamam" ile "kullanıcı gerçekten erişebiliyor"
-ayrı doğrulama noktaları olmalı. Diğer tüm içerik v20'den korundu, hiçbir madde
-gerekçesiz silinmedi.
-Dosya artık ~260 satır — 400 eşiğinin altında, arşivleme gerekmedi.
-Tam turn-by-turn gerekçe/karar dökümü için: `session_arşiv.md` (Session 8 yeni bloğu ayrı
-artifact olarak verildi — kullanıcı session_arşiv.md'nin SONUNA ekleyecek, dosya TAM olarak
-yeniden üretilmedi, AGENT.md Kural #4/YASAK LİSTE gereği).
+*BOWLERA SESSION_INDEX.md — v22. Session 10 (2026-08-07) GERİYE DÖNÜK işlendi: kullanıcı
+bir önceki sohbette bu dosyanın güncellenmediğini bildirdi, sadece o sohbetin SAĞLANAN
+(son) kısmı Claude'a verildi — başlangıcı görülmedi, bu nedenle TAHMİN eklenmedi (Kural #1),
+görülen kısım net şekilde işaretlendi. Görülen kısım #62 (Personel Sipariş Paneli) DB şeması
+alt-parçasıydı: `dotenv` kuruldu, `drizzle.config.ts`'e kalıcı `.env.local` yüklemesi
+eklendi, yeni `order_history` tablosu (`customer_phone`,`channel`,`items`,`total_price`,
+`ordered_at`) canlı Neon'a migrate edildi ve Drizzle Studio ile doğrulandı. `npm audit`
+(12 açık/3 kritik) görüldü ama bilinçli olarak ele alınmadı → yeni açık sorun #63.
+#62 hâlâ KAPANMADI — personel auth + real-time teknoloji kararı yok, bu VARSAYIM olarak
+işaretlendi (order_history'nin #62 için olduğu görülen bağlamdan çıkarıldı, kullanıcı
+teyidi bekleniyor). Konuşmanın "giriş/kayıt akışları" kısmına geçişi not edildi ama
+içeriği bu turda sağlanmadığı için işlenmedi — bir sonraki güncellemede eklenecek.
+Diğer tüm içerik v21'den korundu, hiçbir madde gerekçesiz silinmedi.
+Dosya artık ~290 satır — 400 eşiğinin altında, arşivleme gerekmedi.
+Tam turn-by-turn gerekçe/karar dökümü için: `session_arşiv.md` (bu session için henüz
+ayrı blok üretilmedi — 400 satır eşiği tetiklenmedi, AGENT.md §Session Arşiv kuralı gereği
+gerekmiyor).
 Güncellenme: 2026-08-07.*
