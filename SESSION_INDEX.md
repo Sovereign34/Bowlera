@@ -4,13 +4,13 @@
 > Her session kapanışında TAM DOSYA olarak güncellenir.
 > **Şişmeyi önleme yöntemi:** Bu dosya SADECE anlık durumu tutar — tamamlanmış görevler
 > Açık Sorunlar tablosundan silinir. Turn-by-turn geçmiş (📜 GEÇMİŞ/ARŞİV) burada TUTULMAZ,
-> `session_log.md`'ye taşınır. Bu, arşivi SİLMEK değil DOĞRU DOSYAYA TAŞIMAK'tır.
+> `session_arşiv.md`'ye taşınır. Bu, arşivi SİLMEK değil DOĞRU DOSYAYA TAŞIMAK'tır.
 > ⚠️ GEÇMİŞ İHLAL KAYDI (ders çıkarıldı, hâlâ geçerli):
 > 2026-07-20'de üretilen bir "v2 sıkıştırılmış" SESSION_INDEX dosyası, kapanış notu
 > olmadan 7 açık sorunu (#4,7,15,16,20,22,34) ve 2 kararı (#11,#12) tablolardan düşürmüştü.
 > Bu, aynı gün içindeki bir sonraki sohbette fark edilip geri eklenmiş, ve BU sohbette
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
-> tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_log.md'ye yazılmalı;
+> tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
 > ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
 > kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
@@ -57,7 +57,24 @@ Görev (GÜNCEL — 2026-08-06/07, Session 8):    Canlı production'da eski Twil
           sadece DB'ye satır mı düşüyor — netleşmedi. → #61 (yeni).
 
           **Tam gerekçe, adım adım DB/env sorun giderme süreci, kullanıcı onaylarının tam
-          metni → `session_log.md`, Session 8.**
+          metni → `session_arşiv.md`, Session 8.**
+
+Görev (GÜNCEL — 2026-08-07, Session 9):    Kullanıcı canlı kayıt akışını "Masaya Sipariş"
+          kanalıyla test etti (ekran görüntüsüyle doğrulandı: form → submit → /menu yönlendirmesi
+          ÇALIŞIYOR). Akış birlikte baştan haritalandı:
+          - Fiziksel akış netleşti: mekân küçük olduğu için masa-bazlı ayrı QR YOK — TEK genel QR
+            kod `/kayit-ol`'a yönlendiriyor, kayıt sonrası `/menu`'ye düşülüyor. Önceki turda
+            öne sürülen "masa numarası eksik" endişesi bu turda YANLIŞ ÇIKTI, geri çekildi.
+          - **YENİ BÜYÜK KEŞİF (#62, kritik):** "Masaya Sipariş" kanalında sepet tamamlanınca
+            akışın #58 (WhatsApp yönlendirme) ile AYNI OLMADIĞI netleşti. Kullanıcı, bunun yerine
+            ayrı bir **personel sipariş paneli** istiyor: parola korumalı (personel-only auth,
+            müşteri auth'undan tamamen ayrı), gerçek-zamanlı güncellenen (yeni sipariş anında
+            ekranda belirmeli — WebSocket/SSE/polling seçimi gerekiyor), sepetten TAMAMEN
+            BAĞIMSIZ bir kayıt (CartDrawer'a hiç girmiyor, ayrı bir tabloya/akışa yazılıyor).
+            Bu, #58'in kapsamına GİRMİYOR — kendi başına yeni bir alt sistem, mimari tasarımı
+            (personel auth yöntemi, real-time teknoloji seçimi, yeni DB şeması) HENÜZ YAPILMADI.
+          - Bu konuşma çok uzadığı (CORE.md re-injection eşiği aşıldığı) için #62'nin mimari
+            tasarımı YENİ BİR SOHBETTE ele alınacak — kullanıcı onayladı.
 
 Blokaj/Sıradaki için hâlâ bekleyen:
           Neon DB şifresi (`npg_8baAZqWogI1u`) süreç içinde 3 kez ekran görüntüsünde açığa
@@ -69,7 +86,10 @@ Blokaj/Sıradaki için hâlâ bekleyen:
 
 Blokaj:   🟡 Twilio TR SMS kısıtı (#32) + Netgsm esnaf odası engeli (#56, 9000 TL) — İKİSİ DE
           PARKLI (silinmedi, öncelik değil).
-Sıradaki: (0) #57'yi TAM kapatmak için kalan tek açık uç:
+Sıradaki: (00) [YENİ, KRİTİK, Session 9] #62 — Personel Sipariş Paneli mimari tasarımı:
+          personel auth yöntemi, real-time güncelleme teknolojisi (WebSocket/SSE/polling),
+          yeni DB şeması (`tableOrders` benzeri, sepetten bağımsız). YENİ SOHBETTE ele alınacak.
+          (0) #57'yi TAM kapatmak için kalan tek açık uç:
           (0i) `/online-siparis` sayfası (marketplace linkleri: Yemeksepeti/Getir/Trendyol),
           (0l) [YENİ, Session 8] Kayıt sonrası oturum/kullanıcı adı gösterimi araştır —
           gerçek bir session mekanizması var mı, yoksa sadece DB kaydı mı? Header'da nasıl
@@ -126,7 +146,7 @@ Sıradaki: (0) #57'yi TAM kapatmak için kalan tek açık uç:
 | 🆕 | **[Session 7]** `/siparis`'teki `FulfillmentGate` (2 kanal) SİLİNMEDİ — kayıt sonrası kanal seçimi bir ÖN-TERCİH, checkout'taki gate SON ONAY olarak kalıyor | ✅ Kod tarafında `FulfillmentGate`'e hiç dokunulmadı. |
 | 🆕 | **[Session 8]** `RegistrationForm.tsx` buton rengi `bg-olive-600`'dan (tahmin, geçersiz) `bg-olive-primary`'ye (kanıtlanmış, `app/giris/page.tsx`'ten) düzeltildi | ✅ Canlıda doğrulandı — buton artık görünür. #38'in TAM DESIGN_SYSTEM.md teyidi hâlâ ayrı ve açık. |
 
-*(Tam gerekçe/tarih dökümü için: `session_log.md`.)*
+*(Tam gerekçe/tarih dökümü için: `session_arşiv.md`.)*
 
 ---
 
@@ -153,12 +173,13 @@ Sıradaki: (0) #57'yi TAM kapatmak için kalan tek açık uç:
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme (`wa.me` linki) henüz kodlanmadı — `INTEGRATIONS.md` §0 + gerçek numara bekliyor. `WhatsAppOrderButton.tsx` zaten repoda var (disabled iskelet), sıfırdan yazılmayacak. | `lib/integrations/whatsapp.ts` (henüz yok), `components/order/WhatsAppOrderButton.tsx` |
 | 59 | 🟡 | [YENİ, Session 8] Kayıt sonrası kullanıcı adı/oturum durumu hiçbir yerde görünmüyor — Header hesap ikonu giriş-yapılmamış görünümünde kalıyor. Bu akışta gerçek session/cookie var mı, kök neden araştırılmadı. | `components/layout/Header.tsx`, kayıt akışı auth mekanizması (araştırılacak) |
 | 60 | 🟠 | [YENİ, Session 8] Neon DB şifresi (`npg_8baAZqWogI1u`) sorun giderme sürecinde 3 kez ekran görüntüsünde açığa çıktı — Reset password önerisi 2 kez yapıldı, HENÜZ ONAYLANMADI/YAPILMADI. | Neon console, `.env.local` |
+| 62 | 🔴 | [YENİ, Session 9] Personel Sipariş Paneli — "Masaya Sipariş" kanalında sepet tamamlanınca #58 (WhatsApp) DEĞİL, ayrı parola korumalı + gerçek-zamanlı + sepetten bağımsız bir personel paneline yazılmalı. Mimari tasarım (auth, real-time teknoloji, şema) HENÜZ YAPILMADI — kapsamlı, yeni sohbette ele alınacak. | Yeni: personel auth sistemi, real-time katman, yeni DB tablosu (henüz yok) |
 | 61 | 🟢 | [YENİ, Session 8] `app/kayit-ol/page.tsx` alt başlığı ("Bilgilerini bırak, seni arayalım.") Claude tarafından CONTENT_GUIDE.md görülmeden uydurulmuştu — kullanıcı karar bekliyor (sil / yeniden yaz). | `app/kayit-ol/page.tsx`, `CONTENT_GUIDE.md` |
 
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49 —
-> detaylar önceki SESSION_INDEX sürümlerinde ve `session_log.md`'de.
+> detaylar önceki SESSION_INDEX sürümlerinde ve `session_arşiv.md`'de.
 >
-> Detaylı gerekçe/dosya alıntıları `session_log.md`'de (Session 0'dan Session 8'e tam).
+> Detaylı gerekçe/dosya alıntıları `session_arşiv.md`'de (Session 0'dan Session 8'e tam).
 
 ---
 
@@ -176,7 +197,9 @@ Sıradaki: (0) #57'yi TAM kapatmak için kalan tek açık uç:
 | 7 | 2026-08-06 | #57 uçtan uca kodlandı ve test edildi (17/17 PASS). Zip ile gerçek repo incelendi, 3 kritik çelişki (checkout auth kuralı, users.phone şema çakışması, FulfillmentChannel kanal sayısı) kullanıcı onayıyla çözüldü: ayrı `consentRegistrations` tablosu, ayrı `RegistrationChannel` tipi, `FulfillmentGate` korunması kararları alındı. 11 dosya üretildi (şema, validasyon+test, DB sorgusu, rate-limit+test, API route, form hook+bileşen). 2 kez 20-satır kuralı ihlali kendi kendine düzeltildi. **#57 kapanmadı** — kod hiçbir sayfaya bağlanmadı. | 🟡 Devam ediyor |
 | 8 | 2026-08-06/07 | Kullanıcı canlıda kırık Twilio giriş akışını keşfetti (ekran görüntüsü). `/kayit-ol` ve `/kvkk` route'ları oluşturulup bağlandı, Header.tsx güncellendi, eski `/giris` redirect'e çevrildi. `RegistrationForm.tsx`'teki görünmez buton bug'ı (`bg-olive-600`→`bg-olive-primary`) düzeltildi. `consentRegistrations` migration'ı (DATABASE_URL eksikliği giderilerek) canlı Neon DB'sinde koşuldu. Kayıt formu canlıda uçtan uca test edildi, BAŞARILI. Yeni açık uçlar keşfedildi: kayıt sonrası oturum/kullanıcı adı gösterimi eksik (#59), Neon şifresi 3 kez açığa çıktı/reset bekliyor (#60), Claude'un kendi uydurduğu alt başlık karar bekliyor (#61). **#57 hâlâ kapanmadı** — sadece `/online-siparis` kaldı. | 🟡 Devam ediyor — #57'nin son açık ucu + 3 yeni madde |
 
-*(Tam turn-by-turn detay: `session_log.md`.)*
+| 9 | 2026-08-07 | Kullanıcı canlı kayıt akışını "Masaya Sipariş" kanalıyla test etti — çalışıyor doğrulandı. Fiziksel akış netleşti: tek genel QR → `/kayit-ol` → `/menu` (masa-bazlı QR YOK, önceki turdaki "masa no eksik" endişesi geri çekildi). **Büyük keşif:** "Masaya Sipariş" tamamlanınca #58 (WhatsApp) değil, ayrı bir personel Sipariş Paneli (parola korumalı, gerçek-zamanlı, sepetten bağımsız) gerektiği netleşti — #62 olarak açıldı, mimari tasarımı henüz yapılmadı. Ayrıca bu session'da kullanıcı `session_log.md` (eski isim) mekanizmasını sorguladı; CORE.md/AGENT.md'nin gerçek yazılı kuralı (400 satır eşiği, ayrı anlatı bloğu YOK) doğru şekilde bulunup uygulandı, isim/mekanizma karışıklığı giderildi — CORE.md v1.3, AGENT.md v1.4'e güncellendi. Kullanıcının tek seferlik istisna (tam dosya birleştirmesini Claude'un üretmesi) talebi, aynı sohbette onaylanan kurala dayanarak reddedildi; bunun yerine ayrı bloklar (Session 7 + Session 8) verildi, birleştirme kullanıcıya bırakıldı. | 🟡 Devam ediyor — #62 yeni sohbette |
+
+*(Tam turn-by-turn detay: `session_arşiv.md`.)*
 
 ---
 
@@ -243,7 +266,7 @@ KAYDI" (Üçüncü Ders) eklendi: "kod+test tamam" ile "kullanıcı gerçekten e
 ayrı doğrulama noktaları olmalı. Diğer tüm içerik v20'den korundu, hiçbir madde
 gerekçesiz silinmedi.
 Dosya artık ~260 satır — 400 eşiğinin altında, arşivleme gerekmedi.
-Tam turn-by-turn gerekçe/karar dökümü için: `session_log.md` (Session 8 yeni bloğu ayrı
-artifact olarak verildi — kullanıcı session_log.md'nin SONUNA ekleyecek, dosya TAM olarak
+Tam turn-by-turn gerekçe/karar dökümü için: `session_arşiv.md` (Session 8 yeni bloğu ayrı
+artifact olarak verildi — kullanıcı session_arşiv.md'nin SONUNA ekleyecek, dosya TAM olarak
 yeniden üretilmedi, AGENT.md Kural #4/YASAK LİSTE gereği).
 Güncellenme: 2026-08-07.*
