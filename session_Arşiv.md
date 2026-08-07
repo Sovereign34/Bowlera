@@ -495,3 +495,208 @@
 hibrit OTP kanalı, ardından rıza-esaslı toplama + WhatsApp yönlendirme) · 🆕 (#56→parklandı, #57,
 #58) · 🔴 (WhatsAppOrderButton keşfi, dosyalama/senkron sorunu) · ⚠️ (Netgsm "onaylandı" notu
 çelişkisi hâlâ çözülmedi — Session 5 ile Session 6 arasında)
+----
+## Session 7 — 2026-08-06 — #57 Uçtan Uca Kodlama: Şema Çakışması Keşfi, RegistrationChannel Kararı, Test Doğrulaması
+
+### Bağlam ve Başlangıç
+- Kullanıcı önceliği Claude'a bıraktı ("önceliği sen ayarla, kayıt için kodlamaya başla").
+  SESSION_INDEX'teki #1 sıradaki görev (#57) seçildi.
+
+### 0a — KVKK Aydınlatma Metni Taslağı
+- `kvkk-aydinlatma-metni.md` üretildi: veri sorumlusu, işlenen veriler, işlenme amaçları,
+  hukuki sebep, aktarım, saklama süresi, KVKK m.11 hakları, rıza checkbox metni.
+- Şirket-özel alanlar (ticari unvan, adres, MERSİS/vergi no, KVKK başvuru kanalı) **TODO
+  placeholder** olarak bırakıldı — SAHTE VERİ YASAĞI gereği gerçek bilgi olmadan yayına
+  alınamaz. Hukuki inceleme uyarısı eklendi (Claude avukat değildir).
+- Kullanıcı "iki repomuz var" uyarısı yaptı (docs repo vs. kod repo, geçmişteki
+  PUSULA/Bowlera karışıklığına atıfla) — Claude hiçbir dosyayı otomatik repoya
+  aktarmadığını, taşımanın her zaman kullanıcı eliyle olduğunu netleştirdi.
+
+### Zip ile Repo İncelemesi — Kritik Çelişkiler Keşfedildi
+- Kullanıcı `Bowlera_site-main.zip` yükledi. `app/siparis/page.tsx`, `ProfileForm.tsx`,
+  `lib/db/schema.ts`, `FulfillmentGate.tsx`, `WhatsAppOrderButton.tsx`, `app/giris/page.tsx`,
+  `app/hesap/page.tsx`, `useCartStore.ts` incelendi.
+- **Çelişki A (mimari):** `app/siparis/page.tsx`'in kod-içi yorumu "guest checkout ZORUNLU
+  KILINAMAZ" diyor (ARCHITECTURE.md §1 Kural 7) — ama Session 6 kararı "zorunlu kayıt →
+  kanal seçimi" diyordu. `session_log.md` Session 6'daki tetikleyici maddesi ("Kayıt Ol"
+  veya customizer girişi) bulunup okunarak çözüldü: kayıt `/siparis`'e değil, customizer
+  girişine/voluntary tetiklemeye bağlı — checkout kuralı BOZULMADI.
+- **Çelişki B (şema):** `users.phone` `unique()+notNull()`, Twilio-doğrulanmış kimliğe
+  dayanıyor (Karar #17, "1 numara = 1 hesap"). Doğrulamasız rıza kaydını aynı tabloya
+  yazmak, gerçek numara sahibi sonradan Twilio ile giriş yapmak istediğinde `unique`
+  çakışmasına yol açar. **Karar (kullanıcı onayıyla, Claude önerisi):** AYRI tablo
+  (`consentRegistrations`) — Twilio/Netgsm akışına (#32/#56, parklı ama silinmedi) dokunulmadı.
+  Bu, SESSION_INDEX'teki eski (0e) planı ("verifiedAt'i rıza zamanı olarak yeniden
+  yorumla") GEÇERSİZ kıldı — yerine ayrı tabloda kendi `consentGivenAt` alanı kullanıldı.
+- **Çelişki C (kanal sayısı/zamanlama):** `types/index.ts`'teki `FulfillmentChannel`
+  sadece 2 değer (`pickup`/`dine-in`); Session 6 kararı 3 kanaldan bahsediyordu. Ayrıca
+  kanal seçiminin zamanlaması (kayıt sonrası mı, `/siparis`'teki mevcut `FulfillmentGate`'te
+  mi) belirsizdi. **Karar (kullanıcı onayıyla):** `FulfillmentChannel` DEĞİŞMEDİ (DB/
+  localStorage/testlere yazılı, riskli migration olurdu). Yeni, AYRI bir tip eklendi:
+  `RegistrationChannel = "masaya-siparis" | "gel-al" | "online-platform"`. Kayıt sonrası
+  seçim `fulfillmentChannel`'i ön-dolduruyor (`masaya-siparis`→`dine-in`, `gel-al`→`pickup`),
+  `/siparis`'teki `FulfillmentGate` SİLİNMEDİ, son onay adımı olarak kalıyor. `online-platform`
+  sepete hiç girmiyor ama kayıt satırı yine de oluşturuluyor (Session 6'daki "manuel WhatsApp/
+  SMS teyidi" maddesiyle tutarlı).
+
+### Kod Üretimi (uçtan uca, tek turda)
+- Şema notları önce yazıldı (CORE.md §7.4): `docs/schema-changes/20260806120000_registration_
+  channel_eklendi.md`, `docs/schema-changes/20260806130000_consent_registrations_tablosu_
+  eklendi.md`.
+- `types/index.ts` — `RegistrationChannel` eklendi (mevcut `FulfillmentChannel` dokunulmadı).
+- `lib/db/schema.ts` — `consentRegistrations` tablosu eklendi (phone unique, name, address/
+  age/gender opsiyonel, channel, consentGivenAt, createdAt, updatedAt).
+- `lib/registration/validation.ts` (+`.test.ts`, 9 test) — `validateRegistrationInput`,
+  mevcut `lib/auth/phone.ts` (`isValidTurkishPhone`/`normalizeToE164`) yeniden kullanıldı
+  (dependency discipline). **Kendi kendine düzeltme:** ilk yazımda `validateRegistrationInput`
+  (~24 satır) ve `validateOptionalFields` (~26 satır) AGENT.md'nin 20 satır kuralını aştı —
+  fark edilip anında küçük tek-iş fonksiyonlara bölündü (validateName/Phone/Consent/Channel/
+  Address/Age/Gender), kullanıcıya açıkça flaglendi.
+- `lib/db/queries/consent-registration.ts` — `upsertConsentRegistration` (phone bazlı
+  `onConflictDoUpdate` — aynı numarayla iki kez kayıt DB hatası vermez, günceller).
+- `lib/auth/rate-limit.ts`'e EKLEME — `checkRegistrationRateLimit` (IP bazlı, 5/10dk,
+  auth olmadığı için BSC-7 kritik), mevcut `checkOtpRateLimit`/`checkProfileRateLimit`'e
+  dokunulmadı (+`.registration.test.ts`, 3 test).
+- `app/api/registration/consent/route.ts` — POST, auth GEREKTİRMEZ (bilinçli), IP rate-limit,
+  sunucu-taraf rıza tekrar kontrolü (BSC-3), sessiz catch yok (BSC-4).
+- `components/registration/{useRegistrationForm.ts, channel-options.ts, RegistrationForm.tsx}`
+  — form state/submit hook'u (BSC-6 çift-submit koruması), kanal→fulfillmentChannel eşlemesi,
+  render bileşeni. `submit()` de 20 satır kuralını aşınca `postRegistration()` yardımcısına
+  bölündü (ikinci kendi kendine düzeltme).
+
+### Test Doğrulaması (kullanıcı tarafından, canlı)
+- Kullanıcı GitHub Codespaces'te `npm install` + `npx vitest run` çalıştırdı, ekran
+  görüntüsüyle **17/17 test PASS** doğrulandı: `validation.test.ts` (9), `rate-limit.test.ts`
+  (5, eski/dokunulmamış — çakışma yok teyit edildi), `rate-limit.registration.test.ts` (3).
+- Claude'a "npm zaten kurulu değilmiş" denildi, terminal/ortam netleştirme sorusu soruldu
+  ama kullanıcı asıl npm'in ZATEN kurulu olduğunu, sadece `npm install`'ın paket kurma
+  komutu olduğunu netleştirdi — küçük bir iletişim turu, teknik bir sorun çıkmadı.
+- `npm audit fix --force` çıktıda önerildi, Claude kullanıcıyı BUNU ÇALIŞTIRMAMASI için
+  uyardı (major sürüm atlayıp breaking change getirebilir).
+
+### Kararlar (özet tablo)
+| Karar | Gerekçe |
+|---|---|
+| Rıza kaydı AYRI tabloda (`consentRegistrations`), `users`'a dokunulmadı | `users.phone` unique+Twilio kimlik anahtarı çakışmasını önlemek |
+| `FulfillmentChannel` DEĞİŞMEDİ, yeni `RegistrationChannel` tipi eklendi | Mevcut DB/localStorage/test sözleşmesini bozmamak; online-platform kavramsal olarak sepetin parçası değil |
+| `RegistrationChannel` id'leri Türkçe (`masaya-siparis`/`gel-al`/`online-platform`) | Kullanıcı tercihi |
+| `FulfillmentGate` (`/siparis`) SİLİNMEDİ, kayıt sonrası seçim sadece ön-dolgu | Tek doğruluk kaynağı (Karar #13) korunur, UX bozulmaz |
+| Kayıt endpoint'i auth GEREKTİRMEZ, IP rate-limit ile korunur | Rıza akışı tanım gereği doğrulamasız |
+
+### Açık Kalan (bu turda KAPANMAYAN)
+- **`/kvkk` sayfası henüz yok** — `kvkk-aydinlatma-metni.md` sadece taslak dosya, Next.js
+  route'una dönüştürülmedi. `RegistrationForm.tsx`'teki link şu an 404 verir.
+- **`/online-siparis` sayfası henüz yok** — `online-platform` kanalı seçildiğinde
+  yönlendirilen rota, hiç oluşturulmadı.
+- **Kayıt formunun tetikleyici noktaları henüz kodlanmadı** — ne "Kayıt Ol" butonu/sayfası
+  (`app/kayit/page.tsx` gibi) ne de customizer girişindeki otomatik yönlendirme guard'ı
+  yazıldı. `RegistrationForm.tsx` şu an hiçbir sayfaya bağlı DEĞİL.
+- **DESIGN_SYSTEM.md Tailwind teyidi yapılmadı** — `RegistrationForm.tsx`'teki sınıflar
+  `ProfileForm.tsx`'ten tahmin edildi, kod içinde açıkça flaglendi (#38 ile aynı kapsamda
+  birleştirilebilir).
+- **Şirket KVKK bilgileri (unvan/adres/MERSİS/vergi no) hâlâ TODO.**
+- Şema notu dosyaları (`docs/schema-changes/...md`) sadece Claude tarafından üretildi —
+  kullanıcının bunları gerçekten `docs/` reposuna/klasörüne eklediği teyit edilmedi.
+
+### Sembol Özeti (Session 7)
+📁 (11 dosya: schema.ts, types/index.ts, validation.ts+test, consent-registration.ts,
+rate-limit.ts+test, route.ts, useRegistrationForm.ts, channel-options.ts, RegistrationForm.tsx)
+· 🔧 (3 mimari karar — ayrı tablo, ayrı RegistrationChannel tipi, FulfillmentGate korunması)
+· 🆕 (yok — hepsi mevcut #57 kapsamında) · ✅ (17/17 test canlı doğrulandı) · 🔴 (3 açık uç:
+/kvkk sayfası, /online-siparis sayfası, tetikleyici noktalar henüz yok — #57 KAPANMADI)
+
+------
+> ⚠️ İSİM DEĞİŞİKLİĞİ (2026-08-07): Bu dosya artık 'session_log.md' değil 'session_arşiv.md'
+> olarak adlandırılıyor — isim karışıklığını gidermek için (her session'da otomatik yazılan
+> bir 'log' değil, SADECE SESSION_INDEX 400 satırı geçtiğinde taşınan bir ARŞİV). Aşağıdaki
+> Session 8 bloğu, taşıma eşiği bu turda AŞILMADIĞI için (dosya 249 satır) değil, kapanış
+> anlatısı olarak üretilmişti — Bölüm 7.2 Checkpoint onayı alınmadan. Referans için saklanıyor.
+>
+## Session 8 — 2026-08-06/07 — Canlıda Kırık Giriş Akışı Keşfi, #57'nin 2 Açık Ucu Kapatıldı, Migration Koşuldu
+
+### Bağlam ve Başlangıç
+- Kullanıcı ekran görüntüsüyle geldi: canlı production'da eski Twilio OTP `/giris` sayfası
+  hâlâ tek giriş noktası olarak duruyordu ve TR SMS kısıtı yüzünden "Kod gönderilemedi"
+  hatası veriyordu. Session 7'de #57 kod+test tamamlanmıştı ama **hiçbir sayfaya
+  bağlanmamıştı** — dokümantasyon "tamamlandı" diyordu, gerçek kullanıcı deneyimi kırıktı.
+- Bu, NEXUS_OS'un kendi "GEÇMİŞ İHLAL KAYDI" mantığına uyan yeni bir süreç dersi:
+  **karar alınması + kod yazılması ≠ deploy edilmiş/bağlanmış akış.** Session kapanışında
+  "kod tamam" ile "kullanıcı bunu görebiliyor mu" arasındaki fark ayrıca doğrulanmalı.
+
+### Kritik Eylemler (kullanıcı onayıyla, tek tek)
+1. **`app/giris/page.tsx`** — eski Twilio OTP UI'ı kaldırıldı, `/kayit-ol`'a `redirect()`
+   eden basit bir sayfaya çevrildi (geriye dönük uyumluluk için route silinmedi).
+2. **`app/kayit-ol/page.tsx`** (YENİ) — `RegistrationForm.tsx`'i render eden sayfa
+   oluşturuldu. Bu, Session 7'de eksik kalan "tetikleyici nokta" açık ucunu kapattı.
+3. **`components/layout/Header.tsx`** — kullanıcı sağladı, `/giris` linki `/kayit-ol`'a
+   çevrildi (tek satır, `aria-label` de güncellendi).
+4. **`RegistrationForm.tsx` buton bug'ı** — kullanıcı canlıda test ederken "Kayıt Ol"
+   butonunun görünmediğini fark etti. Kök neden: buton class'ı `bg-olive-600` idi —
+   Session 7'de DESIGN_SYSTEM.md görülmeden TAHMİN edilmiş, tanımsız/geçersiz bir Tailwind
+   rengiydi, bu yüzden buton arkaplansız kalıp `text-white` yazı krem arkaplanda görünmez
+   oluyordu. `app/giris/page.tsx`'teki (kullanıcının kendi dosyası, doğrulanmış) `bg-olive-
+   primary` ile değiştirildi — kısmi/kanıta-dayalı düzeltme, #38'in tam kapsamlı
+   DESIGN_SYSTEM.md teyidini GEREKSİZ KILMIYOR.
+5. **`app/kvkk/page.tsx`** (YENİ) — kullanıcıdan gerçek şirket bilgileri alındı: Bowlera
+   (şahıs şirketi), VKN 41905078374, adres Çağlayan Mahallesi Park Sokak No 30/B,
+   Kağıthane/İstanbul. KVKK Aydınlatma Metni bu bilgilerle yazıldı, `kvkk-aydinlatma-
+   metni.md`'deki TODO'lar dolduruldu. ⚠️ Hukuki taslak olarak işaretlendi — Claude avukat
+   değildir, canlıya almadan önce hukuk danışmanı incelemesi önerildi.
+
+### Kendi Kendine Tespit Edilen İhlal (Claude tarafı)
+- `app/kayit-ol/page.tsx` yazılırken alt başlık olarak "Bilgilerini bırak, seni arayalım."
+  metni CONTENT_GUIDE.md'ye bakılmadan UYDURULDU. Kullanıcı fark edip sordu ("neden bu
+  saçmalığı koydun"). Claude, CONTENT_GUIDE.md görülmeden içerik üretmenin AGENT.md
+  Kural #7 (Tasarım Sistemi bypass yasak) ihlali olduğunu kabul etti. **KARAR BEKLİYOR:**
+  kullanıcı bu turda karar vermedi (silinsin mi / CONTENT_GUIDE.md paylaşılıp yeniden mi
+  yazılsın) — açık madde olarak taşınıyor.
+
+### DB Migration — DATABASE_URL Eksikliği ve Çözümü
+- `consentRegistrations` tablosu Session 7'de şemaya eklenmişti ama migration hiç
+  koşulmamıştı. Kullanıcı denediğinde `npx drizzle-kit push` "Either connection url or
+  host/database are required" hatası verdi.
+- Kök neden: Codespaces'teki `.env.local` dosyasında SADECE Netgsm SMS bilgileri vardı,
+  `DATABASE_URL` hiç tanımlı değildi (production/Vercel env, Codespaces'e otomatik
+  yansımıyor).
+- Kullanıcı adım adım yönlendirildi: Vercel dashboard → Neon entegrasyonu (Copy to
+  Clipboard "Sensitive" kilit yüzünden çalışmadı) → Neon console'a doğrudan gidildi →
+  "Connect" → "Copy snippet" ile tam connection string alındı → `.env.local`'e eklendi.
+- İlk denemede `DATABASE_URL=` öneki unutulup direkt `postgresql://...` yapıştırıldı —
+  fark edilip düzeltildi. `export DATABASE_URL=$(grep ...)` ile terminale zorla yüklenip
+  `npx drizzle-kit push` tekrar çalıştırıldı: **"[✓] Changes applied"** — migration
+  BAŞARILI, tablo artık gerçek (production) Neon DB'sinde var.
+- ⚠️ Neon DB şifresi (`npg_8baAZqWogI1u`) süreç boyunca 3 ayrı ekran görüntüsünde açığa
+  çıktı. Kullanıcıya Neon "Reset password" önerisi 2 kez yapıldı, bu turda ONAYLANMADI/
+  DOĞRULANMADI — açık madde olarak taşınıyor.
+
+### Canlı Test Sonucu ve Yeni Açık Uç
+- Kullanıcı kayıt formunu gerçek verilerle doldurup gönderdi: BAŞARILI (Menü sayfasına
+  yönlendirildi, önceki "Kayıt şu an tamamlanamadı" hatası artık YOK — migration'ın
+  etkisi doğrulandı).
+- **YENİ AÇIK UÇ (henüz araştırılmadı):** Kullanıcı kayıt sonrası hiçbir yerde kullanıcı
+  adının/oturum durumunun göründüğünü belirtti — Header'daki hesap ikonu hâlâ genel/
+  giriş-yapılmamış görünümde. Beklenen davranış netleşmedi (bu rıza-esaslı akışta gerçek
+  bir "oturum" var mı, yoksa sadece DB'ye kayıt mı düşüyor, `session`/`cookie` hiç
+  kurulmuyor mu?) — bir sonraki session'da netleştirilip #61 olarak açılmalı.
+
+### Açık Kalan (bu turda KAPANMAYAN)
+- **`/online-siparis` sayfası hâlâ yok** — #57'nin 3 açık ucundan SADECE bu kaldı
+  (diğer ikisi: /kvkk ve tetikleyici noktalar, bu session'da kapatıldı).
+- Kayıt sonrası oturum/kullanıcı adı gösterimi eksik — yeni keşfedildi, kök neden
+  araştırılmadı (#61, yeni açılacak).
+- Neon DB şifresi resetlenmedi (güvenlik önerisi, onay bekliyor).
+- `app/kayit-ol/page.tsx` alt başlığı ("Bilgilerini bırak...") — kullanıcı onayı
+  bekliyor (sil / CONTENT_GUIDE.md'ye göre yeniden yaz).
+- `/kvkk` sayfası hukuk danışmanı incelemesinden geçmedi (taslak olarak işaretli).
+- DESIGN_SYSTEM.md hâlâ görülmedi — #38 tam kapsamlı teyit hâlâ açık, bu session'daki
+  düzeltme sadece kanıta dayalı nokta-atışıydı.
+
+### Sembol Özeti (Session 8)
+📁 (5 dosya: app/giris/page.tsx yeniden yazıldı, app/kayit-ol/page.tsx YENİ,
+Header.tsx düzenlendi, RegistrationForm.tsx buton fix, app/kvkk/page.tsx YENİ)
+· 🔧 (1 mimari/altyapı aksiyonu — consentRegistrations migration canlı DB'de koşuldu)
+· 🆕 (2 yeni route: /kayit-ol, /kvkk) · ✅ (canlı kayıt formu uçtan uca test edildi,
+BAŞARILI) · 🔴 (2 yeni açık uç: oturum/kullanıcı adı gösterimi eksik, DB şifresi
+resetlenmedi) · ⚠️ (1 kendi kendine tespit edilen içerik ihlali — alt başlık uydurma,
+karar bekliyor)
+
