@@ -15,7 +15,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 1.  SESSION_INDEX.md oku
     → Anlık durum, açık sorunlar, sıradaki görevler, kritik teknik kararlar
 
-2.  session_log.md'yi ASLA otomatik isteme
+2.  session_arşiv.md'yi ASLA otomatik isteme
     → Sadece kullanıcı geçmişe bakmak isterse veya
       ilgili session numarasını belirtince o bloğu iste
 
@@ -93,12 +93,11 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Performans / Core Web Vitals | `ARCHITECTURE.md` + `DESIGN_SYSTEM.md §Animasyon` | `TEST_MATRIX.md` |
 | Responsive / mobil uyarlama | `ARCHITECTURE.md` + `CUSTOMIZER_SPEC.md §Mobil UX` | — |
 | Şubeler / konum bulucu | `ARCHITECTURE.md` + `CONTENT_GUIDE.md §SEO` | — |
-| Bug fix | `session_log.md` ilgili blok | `FAILURE_PATTERNS.md` |
-| Rollback / deploy geri alma | `ARCHITECTURE.md §Deploy` | `session_log.md` |
+| Bug fix (geçmiş kayıt lazımsa) | `session_arşiv.md` ilgili taşınmış blok (varsa) | `FAILURE_PATTERNS.md` |
+| Rollback / deploy geri alma | `ARCHITECTURE.md §Deploy` | `session_arşiv.md` |
 | Test / doğrulama / çalışıyor mu | `TEST_MATRIX.md` | — |
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
-| Session log yazma | Sadece bu session'ın bloğu | — |
 
 ---
 
@@ -108,8 +107,11 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 ── ÇEKİRDEK (Her session başında verilir) ────────────────
 CORE.md                    ← Sen buradasın
 AGENT.md                   ← Ajan davranış kuralları
-SESSION_INDEX.md           ← Anlık durum pusulası
-session_log.md             ← Tam geçmiş (sadece gerekince istenir)
+SESSION_INDEX.md           ← Anlık durum pusulası — TEK aktif hafıza dosyası
+session_arşiv.md           ← Uzak/değiştirilemez hafıza. SADECE SESSION_INDEX.md 400
+                             satırı geçtiğinde, kapanmış içerik oraya taşınır. Ayrı bir
+                             "session kaydı" mekanizması DEĞİLDİR — tek işlevi SESSION_INDEX'in
+                             boyutunu küçük tutmaktır (Bölüm 7.1).
 
 ── REFERANS ──────────────────────────────────────────────
 MASTER_PLAN.md              ← Bowlera Master Teknik Referans v2.0
@@ -253,48 +255,50 @@ public/
 - Açık sorunlar güncelle — çözülenler kaldır, yeniler ekle
 - Sıradaki görevler güncelle
 - Kritik teknik kararlar güncelle — yeni karar varsa ekle
-- Session log haritasına yeni satır ekle
 - **TAM DOSYA olarak ver**
 - ⚠️ "Şişmeyi önle" kuralı SADECE tamamlanmış/güncel-olmayan görev satırlarının silinmesini
-  kapsar. Geçmiş oturumların **arşiv blokları** (📜 GEÇMİŞ / ARŞİV başlıklı bölümler) TAM
-  içerikle korunur — özetlenip "önceki versiyona bakılmalı" gibi bir referansla DEĞİŞTİRİLMEZ.
-  Bu, AGENT.md Kural #4'ün (Truncated çıktı yasak) doğrudan bir uzantısıdır.
-- ⚠️ **400 SATIR EŞİĞİ — session_log.md'ye taşıma zorunluluğu:** Kapanışta güncellenmiş
-  SESSION_INDEX.md **400 satırı geçerse**, dosya "sıkıştırılarak" küçültülemez. Bunun yerine:
+  kapsar. Geçmiş oturumların **arşiv blokları** (SESSION ÖZET tablosu, 📜 GEÇMİŞ/ARŞİV başlıklı
+  bölümler) TAM içerikle korunur — özetlenip "önceki versiyona bakılmalı" gibi bir referansla
+  DEĞİŞTİRİLMEZ. Bu, AGENT.md Kural #4'ün (Truncated çıktı yasak) doğrudan bir uzantısıdır.
+- ⚠️ **400 SATIR EŞİĞİ — session_arşiv.md'ye taşıma zorunluluğu — TEK taşıma mekanizması:**
+  SESSION_INDEX.md ile session_arşiv.md arasındaki ilişki SADECE bu eşikle çalışır; ayrı,
+  her-session-kapanışında-yazılan bir "log" mekanizması YOKTUR (kaldırıldı — bkz. VERSİYON
+  GEÇMİŞİ, session_log→session_arşiv geçişi). Kapanışta güncellenmiş SESSION_INDEX.md
+  **400 satırı geçerse**, dosya "sıkıştırılarak" küçültülemez. Bunun yerine:
   1. Artık aktif olmayan içerik (kapanmış Açık Sorunlar, süresi geçmiş/uygulanmış Kararlar,
-     eski CURRENT FOCUS metinleri) **session_log.md'ye TAŞINIR** — silinmez, özetlenmez.
-  2. Taşınan HER madde için session_log.md'de en az 1-2 cümlelik **kapanış gerekçesi**
-     bırakılır. Gerekçesiz "artık etkili değil" diyerek satırı silmek KESİNLİKLE YASAKTIR
-     — bu, 2026-07-20'de yaşanan gerçek bir ihlaldi: bir "sıkıştırılmış" SESSION_INDEX
+     eski CURRENT FOCUS metinleri, en eski SESSION ÖZET satırları) **session_arşiv.md'ye
+     TAŞINIR** — silinmez, özetlenmez.
+  2. Taşınan HER madde için session_arşiv.md'ye eklenen blokta en az 1-2 cümlelik **kapanış
+     gerekçesi** bırakılır. Gerekçesiz "artık etkili değil" diyerek satırı silmek KESİNLİKLE
+     YASAKTIR — bu, 2026-07-20'de yaşanan gerçek bir ihlaldi: bir "sıkıştırılmış" SESSION_INDEX
      sürümü 7 açık sorunu (#4/7/15/16/20/22/34) ve 2 kararı (#11/#12) hiçbir kapanış notu
      olmadan tablolardan düşürmüştü.
   3. Taşıma işlemi kendi başına bir session kapanışı gerektirir: SESSION_INDEX.md'nin
-     400 satırın ALTINA inmiş TAM güncel hâli + session_log.md'ye eklenen taşıma bloğu
+     400 satırın ALTINA inmiş TAM güncel hâli + session_arşiv.md'ye eklenen taşıma bloğu
      **aynı turda birlikte** verilir — biri verilip diğeri sonraya bırakılamaz.
-  4. SESSION_INDEX.md'nin en üstündeki uyarı notuna, taşımanın tarihi ve kaç madde
+  4. session_arşiv.md'ye eklenen taşıma bloğu **SADECE YENİ EKLEME olarak** verilir —
+     dosyanın kendisi asla tam olarak yeniden üretilmez, kullanıcı kendi elinle
+     mevcut session_arşiv.md'sinin sonuna ekler. (Bkz. Bölüm 9 Mutlak Yasaklar.)
+  5. SESSION_INDEX.md'nin en üstündeki uyarı notuna, taşımanın tarihi ve kaç madde
      taşındığı tek satırla kaydedilir.
-  5. Bu adım atlanırsa Self-Correction tetiklenir — bkz. AGENT.md SELF-CORRECTION tablosu,
+  6. Bu adım atlanırsa Self-Correction tetiklenir — bkz. AGENT.md SELF-CORRECTION tablosu,
      "SESSION_INDEX 400 satır eşiği atlandı" satırı.
 
-**Adım 2 — session_log.md**
-- Yapılanlar + Kararlar (neden alındı) + Teknik notlar
-- **SADECE YENİ BLOK ver** — kullanıcı session_log.md'ye kendisi ekler
-
-**Adım 3 — TEST_MATRIX.md**
+**Adım 2 — TEST_MATRIX.md**
 - Bu session'da dokunulan bileşen/modül var mı?
 - Varsa ilgili satırları güncelle: ❓ → ✅ veya ❌
 - **TAM DOSYA olarak ver**
 
-**Adım 4 — DEPENDENCIES.md**
+**Adım 3 — DEPENDENCIES.md**
 - Yeni dosya/bileşen eklendi mi? Yeni bağımlılık oluştu mu?
 - Değiştiyse **TAM DOSYA olarak ver**
 
-**Adım 5 — ROADMAP.md**
+**Adım 4 — ROADMAP.md**
 - Bu session bir oturum/görev tamamladı mı?
 - Tamamlandıysa checkbox işaretle, kabul kriteri güncelle
 - Değiştiyse **TAM DOSYA olarak ver**
 
-**Adım 6 — Kullanıcı Onayı**
+**Adım 5 — Kullanıcı Onayı**
 - "Bu dosyaları onaylıyor musun?" diye sor
 - "Evet" gelmeden session kapanmaz
 - "Hayır" gelirse ilgili dosyayı düzelt, tekrar sun
@@ -307,11 +311,13 @@ public/
 > Her büyük görev tamamlandığında — session bitmeden — checkpoint al.
 
 **Ajan her büyük görev sonrası otomatik sorar:**
-> "Checkpoint alayım mı? (Evet → SESSION_INDEX + session_log + TEST_MATRIX güncellenir)"
+> "Checkpoint alayım mı? (Evet → SESSION_INDEX + TEST_MATRIX güncellenir)"
 
 **Kullanıcı "Evet" derse:**
-- SESSION_INDEX.md, session_log (yeni blok), TEST_MATRIX.md güncellenir
+- SESSION_INDEX.md ve TEST_MATRIX.md güncellenir
 - TAM DOSYA olarak verilir
+- session_arşiv.md'ye BU ADIMDA dokunulmaz — sadece SESSION_INDEX 400 satırı geçerse
+  (Bölüm 7.1 Adım 1) devreye girer
 - Kullanıcı kopyalar — kesinti olsa bile buradan devam edilir
 
 **Kullanıcı "Hayır" derse:**
@@ -321,7 +327,7 @@ public/
 
 ### 7.3 — Log Tetikleyicileri
 
-Aşağıdakilerden biri gerçekleşince log + SESSION_INDEX + checkpoint ZORUNLU:
+Aşağıdakilerden biri gerçekleşince SESSION_INDEX güncellemesi + checkpoint ZORUNLU:
 
 | Durum | Sembol |
 |---|---|
@@ -368,7 +374,7 @@ YYYYMMDDHHMMSS_aciklama.md
 
 **Session kapanışında:**
 1. Not, proje köküne `docs/schema-changes/` klasörüne kaydedilir (kullanıcı repo'ya taşır)
-2. Session log'a `🗄️` sembolü + dosya adı yazılır
+2. SESSION_INDEX.md'nin Kritik Kararlar tablosuna `🗄️` sembolü + dosya adı yazılır
 3. `ARCHITECTURE.md` güncellenir
 
 ---
@@ -409,7 +415,7 @@ YYYYMMDDHHMMSS_aciklama.md
 | Onaysız birden fazla modülü aynı anda değiştir |
 | Context eksikken HIGH confidence ver |
 | Truncated dosya ver |
-| session_log.md'yi TAM DOSYA olarak ver — SADECE YENİ BLOK |
+| session_arşiv.md'yi TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
 | Üçüncü parti entegrasyonu (WhatsApp/Adisyo/QR) gerçek anahtar/test olmadan "tamamlandı" say |
 
 ---
@@ -423,7 +429,7 @@ Her session açılışında kontrol et, sonucu kullanıcıya söyle:
 | 1 | Açık 🔴 kritik sorun var mı? | SESSION_INDEX.md → Açık Sorunlar |
 | 2 | Son deploy başarılı mı? | Kullanıcıya sor |
 | 3 | Yarım kalan entegrasyon var mı? (WhatsApp/Adisyo/QR) | SESSION_INDEX.md → Açık Sorunlar |
-| 4 | Son session log push edildi mi? | Kullanıcıya sor |
+| 4 | Son SESSION_INDEX güncellemesi push edildi mi? | Kullanıcıya sor |
 | 5 | TEST_MATRIX.md'de ❓ kritik test var mı? | TEST_MATRIX.md → kritik bileşenler |
 | 6 | Açık oturum/faz görevi var mı? | ROADMAP.md → aktif oturum |
 | 7 | Core Web Vitals hedefleri karşılanıyor mu? (LCP<2.5s, CLS<0.1) | SESSION_INDEX.md veya kullanıcıya sor |
@@ -478,3 +484,10 @@ AGENT.md v1.1 ile eşleştirildi).*
 *v1.2 — §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi: SESSION_INDEX.md 400 satırı geçince
 sıkıştırılamaz, gerekçeli olarak session_log.md'ye taşınır. Gerekçe: 2026-07-20'de yaşanan
 gerekçesiz madde kaybı (7 açık sorun + 2 karar) — AGENT.md v1.2 ile eşleştirildi (2026-07-21).*
+*v1.3 — `session_log.md` ismi ve "her session kapanışında ayrı anlatı bloğu yaz" mekanizması
+(eski §7.1 Adım 2 + §7.2'deki session_log referansı) TAMAMEN KALDIRILDI — isim ve çift-mekanizma
+karışıklığı yarattığı kullanıcı tarafından tespit edildi (2026-08-07). Yerine `session_arşiv.md`
+getirildi: TEK işlevi, SESSION_INDEX.md 400 satırı geçtiğinde kapanmış içeriği taşımak — amaç
+SESSION_INDEX'in (aktif hafızanın) boyutunu küçük tutup sistemin hafif çalışmasını sağlamak.
+"session_arşiv.md asla tam dosya olarak yeniden üretilmez, sadece yeni taşıma bloğu verilir"
+güvenlik kuralı DEĞİŞMEDİ, sadece tek mekanizmaya indirgendi. AGENT.md v1.4 ile eşleştirildi.*
