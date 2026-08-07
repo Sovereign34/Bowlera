@@ -1,4 +1,4 @@
-# BOWLERA — session_log.md
+7# BOWLERA — session_log.md
 > Tam geçmiş. SADECE kullanıcı isteyince veya ilgili session numarası belirtilince açılır
 > (CORE.md §1, Adım 2). SESSION_INDEX.md'nin "pusula" işlevini şişirmemek için buraya taşınmıştır.
 > Her session kapanışında SADECE YENİ BLOK eklenir — bu dosya asla TAM DOSYA olarak yeniden
@@ -699,4 +699,107 @@ Header.tsx düzenlendi, RegistrationForm.tsx buton fix, app/kvkk/page.tsx YENİ)
 BAŞARILI) · 🔴 (2 yeni açık uç: oturum/kullanıcı adı gösterimi eksik, DB şifresi
 resetlenmedi) · ⚠️ (1 kendi kendine tespit edilen içerik ihlali — alt başlık uydurma,
 karar bekliyor)
+----
+## ⚠️ TAŞIMA BLOĞU — session_arşiv.md'nin SONUNA eklenecek
+## Taşıma tarihi: 2026-08-07 (Session 11 checkpoint'i)
+## Taşıma gerekçesi: SESSION_INDEX.md 400 satır eşiğini geçti (403 satır). CORE.md §7.1
+## Adım 1 kuralı gereği "sıkıştırma" yasak — bunun yerine artık aktif olmayan (kapanmış/
+## geçmiş) CURRENT FOCUS anlatı blokları, gerekçesiyle birlikte buraya TAŞINDI, silinmedi.
+## SESSION_INDEX.md'de bu bloklara karşılık gelen özetler SESSION ÖZET tablosunda
+## (Session 8/9/10 satırları) ve KRİTİK KARARLAR/AÇIK SORUNLAR tablolarında (#57-#63)
+## hâlâ mevcuttur — bu blok SADECE turn-by-turn tam anlatıyı korur.
+
+---
+
+### Session 8 (2026-08-06/07) — TAM ANLATI
+
+Canlı production'da eski Twilio OTP `/giris` sayfasının hâlâ tek giriş noktası olduğu ve
+kırık olduğu keşfedildi (kullanıcı ekran görüntüsüyle bildirdi). #57'nin 2 açık ucu bu
+turda kapatıldı:
+(1) `/kayit-ol` route'u oluşturulup `RegistrationForm.tsx` bağlandı, `/giris` artık
+`/kayit-ol`'a redirect ediyor; Header.tsx'teki link güncellendi.
+(2) `/kvkk` sayfası, kullanıcıdan alınan gerçek şirket bilgileriyle (Bowlera şahıs
+şirketi, VKN 41905078374, Çağlayan Mah. Park Sokak No 30/B Kağıthane/İstanbul)
+oluşturuldu — hukuki taslak olarak işaretli, avukat incelemesi önerili.
+
+Ayrıca: `RegistrationForm.tsx`'teki "Kayıt Ol" butonu canlıda GÖRÜNMÜYORDU — kök neden
+`bg-olive-600` (Session 7'de tahmin edilmiş, geçersiz Tailwind rengi) idi, kanıtlanmış
+`bg-olive-primary` ile değiştirildi (nokta-atışı düzeltme, #38'in tam DESIGN_SYSTEM.md
+teyidini GEREKSİZ KILMAZ).
+
+`consentRegistrations` migration'ı hiç koşulmamıştı (Codespaces `.env.local`'de
+`DATABASE_URL` eksikti) — Neon connection string bulunup eklendi, `npx drizzle-kit push`
+BAŞARILI oldu. Kayıt formu canlıda uçtan uca test edildi: BAŞARILI (önceki "Kayıt şu an
+tamamlanamadı" hatası düzeldi).
+
+**#57 HÂLÂ TAM KAPANMADI — 1 açık uç kaldı:** `/online-siparis` sayfası yok (online-platform
+kanalı seçildiğinde yönlendirilen rota).
+
+**YENİ AÇIK UÇ (Session 8 keşfi, araştırılmadı):** Kayıt sonrası kullanıcı adı/oturum
+durumu hiçbir yerde görünmüyor — Header hesap ikonu giriş-yapılmamış görünümünde kalıyor.
+Bu akışta gerçek bir session/cookie kuruluyor mu, yoksa sadece DB'ye satır mı düşüyor —
+netleşmedi. → #61 (yeni).
+
+**Kapanış durumu:** #57'nin son ucu (`/online-siparis`) ve #59/#60/#61 Session 11
+itibarıyla hâlâ SESSION_INDEX.md Açık Sorunlar tablosunda açık.
+
+---
+
+### Session 9 (2026-08-07) — TAM ANLATI
+
+Kullanıcı canlı kayıt akışını "Masaya Sipariş" kanalıyla test etti (ekran görüntüsüyle
+doğrulandı: form → submit → /menu yönlendirmesi ÇALIŞIYOR). Akış birlikte baştan
+haritalandı:
+- Fiziksel akış netleşti: mekân küçük olduğu için masa-bazlı ayrı QR YOK — TEK genel QR
+  kod `/kayit-ol`'a yönlendiriyor, kayıt sonrası `/menu`'ye düşülüyor. Önceki turda öne
+  sürülen "masa numarası eksik" endişesi bu turda YANLIŞ ÇIKTI, geri çekildi.
+- **YENİ BÜYÜK KEŞİF (#62, kritik):** "Masaya Sipariş" kanalında sepet tamamlanınca akışın
+  #58 (WhatsApp yönlendirme) ile AYNI OLMADIĞI netleşti. Kullanıcı, bunun yerine ayrı bir
+  **personel sipariş paneli** istiyor: parola korumalı (personel-only auth, müşteri
+  auth'undan tamamen ayrı), gerçek-zamanlı güncellenen (yeni sipariş anında ekranda
+  belirmeli — WebSocket/SSE/polling seçimi gerekiyor), sepetten TAMAMEN BAĞIMSIZ bir kayıt
+  (CartDrawer'a hiç girmiyor, ayrı bir tabloya/akışa yazılıyor). Bu, #58'in kapsamına
+  GİRMİYOR — kendi başına yeni bir alt sistem, mimari tasarımı (personel auth yöntemi,
+  real-time teknoloji seçimi, yeni DB şeması) HENÜZ YAPILMADI.
+- Bu konuşma çok uzadığı (CORE.md re-injection eşiği aşıldığı) için #62'nin mimari
+  tasarımı YENİ BİR SOHBETTE ele alınacak — kullanıcı onayladı.
+
+Ayrıca bu session'da kullanıcı `session_log.md` (eski isim) mekanizmasını sorguladı;
+CORE.md/AGENT.md'nin gerçek yazılı kuralı (400 satır eşiği, ayrı anlatı bloğu YOK) doğru
+şekilde bulunup uygulandı, isim/mekanizma karışıklığı giderildi — CORE.md v1.3, AGENT.md
+v1.4'e güncellendi.
+
+**Kapanış durumu:** #62, Session 11'de kapsamı GENİŞLEYEREK hâlâ açık — bkz.
+SESSION_INDEX.md güncel #62 satırı.
+
+---
+
+### Session 10 (2026-08-07) — TAM ANLATI (GERİYE DÖNÜK işlenmişti, sadece sağlanan kısım)
+
+⚠️ NOT: Bu session'ın SADECE bir kısmı (sohbetin devamı) Claude'a sağlanmıştı —
+başlangıcı görülmedi. Aşağıdaki madde SADECE görülen kısımdan çıkarılmıştı, TAHMİN
+eklenmemişti. Görülen kısım #62 (Personel Sipariş Paneli) ile ilgili DB şeması
+çalışmasıydı:
+- `dotenv` paketi kuruldu. `npm install` çıktısında 12 güvenlik açığı (3 kritik) uyarısı
+  çıktı — `npm audit fix --force` KOŞULMADI (kırıcı değişiklik riski, migration'ın
+  ortasında ele alınmadı) → #63 (yeni, açık sorun olarak kaydedildi).
+- `drizzle.config.ts` kalıcı olarak düzeltildi: `defineConfig` importundan önce
+  `import { config } from "dotenv"; config({ path: ".env.local" })` eklendi — önceden
+  `.env.local`'i doğru okumuyordu. Bu düzeltme ileride başka migration'larda da geçerli
+  olacak.
+- Yeni `order_history` tablosu şemaya eklendi (alanlar: `customer_phone`, `channel`,
+  `items`, `total_price`, `ordered_at`) ve `npx drizzle-kit push` ile canlı Neon
+  veritabanına BAŞARIYLA uygulandı. Drizzle Studio ile görsel olarak doğrulandı (tablo +
+  sütunlar mevcut, henüz veri yok).
+- ⚠️ VARSAYIM (kullanıcı teyidi gerekiyordu): `order_history` tablosunun #62'nin
+  "sepetten bağımsız yeni DB şeması" ihtiyacını karşılamak için oluşturulduğu görülen
+  bağlamdan çıkarılmıştı — ama personel auth yöntemi ve real-time güncelleme teknolojisi
+  (WebSocket/SSE/polling) kararları HENÜZ görülen kısımda YOKTU. #62 bu nedenle hâlâ
+  KAPANMAMIŞTI, sadece DB şeması alt-parçası ilerlemişti.
+- Konuşma, kullanıcı onayıyla **giriş/kayıt ve diğer akışlar** konusuna geçmişti — bu
+  başlığın içeriği o turda Claude'a sağlanmamıştı.
+
+**Kapanış durumu:** Bu blokta ertelenen "giriş/kayıt ve diğer akışlar" konusu, Session 11'de
+(iki turda) tam olarak işlendi — bkz. SESSION_INDEX.md Session 11 CURRENT FOCUS ve
+SESSION ÖZET tablosu satır 11.
 
