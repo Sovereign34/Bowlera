@@ -34,12 +34,64 @@
 > yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
 > güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
 > kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
+> ⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
+> `middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
+> varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
+> gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
+> AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
+> yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
+> senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
+> etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
+> set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
+> senkron, ama açıklayıcı yorum bloklarından biri geride kalmış — bkz. Açık Sorun #72).
+> Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
+> gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
+> yapılıyor.
 
 ---
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı), 2026-08-08 — `users.role` migration KOŞULDU + DOĞRULANDI]**
+> **[YENİ SOHBET (devamı, 3.), 2026-08-08 — #62 KOD TARAFI TAMAMEN KAPANDI ✅]**
+> Bir önceki turdaki 2 açık varsayım netleşti: (1) kullanıcı **403 kararını onayladı**
+> (`role !== 'staff'` → 403, redirect değil); (2) `types/next-auth.d.ts` paylaşıldı — `role`
+> alanı `phone` deseniyle Session/User/JWT'ye eklendi (literal union korunarak, `middleware.ts`
+> guard'ının tip-güvenliği bozulmadı). Bu değişiklik build'i açtı: kullanıcı Vercel'de
+> `Property 'role' does not exist...` hatasını paylaştı, `next-auth.d.ts` düzeltmesiyle
+> çözüldü, **kullanıcı deploy'un yeşil olduğunu doğruladı**.
+> **Açık Sorun #72 de bu turda KAPANDI:** `types/index.ts`'teki eski/yanlış yorum
+> ("auth.ts henüz role set etmiyor") düzeltildi — artık 4 dosyanın (`types/index.ts`,
+> `auth.ts`, `middleware.ts`, `types/next-auth.d.ts`) hem kodu hem de açıklayıcı yorumları
+> senkron ve repoda doğrulanmış durumda.
+> **#62'nin DURUM ÖZETİ:** Mimari kararlar ✅ + DB migration ✅ + kod (4 dosya) ✅ + canlı
+> build ✅ — hepsi TAMAM. Kalan TEK parça: panelin kendisi (UI: Masaya/Gel Al iki sekme,
+> API route, polling ile real-time) — bu HENÜZ YAZILMADI, sıradaki büyük görev budur.
+> **TEST_MATRIX.md hâlâ BEKLEMEDE** (dosya bu sohbette hiç paylaşılmadı) — önceki turda
+> önerilen 5 test senaryosu (403/redirect/staff-geçişi/guest-gate regresyon/masaya-sipariş
+> izolasyonu) oraya işlenmeli, dosya paylaşılınca yapılabilir.
+
+> **[YENİ SOHBET (devamı, 2.), 2026-08-08 — Kod üretildi, ONAY BEKLİYOR (BEŞİNCİ DERS, geriye
+> dönük checkpoint)]**
+> Önceki (kesilen) turda `types/index.ts` (`AuthenticatedUser.role` eklendi), `auth.ts`
+> (JWT/session callback'lerine `role` + `normalizeRole()` eklendi), `middleware.ts`
+> (`/personel/*` için role bazlı guard eklendi) üretilip [KARAR BİLDİRİMİ] ile sunulmuştu.
+> Kullanıcı 3 dosyayı + governance dosyalarını bu sohbete taşıdı; **kod tarafı henüz
+> onaylanmadı**, sadece SESSION_INDEX bu turda geriye dönük işleniyor.
+> **İki açık varsayım hâlâ AÇIK (kullanıcı onayı bekliyor):**
+> 1. `/personel/*` + oturumlu + `role: "customer"` → **403** (redirect DEĞİL) — tasarım
+>    kararı AI tarafından verildi, şema notu ikisini de olası bırakmıştı.
+> 2. `lib/auth/guest-gate.ts` VE `next-auth.d.ts` bu sohbette hâlâ görülmedi — `middleware.ts`
+>    guest-gate'e DOKUNMADAN yazıldı (varsayım), `auth.ts`/`middleware.ts`'teki
+>    `req.auth.user.role` erişimi `next-auth.d.ts` module augmentation olmadan TS hatası
+>    verebilir (runtime'da `as` cast ile güvenli okunuyor, ama tip güvenliği eksik).
+> **Yeni bulgu (dosya senkron kontrolü sırasında):** `types/index.ts`'in kendi yorum bloğu
+> hâlâ "auth.ts HENÜZ role set etmiyor" diyor — bu YANLIŞ, auth.ts fiilen set ediyor. Kod
+> senkron ama dokümantasyon yorumu geride kalmış → Açık Sorun #72 (yeni, aşağıda).
+> **Bu turda ÜRETİLEN kod YOK** — sadece SESSION_INDEX güncellendi ve yukarıdaki 3 nokta
+> (403 onayı, next-auth.d.ts, #72 yorum düzeltmesi) netleşene kadar `types/index.ts`/
+> `auth.ts`/`middleware.ts` "onaylandı" sayılmıyor (AGENT.md Kural #3).
+
+> **[Önceki sohbet turu, 2026-08-08 — `users.role` migration KOŞULDU + DOĞRULANDI]**
 > Önceki turda üretilen `20260808020000_users_role_alani_eklendi.md` şema notu temel
 > alınarak: (1) `lib/db/schema.ts`'e `role: text("role").notNull().default("customer")`
 > eklendi, kullanıcı bu dosyayı GitHub'a manuel kaydetti; (2) migration SQL'i
@@ -147,7 +199,8 @@
 | 🆕 | **[Session 12 devamı, #69 KAPANDI — ARCHITECTURE.md v1.10]** `order_history.channel` Masaya/Gel Al ayrımı için yeterli bulundu, ek alan eklenmedi. §2.7b'nin açık soru listesi tamamen kapandı. | ✅ Karar netleşti, kod HENÜZ YAZILMADI (1b bekliyor) |
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.11]** Masa numarası TUTULACAK — terk edilmeyecek. Route: `/masaya-siparis/[tableId]` (path segment). `useCartStore`'a `tableId`+`setTableId()` eklendi (§2.3). `order_history`'ye nullable `table_number` eklenecek (SADECE dine-in) — şema notu: `20260808010000_order_history_tablenumber_eklendi.md`. #69'un kapsamı genişletildi (KAPALI kalıyor, gerekçesiz düşürülmedi). | ✅ Karar netleşti + doküman güncellendi, kod/migration HENÜZ YAZILMADI/KOŞULMADI |
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.12]** #62'nin 3 mimari sorusu KAPANDI: (1) Personel auth = `users.role` alanıyla mevcut Auth.js'e rol bazlı yetki (2) Real-time = basit polling (3) Onay kuyruğu UI = iki ayrı sekme/panel (Masaya / Gel Al). | ✅ Karar netleşti + doküman güncellendi |
-| 🗄️✅ | **[BU TURDA — `users.role` MIGRATION KOŞULDU]** `lib/db/schema.ts`'e `role` sütunu eklendi (`text`, `NOT NULL`, `DEFAULT 'customer'`), kullanıcı GitHub'a manuel kaydetti. `ALTER TABLE` Neon SQL Editor'de koşuldu, `role text` sütunu Tables görünümünde DOĞRULANDI. `users` tablosu 0 satır (Twilio #32 kısıtı) — regresyon test edilemedi ama risk de fiilen yok. `types/index.ts`/`auth.ts`/`middleware.ts` HENÜZ DEĞİŞTİRİLMEDİ. | ✅ DB tarafı TAMAM, kod tarafı bekliyor |
+| 🗄️✅ | **[önceki tur — `users.role` MIGRATION KOŞULDU]** `lib/db/schema.ts`'e `role` sütunu eklendi (`text`, `NOT NULL`, `DEFAULT 'customer'`), kullanıcı GitHub'a manuel kaydetti. `ALTER TABLE` Neon SQL Editor'de koşuldu, `role text` sütunu Tables görünümünde DOĞRULANDI. `users` tablosu 0 satır (Twilio #32 kısıtı) — regresyon test edilemedi ama risk de fiilen yok. | ✅ DB tarafı TAMAM |
+| 🗄️✅ | **[BU TURDA — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. | ✅ Kod TAMAM, canlı build YEŞİL |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -177,14 +230,19 @@
 | 59 | 🟡 | Kayıt sonrası kullanıcı adı/oturum durumu hiçbir yerde görünmüyor | `components/layout/Header.tsx` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 62 | 🟡 | Personel Sipariş Paneli — mimari kararlar KAPANDI, `users.role` migration'ı KOŞULDU+DOĞRULANDI (bu turda). Kalan: `types/index.ts`/`auth.ts`/`middleware.ts` kodu + panelin kendisi HENÜZ YAZILMADI. | `users.role` (DB'de var, kodda yok), ARCHITECTURE.md §2.9a |
+| 62 | 🔴 | Personel Sipariş Paneli — mimari kararlar ✅, DB migration ✅, `/personel/*` guard'ı (4 dosya: `types/index.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts`) ✅ canlı build yeşil. **KALAN TEK PARÇA:** panelin kendisi — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. HENÜZ YAZILMADI. | ARCHITECTURE.md §2.9a |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
 | 70 | 🟡 | `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 
-> **KAPANDI (bu turda):** `users.role` migration'ının koşulması + doğrulanması — #62'nin DB
-> tarafı artık TAM anlamıyla bitti, kalan tek şey kod (bkz. #62 açıklaması).
+> **KAPANDI (bu turda):** #72 — `types/index.ts`'teki eski/yanlış yorum düzeltildi (auth.ts
+> zaten role set ediyordu, yorum geride kalmıştı). #62'nin KOD tarafı (4 dosya) TAMAMEN
+> kapandı — kullanıcı 403 kararını onayladı, `next-auth.d.ts` eklendi, Vercel build yeşil
+> doğrulandı. #62'nin KENDİSİ (panel UI+API+polling) hâlâ AÇIK, yukarıda daraltılmış
+> kapsamıyla listede duruyor — gerekçesiz düşürülmedi.
+>
+> **KAPANDI (önceki tur):** `users.role` migration'ının koşulması + doğrulanması.
 >
 > **KAPANDI (önceki tur):** 1d — Vercel build'in yeşil olduğu kullanıcı tarafından
 > doğrulandı. #62'nin 3 açık mimari sorusu (personel auth, real-time teknoloji, onay kuyruğu
@@ -225,12 +283,12 @@
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. `lib/db/schema.ts` (users.role eklendi) kullanıcı tarafından manuel push edildi. ✅ Önceki turdaki `channel-options.ts` build kırığı düzeltildi, Vercel deploy YEŞİL (1d KAPANDI). |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 (Personel Sipariş Paneli) hiç işlenmemiş, ayrı bir oturum/kalem olarak eklenmesi gerekebilir. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı (DB var, kod yok). |
 | Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). Genel `npm test` hâlâ tekrar çalıştırılmadı. ⚠️ `users.role` migration'ı için TEST_MATRIX.md güncellemesi BEKLEMEDE (dosya paylaşılmadı). |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. **[Bu turda]** `users.role` DB'de VAR ve DOĞRULANDI, ama `/personel/*` guard'ı ve JWT'ye taşınması HENÜZ KODLANMADI. |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. **[Bu turda]** `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya (`types/index.ts`, `auth.ts`, `middleware.ts`, `types/next-auth.d.ts`) senkron, canlı build yeşil doğrulandı. |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Kullanıcı Kaydı (rıza esaslı) | 🟡 Backend+Frontend TAMAM, canlı test BAŞARILI. Oturum göstergesi eksik (#59). Kanal seçimi zorunlu adımı henüz KODLANMADI. |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. **[Bu turda]** `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). |
-| Personel Sipariş Paneli (#62) | 🟡 Mimari kararlar (auth/real-time/UI) KAPANDI. **[Bu turda]** `users.role` DB migration'ı KOŞULDU+DOĞRULANDI. Kalan: `types/index.ts`+`auth.ts`+`middleware.ts` kodu, sonra panelin kendisi (UI+API route+polling). | 
+| Personel Sipariş Paneli (#62) | 🟢 Mimari kararlar ✅, DB migration ✅, `/personel/*` guard'ı (4 dosya) ✅ canlı build yeşil. **KALAN:** panelin kendisi (UI: iki sekme, API route, polling). | 
 | Mimari Dokümantasyon | 🟢 ARCHITECTURE.md v1.12 — #62'nin 3 mimari kararı §2.9a'ya, `users.role` planı §3'e, migration notu §4.1'e işlendi; migration KOŞULDUĞU için §4.1'deki "HENÜZ KOŞULMADI" notu bir sonraki ARCHITECTURE.md turunda kaldırılmalı (şu an güncellenmedi — sadece SESSION_INDEX bu turda işlendi). ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). |
 
 ---
@@ -239,7 +297,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 1 | **[GÜNCELLENDİ, bu turda]** `users.role` migration'ı KOŞULDU+DOĞRULANDI. Sırada: `types/index.ts` (`AuthenticatedUser.role` eklenmeli), `auth.ts` (JWT session callback'ine `role` eklenmeli), `middleware.ts` (`/personel/*` rol bazlı guard). Üçü ayrı onay turu (AGENT.md Kural #5). Sonra #62 Personel Sipariş Paneli'nin kendisi (UI: iki sekme, real-time: polling). | 🔴 |
+| 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 1c | `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md bekliyor) | 🟡 |
@@ -275,15 +333,16 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v31 (v30'dan: `users.role` migration'ı kullanıcı tarafından Neon'da
-koşuldu ve Tables görünümünde doğrulandı (`role text` sütunu mevcut, `users` tablosu 0 satır —
-Twilio #32 kısıtı nedeniyle regresyon testi henüz mümkün değil ama risk de yok). Değişen
-bölümler: CURRENT FOCUS (yeni blok), KRİTİK KARARLAR (yeni satır — migration koşuldu/doğrulandı),
-AÇIK SORUNLAR (#62 açıklaması güncellendi — DB tamam/kod bekliyor, KAPANDI notuna migration
-eklendi), SESSION ÖZET (Session 12 devamı satırı güncellendi), GENEL DURUM (Repo/Test
-Suite/Auth/Veritabanı/Personel Paneli/Mimari Dokümantasyon satırları güncellendi),
-SIRADAKİ GÖREVLER (1 güncellendi — kod adımına geçildi, 1d/1f yeni, 27 TAMAMLANDI eklendi).
-Kullanıcı isteği üzerine bu checkpoint'te SADECE SESSION_INDEX güncellendi — TEST_MATRIX.md
-dosyası paylaşılmadığı için güncellenmedi (bkz. Sıradaki Görevler #1f).
+*BOWLERA SESSION_INDEX.md — v33 (v32'den: KAPANIŞ CHECKPOINT'İ — kullanıcı 403 kararını
+onayladı, `types/next-auth.d.ts` paylaşıldı ve eklendi (Vercel build kırığını düzeltti),
+kullanıcı deploy'un yeşil olduğunu doğruladı. Açık Sorun #72 (eski yorum) düzeltilip
+kapandı — `types/index.ts` güncellendi (ayrıca sunuldu). #62'nin KOD tarafı (4 dosya:
+types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) TAMAMEN kapandı; #62'nin
+KENDİSİ (panel UI+API+polling) daraltılmış kapsamla açık kalmaya devam ediyor. Değişen
+bölümler: CURRENT FOCUS (yeni kapanış bloğu), KRİTİK KARARLAR (satır güncellendi — ✅),
+AÇIK SORUNLAR (#62 daraltıldı, #72 kapandı-log'a taşındı), GENEL DURUM (Auth/Personel Paneli
+✅'ye güncellendi), SIRADAKİ GÖREVLER (1 TAMAMLANDI, panel inşası öne çıktı).
+`types/index.ts` bu turda AYRICA güncellenip sunuldu (#72 düzeltmesi) — SESSION_INDEX'le
+birlikte iki dosya bu checkpoint'in parçası.
 Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-08.*
