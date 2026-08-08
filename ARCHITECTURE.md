@@ -82,12 +82,15 @@ app/api/orders/history/route.ts ──► order_history tablosu (Neon Postgres, 
 4. Üçüncü parti API çağrıları (Adisyo/SepetTakip/Twilio) sadece app/api/ Route Handler'larından yapılır — client component'ten asla
 5. Customizer adım sırası useCustomizerStore'daki currentStep ile kontrol edilir — URL manipülasyonuyla atlanamaz
 6. Tasarım sistemi token'ları (renk/tipografi) sadece tailwind.config.ts üzerinden kullanılır — inline hex kod yasak (DESIGN_SYSTEM.md)
-7. ⚠️ [Session 11 ile KISMEN DEĞİŞTİ, henüz kodlanmadı] Auth katmanı sepet akışından tamamen
-   bağımsız DEĞİL artık — Masaya Sipariş dışındaki kanallarda ürün seçimi giriş/kayıt
-   akışını TETİKLER (§2.7a). useCartStore'un kendisi hâlâ auth durumuna göre dallanmaz
-   (state mutasyonu değişmedi), ama akışa giriş noktası artık auth-farkında. Eski hâli:
-   "guest checkout her zaman geçerli kalır" — bu artık SADECE Masaya Sipariş kanalı için
-   geçerli, diğer kanallarda giriş/kayıt zorunlu (Karar, Session 11).
+7. ⚠️ **[Session 12 ile GÜNCELLENDİ, henüz kodlanmadı]** Auth katmanı sepet akışından
+   tamamen bağımsız DEĞİL artık — ama kapsam Session 11'e göre DARALTILDI. Masaya Sipariş
+   (§2.7b) artık bu sitenin auth/kanal-seçimi mimarisinin TAMAMEN DIŞINDA, ayrı bir
+   yüzeyde (`/masaya-siparis/*`) yaşıyor — `middleware.ts`'in matcher'ı (`/menu/customize/:path*`)
+   bu yüzeyi hiç kapsamaz, YENİ BİR İSTİSNA YAZILMASINA GEREK YOK. Gel Al ve Online
+   Platform kanallarında ürün seçimi hâlâ giriş/kayıt akışını TETİKLER (§2.7a).
+   `useCartStore` hem `/menu/customize/*` (Gel Al) hem `/masaya-siparis/*` (Masaya) tarafından
+   PAYLAŞILIR — store'un kendisi auth durumuna göre dallanmaz (state mutasyonu değişmedi),
+   sadece iki farklı giriş noktası (route) vardır, ikisi de aynı store'u kullanır.
 8. Kullanıcı profili/adres verisi SADECE app/api/user/profile/route.ts üzerinden okunur/yazılır — bu route request body'den phone KABUL ETMEZ, kimlik her zaman session'dan (session.user.phone) alınır (BSC-3 kritik sınır, Karar #23)
 9. Adres alanı sipariş akışını (checkout) BLOKLAMAZ — FulfillmentChannel ("pickup" | "dine-in") delivery içermediği için adres sadece profil/sadakat verisidir, opsiyonel olarak /hesap sayfasında toplanır (Karar #23)
 10. Teslimat kanalı (fulfillmentChannel) app/siparis/page.tsx'te ZORUNLU seçim haline getirilir — kanal seçilmeden WhatsApp sipariş CTA'sı aktif olamaz (Açık Sorun #26, KAPANDI)
@@ -317,23 +320,31 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 > ⚠️ Bu alt bölüm henüz karşılık gelen kodu olmayan bir MİMARİ KARAR belgesidir.
 > SIRADAKİ GÖREVLER listesindeki 1b maddesi bu kontratı kodlayacaktır. Kod üretildiğinde
 > bu blok normal bir modül kontratına (dosya + amaç/bağlı/risk/dokunma) dönüştürülmeli.
+>
+> ⚠️ **[Session 12 ile KAPSAM DARALTILDI]** Bu bölüm artık SADECE Gel Al ve Online
+> Platform kanallarını kapsar. Masaya Sipariş bu akıştan tamamen ÇIKARILDI — kendi ayrı
+> mimarisi için bkz. §2.7b. Aşağıdaki akış/tablo bu değişikliğe göre güncellenmiştir.
 
 **Akış:**
 1. Girişsiz (guest) kullanıcı menüde serbestçe gezinebilir.
-2. Bir ürün **seçtiği an** (customizer'a girmek veya imza kaseyi sepete eklemek üzere
-   tıklamak) giriş sayfasına yönlendirilir — **istisna:** Masaya Sipariş kanalı guest
-   girişini korur (madde 3).
+2. Bir ürün **seçtiği an** (customizer'a girmek üzere tıklamak, `/menu/customize/*`)
+   giriş sayfasına yönlendirilir. **Masaya Sipariş bu akışın dışındadır** (§2.7b) —
+   `/masaya-siparis/*` bu kurala tabi değildir, ayrı bir route prefix'idir.
 3. Giriş sayfası her zaman iki seçenek sunar: **giriş** veya **kayıt**.
 4. Kayıt seçilirse: kullanıcı bilgileri + KVKK metni okutulur → giriş sağlanmadan ÖNCE
-   kanal seçimi (Masaya Servis / Gel Al / Online Platform) ZORUNLU.
+   kanal seçimi (Gel Al / Online Platform) ZORUNLU.
 
 **Kanal bazlı davranış:**
 
 | Kanal | Bilgi/Giriş gereksinimi | Sipariş tamamlama koşulu |
 |---|---|---|
-| Masaya Sipariş | YOK — kullanıcı kişisel bilgi vermek zorunda değil, **"Masaya Servis"** genel etiketiyle guest girişi yapar | Direkt tamamlanır, doğrulama yok |
 | Gel Al | Hesapla giriş (kayıt veya mevcut hesap), sepeti serbestçe doldurur | **İlk siparişte** Personel Sipariş Paneli'nden (§2.9a) personel, telefon/WhatsApp üzerinden erişim teyidi yaptıktan sonra MANUEL ONAY vermeden sipariş tamamlanmaz |
 | Online Platform | — | `/online-siparis` (henüz yok, Açık Sorun #57) üzerinden Yemeksepeti/Getir/Trendyol'a yönlendirme |
+
+> ⚠️ Masaya Sipariş satırı bu tablodan Session 12'de ÇIKARILDI — sebep silme değil,
+> TAŞIMA: bkz. §2.7b. Not: `RegistrationChannel` tipinden (`types/index.ts`)
+> `"masaya-siparis"` değerinin çıkarılıp çıkarılmayacağı HENÜZ KARARLAŞTIRILMADI — bu
+> dosya `types/index.ts`'i içermiyor, kod üretilirken netleştirilmeli (Açık Sorun, yeni).
 
 **Doğrulama durumu alanı (Açık Sorun #64 — KAPANDI, Session 11):** Gel Al kanalında ilk
 siparişteki manuel onay sırasında kullanıcı zaten DB'ye yazıldığı için, onay adımı SADECE
@@ -343,9 +354,58 @@ sonraki siparişler otomatik "confirmed"/aktif sayılır.
 
 **Personel Sipariş Paneli ile kesişim (Açık Sorun #62 — hâlâ AÇIK, kapsam genişledi):**
 "Kasa paneli" ile Açık Sorun #62'de tanımlı Personel Sipariş Paneli AYNI panel olduğu
-teyit edildi. Panel artık hem Masaya Sipariş'in gerçek-zamanlı akışını hem Gel Al'ın
-ilk-sipariş manuel onay kuyruğunu yönetecek. Personel auth yöntemi, real-time teknoloji
-(WebSocket/SSE/polling) ve onay kuyruğu UI/veri modeli **HÂLÂ TASARLANMADI** — bkz. §2.9a.
+teyit edildi. Panel artık hem Masaya Sipariş'in gerçek-zamanlı akışını (§2.7b'den gelen
+siparişler) hem Gel Al'ın ilk-sipariş manuel onay kuyruğunu yönetecek. Personel auth
+yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri modeli
+**HÂLÂ TASARLANMADI** — bkz. §2.9a.
+
+### 2.7b Masaya Sipariş — Ayrı QR Menü Sayfası — [Session 12, KARARLAŞTIRILDI, HENÜZ KODLANMADI]
+
+> ⚠️ **KARAR GEREKÇESİ:** Session 11'de Masaya Sipariş'in genel giriş/kayıt akışı içinde
+> "bilgi vermeden guest istisnası" olarak yaşaması kararlaştırılmıştı (§2.7a eski hâli).
+> Session 12'de kod incelemesi sırasında ortaya çıktı: mevcut `RegistrationForm.tsx` TÜM
+> kanallar için (Masaya dahil) aynı ad/telefon/KVKK formunu zorunlu tutuyordu — bu, Session
+> 11 kararıyla DOĞRUDAN ÇELİŞİYORDU (Açık Sorun #65). Kullanıcıyla değerlendirildi: bu
+> çelişkiyi kod-içi istisnalarla ("iki farklı UX modelini tek akışta zorlamak") çözmek
+> yerine, Masaya Sipariş'i TAMAMEN AYRI bir yüzeye taşımak kararlaştırıldı. Gerekçe: masada
+> oturan müşterinin QR okutup saniyeler içinde sipariş verebilmesi gerekiyor — ad/telefon/
+> KVKK formu bu deneyime uymuyor. Bu karar #65'i çözmüyor, ORTADAN KALDIRIYOR.
+
+```
+// app/masaya-siparis/page.tsx (+ app/masaya-siparis/customize/[id]/page.tsx)
+// Amaç:    Genel QR'dan gelen misafirin, HİÇBİR kimlik/rıza bilgisi vermeden menüyü
+//          gezip özelleştirip doğrudan sipariş verebildiği bağımsız yüzey
+// Bağlı:   lib/menu-data.json (AYNI veri kaynağı, kopya YOK), store/useCartStore.ts
+//          (PAYLAŞILIR — §1 madde 7), order_history tablosu (channel="dine-in")
+// Risk:    Bu route'un `/menu/customize/*` matcher'ına YANLIŞLIKLA dahil edilmesi guard'ı
+//          bozar (tüm masaya misafirlerini girişe zorlar); tersi de mümkün — matcher
+//          genişletilirken bu prefix'in dışarıda kaldığından emin olunmalı
+// Dokunma: middleware.ts matcher'ı DEĞİŞMİYOR — bu route zaten kapsamı dışında, bu
+//          yüzden guest-gate kodunda HİÇBİR değişiklik gerekmiyor (bkz. §1 madde 7)
+```
+
+**Netleşen kararlar:**
+- Route prefix: `/masaya-siparis/*` — mevcut kod tabanındaki `"masaya-siparis"` terimiyle
+  tutarlı (bkz. `channel-options.ts`), yeni bir isim uydurulmadı.
+- Sepet: `useCartStore` PAYLAŞILIR, ayrı/basitleştirilmiş bir state kurulmuyor — sebep:
+  customizer fiyat/kalori hesaplama mantığı zaten yazılı+test edilmiş
+  (`customizer-summary-format.test.ts`), tekrar yazmak Sahte Veri Yasağı ruhuna aykırı
+  bir bakım yükü yaratırdı.
+- Guest gate etkisi: `middleware.ts` matcher'ı `/menu/customize/:path*` olarak KALIYOR —
+  `/masaya-siparis/*` bu prefix'in dışında olduğu için middleware'e YENİ BİR İSTİSNA
+  YAZILMASINA GEREK YOK. Açık Sorun #65 bu kararla KAPANIYOR (kod üretildiğinde).
+
+**HÂLÂ AÇIK olan sorular (kod üretilmeden netleşmeli):**
+1. `/masaya-siparis` sayfasından sipariş tamamlandığında checkout adımı nasıl olacak —
+   mevcut `app/siparis/page.tsx`'in (artık Gel Al'a özel) bir varyantı mı, yoksa kendi
+   mini-checkout'u mu? (§2.9 ile ilişkili, henüz kararlaştırılmadı)
+2. `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak
+   mı, yoksa `FulfillmentChannel`'da mı kalacak? (§3'teki not, henüz kararlaştırılmadı)
+3. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
+   edeceği — `channel: "dine-in"` alanı zaten yeterli mi, yoksa ek bir kaynak/route
+   alanı mı gerekiyor?
+
+
 
 ### 2.8 `app/api/user/profile/route.ts` + `app/hesap/page.tsx` — Kullanıcı Profili/Adres
 
@@ -376,16 +436,18 @@ ilk-sipariş manuel onay kuyruğunu yönetecek. Personel auth yöntemi, real-tim
 > ⚠️ Bilinen açıklar: `ProfileForm.tsx`'teki Tailwind renk sınıfları DESIGN_SYSTEM.md
 > görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38).
 
-### 2.9 `app/siparis/page.tsx` — Checkout (Paket Servis / Gel Al)
+### 2.9 `app/siparis/page.tsx` — Checkout (Gel Al)
 
 ```tsx
 // app/siparis/page.tsx
 // Amaç:    Sepet özeti + ZORUNLU teslimat kanalı seçimi + sipariş CTA'sı
 // Bağlı:   store/useCartStore.ts, components/order/{OrderSummary,FulfillmentGate,WhatsAppOrderButton}.tsx
 // Risk:    Kanal seçimi zorunlu kılınmazsa teslimat şekli belirsiz sipariş oluşur (Açık Sorun #26 — KAPANDI)
-// Dokunma: §1 Katman Sınırı Kuralı madde 7 (güncellendi) — guest checkout SADECE Masaya
-//          Sipariş kanalında korunur; Gel Al kanalında artık hesap girişi ön koşuldur
-//          (Session 11, henüz kodlanmadı — bkz. §2.7a)
+// Dokunma: ⚠️ [Session 12 ile GÜNCELLENDİ] Bu sayfa artık SADECE Gel Al kanalı içindir —
+//          guest checkout istisnası TAMAMEN KALKTI (Masaya Sipariş §2.7b'ye taşındı, kendi
+//          ayrı akışı olacak). Gel Al kanalında artık hesap girişi ön koşuldur (§2.7a).
+//          §2.7b Açık Soru #1: Masaya'nın kendi checkout'u bu sayfanın varyantı mı olacak,
+//          netleşmedi — netleşene kadar bu sayfa Gel Al'a özel kalır.
 ```
 
 > **Karar:** WhatsApp CTA'sı bilinçli olarak devre dışı bırakıldı —
@@ -396,13 +458,15 @@ ilk-sipariş manuel onay kuyruğunu yönetecek. Personel auth yöntemi, real-tim
 ### 2.9a Personel Sipariş Paneli — [Açık Sorun #62, TASARIM AŞAMASINDA]
 
 ```
-// Amaç:    (1) Masaya Sipariş'in gerçek-zamanlı akışını VE (2) Gel Al'ın ilk-sipariş
-//          manuel telefon/WhatsApp onay kuyruğunu TEK panelde yönetmek
+// Amaç:    (1) Masaya Sipariş'in gerçek-zamanlı akışını (artık §2.7b'deki
+//          `/masaya-siparis/*` yüzeyinden gelir) VE (2) Gel Al'ın ilk-sipariş manuel
+//          telefon/WhatsApp onay kuyruğunu TEK panelde yönetmek
 // Bağlı:   order_history tablosu (Neon Postgres, Session 10'da migrate edildi ve
 //          doğrulandı — bu panelin temel veri katmanı hazır)
 // Risk:    Personel auth zayıfsa sipariş verisi/onay yetkisi yetkisiz erişime açılır (BSC ihlali riski)
 // Dokunma: Bu bölüm henüz bir dosya kontratı DEĞİL — aşağıdaki 3 karar netleşmeden
 //          kod üretilemez (AGENT.md Self-Check: "Tüm gerekli dosyalar sağlandı mı?")
+//          [Session 12] §2.7b Açık Soru #3 (order_history'de kanal ayrımı) burayı da etkiler.
 ```
 
 **Hâlâ AÇIK olan 3 mimari soru:**
@@ -436,11 +500,12 @@ type BowlItem = {
 }
 
 type FulfillmentChannel = "pickup" | "dine-in"
-// ⚠️ [Session 11 ile İLGİLİ, henüz kodlanmadı] Kavramsal olarak üç kanal var (Masaya
-// Sipariş / Gel Al / Online Platform) ama bu tip hâlâ ikili (pickup/dine-in). Online
-// Platform kanalı checkout'u değil, ayrı bir yönlendirme sayfasını (/online-siparis,
-// Açık Sorun #57) kullanıyor — bu yüzden şimdilik bu tipe eklenmedi. 1b kodlanırken
-// bu tipin üçüncü bir değere ihtiyacı olup olmadığı netleştirilmeli.
+// ⚠️ [Session 12 ile GÜNCELLENDİ, henüz kodlanmadı] "dine-in" değeri artık Gel Al kanalının
+// giriş/kayıt akışından DEĞİL, §2.7b'deki ayrı `/masaya-siparis/*` yüzeyinden geliyor.
+// Online Platform kanalı hâlâ checkout'u değil, ayrı bir yönlendirme sayfasını
+// (/online-siparis, Açık Sorun #57) kullanıyor. §2.7b Açık Soru #2: bu tipin üçüncü bir
+// değere ihtiyacı olup olmadığı (ya da RegistrationChannel'daki "masaya-siparis"in
+// FulfillmentChannel'a mı taşınacağı) HENÜZ KARARLAŞTIRILMADI.
 
 type CartItem = {
   cartId: string                 // uuid — sepet içi benzersiz kimlik
@@ -464,8 +529,9 @@ type AuthenticatedUser = {
   // ⚠️ [YENİ, Session 11, Açık Sorun #64 — KARAR KAPANDI, HENÜZ KODLANMADI]
   // Gel Al kanalında ilk sipariş onayı bekleniyorsa "pending", personel manuel onay
   // verdikten sonra "confirmed" — sonraki siparişler tekrar onay istemez (§2.7a).
-  // Masaya Sipariş / Online Platform kanallarında bu alan kullanılmaz (guest veya
-  // marketplace yönlendirmesi).
+  // Online Platform kanalında bu alan kullanılmaz (marketplace yönlendirmesi).
+  // [Session 12] Masaya Sipariş artık AuthenticatedUser kapsamının dışında — §2.7b,
+  // hiç kimlik/hesap oluşturmuyor.
 }
 
 type OrderHistoryEntry = {
@@ -540,8 +606,22 @@ type OrderHistoryEntry = {
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.6 — Session 11 — 2026-08-07*
-*Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-11 senkronu)*
+*BOWLERA ARCHITECTURE.md — v1.7 — Session 12 — 2026-08-08*
+*Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
+*v1.7 (bu güncelleme): Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI —
+yeni §2.7b eklendi (`/masaya-siparis/*`, auth gerektirmeyen bağımsız yüzey). Gerekçe: Session
+11 kararı ("Masaya Sipariş = bilgi vermeden guest girişi") ile mevcut kodun (`RegistrationForm.tsx`
+TÜM kanallar için aynı formu zorunlu tutuyordu) ÇELİŞTİĞİ Session 12'de kod incelemesiyle
+tespit edildi (Açık Sorun #65). Çözüm: istisna eklemek yerine Masaya Sipariş'i mimariden
+çıkarmak. Değişiklikler: (1) §1 madde 7 — Masaya Sipariş artık middleware matcher kapsamı
+dışında, YENİ İSTİSNA GEREKMİYOR; (2) §2.7a — tablo Gel Al/Online'a daraltıldı; (3) §2.7b
+YENİ — route (`/masaya-siparis`), sepet kararı (`useCartStore` PAYLAŞILIR, ayrı state YOK)
+ve 3 açık soru (checkout varyantı, RegistrationChannel/FulfillmentChannel tip etkisi,
+order_history kanal ayrımı); (4) §2.9 — checkout artık Gel Al'a özel; (5) §2.9a — Masaya
+akışının kaynağı güncellendi; (6) §3 — FulfillmentChannel ve AuthenticatedUser yorumları
+senkronize edildi. ⚠️ Bu güncelleme SADECE dokümantasyon — kod HENÜZ YAZILMADI (1b/§2.7b
+SIRADAKİ GÖREVLER'de duruyor).*
+*v1.6: Session 11 — 2026-08-07*
 *v1.6 (bu güncelleme): Dosya, kodun önceden ilerlediği ama dokümana hiç yansımadığı
 Session 8-11 aralığına SENKRONİZE edildi — bu, CORE.md'nin "kod yazılmadan önce Claude
 bu dosyayı okumak zorundadır" kuralının bozulmasını önlemek için yapıldı (dosya, SESSION_INDEX
