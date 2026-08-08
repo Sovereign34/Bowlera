@@ -40,6 +40,30 @@
 
 ## 🎯 CURRENT FOCUS
 
+> **[Session 12, 2026-08-08 — RETROACTİF checkpoint, zip doğrulamalı]** Session 11'in
+> kapanışında SIRADAKİ GÖREV 1b için kodlama başlamıştı; o sohbet de checkpoint onayı
+> beklerken kapandı (SESSION_INDEX güncellenmeden). Kullanıcı önce kapanan sohbetin son
+> mesajını (KARAR BİLDİRİMİ + checkpoint sorusu) yapıştırdı; Claude eksik veri nedeniyle
+> (kod dosyaları görülmedi, "#65" referansı belirsizdi, "Sepete Ekle" kapsam sorusu
+> cevapsızdı) üretmeyi reddedip 3 netleştirme istedi. Kullanıcı ardından GERÇEK REPO ZIP'İNİ
+> yükledi — bu turda kod doğrudan repodan incelendi (tahmine dayanmadı):
+> - `middleware.ts` + `lib/auth/guest-gate.ts` + `lib/auth/guest-gate.test.ts` repoda MEVCUT
+>   ve zaten push edilmiş durumda görüldü.
+> - `auth.ts`'in gerçek export şekli (`{ handlers, auth, signIn, signOut }`) doğrulandı —
+>   `middleware.ts`'in `import { auth } from '@/auth'` çağrısıyla TAM uyumlu. Önceki turdaki
+>   MEDIUM confidence gerekçesi (auth.ts export şekli görülmedi) bu turda ortadan kalktı →
+>   **confidence HIGH'a yükseltildi.**
+> - "#65" referansı `guest-gate.ts`/`middleware.ts` yorum bloklarında zaten belgeliydi:
+>   Masaya Sipariş kanalının guest-girişi istisnası bu middleware'e BİLİNÇLİ OLARAK
+>   eklenmemiş (kod yorumunda "kullanıcı onayı: B olmalı" notu var — bu onayın tam içeriği
+>   bu turda görülmeyen bir önceki alt-turda verilmiş, sadece sonucu koda yazılmış).
+> - "Sepete Ekle" bypass gap'i (component-seviyesi guard, #66) kullanıcıya hâlâ SORULMADI —
+>   kod yorumunda "1b'nin bu turda ele alınmayan bir parçası" olarak dokümante edilmiş,
+>   backlog'a eklenip eklenmeyeceği AÇIK karar olarak aşağıya işlendi.
+> ⚠️ **Sınırlama:** Bu ortamda ağ erişimi yok, `npm test`/`vitest` ÇALIŞTIRILAMADI. Test
+> dosyası (8 test: 2 happy + 4 edge + 2 failure) kod incelemesiyle doğrulandı, ama
+> ÇALIŞTIRILARAK doğrulanmadı — bu ayrım kullanıcıya açıkça belirtildi, "PASS" iddia edilmedi.
+
 > 📦 **[Session 11 checkpoint'inde taşındı]** Session 8, Session 9 ve Session 10'un
 > CURRENT FOCUS anlatı blokları (Twilio→`/kayit-ol` geçişi, buton bug fix, migration
 > koşumu; Masaya Sipariş fiziksel akış + #62'nin açılışı; `order_history` DB şeması
@@ -227,6 +251,8 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 | 61 | 🟢 | [YENİ, Session 8] `app/kayit-ol/page.tsx` alt başlığı ("Bilgilerini bırak, seni arayalım.") Claude tarafından CONTENT_GUIDE.md görülmeden uydurulmuştu — kullanıcı karar bekliyor (sil / yeniden yaz). | `app/kayit-ol/page.tsx`, `CONTENT_GUIDE.md` |
 | 62 | 🔴 | Personel Sipariş Paneli — **[Session 11, KAPSAM GENİŞLEDİ]** Artık SADECE "Masaya Sipariş"in gerçek-zamanlı akışı değil, "kasa paneli" ile AYNI ŞEY olduğu teyit edildi ve Gel Al'ın İLK siparişteki manuel telefon/WhatsApp teyit+onay kuyruğunu da yönetecek. **[Session 11 devamı]:** #64 kapanışıyla mimariye yeni bir alt-karar eklendi — kullanıcı kaydında doğrulama durumu alanı (`pending`/`confirmed`), ilk onaydan sonra sonraki siparişler otomatik "aktif" sayılacak. DB şeması alt-parçası (`order_history`) canlıda var. Personel auth yöntemi, real-time güncelleme teknolojisi (WebSocket/SSE/polling) VE doğrulama durumu alanının kesin şeması HÂLÂ YAPILMADI — #62 KAPANMADI. | `order_history` (Neon, migrate edildi), personel auth sistemi (henüz yok), real-time katman (henüz yok), doğrulama durumu alanı (henüz yok) |
 | 63 | 🟠 | [YENİ, Session 10] `npm install` çıktısında 12 güvenlik açığı (3 kritik) uyarısı — `npm audit fix --force` bilinçli olarak KOŞULMADI (kırıcı değişiklik riski, migration'ın ortasındaydı). Ayrı, sakin bir zamanda ele alınmalı. | `package.json`, `npm audit` çıktısı |
+| 65 | 🟡 | [YENİ, Session 11/12] Guest gate middleware'i (`resolveGuestGateRedirect`) Masaya Sipariş kanalının guest-girişi istisnasını KAPSAMIYOR — Session 11'de kararlaştırılan "Masaya Sipariş = 'Masaya Servis' etiketiyle bilgi vermeden guest girişi" kuralı, şu an `/menu/customize/*` altındaki HERKESİ (kanal ayrımı yapmadan) girişe yönlendiriyor. Kod yorumunda "kullanıcı onayı: B olmalı" notu var — bu seçimin tam gerekçesi/alternatifleri (A neydi?) bu turda görülmeyen bir alt-turda konuşulmuş, netleştirilmesi istenirse kullanıcıdan teyit alınmalı. Bilinçli borç olarak kodda işaretli. | `lib/auth/guest-gate.ts`, `middleware.ts` |
+| 66 | 🟢 | [YENİ, Session 11/12] İmza kase "Sepete Ekle" butonu (customize'a hiç girmeden direkt ekleme) client-side action olduğu için guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi ayrı bir guard gerekiyor. **AÇIK KARAR (kullanıcıdan teyit bekliyor):** bu, 1b'nin ayrı bir alt-görevi olarak SIRADAKİ GÖREVLER'e eklensin mi, yoksa bilinçli açık mı bırakılsın? | `components/customizer/AddToCartButton.tsx` (muhtemelen, #50 ile kesişiyor) |
 
 > **KAPANDI (bu turda):** #64 — Gel Al onay adımının sadece ilk siparişte gerektiği kullanıcı
 > tarafından netleştirildi (ilk teyitte kullanıcı DB'ye yazılır, doğrulama durumu alanı
@@ -255,6 +281,7 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 | 9 | 2026-08-07 | Kullanıcı canlı kayıt akışını "Masaya Sipariş" kanalıyla test etti — çalışıyor doğrulandı. Fiziksel akış netleşti: tek genel QR → `/kayit-ol` → `/menu` (masa-bazlı QR YOK, önceki turdaki "masa no eksik" endişesi geri çekildi). **Büyük keşif:** "Masaya Sipariş" tamamlanınca #58 (WhatsApp) değil, ayrı bir personel Sipariş Paneli (parola korumalı, gerçek-zamanlı, sepetten bağımsız) gerektiği netleşti — #62 olarak açıldı, mimari tasarımı henüz yapılmadı. Ayrıca bu session'da kullanıcı `session_log.md` (eski isim) mekanizmasını sorguladı; CORE.md/AGENT.md'nin gerçek yazılı kuralı (400 satır eşiği, ayrı anlatı bloğu YOK) doğru şekilde bulunup uygulandı, isim/mekanizma karışıklığı giderildi — CORE.md v1.3, AGENT.md v1.4'e güncellendi. Kullanıcının tek seferlik istisna (tam dosya birleştirmesini Claude'un üretmesi) talebi, aynı sohbette onaylanan kurala dayanarak reddedildi; bunun yerine ayrı bloklar (Session 7 + Session 8) verildi, birleştirme kullanıcıya bırakıldı. | 🟡 Devam ediyor — #62 yeni sohbette |
 | 10 | 2026-08-07 | ⚠️ Session_INDEX bu session'ın sonunda güncellenmemişti, sonraki sohbette geriye dönük tamamlandı — sadece sohbetin sağlanan (son) kısmı işlendi, başlangıcı görülmedi. Görülen kısım #62'nin DB şeması alt-parçası: `dotenv` kuruldu (npm audit 12/3-kritik uyarısı görüldü ama ele alınmadı → #63 yeni), `drizzle.config.ts`'e kalıcı `.env.local` yüklemesi eklendi, yeni `order_history` tablosu (`customer_phone`,`channel`,`items`,`total_price`,`ordered_at`) canlı Neon'a migrate edildi ve Drizzle Studio ile doğrulandı. #62 hâlâ KAPANMADI — personel auth + real-time teknoloji kararı yok. Konuşma sonra giriş/kayıt akışları konusuna geçti (içeriği bu turda sağlanmadı). | 🟡 Devam ediyor — #62 kısmi ilerleme, #63 yeni |
 | 11 | 2026-08-07 | ⚠️ Bu güncelleme de GERİYE DÖNÜK yapıldı — Session 10'un devamı olan sohbet kapanmış ama SESSION_INDEX güncellenmemişti; kullanıcı kapanan sohbetin TAM METNİNİ bu sohbete taşıdı. İşlenen içerik: Session 10'da ertelenen giriş/kayıt/sipariş kanalı akışı netleşti. Genel kural: girişsiz kullanıcı menüde gezinebilir, ürün seçince giriş sayfasına yönlenir, giriş sayfası giriş/kayıt sunar, kayıtta bilgi+KVKK sonrası kanal seçimi (Masaya Servis/Gel Al/Online) giriş sağlanmadan ÖNCE zorunlu. Kanal bazlı netleşme: Masaya Sipariş = guest ("Masaya Servis" etiketiyle, bilgi vermeden); Gel Al = hesapla giriş + İLK siparişte personel manuel telefon/WhatsApp onayı zorunlu; Online = `/online-siparis`'e yönlendirme (değişmedi). **Kritik kapsam kararı:** "kasa paneli" ile #62 Personel Sipariş Paneli AYNI ŞEY olduğu teyit edildi — panel artık hem Masaya Sipariş gerçek-zamanlı akışını hem Gel Al'ın manuel onay kuyruğunu yönetecek; bu #58 (WhatsApp yönlendirme) ile #62'yi de iç içe geçirdi. **Aynı session'ın devamında:** #64 kapandı — Gel Al onayının sadece ilk siparişte gerektiği, ilk teyitte kullanıcının DB'ye yazılıp bir doğrulama durumu alanıyla (`pending`/`confirmed`) takip edileceği kullanıcı tarafından onaylandı; bu karar #62'nin mimari kapsamına eklendi. Bu turda kod/şema ÜRETİLMEDİ, kullanıcı checkpoint istedi ve SESSION_INDEX bu noktada güncellendi. | 🔴 Devam ediyor — #62 mimari tasarımı (auth+real-time+doğrulama alanı) hâlâ bekliyor; #64 KAPANDI |
+| 12 | 2026-08-08 | ⚠️ Yine RETROAKTİF: Session 11'in devamı olan sohbet, 1b'nin guest-gate middleware'i kodlanıp checkpoint onayı BEKLENİRKEN kapandı. Kullanıcı önce kapanan sohbetin son mesajını yapıştırdı; eksik veri (kod görülmedi, "#65" belirsiz, "Sepete Ekle" kararı cevapsız) nedeniyle üretim reddedildi, netleştirme istendi. Kullanıcı ardından gerçek repo zip'ini yükledi — kod doğrudan repodan doğrulandı (tahmin edilmedi): `middleware.ts`+`guest-gate.ts`+`guest-gate.test.ts` repoda mevcut ve push edilmiş; `auth.ts` export şekli middleware ile tam uyumlu bulundu (confidence MEDIUM→HIGH). "#65" kod yorumunda zaten belgeliymiş: Masaya Sipariş'in guest istisnası middleware'e bilinçli olarak eklenmemiş. "Sepete Ekle" bypass gap'i #66 olarak açık karara bağlandı (kullanıcı teyidi bekliyor). Ağ erişimi olmadığından testler ÇALIŞTIRILAMADI, sadece kod incelemesiyle doğrulandı — bu ayrım açıkça belirtildi. | 🟡 1b kısmen tamamlandı — #65/#66 açık, kanal seçimi adımı hâlâ kodlanmadı |
 
 *(Tam turn-by-turn detay: `session_arşiv.md`.)*
 
@@ -266,8 +293,8 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 |---|---|
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel, Vercel Production'da deploy'lar Ready. Kullanıcı GitHub Codespaces (`3rw9.github.dev`) üzerinden de çalışıyor. |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı |
-| Test Suite | 🟢 Header.test.tsx, customizer-summary-format.test.ts, menu-filters.test.ts, hakkimizda/page.test.tsx (2/2), send-otp.test.ts (3/3), `lib/registration/validation.test.ts` (9), `lib/auth/rate-limit.test.ts` (5), `lib/auth/rate-limit.registration.test.ts` (3). Genel `npm test` (tüm proje) hâlâ tekrar çalıştırılmadı. |
-| Auth | 🟡 Twilio/Netgsm PARKLI (#32/#56). **[Session 8]:** Eski `/giris` (Twilio OTP) UI'ı kaldırıldı, rıza esaslı kayıt (`/kayit-ol`) birincil akış oldu. Oturum/kullanıcı adı gösterimi hâlâ netleşmedi (#59). **[Session 11]:** Genel giriş/kayıt akışı (guest gezinme → ürün seçince giriş, giriş sayfasında giriş/kayıt seçimi, kanal seçimi zorunluluğu) karar olarak netleşti, henüz KODLANMADI. |
+| Test Suite | 🟢 Header.test.tsx, customizer-summary-format.test.ts, menu-filters.test.ts, hakkimizda/page.test.tsx (2/2), send-otp.test.ts (3/3), `lib/registration/validation.test.ts` (9), `lib/auth/rate-limit.test.ts` (5), `lib/auth/rate-limit.registration.test.ts` (3), `lib/auth/guest-gate.test.ts` (8 — kod incelemesiyle doğrulandı, bu ortamda ağ yok, ÇALIŞTIRILAMADI). Genel `npm test` (tüm proje) hâlâ tekrar çalıştırılmadı. |
+| Auth | 🟡 Twilio/Netgsm PARKLI (#32/#56). **[Session 8]:** Eski `/giris` (Twilio OTP) UI'ı kaldırıldı, rıza esaslı kayıt (`/kayit-ol`) birincil akış oldu. Oturum/kullanıcı adı gösterimi hâlâ netleşmedi (#59). **[Session 11]:** Genel giriş/kayıt akışı karar olarak netleşti. **[Session 11/12]:** Guest gate middleware'i (`/menu/customize/*` → `/kayit-ol` callbackUrl ile) KODLANDI, repoda push edilmiş halde doğrulandı (zip incelemesi). Kanal ayrımı (Masaya Sipariş guest istisnası, #65) ve "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik — 1b TAM kapanmadı. |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Kullanıcı Kaydı (rıza esaslı) | 🟡 **[Session 8]** Backend + Frontend TAMAM, `/kayit-ol`'a BAĞLANDI, DB migration KOŞULDU, canlı uçtan uca test BAŞARILI. Kayıt sonrası oturum göstergesi eksik (#59). **[Session 11]:** Kayıt akışına "kanal seçimi zorunlu" adımı eklenmesi kararlaştırıldı, henüz KODLANMADI. |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı — kanal seçimi zorunlu, `FulfillmentGate` dokunulmadan doğrulandı |
@@ -290,7 +317,7 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 1 | [GENİŞLEDİ, Session 11] #62 Personel Sipariş Paneli mimari tasarımı — Masaya Sipariş gerçek-zamanlı akışı + Gel Al ilk-sipariş manuel onay kuyruğu + kullanıcı doğrulama durumu alanı (#64 kararı dahil): personel auth yöntemi, real-time teknoloji, onay kuyruğu UI/veri modeli, `pending`/`confirmed` şeması | 🔴 |
-| 1b | [YENİ, Session 11] Genel giriş/kayıt akış kararlarını (guest gezinme, giriş sayfası giriş/kayıt seçimi, kayıtta zorunlu kanal seçimi) koda dök | 🔴 |
+| 1b | [KISMİ İLERLEME, Session 12] Genel giriş/kayıt akış kararlarını koda dök — `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı). Kalan: (i) Masaya Sipariş guest istisnası middleware'e eklenmeli (#65), (ii) "Sepete Ekle" bypass için component-seviyesi guard (#66 — eklensin mi kararı bekliyor), (iii) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri: Yemeksepeti/Getir/Trendyol) | 🔴 |
 | 3 | [YENİ] Kayıt sonrası oturum/kullanıcı adı gösterimini araştır ve çöz (#59) | 🟡 |
 | 4 | [YENİ] Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
@@ -316,7 +343,9 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v24. ⚠️ **400 satır eşiği bu checkpoint'te tetiklendi:**
+*BOWLERA SESSION_INDEX.md — v25 (v24'ten: #65/#66 eklendi, 1b kısmi tamamlandı, guest gate
+middleware zip üzerinden doğrulandı, confidence HIGH'a yükseltildi). ⚠️ **400 satır eşiği
+Session 11 checkpoint'inde tetiklenmişti** (bu Session 12 turunda YENİDEN tetiklenmedi):
 CURRENT FOCUS'taki Session 8/9/10 anlatı blokları (3 madde, ~59 satır) `session_arşiv.md`'ye
 TAŞINDI (gerekçe: hepsi kapanmış/geçmiş anlatıydı, SESSION ÖZET + KRİTİK KARARLAR/AÇIK
 SORUNLAR tablolarında özleri zaten korunuyordu — bkz. dosya başındaki 400 SATIR EŞİĞİ
@@ -344,7 +373,26 @@ taşındı (henüz kod/şema üretilmedi). Kullanıcı checkpoint istedi, kod a�
 noktada SESSION_INDEX güncellendi (AGENT.md Checkpoint protokolüne uyuldu). Diğer tüm içerik
 v23'ten korundu, hiçbir madde gerekçesiz silinmedi.
 Dosya artık ~380 satır — 400 eşiğinin altında, arşivleme gerekmedi.
-Tam turn-by-turn gerekçe/karar dökümü için: `session_arşiv.md` (bu session için henüz
-ayrı blok üretilmedi — 400 satır eşiği tetiklenmedi, AGENT.md §Session Arşiv kuralı gereği
-gerekmiyor).
-Güncellenme: 2026-08-07.*
+Tam turn-by-turn gerekçe/karar dökümü için: `session_arşiv.md` (Session 11 için henüz
+ayrı blok üretilmedi — 400 satır eşiği o turda tetiklenmedi).
+
+**Session 12 (2026-08-08, RETROAKTİF):** Session 11'in devamı olan sohbet, guest-gate
+middleware'i (1b) kodlanıp checkpoint onayı BEKLENİRKEN kapandı. Kullanıcı önce sadece
+kapanan sohbetin son mesajını (KARAR BİLDİRİMİ) yapıştırdı; Claude bu turda "Tahmin etme"
+kuralına (AGENT.md Kural #1/#2) uyarak — kod dosyaları görülmediği, "#65" referansının
+kaynağı belirsiz olduğu ve "Sepete Ekle" kapsam sorusu cevapsız kaldığı için — TAM DOSYA
+üretmeyi reddetti, 3 netleştirme istedi. Kullanıcı ardından GERÇEK REPO ZIP'İNİ yükledi;
+bu turda hiçbir şey tahmin edilmedi, doğrudan repodan doğrulandı: `middleware.ts` +
+`lib/auth/guest-gate.ts` + `lib/auth/guest-gate.test.ts` repoda MEVCUT ve push edilmiş
+bulundu; `auth.ts`'in gerçek export şekli middleware'in import'uyla TAM uyumlu doğrulandı
+(önceki MEDIUM confidence gerekçesi ortadan kalktı → **HIGH'a yükseltildi**). "#65" meğer
+kod yorumunda zaten belgeliymiş: Masaya Sipariş kanalının guest-girişi istisnası middleware'e
+BİLİNÇLİ OLARAK eklenmemiş (açık sorun olarak bu turda tabloya işlendi). "Sepete Ekle" bypass
+gap'i #66 olarak yeni açık sorun/karar bekleyen madde şeklinde eklendi (backlog'a girsin mi
+kullanıcı teyidi bekliyor). ⚠️ Bu ortamda ağ erişimi yoktu, `npm test` ÇALIŞTIRILAMADI —
+test dosyası (8 test) SADECE kod incelemesiyle doğrulandı, bu ayrım kullanıcıya açıkça
+belirtildi; "testler geçti" gibi doğrulanmamış bir iddia YAPILMADI. 1b görevi KISMEN
+tamamlandı (route-seviyesi guest gate TAMAM; kanal istisnası #65 ve component-seviyesi
+guard #66 hâlâ açık; kayıt akışına zorunlu kanal seçimi adımı hâlâ kodlanmadı).
+Dosya artık ~380 satır — 400 eşiğinin altında, arşivleme gerekmedi.
+Güncellenme: 2026-08-08.*
