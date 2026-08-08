@@ -394,16 +394,23 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 - Guest gate etkisi: `middleware.ts` matcher'ı `/menu/customize/:path*` olarak KALIYOR —
   `/masaya-siparis/*` bu prefix'in dışında olduğu için middleware'e YENİ BİR İSTİSNA
   YAZILMASINA GEREK YOK. Açık Sorun #65 bu kararla KAPANIYOR (kod üretildiğinde).
+- **[YENİ, #67 KAPANDI]** Checkout: `/masaya-siparis`'in **kendi bağımsız mini-checkout'u**
+  olacak — `app/siparis/page.tsx`'in (§2.9, artık Gel Al'a özel) bir varyantı DEĞİL, ayrı
+  bir bileşen/route (`app/masaya-siparis/checkout/page.tsx` gibi, kesin dosya adı bu
+  yüzey kodlanırken netleşecek). Gerekçe: bu bölümün başındaki KARAR GEREKÇESİ'yle
+  tutarlılık — Masaya'yı auth/kanal-seçimi mimarisinden TAMAMEN izole etmenin asıl amacı,
+  `/siparis`'e bağlanmanın Gel Al'a özel mantığı (hesap girişi zorunluluğu, ilk-sipariş
+  manuel onay) yanlışlıkla Masaya'ya sızdırma riskini taşımasıydı. Fiyat/sepet özet
+  gösterimi (`SummaryPanel.tsx` gibi paylaşılan bir bileşen üzerinden) paylaşılabilir —
+  paylaşılan, checkout AKIŞININ KENDİSİ değil, sadece gösterim katmanı olmalı.
 
 **HÂLÂ AÇIK olan sorular (kod üretilmeden netleşmeli):**
-1. `/masaya-siparis` sayfasından sipariş tamamlandığında checkout adımı nasıl olacak —
-   mevcut `app/siparis/page.tsx`'in (artık Gel Al'a özel) bir varyantı mı, yoksa kendi
-   mini-checkout'u mu? (§2.9 ile ilişkili, henüz kararlaştırılmadı)
-2. `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak
-   mı, yoksa `FulfillmentChannel`'da mı kalacak? (§3'teki not, henüz kararlaştırılmadı)
-3. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
+1. `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak
+   mı, yoksa `FulfillmentChannel`'da mı kalacak? (§3'teki not, henüz kararlaştırılmadı —
+   Açık Sorun #68)
+2. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
    edeceği — `channel: "dine-in"` alanı zaten yeterli mi, yoksa ek bir kaynak/route
-   alanı mı gerekiyor?
+   alanı mı gerekiyor? (Açık Sorun #69)
 
 
 
@@ -602,13 +609,23 @@ type OrderHistoryEntry = {
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
 | Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7a'daki karar, 1b görevinde kodlanacak | — |
-| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — §2.9a'daki 3 açık soru netleşmeden kodlanamaz | `order_history` DB şeması (zaten canlıda, ayrı katman) |
+| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7b'deki 2 açık soru (#68/#69) netleşmeden kodlanamaz | `order_history` DB şeması (zaten canlıda, ayrı katman) |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.7 — Session 12 — 2026-08-08*
+*BOWLERA ARCHITECTURE.md — v1.8 — Session 12 devamı — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.7 (bu güncelleme): Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI —
+*v1.8 (bu güncelleme): §2.7b Açık Soru #1 (checkout varyantı) KAPANDI — kullanıcı onayıyla
+Seçenek A benimsendi: `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak,
+`app/siparis/page.tsx`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Session 12'nin
+Masaya'yı auth/kanal-seçimi mimarisinden tamamen izole etme kararıyla tutarlılık — `/siparis`'e
+bağlanmak, Gel Al'a özel mantığın (hesap girişi zorunluluğu, ilk-sipariş manuel onay)
+yanlışlıkla Masaya'ya sızma riskini taşıyordu. Fiyat/sepet özet GÖSTERİMİ paylaşılabilir
+(`SummaryPanel.tsx` gibi), ama checkout AKIŞININ KENDİSİ paylaşılmayacak. §2.7b'deki açık
+soru listesi 3'ten 2'ye indi (#68, #69 hâlâ açık). Bu güncelleme SADECE dokümantasyon —
+mini-checkout'un kendisi HENÜZ KODLANMADI (kesin dosya adı/route kodlama turunda netleşecek).
+SESSION_INDEX.md v27 ile eşleştirildi.*
+*v1.7 (önceki güncelleme): Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI —
 yeni §2.7b eklendi (`/masaya-siparis/*`, auth gerektirmeyen bağımsız yüzey). Gerekçe: Session
 11 kararı ("Masaya Sipariş = bilgi vermeden guest girişi") ile mevcut kodun (`RegistrationForm.tsx`
 TÜM kanallar için aynı formu zorunlu tutuyordu) ÇELİŞTİĞİ Session 12'de kod incelemesiyle

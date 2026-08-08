@@ -63,6 +63,15 @@
 > **Bu turda kod ÜRETİLMEDİ** — sadece dokümantasyon senkronu (Kural #6 gereği, kod
 > aşamasına geçilmeden önce bu KARAR BİLDİRİMİ + onay adımı tamamlanmalı).
 
+> **[Aynı sohbetin devamı] #67 KAPANDI.** İki seçenek (A: bağımsız mini-checkout, B:
+> `/siparis`'in varyantı) Claude tarafından karşılaştırmalı analiz edildi, **Seçenek A**
+> önerildi ve kullanıcı tarafından AYNEN ONAYLANDI: `/masaya-siparis` kendi bağımsız
+> mini-checkout'unu kullanacak, `/siparis`'e (§2.9, Gel Al'a özel) bağlanmayacak. Gerekçe:
+> Masaya'nın auth/kanal-seçimi mimarisinden tam izolasyonu — `/siparis`'e bağlanmak Gel
+> Al'a özel mantığın (hesap girişi, ilk-sipariş manuel onay) sızma riskini taşıyordu.
+> Fiyat/özet GÖSTERİMİ paylaşılabilir, checkout AKIŞI paylaşılmayacak. ARCHITECTURE.md
+> v1.8'e işlendi. **Bu turda da kod ÜRETİLMEDİ** — sadece mimari karar netleşti.
+
 > 📦 **[Bu turda taşındı — Session 12 devamı]** Session 11 ve Session 12'nin tam CURRENT
 > FOCUS anlatı blokları (genel giriş/kayıt akışı netleşmesi, #62 kapsam genişlemesi, #64
 > kapanışı, Session 12 retroaktif middleware doğrulaması — ~135 satır) `session_arşiv_1.md`'ye
@@ -93,7 +102,8 @@
 | 🆕 | **[Session 11]** Kayıtta bilgi+KVKK sonrası, giriş sağlanmadan ÖNCE kanal seçimi ZORUNLU | ✅ Karar netleşti, henüz KODLANMADI |
 | 🆕 | **[Session 11, KRİTİK]** "Kasa paneli" = Personel Sipariş Paneli (#62), TEK panel — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş manuel onay kuyruğu | 🔴 Kapsam netleşti, mimari tasarım HENÜZ YAPILMADI |
 | 🆕 | **[Session 11 devamı, #64 KAPANDI]** Gel Al onayı SADECE ilk siparişte — doğrulama durumu alanı (`pending`/`confirmed`) tutulur | ✅ Karar netleşti, #62 tasarımına eklendi, henüz KODLANMADI |
-| 🆕 | **[Session 12 devamı, KRİTİK — ARCHITECTURE.md v1.7]** Masaya Sipariş genel giriş/kayıt akışından TAMAMEN AYRILDI, ayrı `/masaya-siparis/*` yüzeyine taşındı (auth gerektirmez, guest-istisnası mekanizması yerine mimari izolasyon). `useCartStore` PAYLAŞILIR (ayrı state kurulmadı). Middleware'e YENİ istisna GEREKMİYOR — bu nedenle #65 KAPANDI. | ✅ Karar netleşti (ARCHITECTURE.md v1.7), henüz KODLANMADI — 3 açık soru var (#67/#68/#69) |
+| 🆕 | **[Session 12 devamı, KRİTİK — ARCHITECTURE.md v1.7]** Masaya Sipariş genel giriş/kayıt akışından TAMAMEN AYRILDI, ayrı `/masaya-siparis/*` yüzeyine taşındı (auth gerektirmez, guest-istisnası mekanizması yerine mimari izolasyon). `useCartStore` PAYLAŞILIR (ayrı state kurulmadı). Middleware'e YENİ istisna GEREKMİYOR — bu nedenle #65 KAPANDI. | ✅ Karar netleşti (ARCHITECTURE.md v1.7), henüz KODLANMADI — 2 açık soru kaldı (#68/#69) |
+| 🆕 | **[Session 12 devamı, #67 KAPANDI — ARCHITECTURE.md v1.8]** `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak — `/siparis`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Gel Al'a özel mantığın (hesap girişi, ilk-sipariş manuel onay) Masaya'ya sızma riskini önlemek. Fiyat/özet gösterimi paylaşılabilir, checkout akışı paylaşılmayacak. | ✅ Karar netleşti (ARCHITECTURE.md v1.8), henüz KODLANMADI |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -126,14 +136,15 @@
 | 62 | 🔴 | Personel Sipariş Paneli — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş onay kuyruğu, TEK panel. Personel auth + real-time teknoloji + doğrulama durumu alanı HÂLÂ YAPILMADI. **[Session 12 devamı]:** artık §2.7b'den (Masaya) gelen veri ile §2.9a arasındaki bağlantı da #69'a bağlı. | `order_history`, personel auth sistemi (yok), real-time katman (yok) |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
-| 67 | 🟡 | **[YENİ, Session 12 devamı, ARCHITECTURE.md §2.7b Açık Soru #1]** `/masaya-siparis`'ten sipariş tamamlandığında checkout adımı nasıl olacak — kendi mini-checkout'u mu, yoksa `/siparis` (§2.9, artık Gel Al'a özel) sayfasının bir varyantı mı? Tahmin edilmedi, kullanıcı teyidi bekliyor. | `ARCHITECTURE.md` §2.7b, §2.9 |
-| 68 | 🟡 | **[YENİ, Session 12 devamı, ARCHITECTURE.md §2.7b Açık Soru #2]** `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak mı, yoksa `FulfillmentChannel`'a mı taşınacak/eklenecek? `types/index.ts` bu turda hiç görülmedi — tip değişikliği kodlanmadan önce dosya istenmeli. | `types/index.ts` |
-| 69 | 🟡 | **[YENİ, Session 12 devamı, ARCHITECTURE.md §2.7b Açık Soru #3]** Sipariş `order_history`'ye düştüğünde Personel Sipariş Paneli (§2.9a, #62) bunu Masaya siparişi mi Gel Al siparişi mi olarak nasıl ayırt edecek — `channel` alanı yeterli mi, ek alan mı gerekiyor? #62'nin mimari tasarımını doğrudan etkiliyor. | `order_history` şeması, §2.9a |
+| 68 | 🟡 | **[YENİ, Session 12 devamı, ARCHITECTURE.md §2.7b Açık Soru #1]** `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak mı, yoksa `FulfillmentChannel`'a mı taşınacak/eklenecek? `types/index.ts` bu turda hiç görülmedi — tip değişikliği kodlanmadan önce dosya istenmeli. | `types/index.ts` |
+| 69 | 🟡 | **[YENİ, Session 12 devamı, ARCHITECTURE.md §2.7b Açık Soru #2]** Sipariş `order_history`'ye düştüğünde Personel Sipariş Paneli (§2.9a, #62) bunu Masaya siparişi mi Gel Al siparişi mi olarak nasıl ayırt edecek — `channel` alanı yeterli mi, ek alan mı gerekiyor? #62'nin mimari tasarımını doğrudan etkiliyor. | `order_history` şeması, §2.9a |
 
 > **KAPANDI (bu turda):** #65 — Masaya Sipariş'in guest-girişi istisnasının middleware'e
 > eklenmesi görevi, ARCHITECTURE.md v1.7 kararıyla (Masaya'nın middleware kapsamı dışına,
 > ayrı `/masaya-siparis/*` yüzeyine taşınması) GEÇERSİZ hale geldi — istisnaya hiç gerek
 > kalmadı. Kod hâlâ yazılmadı (bkz. SIRADAKİ GÖREVLER 1b).
+> **#67** — Checkout varyantı sorusu, kullanıcı onayıyla Seçenek A (bağımsız mini-checkout)
+> olarak çözüldü, ARCHITECTURE.md v1.8'e işlendi. Kod hâlâ yazılmadı.
 >
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49, #64 —
 > detaylar `session_arşiv.md` ve `session_arşiv_1.md`'de.
@@ -172,7 +183,7 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. **[Session 12 devamı]:** Masaya Sipariş kanalı artık middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Kullanıcı Kaydı (rıza esaslı) | 🟡 Backend+Frontend TAMAM, canlı test BAŞARILI. Oturum göstergesi eksik (#59). Kanal seçimi zorunlu adımı henüz KODLANMADI. |
-| Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı. **[Session 12 devamı]:** ARCHITECTURE.md'de artık SADECE Gel Al'a özel olarak tanımlı (§2.9) — Masaya'nın kendi checkout'u/varyantı henüz kararlaştırılmadı (#67). |
+| Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). **[Session 12 devamı, #67 KAPANDI]:** Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). |
 | Personel Sipariş Paneli (#62) | 🔴 Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş onay kuyruğu, TEK panel. Personel auth, real-time teknoloji VE onay kuyruğu tasarımı HÂLÂ YAPILMADI. **[Session 12 devamı]:** artık §2.7b'den gelen Masaya verisinin kanal ayrımı (#69) da bu panelin tasarımını etkiliyor. |
 | Mimari Dokümantasyon | 🟢 **[Session 12 devamı]** ARCHITECTURE.md v1.7 — Masaya Sipariş §2.7a'dan ayrılıp §2.7b'ye taşındı, §1/§2.9/§2.9a/§3 senkron edildi. SESSION_INDEX.md v26 bu kararla senkron. |
@@ -184,7 +195,7 @@
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 1 | #62 Personel Sipariş Paneli mimari tasarımı — personel auth yöntemi, real-time teknoloji, onay kuyruğu UI/veri modeli, `pending`/`confirmed` şeması. **[Session 12 devamı]:** #69 netleşmeden (order_history kanal ayrımı) tasarım tamamlanamaz. | 🔴 |
-| 1b | [GÜNCELLENDİ, Session 12 devamı] Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) ~~Masaya Sipariş guest istisnası middleware'e eklenmeli~~ — ARTIK GEÇERSİZ, bkz. #65 KAPANDI; (iii) YENİ: `/masaya-siparis/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx`) HENÜZ KODLANMADI — #67/#68/#69 netleşmeden başlanamaz; (iv) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (v) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
+| 1b | [GÜNCELLENDİ, Session 12 devamı, #67 KAPANDI] Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) ~~Masaya Sipariş guest istisnası middleware'e eklenmeli~~ — ARTIK GEÇERSİZ, bkz. #65 KAPANDI; (iii) `/masaya-siparis/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + **kendi mini-checkout'u**, #67 kararınca) HENÜZ KODLANMADI — #68/#69 netleşmeden başlanamaz; (iv) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (v) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
 | 3 | Kayıt sonrası oturum/kullanıcı adı gösterimini araştır ve çöz (#59) | 🟡 |
 | 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
@@ -208,22 +219,17 @@
 | 21 | Customizer adım başlıklarını Türkçeleştir / spec ile senkronla (#28/29) | 🟢 |
 | 22 | Genel `npm test` (tüm proje) çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
 | 23 | [YENİ, Session 12 devamı] `types/index.ts` görülüp #68 (RegistrationChannel/FulfillmentChannel tip etkisi) netleştirilmeli | 🟡 |
-| 24 | [YENİ, Session 12 devamı] `/masaya-siparis` checkout varyantı kararı (#67) — kullanıcıyla netleştirilmeli | 🟡 |
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v26 (v25'ten: ARCHITECTURE.md v1.7 senkronu — #65 KAPANDI
-(gerekçe: middleware istisnası gereksiz hale geldi, Masaya Sipariş `/masaya-siparis/*`
-yüzeyine taşındı), #67/#68/#69 yeni açık soru olarak eklendi (§2.7b'nin 3 açık sorusu),
-SIRADAKİ GÖREVLER 1b güncellendi, #66'ya kapsam netliği notu eklendi, KRİTİK KARARLAR
-tablosuna yeni satır eklendi. ⚠️ **400 satır eşiği bu turda tetiklendi** (dosya 399
-satırdaydı) — kullanıcı onayıyla BÜYÜK bir taşıma yapıldı: Session 11 + Session 12'nin
-tam CURRENT FOCUS anlatı blokları (~135 satır) VE eski (v23-v25) versiyon dipnot
-paragrafları, YENİ açılan `session_arşiv_1.md` dosyasına taşındı — bu, arşivin
-`session_arşiv.md`'den (Session 0-10) sonraki İKİNCİ fiziksel dosyasıdır, aynı tek
-mekanizmanın (CORE.md §7.1 Adım 1) devamıdır, kural değişmedi. Taşınan tam metin ayrı
-olarak `session_arşiv_1.md` içeriği olarak sunuldu (ilişki notu dosyanın başlığında);
-kullanıcı kendi yeni dosyasına ekleyecek. Bu turda kod ÜRETİLMEDİ — sadece dokümantasyon
-senkronu, KARAR BİLDİRİMİ + onay adımına uyuldu (AGENT.md Kural #6).
-Dosya artık ~230 satır — 400 eşiğinin çok altında.
+*BOWLERA SESSION_INDEX.md — v27 (v26'dan: aynı sohbetin devamında #67 KAPANDI —
+`/masaya-siparis` checkout kararı: Seçenek A [bağımsız mini-checkout] kullanıcı tarafından
+onaylandı, ARCHITECTURE.md v1.8'e işlendi. AÇIK SORUNLAR tablosundan #67 çıkarıldı, KAPANDI
+notuna eklendi; #68/#69 §2.7b'nin artık 2 açık sorusu olarak yeniden numaralandırıldı
+(Açık Soru #1/#2). KRİTİK KARARLAR tablosuna yeni satır eklendi. SIRADAKİ GÖREVLER 1b ve
+madde 24 güncellendi — madde 24 (checkout kararı) #67'nin kapanmasıyla KAPANDI, listeden
+çıkarıldı. GENEL DURUM'daki Checkout satırı senkron edildi. Bu turda da kod ÜRETİLMEDİ —
+sadece mimari karar + dokümantasyon senkronu, KARAR BİLDİRİMİ + onay adımına uyuldu
+(AGENT.md Kural #6). v26'daki 400 satır eşiği taşıması bu turda etkilenmedi, dosya hâlâ
+eşiğin altında.
 Güncellenme: 2026-08-08.*
