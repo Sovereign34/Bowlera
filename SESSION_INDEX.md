@@ -39,47 +39,32 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[Session 12 devamı, 2026-08-08 — ARCHITECTURE.md v1.7 senkronu]** Ayrı bir sohbette
-> (bu sohbetin dışında) ARCHITECTURE.md, KARAR BİLDİRİMİ + kullanıcı onayıyla v1.7'ye
-> güncellenmişti: **Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI**
-> ve ayrı, auth gerektirmeyen bir QR yüzeyine (`/masaya-siparis/*`) taşındı — yeni §2.7b.
-> Bu sohbette SESSION_INDEX.md o kararla senkronize edildi:
-> - **#65 KAPANDI** — gerekçe: middleware'in matcher'ı zaten `/menu/customize/:path*`
->   ile sınırlı; `/masaya-siparis/*` bu prefix'in DIŞINDA olduğu için Masaya Sipariş'e
->   özel bir guest-istisnası eklemeye HİÇ gerek kalmadı. Sorunun kendisi mimari kararla
->   ortadan kalktı (kod hâlâ yazılmadı, ama artık "istisna eklenmeli" görevi geçersiz).
-> - **3 yeni açık soru** (#67/#68/#69) eklendi — ARCHITECTURE.md §2.7b'de kasıtlı olarak
->   AÇIK bırakılmış, tahmin edilmemiş sorular (bkz. AÇIK SORUNLAR tablosu).
-> - **SIRADAKİ GÖREVLER 1b** güncellendi — middleware istisnası alt-kalemi kaldırıldı,
->   yerine `/masaya-siparis/*` yüzeyinin kodlanması görevi eklendi (henüz başlanamaz,
->   #67/#68/#69 netleşmeli).
-> - **Sepet kararı teyidi:** `useCartStore` Masaya ile Gel Al arasında PAYLAŞILACAK (ayrı
->   state kurulmayacak) — gerekçe: Katman Kuralı §1 madde 7'de zaten teyitli olan
->   "`useCartStore` auth durumuna göre dallanmaz" ilkesiyle tutarlı, ayrıca zaten test
->   edilmiş fiyat/kalori hesaplama mantığının tekrarını önlüyor (Sahte Veri Yasağı ruhu).
-> - **400 satır eşiği bu turda tetiklendi** (dosya 399 satırdaydı) — kullanıcı onayıyla
->   taşıma BÜYÜK tutuldu: Session 11 + Session 12'nin tam CURRENT FOCUS anlatı blokları
->   VE eski versiyon dipnot paragrafları `session_arşiv_1.md`'ye taşındı (bkz. dosya sonu).
-> **Bu turda kod ÜRETİLMEDİ** — sadece dokümantasyon senkronu (Kural #6 gereği, kod
-> aşamasına geçilmeden önce bu KARAR BİLDİRİMİ + onay adımı tamamlanmalı).
+> **[YENİ SOHBET, 2026-08-08 — #62 Personel Sipariş Paneli, ARCHITECTURE.md v1.12]**
+> Vercel build'in yeşil olduğu kullanıcı tarafından doğrulandı (1d KAPANDI). Ardından #62
+> tartışıldı: ARCHITECTURE.md §2.9a'daki 3 açık mimari soru Claude'un önerisi + kullanıcı
+> onayıyla KAPANDI:
+> 1. **Personel Auth:** Mevcut Auth.js sistemine `users.role: "customer" | "staff"` alanı
+>    eklenerek rol bazlı yetkilendirme (ayrı personel-hesap sistemi veya paylaşımlı-cihaz
+>    PIN yerine) — gerekçe: mevcut session mekanizmasını tekrar kullanmak, iki paralel
+>    auth mantığı yaratmamak.
+> 2. **Real-Time Teknoloji:** Basit polling (WebSocket/SSE yerine) — kullanıcı tercihi.
+> 3. **Onay Kuyruğu UI:** İki ayrı sekme/panel (Masaya real-time akışı / Gel Al onay
+>    kuyruğu) — tek filtreli liste yerine; farklı veri şekli + farklı aksiyon seti
+>    gerektirdiği için.
+> **ARCHITECTURE.md v1.12'ye işlendi:** §1 Katman Sınırı Kuralı'na madde 13 eklendi
+> (`users.role` migration'ının CORE.md §7.4 notu gerektirdiği uyarısı); §2.9a üç karar
+> bloğuyla genişletildi; §3 `AuthenticatedUser` tipine `role` alanı planı not edildi
+> (henüz kodlanmadı); §4.1 Deploy tablosuna migration bekleyen `users.role` kolonu notu
+> eklendi.
+> **Bu turda kod ÜRETİLMEDİ, migration KOŞULMADI** — sadece mimari karar dokümantasyonu
+> (Kural #6 gereği, kod aşamasına geçilmeden önce bu KARAR BİLDİRİMİ + onay adımı
+> tamamlanmalı). **Bir sonraki adım kodlama DEĞİL** — önce `users.role` için CORE.md §7.4
+> formatında ayrı bir şema değişiklik notu üretilmeli (bkz. SIRADAKİ GÖREVLER 1).
+> **Kullanıcı isteği üzerine bu turda SADECE SESSION_INDEX güncellendi** — TEST_MATRIX.md
+> bilinçli olarak GÜNCELLENMEDİ (kod/test yok, güncellenecek bir şey de yoktu; bir sonraki
+> gerçek test-etkili checkpoint'e bırakıldı).
 
-> **[Aynı sohbetin devamı] #67 KAPANDI.** İki seçenek (A: bağımsız mini-checkout, B:
-> `/siparis`'in varyantı) Claude tarafından karşılaştırmalı analiz edildi, **Seçenek A**
-> önerildi ve kullanıcı tarafından AYNEN ONAYLANDI: `/masaya-siparis` kendi bağımsız
-> mini-checkout'unu kullanacak, `/siparis`'e (§2.9, Gel Al'a özel) bağlanmayacak. Gerekçe:
-> Masaya'nın auth/kanal-seçimi mimarisinden tam izolasyonu — `/siparis`'e bağlanmak Gel
-> Al'a özel mantığın (hesap girişi, ilk-sipariş manuel onay) sızma riskini taşıyordu.
-> Fiyat/özet GÖSTERİMİ paylaşılabilir, checkout AKIŞI paylaşılmayacak. ARCHITECTURE.md
-> v1.8'e işlendi. **Bu turda da kod ÜRETİLMEDİ** — sadece mimari karar netleşti.
-
-> 📦 **[Bu turda taşındı — Session 12 devamı]** Session 11 ve Session 12'nin tam CURRENT
-> FOCUS anlatı blokları (genel giriş/kayıt akışı netleşmesi, #62 kapsam genişlemesi, #64
-> kapanışı, Session 12 retroaktif middleware doğrulaması — ~135 satır) `session_arşiv_1.md`'ye
-> taşındı — hepsi kapanmış/geçmiş anlatı, SESSION ÖZET tablosunda (Session 11/12 satırları)
-> ve KRİTİK KARARLAR/AÇIK SORUNLAR tablolarında özleri zaten korunuyordu. Tam metin
-> gerekirse `session_arşiv_1.md`, Taşıma Bloğu #1'e bakılmalı.
-
-> **[YENİ SOHBET, 2026-08-08 — Masa Numarası Kararı, ARCHITECTURE.md v1.11]** ⚠️ Önceki
+> **[Önceki tur, aynı sohbet — Masa Numarası Kararı, ARCHITECTURE.md v1.11]** ⚠️ Önceki
 > sohbet bu konuyu (masa numarası) konuşurken SESSION_INDEX güncellenmeden kesilmişti —
 > DÖRDÜNCÜ DERS'in tarif ettiği durumun bir tekrarı, bu sohbette geriye dönük tamamlandı.
 > **Karar (kullanıcı onaylı):** Masaya Sipariş akışında masa numarası TUTULACAK — terk
@@ -107,10 +92,8 @@
 > #70, yeni).
 > **Bu turda SADECE dokümantasyon üretildi** (ARCHITECTURE.md + şema notu) — `store/useCartStore.ts`
 > kodu, `/masaya-siparis/[tableId]` route'u ve migration'ın kendisi HENÜZ YAZILMADI/KOŞULMADI.
-> Kullanıcı isteği üzerine bu turda **SADECE SESSION_INDEX güncellendi** — TEST_MATRIX.md
-> bilinçli olarak bu checkpoint'te GÜNCELLENMEDİ (bir sonraki checkpoint'e bırakıldı).
 
-> 🔴🐛 **[AYNI SOHBET, DEVAM — CANLI BUILD KIRIĞI BULUNDU VE ÇÖZÜLDÜ]** Kullanıcı Vercel
+> 🔴🐛 **[Önceki tur — CANLI BUILD KIRIĞI BULUNDU VE ÇÖZÜLDÜ]** Kullanıcı Vercel
 > build log'u paylaştı: `components/registration/channel-options.ts` hâlâ
 > `RegistrationChannel`'a `"masaya-siparis"` değeri atıyordu — bu değer #68 kararıyla
 > (ARCHITECTURE.md v1.9, Session 12 devamı) tipten ÇIKARILMIŞTI, ama bu dosya o turda hiç
@@ -125,12 +108,15 @@
 > (confidence: HIGH). DB etkisi yok — `consentRegistrations.channel` enum değil düz `text`,
 > geçmiş `"masaya-siparis"` kayıtları (Session 9) etkilenmedi, sadece yeni kayıt formundan
 > bu seçenek kalktı.
-> **Yeni Açık Sorun #71 açıldı:** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak
+> **✅ [Bu turda doğrulandı] 1d KAPANDI:** Kullanıcı Vercel deploy'unun yeşil olduğunu
+> teyit etti.
+> **Açık Sorun #71 hâlâ AÇIK:** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak
 > `channel-options.ts`'i (ve muhtemelen başka görülmemiş dosyaları) hiç listelemiyor — tip
-> daraltma kararları verilirken bu dosya sistematik olarak taranmalı. Bu turda DEPENDENCIES.md
-> paylaşılmadığı için dosyanın kendisi güncellenemedi, sadece Açık Sorun olarak loglandı.
-> CORE.md §7.3 gereği (🔴 blokaj + 🐛 kritik bug) bu SESSION_INDEX güncellemesi ZORUNLU
-> tetiklendi, checkpoint sorusu beklenmedi.
+> daraltma kararları verilirken bu dosya sistematik olarak taranmalı. DEPENDENCIES.md bu
+> sohbette paylaşıldı (v1.1, Session 3) ama #71'in düzeltmesi (RegistrationChannel
+> tüketicilerinin eksiksiz taranması) bu turun kapsamı dışında kaldı — ayrıca not: bu dosya
+> da genel olarak ESKİ (`useCartStore.tableId`, `order_history` gibi yeni alanlar/tablolar
+> haritada yok), bir sonraki uygun turda güncellenmeli.
 
 ---
 
@@ -153,13 +139,14 @@
 | 🆕 | **[Session 7]** `RegistrationChannel` tipi (`masaya-siparis`\|`gel-al`\|`online-platform`), `FulfillmentChannel`'DAN AYRI | ✅ Kod+şema+test tamam. |
 | 🆕 | **[Session 11]** Genel giriş akışı: girişsiz gezinme → ürün SEÇİNCE giriş sayfası → giriş/kayıt seçimi | ✅ Karar netleşti, henüz KODLANMADI |
 | 🆕 | **[Session 11]** Kayıtta bilgi+KVKK sonrası, giriş sağlanmadan ÖNCE kanal seçimi ZORUNLU | ✅ Karar netleşti, henüz KODLANMADI |
-| 🆕 | **[Session 11, KRİTİK]** "Kasa paneli" = Personel Sipariş Paneli (#62), TEK panel — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş manuel onay kuyruğu | 🔴 Kapsam netleşti, mimari tasarım HENÜZ YAPILMADI |
+| 🆕 | **[Session 11, KRİTİK]** "Kasa paneli" = Personel Sipariş Paneli (#62), TEK panel — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş manuel onay kuyruğu | 🟡 Kapsam + mimari kararlar netleşti, kod HENÜZ YAZILMADI |
 | 🆕 | **[Session 11 devamı, #64 KAPANDI]** Gel Al onayı SADECE ilk siparişte — doğrulama durumu alanı (`pending`/`confirmed`) tutulur | ✅ Karar netleşti, #62 tasarımına eklendi, henüz KODLANMADI |
-| 🆕 | **[Session 12 devamı, KRİTİK — ARCHITECTURE.md v1.7]** Masaya Sipariş genel giriş/kayıt akışından TAMAMEN AYRILDI, ayrı `/masaya-siparis/*` yüzeyine taşındı (auth gerektirmez, guest-istisnası mekanizması yerine mimari izolasyon). `useCartStore` PAYLAŞILIR (ayrı state kurulmadı). Middleware'e YENİ istisna GEREKMİYOR — bu nedenle #65 KAPANDI. | ✅ Karar netleşti (ARCHITECTURE.md v1.7), henüz KODLANMADI — 2 açık soru kaldı (#68/#69) |
+| 🆕 | **[Session 12 devamı, KRİTİK — ARCHITECTURE.md v1.7]** Masaya Sipariş genel giriş/kayıt akışından TAMAMEN AYRILDI, ayrı `/masaya-siparis/*` yüzeyine taşındı (auth gerektirmez, guest-istisnası mekanizması yerine mimari izolasyon). `useCartStore` PAYLAŞILIR (ayrı state kurulmadı). Middleware'e YENİ istisna GEREKMİYOR — bu nedenle #65 KAPANDI. | ✅ Karar netleşti (ARCHITECTURE.md v1.7), henüz KODLANMADI |
 | 🆕 | **[Session 12 devamı, #67 KAPANDI — ARCHITECTURE.md v1.8]** `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak — `/siparis`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Gel Al'a özel mantığın (hesap girişi, ilk-sipariş manuel onay) Masaya'ya sızma riskini önlemek. Fiyat/özet gösterimi paylaşılabilir, checkout akışı paylaşılmayacak. | ✅ Karar netleşti (ARCHITECTURE.md v1.8), henüz KODLANMADI |
 | 🗄️ | **[Session 12 devamı, #68 KAPANDI — ARCHITECTURE.md v1.9]** `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI (`FulfillmentChannel`'a taşınmadı). `20260808000000_registration_channel_masaya_siparis_cikarildi.md` | ✅ `types/index.ts` düzenlendi, migration gerekmedi (DB sütunu enum değil) |
 | 🆕 | **[Session 12 devamı, #69 KAPANDI — ARCHITECTURE.md v1.10]** `order_history.channel` Masaya/Gel Al ayrımı için yeterli bulundu, ek alan eklenmedi. §2.7b'nin açık soru listesi tamamen kapandı. | ✅ Karar netleşti, kod HENÜZ YAZILMADI (1b bekliyor) |
-| 🗄️ | **[YENİ SOHBET, 2026-08-08, KRİTİK — ARCHITECTURE.md v1.11]** Masa numarası TUTULACAK — terk edilmeyecek. Route: `/masaya-siparis/[tableId]` (path segment). `useCartStore`'a `tableId`+`setTableId()` eklendi (§2.3). `order_history`'ye nullable `table_number` eklenecek (SADECE dine-in) — şema notu: `20260808010000_order_history_tablenumber_eklendi.md`. #69'un kapsamı genişletildi (KAPALI kalıyor, gerekçesiz düşürülmedi). | ✅ Karar netleşti + doküman güncellendi, kod/migration HENÜZ YAZILMADI/KOŞULMADI |
+| 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.11]** Masa numarası TUTULACAK — terk edilmeyecek. Route: `/masaya-siparis/[tableId]` (path segment). `useCartStore`'a `tableId`+`setTableId()` eklendi (§2.3). `order_history`'ye nullable `table_number` eklenecek (SADECE dine-in) — şema notu: `20260808010000_order_history_tablenumber_eklendi.md`. #69'un kapsamı genişletildi (KAPALI kalıyor, gerekçesiz düşürülmedi). | ✅ Karar netleşti + doküman güncellendi, kod/migration HENÜZ YAZILMADI/KOŞULMADI |
+| 🗄️ | **[YENİ SOHBET, 2026-08-08, KRİTİK — ARCHITECTURE.md v1.12]** #62'nin 3 mimari sorusu KAPANDI: (1) Personel auth = `users.role` alanıyla mevcut Auth.js'e rol bazlı yetki (2) Real-time = basit polling (3) Onay kuyruğu UI = iki ayrı sekme/panel (Masaya / Gel Al). `users.role` gerçek bir şema değişikliği — migration/CORE.md §7.4 notu HENÜZ ÜRETİLMEDİ. | ✅ Karar netleşti + doküman güncellendi, migration/kod HENÜZ YAZILMADI/KOŞULMADI |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -189,27 +176,20 @@
 | 59 | 🟡 | Kayıt sonrası kullanıcı adı/oturum durumu hiçbir yerde görünmüyor | `components/layout/Header.tsx` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 62 | 🔴 | Personel Sipariş Paneli — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş onay kuyruğu, TEK panel. Personel auth + real-time teknoloji + doğrulama durumu alanı HÂLÂ YAPILMADI. **[Session 12 devamı]:** artık §2.7b'den (Masaya) gelen veri ile §2.9a arasındaki bağlantı da #69'a bağlı. | `order_history`, personel auth sistemi (yok), real-time katman (yok) |
+| 62 | 🟡 | Personel Sipariş Paneli — 3 mimari soru (auth/real-time/UI) bu turda KAPANDI (bkz. Kritik Kararlar). Kalan: `users.role` şema değişiklik notu (CORE.md §7.4) + migration + panelin kendisi HENÜZ YAZILMADI. | `order_history`, `users.role` (henüz şemada yok), ARCHITECTURE.md §2.9a |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
-| 68 | 🟢 | **[KAPANDI, Session 12 devamı, ARCHITECTURE.md v1.9]** `RegistrationChannel` tipinden `"masaya-siparis"` ÇIKARILDI, `FulfillmentChannel`'a taşınmadı. `types/index.ts` ve `lib/db/schema.ts` bu turda görüldü — `consentRegistrations.channel` sütunu enum değil düz `text`, migration gerekmedi. Şema notu: `docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`. | `types/index.ts` |
-| 69 | 🟢 | **[KAPANDI, Session 12 devamı, ARCHITECTURE.md v1.10 — kapsamı GENİŞLETİLDİ bkz. #70]** `order_history.channel` (`"dine-in"\|"pickup"`) Masaya/Gel Al ayrımı için YETERLİ — ek alan gerekmedi. Bu gerekçe hâlâ doğru. Ama "aynı kanal içinde HANGİ masa" sorusunu hiç kapsamıyordu — o soru yeni Açık Soru #70. | `order_history` şeması, §2.9a |
-| 70 | 🟡 | **[YENİ SOHBET, 2026-08-08]** `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
-| 71 | 🟠 | **[YENİ, aynı sohbet — 🔴 build kırığından doğdu]** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor. #68 kapanırken bu dosya atlandığı için canlı build kırıldı (bu turda düzeltildi). DEPENDENCIES.md paylaşılıp `RegistrationChannel`'ın TÜM tüketicileri taranmalı — sadece bu 1 dosya mı, başka atlanan var mı belirsiz. | `DEPENDENCIES.md` (henüz görülmedi) |
+| 70 | 🟡 | `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
+| 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 
-> **KAPANDI (bu turda):** #65 — Masaya Sipariş'in guest-girişi istisnasının middleware'e
-> eklenmesi görevi, ARCHITECTURE.md v1.7 kararıyla (Masaya'nın middleware kapsamı dışına,
-> ayrı `/masaya-siparis/*` yüzeyine taşınması) GEÇERSİZ hale geldi — istisnaya hiç gerek
-> kalmadı. Kod hâlâ yazılmadı (bkz. SIRADAKİ GÖREVLER 1b).
-> **#67** — Checkout varyantı sorusu, kullanıcı onayıyla Seçenek A (bağımsız mini-checkout)
-> olarak çözüldü, ARCHITECTURE.md v1.8'e işlendi. Kod hâlâ yazılmadı.
-> 🔴🐛 **[AYNI SOHBET]** Canlı build kırığı — `channel-options.ts`'te `"masaya-siparis"`
-> #68'den kalan bir artıktı, kaldırıldı, kullanıcı onayıyla dosya üretildi. Build'in tekrar
-> yeşile döndüğü kullanıcı tarafından AYRICA doğrulanmalı (ÜÇÜNCÜ DERS — "kod tamam" ile
-> "kullanıcı deneyimi tamam" ayrı kontrol noktaları).
+> **KAPANDI (bu turda):** 1d — Vercel build'in yeşil olduğu kullanıcı tarafından doğrulandı.
+> **KAPANDI (bu turda):** #62'nin 3 açık mimari sorusu (personel auth, real-time teknoloji,
+> onay kuyruğu UI) — ARCHITECTURE.md v1.12'ye işlendi. #62'nin KENDİSİ henüz kapanmadı
+> (kod/migration yok), öncelik 🔴'dan 🟡'a düşürüldü çünkü artık bloklayan bir mimari
+> belirsizlik yok, sadece üretim işi kaldı.
 >
-> **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49, #64 —
-> detaylar `session_arşiv.md` ve `session_arşiv_1.md`'de.
+> **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49,
+> #64, #65, #67, #68, #69 — detaylar `session_arşiv.md` ve `session_arşiv_1.md`'de.
 
 ---
 
@@ -229,7 +209,8 @@
 | 9 | 2026-08-07 | Masaya Sipariş kanalı canlıda doğrulandı. Personel Sipariş Paneli ihtiyacı keşfedildi → #62 açıldı. `session_log.md` ismi/mekanizması netleştirildi. | 🟡 Devam ediyor — #62 yeni sohbette |
 | 10 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. `order_history` tablosu migrate edildi. #63 (npm audit) yeni. | 🟡 Devam ediyor |
 | 11 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. Genel giriş/kayıt akışı netleşti (kanal bazlı tablo), #62 kapsamı genişledi ("kasa paneli" = Personel Sipariş Paneli), #64 kapandı (doğrulama durumu alanı kararı). | 🔴 Devam ediyor — #62 mimarisi bekliyor |
-| 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i zip ile doğrulandı (confidence HIGH), #65/#66 açıldı. **Devamında:** ARCHITECTURE.md v1.7'ye güncellendi (Masaya Sipariş ayrı `/masaya-siparis/*` yüzeyine taşındı), SESSION_INDEX o kararla senkronize edildi — #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi ve büyük bir taşıma yapıldı. **⚠️ Yeni sohbette devamı:** önceki sohbet masa numarası konusunu SESSION_INDEX güncellenmeden bitirdi (DÖRDÜNCÜ DERS tekrarı) — bu sohbette geriye dönük tamamlandı: masa numarası TUTULACAK kararı onaylandı, ARCHITECTURE.md v1.11'e işlendi (`CartState.tableId`, path segment route, `order_history.table_number` şema notu), #69 kapsamı genişletildi (#70 yeni açıldı). | 🟡 §2.7b kod üretimine hazır (route/store/mini-checkout HENÜZ YAZILMADI); #70 (table_number tipi) migration öncesi netleşmeli |
+| 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i zip ile doğrulandı (confidence HIGH), #65/#66 açıldı. ARCHITECTURE.md v1.7'ye güncellendi (Masaya Sipariş ayrı `/masaya-siparis/*` yüzeyine taşındı), #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi. Masa numarası kararı: TUTULACAK, ARCHITECTURE.md v1.11'e işlendi (`CartState.tableId`, path segment route, `order_history.table_number` şema notu), #69 kapsamı genişletildi (#70 yeni açıldı). Canlı build kırığı bulunup düzeltildi (`channel-options.ts`), #71 yeni açıldı. | 🟡 §2.7b kod üretimine hazır; #70/#71 netleşmeli |
+| 12 (devamı, yeni sohbet) | 2026-08-08 | 1d KAPANDI (Vercel build yeşil, kullanıcı doğruladı). #62 tartışıldı — 3 mimari soru (personel auth, real-time, onay kuyruğu UI) kullanıcı onayıyla kapandı, ARCHITECTURE.md v1.12'ye işlendi. `users.role` migration'ı ayrı bir §7.4 notu gerektiriyor, henüz üretilmedi. | 🟡 #62 mimarisi tamam, üretim (şema notu → migration → kod) bekliyor |
 
 *(Tam turn-by-turn detay: `session_arşiv.md` [0-10], `session_arşiv_1.md` [11+].)*
 
@@ -239,16 +220,16 @@
 
 | Alan | Değer |
 |---|---|
-| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. ⚠️ **[AYNI SOHBET]** `main`'deki son build (`d4d22c5`) `channel-options.ts` tip hatasıyla KIRILMIŞTI — düzeltme bu turda üretildi, kullanıcının commit edip yeniden deploy etmesi ve build'in yeşile döndüğünü DOĞRULAMASI gerekiyor (henüz teyit edilmedi). |
-| Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı. **[Yeni sohbet]:** ARCHITECTURE.md v1.11'e güncellendi, henüz koda yansımadı. |
+| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. ✅ **[Bu turda doğrulandı]** Önceki turdaki `channel-options.ts` tip hatasından kaynaklanan build kırığı düzeltildi, kullanıcı Vercel'de deploy'un YEŞİL olduğunu teyit etti (1d KAPANDI). |
+| Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 (Personel Sipariş Paneli) hiç işlenmemiş, ayrı bir oturum/kalem olarak eklenmesi gerekebilir. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda yansımadı. |
 | Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). Genel `npm test` hâlâ tekrar çalıştırılmadı. |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. **[Session 12 devamı]:** Masaya Sipariş kanalı artık middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. **[Bu turda]** Personel Paneli erişimi için `users.role` alanı kararlaştırıldı, HENÜZ şemada yok. |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE repoda doğrulandı. 🟠 Twilio kısıtı yüzünden canlıda hâlâ test edilemiyor (#39) |
 | Kullanıcı Kaydı (rıza esaslı) | 🟡 Backend+Frontend TAMAM, canlı test BAŞARILI. Oturum göstergesi eksik (#59). Kanal seçimi zorunlu adımı henüz KODLANMADI. |
-| Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). **[Session 12 devamı, #67 KAPANDI]:** Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
-| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ **[Yeni sohbet]:** `order_history.table_number` kolonu eklenmesi KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). |
-| Personel Sipariş Paneli (#62) | 🔴 Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş onay kuyruğu, TEK panel. Personel auth, real-time teknoloji VE onay kuyruğu tasarımı HÂLÂ YAPILMADI. **[Session 12 devamı]:** #68/#69 KAPANDI — mimari önü açık, tasarım/kod HENÜZ YAPILMADI. Masa bazlı filtreleme ihtiyacı (#70'e bağlı) tasarım turunda netleşmeli. |
-| Mimari Dokümantasyon | 🟢 **[Yeni sohbet]** ARCHITECTURE.md v1.11 — masa numarası kararı (`CartState.tableId`, path segment route, `order_history.table_number`) §2.3/§2.7b/§3/§4.1'e işlendi. SESSION_INDEX.md v28 bu kararla senkron. |
+| Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
+| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). ⚠️ **[Bu turda]** `users.role` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — CORE.md §7.4 notu önce üretilmeli. |
+| Personel Sipariş Paneli (#62) | 🟡 **[Bu turda]** 3 mimari soru (auth = rol bazlı, real-time = polling, onay kuyruğu UI = 2 sekme) kullanıcı onayıyla KAPANDI, ARCHITECTURE.md §2.9a v1.12'ye işlendi. Kalan: `users.role` şema değişiklik notu + migration, sonra kod. |
+| Mimari Dokümantasyon | 🟢 ARCHITECTURE.md v1.12 — #62'nin 3 mimari kararı §2.9a'ya, `users.role` planı §3'e, migration notu §4.1'e işlendi. SESSION_INDEX.md v30 bu kararla senkron. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). |
 
 ---
 
@@ -256,11 +237,10 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 1 | #62 Personel Sipariş Paneli mimari tasarımı — personel auth yöntemi, real-time teknoloji, onay kuyruğu UI/veri modeli, `pending`/`confirmed` şeması. **[Session 12 devamı]:** #68/#69 KAPANDI, tasarıma başlanabilir. | 🔴 |
-| 1b | [GÜNCELLENDİ, yeni sohbet] Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) ~~Masaya Sipariş guest istisnası middleware'e eklenmeli~~ — ARTIK GEÇERSİZ, bkz. #65 KAPANDI; (iii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + **kendi mini-checkout'u**, #67 kararınca — YENİ: route artık `tableId` path segment'i taşıyor, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iv) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (v) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
-| 1c | [YENİ, yeni sohbet] `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
-| 1d | [YENİ, aynı sohbet — 🔴'den doğdu] Build düzeltmesinin (`channel-options.ts`) commit edilip Vercel'de yeşil build verdiğini DOĞRULA (kullanıcı eylemi) | 🔴 |
-| 1e | [YENİ, aynı sohbet, #71] DEPENDENCIES.md paylaşılsın — `RegistrationChannel`'ın TÜM tüketicileri taransın, `channel-options.ts` gibi atlanan başka dosya var mı teyit edilsin | 🟠 |
+| 1 | **[GÜNCELLENDİ, bu turda]** `users.role: "customer" \| "staff"` için CORE.md §7.4 formatında şema değişiklik notu üret → migration koş → SONRA #62 Personel Sipariş Paneli'ni kodla (auth: rol bazlı middleware guard `/personel/*`, real-time: polling, UI: iki sekme — Masaya/Gel Al). Mimari önü tamamen açık. | 🔴 |
+| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
+| 1c | `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
+| 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, planlanan `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
 | 3 | Kayıt sonrası oturum/kullanıcı adı gösterimini araştır ve çöz (#59) | 🟡 |
 | 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
@@ -283,22 +263,22 @@
 | 20 | VisualPreview çağıranlarının tam repo taraması ile #34'ü kesin kapat | 🟢 |
 | 21 | Customizer adım başlıklarını Türkçeleştir / spec ile senkronla (#28/29) | 🟢 |
 | 22 | Genel `npm test` (tüm proje) çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
-| 23 | [Session 12 devamı, TAMAMLANDI] `types/index.ts` görüldü, #68 (RegistrationChannel/FulfillmentChannel tip etkisi) netleşti ve kodlandı | ✅ |
+| 23 | [TAMAMLANDI] `types/index.ts` görüldü, #68 (RegistrationChannel/FulfillmentChannel tip etkisi) netleşti ve kodlandı | ✅ |
+| 24 | [TAMAMLANDI, bu turda] Vercel build yeşil doğrulandı (1d) | ✅ |
+| 25 | [TAMAMLANDI, bu turda] #62'nin 3 mimari sorusu kapandı — ARCHITECTURE.md v1.12 | ✅ |
+| 26 | ROADMAP.md'ye #62 (Personel Sipariş Paneli) için ayrı bir oturum/kalem eklenmesi düşünülmeli — şu an hiç yer almıyor | 🟢 |
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v29 (v28'den: AYNI SOHBET — 🔴 canlı build kırığı bulundu ve
-çözüldü. Kullanıcı Vercel build log'u paylaştı: `components/registration/channel-options.ts`
-hâlâ #68'de tipten çıkarılmış `"masaya-siparis"` değerini kullanıyordu — #68 kapanırken bu
-dosya DEPENDENCIES.md'de `RegistrationChannel` tüketicisi olarak kayıtlı olmadığı için
-atlanmıştı. Düzeltme kullanıcı onayıyla üretildi (`channel-options.ts`, 2 seçenekli hâle
-getirildi), tek tüketici `RegistrationForm.tsx` görülüp kırılma riski taşımadığı teyit
-edildi (confidence: HIGH). CORE.md §7.3 gereği (🔴 blokaj + 🐛 kritik bug) bu güncelleme
-ZORUNLU tetiklendi, checkpoint sorusu beklenmedi — TEST_MATRIX.md yine GÜNCELLENMEDİ (v28'de
-bırakıldığı yerde, sonraki checkpoint'e devrediliyor). Yeni Açık Sorun #71 açıldı:
-DEPENDENCIES.md'nin `RegistrationChannel` tüketicilerini eksik listelemesi — dosya henüz
-paylaşılmadığı için düzeltilemedi, sadece loglandı. Değişen bölümler: CURRENT FOCUS (yeni
-blok), AÇIK SORUNLAR (#71 eklendi), KAPANDI notu (build-fix eklendi), GENEL DURUM (Repo
-satırı — build kırığı + doğrulama bekliyor notu), SIRADAKİ GÖREVLER (1d, 1e eklendi). Dosya
-hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
+*BOWLERA SESSION_INDEX.md — v30 (v29'dan: YENİ SOHBET — 1d KAPANDI (Vercel build yeşil
+doğrulandı), #62'nin 3 mimari sorusu (personel auth, real-time teknoloji, onay kuyruğu UI)
+Claude'un önerisi + kullanıcı onayıyla kapandı, ARCHITECTURE.md v1.12'ye işlendi. Değişen
+bölümler: CURRENT FOCUS (yeni blok), KRİTİK KARARLAR (yeni satır — ARCHITECTURE.md v1.12),
+AÇIK SORUNLAR (#62 açıklaması + öncelik güncellendi 🔴→🟡, KAPANDI notuna 1d ve #62-mimari
+eklendi), SESSION ÖZET (Session 12 devamı satırı eklendi), GENEL DURUM (Repo — build
+doğrulandı; Auth/Veritabanı/Personel Paneli/Mimari Dokümantasyon satırları güncellendi),
+SIRADAKİ GÖREVLER (1 güncellendi — `users.role` şema notu önce, 24/25/26 eklendi).
+Kullanıcı isteği üzerine bu checkpoint'te SADECE SESSION_INDEX güncellendi —
+TEST_MATRIX.md bilinçli olarak GÜNCELLENMEDİ (bu turda üretilen/değişen bir test yok).
+Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-08.*
