@@ -162,10 +162,15 @@ export async function GET() {
 
 ```ts
 // store/useCartStore.ts
-// Amaç:    Sepet öğelerini ve teslimat kanalını yönetir, tarayıcı kapansa da korur
-// Bağlı:   CartBadge, CartDrawer, Customizer "Sepete Ekle" butonu, app/siparis/page.tsx
+// Amaç:    Sepet öğelerini, teslimat kanalını ve (dine-in için) masa numarasını yönetir,
+//          tarayıcı kapansa da korur
+// Bağlı:   CartBadge, CartDrawer, Customizer "Sepete Ekle" butonu, app/siparis/page.tsx,
+//          app/masaya-siparis/[tableId]/page.tsx (§2.7b — YENİ, bu güncelleme)
 // Risk:    Hatalı state güncelleme → yanlış fiyat/miktar sepette görünür.
-//          fulfillmentChannel boş kalırsa teslimat şekli belirsizleşir (Açık Sorun #26, KAPANDI)
+//          fulfillmentChannel boş kalırsa teslimat şekli belirsizleşir (Açık Sorun #26, KAPANDI).
+//          [YENİ, bu güncelleme] tableId boş/yanlış set edilirse personel siparişi yanlış
+//          masaya götürür (§2.7b, masa numarası kararı) — QR akışının asıl kazancı olan
+//          sürtünmesiz deneyim bozulur.
 // Dokunma: BSC-6 (race condition) kontrolü — çift tıklama koruması component tarafında
 
 import { create } from 'zustand'
@@ -175,9 +180,14 @@ import type { CartItem, FulfillmentChannel } from '@/types'
 interface CartState {
   cart: CartItem[]
   fulfillmentChannel: FulfillmentChannel | null   // sepet/oturum seviyesinde TEK alan — Karar #13
+  // 🆕 [YENİ, bu güncelleme — §2.7b masa numarası kararı] SADECE dine-in akışında anlamlı.
+  // `/masaya-siparis/[tableId]` route param'ından sayfa girişinde set edilir — fulfillmentChannel
+  // gibi kendi setter'ı var ama kanal seçimiyle OTOMATİK ilişkilendirilmez (iki ayrı alan).
+  tableId: string | null
   addToCart: (item: CartItem) => void
   removeFromCart: (cartId: string) => void
   setFulfillmentChannel: (channel: FulfillmentChannel) => void
+  setTableId: (tableId: string) => void   // 🆕
   clearCart: () => void
 }
 
@@ -186,11 +196,13 @@ export const useCartStore = create<CartState>()(
     (set) => ({
       cart: [],
       fulfillmentChannel: null,
+      tableId: null,   // 🆕
       addToCart: (item) => set((state) => ({ cart: [...state.cart, item] })),
       removeFromCart: (cartId) =>
         set((state) => ({ cart: state.cart.filter((i) => i.cartId !== cartId) })),
       setFulfillmentChannel: (channel) => set({ fulfillmentChannel: channel }),
-      clearCart: () => set({ cart: [] }),   // fulfillmentChannel BİLİNÇLİ olarak sıfırlanmıyor
+      setTableId: (tableId) => set({ tableId }),   // 🆕
+      clearCart: () => set({ cart: [] }),   // fulfillmentChannel VE tableId BİLİNÇLİ olarak sıfırlanmıyor
     }),
     { name: 'bowlera-cart' }
   )
@@ -372,14 +384,19 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 > KVKK formu bu deneyime uymuyor. Bu karar #65'i çözmüyor, ORTADAN KALDIRIYOR.
 
 ```
-// app/masaya-siparis/page.tsx (+ app/masaya-siparis/customize/[id]/page.tsx)
+// app/masaya-siparis/[tableId]/page.tsx (+ app/masaya-siparis/[tableId]/customize/[id]/page.tsx)
 // Amaç:    Genel QR'dan gelen misafirin, HİÇBİR kimlik/rıza bilgisi vermeden menüyü
-//          gezip özelleştirip doğrudan sipariş verebildiği bağımsız yüzey
+//          gezip özelleştirip doğrudan sipariş verebildiği bağımsız yüzey — QR, masaya
+//          özel `tableId`'yi route param'ı olarak taşır (YENİ, bu güncelleme — masa
+//          numarası kararı, aşağıda)
 // Bağlı:   lib/menu-data.json (AYNI veri kaynağı, kopya YOK), store/useCartStore.ts
-//          (PAYLAŞILIR — §1 madde 7), order_history tablosu (channel="dine-in")
+//          (PAYLAŞILIR — §1 madde 7, `tableId` alanı dahil — bkz. §2.3), order_history
+//          tablosu (channel="dine-in", `table_number` kolonu — YENİ, bu güncelleme)
 // Risk:    Bu route'un `/menu/customize/*` matcher'ına YANLIŞLIKLA dahil edilmesi guard'ı
 //          bozar (tüm masaya misafirlerini girişe zorlar); tersi de mümkün — matcher
-//          genişletilirken bu prefix'in dışarıda kaldığından emin olunmalı
+//          genişletilirken bu prefix'in dışarıda kaldığından emin olunmalı. [YENİ] `tableId`
+//          route param'ı sayfa girişinde `useCartStore.setTableId()` ile YAZILMAZSA personel
+//          siparişi hangi masaya götüreceğini bilemez (bkz. Katman Sınırı, altta).
 // Dokunma: middleware.ts matcher'ı DEĞİŞMİYOR — bu route zaten kapsamı dışında, bu
 //          yüzden guest-gate kodunda HİÇBİR değişiklik gerekmiyor (bkz. §1 madde 7)
 ```
@@ -410,15 +427,45 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 sütunu Postgres enum DEĞİL, düz `text` — migration gerekmedi. Şema notu:
 `docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
 
-**[#69 KAPANDI, bu güncelleme]** `order_history.channel` sütunu (`"dine-in" | "pickup"`)
+**[#69 KAPANDI, önceki güncelleme]** `order_history.channel` sütunu (`"dine-in" | "pickup"`)
 Personel Paneli'nin Masaya/Gel Al ayrımı için YETERLİ — ek alan gerekmiyor. Gerekçe: Online
 Platform kanalı `order_history`'ye hiç yazmıyor (marketplace'e yönlendirme), bu yüzden mevcut
 iki değer zaten 1-1 karşılık veriyor. Gel Al'ın ilk-sipariş onay durumu (`pending`/`confirmed`)
 zaten `order_history`'de değil, `users.verificationStatus`'ta (kişi bazlı, `customerPhone` join'i
 ile) tutuluyor — sipariş bazlı ek bir onay alanına ihtiyaç yok.
 
-**Açık soru kalmadı.** §2.7b artık kod üretimine hazır (bkz. SIRADAKİ GÖREVLER 1b) — hem #68
-hem #69 kapandığı için mimari önünde engel yok.
+> ⚠️ **[YENİ, bu güncelleme] #69'un kapanış gerekçesi KISMEN yeniden değerlendirildi —
+> gerekçesiz düşürme DEĞİL, yeni bir gereksinimle genişletme:** #69, `channel` ayrımının
+> Masaya/Gel Al AYRIMI için yeterli olduğunu söylüyordu — bu hâlâ doğru ve DEĞİŞMEDİ. Ama
+> ayrı bir soru ortaya çıktı: aynı `channel="dine-in"` kanalı İÇİNDE, siparişin FİZİKSEL
+> OLARAK hangi masaya ait olduğu ayrıca tutulmalı mı? (#69'un kapsamı bu soruyu hiç
+> içermiyordu.) Cevap: EVET — bkz. aşağıdaki "Masa numarası kararı". `order_history`'ye
+> `table_number` kolonu eklenir. Bu, #69'u YANLIŞ hale getirmiyor, kapsamını genişletiyor.
+
+**[YENİ, bu güncelleme] Masa numarası kararı:** Masaya Sipariş'in amacı "QR'ı okut, birkaç
+saniyede sipariş ver" (bu felsefe CUSTOMIZER_SPEC.md §1 ile de tutarlı). Masa numarası
+olmadan personel siparişi hangi masaya götüreceğini BİLEMEZ — müşteriye "hangi masadaydınız?"
+diye sormak zorunda kalır, bu da QR akışının asıl kazancını (sürtünmesiz deneyim) sıfırlar.
+Bu mimari bir tercih değil, fiziksel bir zorunluluktur: dine-in sipariş sistemi masa
+eşlemesi olmadan eksik sayılır. (Not: Session 12'deki §2.7a→§2.7b izolasyon kararı SADECE
+kimlik/rıza akışını kaldırmıştı — "masa numarası gereksiz" diye bir gerekçe hiç geçmemişti;
+bu konu Session 9-12 arasında hiç ele alınmamış bir senkron boşluğuydu.)
+
+- **Route:** Path segment — `/masaya-siparis/[tableId]` (örn. `/masaya-siparis/14`). Query
+  param DEĞİL: bu kod tabanında zaten `/menu/customize/[id]` gibi dynamic route segment
+  konvansiyonu var, query param projede hiç kullanılmıyor — tutarlılık için path param
+  tercih edildi.
+- **Sepet:** `tableId`, sayfaya girişte `useCartStore`'a bir alan olarak yazılır (bkz. §2.3,
+  `CartState.tableId` + `setTableId()`) — çoklu sayfa akışında (menü→customize→checkout)
+  taşınması gerekiyor, sepet zaten paylaşılan tek state (§1 madde 7 ile tutarlı).
+- **`order_history` şeması:** Sipariş tamamlanınca yeni bir `table_number` sütunu (nullable,
+  SADECE `channel="dine-in"` satırlarında dolu) eklenir. Bu gerçek bir DB şeması değişikliği
+  — CORE.md §7.4 formatında ayrı bir değişiklik notu üretildi (bkz. bu turun teslimatları),
+  ⚠️ migration HENÜZ KOŞULMADI.
+
+**Açık soru kalmadı** (checkout varyantı, tip etkisi, kanal ayrımı — #67/#68/#69 hepsi
+kapalı). §2.7b kod üretimine hazır (bkz. SIRADAKİ GÖREVLER 1b) — masa numarası kararı bu
+hazırlığı bloklamıyor, sadece route/store/şema kontratına bir alan daha ekliyor.
 
 
 
@@ -555,6 +602,10 @@ type OrderHistoryEntry = {
   // güncellemenin kapsamı dışında — Personel Sipariş Paneli (§2.9a) tasarlanırken
   // netleştirilmeli. Burada YER TUTUCU olarak bırakılıyor, hardcode/varsayım YAPILMADI
   // (AGENT.md Kural #4, Sahte Veri Yasağı).
+  // [YENİ, bu güncelleme — §2.7b masa numarası kararı] `table_number` alanı (nullable,
+  // SADECE channel="dine-in" için dolu) tabloya EKLENMESİ KARARLAŞTIRILDI — migration
+  // HENÜZ KOŞULMADI. Tipin TAMAMI hâlâ netleşmedi, sadece bu tek alanın var olacağı
+  // kesinleşti. Şema notu: docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md
 }
 ```
 
@@ -574,7 +625,7 @@ type OrderHistoryEntry = {
 |---|---|
 | Platform | ✅ Vercel — proje `bowlera-site` olarak bağlı, deploy yeşil |
 | Ortam Değişkenleri | CONFIG_SCHEMA.md'de tanımlı, platform dashboard'undan girilir — ⚠️ CONFIG_SCHEMA.md v1.2 de bu Session 8-11 kararlarına göre AYRI olarak güncellenmeli (bu görevin 2. adımı) |
-| Veritabanı | ✅ Neon Postgres (Vercel Marketplace, Frankfurt region) — Karar #20. Session 8: `consentRegistrations` tablosu eklendi. Session 10: `order_history` tablosu eklendi. |
+| Veritabanı | ✅ Neon Postgres (Vercel Marketplace, Frankfurt region) — Karar #20. Session 8: `consentRegistrations` tablosu eklendi. Session 10: `order_history` tablosu eklendi. ⚠️ [YENİ] `order_history.table_number` kolonu eklenmesi KARARLAŞTIRILDI (masa numarası kararı, §2.7b) — migration HENÜZ KOŞULMADI. |
 | Build Komutu | `next build` |
 | Önizleme | Her PR için otomatik preview deploy önerilir |
 
@@ -621,9 +672,24 @@ type OrderHistoryEntry = {
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.10 — Session 12 devamı — 2026-08-08*
+*BOWLERA ARCHITECTURE.md — v1.11 — Session 12 devamı — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.10 (bu güncelleme): §2.7b Açık Soru #2 (order_history kanal ayrımı) KAPANDI — Açık Sorun
+*v1.11 (bu güncelleme): Masa numarası kararı — kullanıcı onayıyla §2.7b'ye eklendi. Masaya
+Sipariş'in "QR okut, saniyeler içinde sipariş ver" felsefesi masa eşlemesi olmadan eksik
+kalıyordu (Session 9-12 arası hiç ele alınmamış bir senkron boşluğu — §2.7a→§2.7b izolasyon
+kararı sadece kimlik/rıza akışını kaldırmıştı, masa numarasını değil). Değişiklikler:
+(1) §2.3 `CartState`'e `tableId: string | null` + `setTableId()` eklendi — `store/useCartStore.ts`
+kontratı, `types/index.ts` DEĞİL (bu dosyanın bir önceki turunda `types/index.ts`'e eklenecek
+denmişti — bu YANLIŞTI, `CartState` o dosyada tanımlı değil, sadece §2.3'te dokümante
+ediliyor; bu turda düzeltildi). (2) §2.7b — route path segmente güncellendi
+(`/masaya-siparis/[tableId]`), "Masa numarası kararı" alt bölümü eklendi, #69'un kapanış
+gerekçesi KISMEN yeniden değerlendirildi (gerekçesiz düşürme değil, kapsam genişlemesi —
+bkz. ilgili not). (3) §3 `OrderHistoryEntry` yer tutucusuna `table_number` notu eklendi.
+(4) §4.1 Deploy tablosuna migration bekleyen kolon notu eklendi. ⚠️ Bu güncelleme
+dokümantasyon + tip kontratı — `store/useCartStore.ts`'in kendisi ve migration HENÜZ
+KODLANMADI/KOŞULMADI. Şema notu: docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md.
+SESSION_INDEX.md'ye bu turda HENÜZ işlenmedi — checkpoint onayı bekleniyor.*
+*v1.10 (önceki güncelleme): §2.7b Açık Soru #2 (order_history kanal ayrımı) KAPANDI — Açık Sorun
 #69. Karar: `order_history.channel` (`"dine-in"|"pickup"`) Masaya/Gel Al ayrımı için yeterli,
 ek alan gerekmedi — Online Platform bu tabloya hiç yazmıyor, Gel Al onay durumu zaten
 `users.verificationStatus`'ta (kişi bazlı, sipariş bazlı değil). §2.7b'nin açık soru listesi
