@@ -45,8 +45,8 @@ CMS: Sanity/Contentful ────┘        (ISR ile, büyüme fazı)         
                                                                           (wa.me linki | Adisyo/SepetTakip API — server-side)
                                                                           ⚠️ WhatsApp köprüsü şube numarası bekleniyor (§2.9)
 
-app/kayit-ol/page.tsx ──► app/api/auth/register/route.ts ──► auth.ts (Auth.js JWT session)
-(rıza esaslı kayıt — Session 8 ile BİRİNCİL akış oldu)                        │
+app/kayit-ol/page.tsx ──► app/api/registration/consent/route.ts ──► auth.ts (Auth.js JWT session)
+(rıza esaslı kayıt — Session 8 ile BİRİNCİL akış oldu; bu turda signIn() eklendi, #59 KAPANDI)   │
                                                                                 ▼
                                                                 lib/db/client.ts (Neon Postgres, Drizzle ORM)
                                                                                 │
@@ -54,9 +54,9 @@ app/kayit-ol/page.tsx ──► app/api/auth/register/route.ts ──► auth.ts
                               ▼                                 ▼                                                ▼
                    consentRegistrations tablosu        users tablosu (phone, address,               app/hesap/page.tsx ──► app/api/user/profile/route.ts
                    (KVKK rıza kaydı, Session 8)         displayName, loyaltyPoints,                  (GET/PATCH — sadece session.user.phone kullanır)
-                                                          verifiedAt, ⚠️ + doğrulama-durumu
-                                                          alanı — KARARLAŞTIRILDI, HENÜZ
-                                                          KODLANMADI, bkz. §2.7a)
+                                                          verifiedAt, role, verificationStatus,
+                                                          contactAttempts — TÜMÜ KODLANDI ve
+                                                          repoda doğrulandı, bu turda)
 
 ⚠️ app/giris/page.tsx (Twilio OTP) — PARKLI (Açık Sorun #32/#56). Eski Twilio OTP UI'ı
    Session 8'de KALDIRILDI. Twilio kararı acil değil, bkz. §2.7 not.
@@ -95,14 +95,19 @@ app/api/orders/history/route.ts ──► order_history tablosu (Neon Postgres, 
 9. Adres alanı sipariş akışını (checkout) BLOKLAMAZ — FulfillmentChannel ("pickup" | "dine-in") delivery içermediği için adres sadece profil/sadakat verisidir, opsiyonel olarak /hesap sayfasında toplanır (Karar #23)
 10. Teslimat kanalı (fulfillmentChannel) app/siparis/page.tsx'te ZORUNLU seçim haline getirilir — kanal seçilmeden WhatsApp sipariş CTA'sı aktif olamaz (Açık Sorun #26, KAPANDI)
 11. Üçüncü parti entegrasyon için gerekli kimlik bilgisi (ör. şube telefon numarası) eksikken ilgili CTA gerçek işlevle bağlanamaz — sahte/placeholder değer YASAK (BSC-5, CORE §9); bunun yerine CTA bilinçli olarak devre dışı + açıklamalı bırakılır
-12. [YENİ, Session 11 — KARARLAŞTIRILDI, HENÜZ KODLANMADI] Gel Al kanalında ilk sipariş,
-    Personel Sipariş Paneli üzerinden personel tarafından telefon/WhatsApp ile erişim teyidi
-    yapılıp MANUEL ONAY verilmeden tamamlanamaz. Onay sonrası kullanıcının doğrulama durumu
-    `confirmed` olarak işaretlenir, sonraki siparişler bu adımı tekrarlamaz (§2.7a, Açık
-    Sorun #64 — KAPANDI).
-13. [YENİ, bu güncelleme] Personel Sipariş Paneli erişimi `users.role` alanına (rol bazlı
-    yetkilendirme, §2.9a) dayanır — bu alan HENÜZ users şemasında yok, panel kodlanmaya
-    başlanmadan ÖNCE CORE.md §7.4 formatında ayrı bir şema değişiklik notu üretilmeli.
+12. [Session 11 KARAR, bu turda KODLANDI — §2.7a, Açık Sorun #64 revize] Gel Al kanalında
+    ilk sipariş, Personel Sipariş Paneli üzerinden personel tarafından telefon/WhatsApp ile
+    erişim teyidi yapılıp MANUEL ONAY verilmeden tamamlanamamalıdır. `users.verificationStatus`
+    alanı ("pending"|"confirmed") ve JWT/session zinciri KODLANDI (auth.ts, types/index.ts,
+    types/next-auth.d.ts) — ama bu kuralı FİİLEN UYGULAYAN checkout-tarafı kontrol (`app/siparis/
+    page.tsx`'te `verificationStatus === 'pending'` iken tamamlamayı engelleme) HENÜZ
+    YAZILMADI (ayrı kod turu, Kural #5). **[YENİ, bu turda]** Personel 3 kez telefon/WhatsApp
+    ile ulaşmayı deneyip başaramazsa (`users.contactAttempts` 3'e ulaşırsa), Personel Sipariş
+    Paneli bu kaydı "şüpheli/muhtemelen sahte" diye öne çıkarır — silme OTOMATİK DEĞİL,
+    karar hâlâ personelde (manuel silme, panelin kendisi henüz yazılmadı).
+13. [Session 11'de eklendi, bu turdan ÖNCE KODLANDI] Personel Sipariş Paneli erişimi
+    `users.role` alanına (rol bazlı yetkilendirme, §2.9a) dayanır — bu alan artık users
+    şemasında VAR ve `/personel/*` middleware guard'ı KODLANDI, Vercel build yeşil doğrulandı.
 ```
 
 > ⚠️ **ÖNEMLİ NOT (bu güncelleme, Session 11 senkronu):** Yukarıdaki madde 7 ve 12 ile
@@ -304,13 +309,19 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 > kesişiyor (§2.7a, §2.9) — Personel Sipariş Paneli (#62) mimarisi bu turda netleşti
 > (§2.9a), kod üretilince bu bölüm güncellenecek.
 
-### 2.7 `app/api/auth/register/route.ts` — Rıza Esaslı Kayıt (`/kayit-ol`)
+### 2.7 `app/api/registration/consent/route.ts` — Rıza Esaslı Kayıt (`/kayit-ol`)
+
+> ⚠️ **[Bu turda düzeltildi] Dosya adı senkron hatası:** Bu bölüm önceki sürümlerde
+> `app/api/auth/register/route.ts` diye anılıyordu — repoda böyle bir dosya HİÇ olmadı,
+> gerçek route her zaman `app/api/registration/consent/route.ts` idi. Dokümantasyon kodu
+> hiç yakalamamıştı (Açık Sorun #59 teşhisi sırasında bu turda bulundu). Aşağıdaki tüm
+> referanslar düzeltildi.
 
 ```ts
-// app/api/auth/register/route.ts
-// Amaç:    Kullanıcı bilgisi + KVKK rızası alarak hesap oluşturur, Auth.js JWT session açar
+// app/api/registration/consent/route.ts
+// Amaç:    Kullanıcı bilgisi + KVKK rızası alarak rıza kaydı yazar VE Auth.js JWT session açar
 // Bağlı:   app/kayit-ol/page.tsx, lib/registration/validation.ts, lib/auth/rate-limit.ts,
-//          lib/db/queries (consentRegistrations + users tabloları)
+//          lib/db/queries (consentRegistrations tablosu), auth.ts (signIn)
 // Risk:    KVKK rızası kaydedilmeden hesap açılırsa yasal risk; rate-limit'siz bırakılırsa
 //          kayıt endpoint'i kötüye kullanılabilir (BSC-7)
 // Dokunma: KVKK metni değişirse app/kvkk/page.tsx ve bu route'un rıza-versiyon alanı
@@ -319,22 +330,33 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 // [Session 8] Eski app/giris/page.tsx (Twilio OTP) UI'ı KALDIRILDI.
 // Bu route artık BİRİNCİL kayıt/giriş akışıdır. Backend + Frontend tamam, /kayit-ol'a
 // BAĞLANDI, consentRegistrations migration'ı canlıda koşuldu, uçtan uca test BAŞARILI.
+// [Bu turda] signIn("credentials", { phone, redirect: false }) eklendi — kayıt artık
+// OTP'siz bir Auth.js oturumu da açıyor (Açık Sorun #59 KAPANDI).
 ```
 
-> ⚠️ **Bilinen açık:** Kayıt sonrası oturum/kullanıcı adı gösterimi netleşmedi (Açık Sorun #59).
+> ⚠️ **[KAPANDI, bu turda] Kayıt sonrası oturum/kullanıcı adı gösterimi (Açık Sorun #59):**
+> `consent/route.ts` artık rıza kaydından SONRA `signIn()` çağırıyor — `Header.tsx` bileşeni
+> `useSession()` ile bunu doğru okuyor, kullanıcı adı artık görünüyor. Bu, OTP doğrulaması
+> DEĞİL — bkz. auth.ts güvenlik sınırı notu ve §2.7a "Doğrulama durumu alanı" bölümü:
+> oturum açabilmek, sipariş tamamlayabilmek anlamına GELMİYOR.
 >
 > ⚠️ **Twilio/Netgsm — PARKLI (#32/#56):** `app/giris/page.tsx` (Twilio Verify OTP akışı)
 > Session 8'de arayüzden kaldırıldı. Backend route'ları (`app/api/auth/otp/*`) kod
 > seviyesinde repoda duruyor olabilir ama **aktif kullanılmıyor** — canlı akışa bağlı
 > değil. Twilio'nun Türkiye'yi "restricted country" işaretlemesi (Açık Sorun #32) hâlâ
-> çözülmedi, ama bu artık acil değil çünkü birincil akış `/kayit-ol`'a taşındı.
-> Twilio/Netgsm nihai kararı (kullanılacak mı, hangi sağlayıcı) hâlâ AÇIK.
+> çözülmedi. Bu turda kullanıcı kararıyla ayrıca netleşti: OTP'li giriş bu proje fazında
+> tamamen devre dışı — gerçek doğrulama artık SMS ile değil, personel manuel teyidiyle
+> yapılacak (§2.7a). Twilio/Netgsm nihai kararı hâlâ AÇIK ama artık acil değil.
 
-### 2.7a Genel Giriş/Kayıt Akışı — [Session 11, KARARLAŞTIRILDI, HENÜZ KODLANMADI]
+### 2.7a Genel Giriş/Kayıt Akışı — [Session 11 KARARLAŞTIRILDI, bu turda KISMEN KODLANDI]
 
-> ⚠️ Bu alt bölüm henüz karşılık gelen kodu olmayan bir MİMARİ KARAR belgesidir.
-> SIRADAKİ GÖREVLER listesindeki 1b maddesi bu kontratı kodlayacaktır. Kod üretildiğinde
-> bu blok normal bir modül kontratına (dosya + amaç/bağlı/risk/dokunma) dönüştürülmeli.
+> ⚠️ **[Bu turda güncellendi]** Oturum açma kısmı (adım 3-4, sadece "kayıt" dalı) artık
+> KODLANDI — `/kayit-ol` OTP'siz `signIn()` çağırıyor, kullanıcı adı görünüyor (#59
+> KAPANDI). **"Giriş" seçeneği ise fiilen ÇALIŞMIYOR** — Twilio OTP parklı olduğu için
+> mevcut kullanıcılar için ayrı bir giriş formu/akışı YOK; tek çalışan yol tekrar
+> `/kayit-ol`'dan geçmek (aynı telefonla, `authorize()` mevcut satırı günceller, yeni
+> satır açmaz). Aşağıdaki akış tarifi hâlâ SIRADAKİ GÖREVLER'deki 1b'nin kapsamı — özellikle
+> checkout'taki manuel-onay ENGELİ (madde 12, kural listesi) HENÜZ KODLANMADI.
 >
 > ⚠️ **[Session 12 ile KAPSAM DARALTILDI]** Bu bölüm artık SADECE Gel Al ve Online
 > Platform kanallarını kapsar. Masaya Sipariş bu akıştan tamamen ÇIKARILDI — kendi ayrı
@@ -361,11 +383,16 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 > `"masaya-siparis"` değerinin çıkarılıp çıkarılmayacağı HENÜZ KARARLAŞTIRILMADI — bu
 > dosya `types/index.ts`'i içermiyor, kod üretilirken netleştirilmeli (Açık Sorun, yeni).
 
-**Doğrulama durumu alanı (Açık Sorun #64 — KAPANDI, Session 11):** Gel Al kanalında ilk
-siparişteki manuel onay sırasında kullanıcı zaten DB'ye yazıldığı için, onay adımı SADECE
-ilk siparişte gereklidir. Mimari yansıması: `AuthenticatedUser` tipine bir doğrulama durumu
-alanı eklenir (bkz. §3, `verificationStatus: "pending" | "confirmed"`), ilk onaydan sonra
-sonraki siparişler otomatik "confirmed"/aktif sayılır.
+**Doğrulama durumu alanı (Açık Sorun #64 — revize, bu turda KISMEN KODLANDI):** Gel Al
+kanalında ilk siparişteki manuel onay sırasında kullanıcı zaten DB'ye yazıldığı için, onay
+adımı SADECE ilk siparişte gereklidir. Mimari yansıması: `AuthenticatedUser` tipine bir
+doğrulama durumu alanı eklendi (bkz. §3, `verificationStatus: "pending" | "confirmed"`) —
+DB, auth.ts, types/next-auth.d.ts tarafı TAMAMEN KODLANDI. **HENÜZ YAZILMAYAN kısım:**
+`app/siparis/page.tsx`'in `verificationStatus === 'pending'` iken siparişi fiilen
+ENGELLEMESİ — alan var, ama onu okuyup checkout'u durduran kod henüz yok. **[YENİ, bu
+turda]** `users.contactAttempts` sayacı eklendi — personel panelden "ulaşamadım" dedikçe
++1 artırılacak (panelin kendisi henüz yazılmadı), 3'e ulaşınca kayıt "şüpheli/muhtemelen
+sahte" diye öne çıkarılacak; silme kararı otomatik değil, personelde kalıyor.
 
 **Personel Sipariş Paneli ile kesişim (Açık Sorun #62 — kapsam netleşti, tasarım kararları
 bkz. §2.9a):** "Kasa paneli" ile Açık Sorun #62'de tanımlı Personel Sipariş Paneli AYNI
@@ -577,21 +604,27 @@ type CartItem = {
 
 type AuthenticatedUser = {
   phone: string                  // kimlik anahtarı — Karar #17, "1 numara = 1 hesap"
-  verifiedAt: string             // ISO timestamp — son doğrulama/kayıt zamanı
+  // ⚠️ [Bu turda ANLAM GÜNCELLENDİ] ARTIK "son OTP doğrulama zamanı" DEĞİL — sadece
+  // "hesabın açıldığı an / en son signIn() zamanı". Twilio/Netgsm devre dışı kaldığı için
+  // gerçek doğrulama göstergesi artık verificationStatus (aşağıda).
+  verifiedAt: string
   // Karar #20 ile bu alanlar KALICI OLARAK SAKLANIYOR — Neon Postgres, users tablosu.
   address?: string                // Karar #23 — SADECE profil/sadakat verisi, checkout'u bloklamaz
   displayName?: string
   loyaltyPoints?: number          // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
-  verificationStatus?: "pending" | "confirmed"
-  // ⚠️ [Session 11, Açık Sorun #64 — KARAR KAPANDI, HENÜZ KODLANMADI]
-  // Gel Al kanalında ilk sipariş onayı bekleniyorsa "pending", personel manuel onay
-  // verdikten sonra "confirmed" — sonraki siparişler tekrar onay istemez (§2.7a).
+  // 🆕 [§2.9a Personel Auth Kararı — TAMAMEN KODLANDI, bu turdan önce] ZORUNLU alan
+  // (opsiyonel değil — DB'de NOT NULL DEFAULT 'customer'). middleware.ts'in /personel/*
+  // guard'ı bu alanı okur, Vercel build yeşil doğrulandı.
+  role: "customer" | "staff"
+  // ⚠️ [Session 11, Açık Sorun #64 — revize, bu turda KISMEN KODLANDI] ZORUNLU alan
+  // (opsiyonel değil — DB'de NOT NULL DEFAULT 'pending'). Gel Al kanalında ilk sipariş
+  // onayı bekleniyorsa "pending", personel manuel onay verdikten sonra "confirmed" —
+  // sonraki siparişler tekrar onay istemez (§2.7a). Bu alan/auth zinciri KODLANDI; onu
+  // OKUYUP checkout'u durduran kontrol (`app/siparis/page.tsx`) HENÜZ YAZILMADI.
   // Online Platform kanalında bu alan kullanılmaz (marketplace yönlendirmesi).
   // [Session 12] Masaya Sipariş artık AuthenticatedUser kapsamının dışında — §2.7b,
   // hiç kimlik/hesap oluşturmuyor.
-  // 🆕 [bu güncelleme, §2.9a Personel Auth Kararı] role?: "customer" | "staff" — HENÜZ
-  // users şemasına eklenmedi, HENÜZ bu tipe eklenmedi; CORE.md §7.4 notu üretilince
-  // hem şema hem bu tip güncellenecek. Şu an sadece kararın kendisi belgeleniyor.
+  verificationStatus: "pending" | "confirmed"
 }
 
 type OrderHistoryEntry = {
@@ -662,17 +695,37 @@ type OrderHistoryEntry = {
 | Render | Bileşenler (`MenuCard`, `SummaryPanel`) | State mutasyonu |
 | Sepet kalıcılığı + teslimat kanalı | `useCartStore` (persist) | Checkout UI, ödeme |
 | Checkout / kanal zorunluluğu | `app/siparis/page.tsx`, `components/order/*` | Ödeme işlemi (henüz yok), WhatsApp gönderimi (blokajlı) |
-| Kullanıcı kimliği/oturum (rıza esaslı) | `auth.ts`, `app/api/auth/register/*` (`/kayit-ol`) | Sepet/checkout akışı (Masaya Sipariş kanalında bağımsız kalır; diğer kanallarda giriş ön koşul — §2.7a, henüz kodlanmadı) |
+| Kullanıcı kimliği/oturum (rıza esaslı) | `auth.ts`, `app/api/registration/consent/route.ts` (`/kayit-ol`) | Sepet/checkout akışı (Masaya Sipariş kanalında bağımsız kalır; diğer kanallarda oturum açık olması sipariş TAMAMLAMA garantisi vermez — checkout'taki verificationStatus gate'i henüz kodlanmadı, §2.7a) |
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
-| Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7a'daki karar, 1b görevinde kodlanacak | — |
-| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — mimari kararlar KAPANDI (§2.9a: auth/real-time/UI), kod HENÜZ YAZILMADI, `users.role` migration'ı bekliyor | `order_history` DB şeması (zaten canlıda, ayrı katman) |
+| Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | `middleware.ts` (guest-gate — kodlandı), `app/api/registration/consent/route.ts` (kayıt+oturum — kodlandı) | Checkout-tarafı manuel-onay ENGELİ (`verificationStatus` gate) — §2.7a, HENÜZ KODLANMADI |
+| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — mimari kararlar KAPANDI (§2.9a: auth/real-time/UI), `/personel/*` guard'ı + `users.role`/`verificationStatus`/`contactAttempts` şeması KODLANDI, panelin kendisi (UI+API+polling) HENÜZ YAZILMADI | `order_history` DB şeması (zaten canlıda, ayrı katman) |
 
 ---
 
 *BOWLERA ARCHITECTURE.md — v1.12 — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.12 (bu güncelleme): §2.9a Personel Sipariş Paneli'nin 3 açık mimari sorusu kullanıcı
+*v1.13 (bu güncelleme): #59 (kayıt sonrası oturum) KAPANDI + #64 revize (3-deneme kuralı
+eklendi) + dosya adı senkron hatası düzeltildi. Değişiklikler: (1) §1 diyagramı — route yolu
+`app/api/auth/register/route.ts` → gerçek yol `app/api/registration/consent/route.ts` olarak
+düzeltildi (bu isim HİÇ var olmadı, dokümantasyon kodu hiç yakalamamıştı); users tablosu
+alan listesine `role`/`verificationStatus`/`contactAttempts` eklendi, hepsi KODLANDI. (2)
+Kural 12 — checkout-gate hâlâ yazılmadığı netleştirildi + "3 başarısız deneme → şüpheli
+işaretleme" kuralı eklendi (`contactAttempts`). Kural 13 — `role` artık KODLANDI olarak
+güncellendi. (3) §2.7 — başlık ve kod bloğu gerçek dosya yoluna düzeltildi, #59'un KAPANDI
+notu eklendi, Twilio/Netgsm netliği güncellendi (OTP'li giriş bu faz için tamamen devre
+dışı, gerçek doğrulama artık personel manuel teyidi). (4) §2.7a — başlık "KISMEN KODLANDI"ya
+güncellendi, "giriş" seçeneğinin fiilen çalışmadığı not edildi, doğrulama durumu paragrafı
+KODLANDI+3-deneme kuralına göre revize edildi. (5) §3 `AuthenticatedUser` — gerçek
+types/index.ts ile senkronlandı (`role`/`verificationStatus` artık ZORUNLU alanlar,
+`verifiedAt` yorumu güncellendi). (6) §5 tablo — iki satır (kimlik/oturum, guest-gate,
+Personel Paneli) gerçek dosya/durum bilgisiyle güncellendi.
+⚠️ Bu turda KODLANAN: `lib/db/schema.ts`, `types/index.ts`, `auth.ts`,
+`types/next-auth.d.ts`, `app/api/registration/consent/route.ts`. HENÜZ KODLANMAYAN:
+checkout-tarafı verificationStatus gate'i, Personel Sipariş Paneli'nin kendisi (UI+API+
+contactAttempts artırma+3-deneme flag'leme). Şema notu:
+docs/schema-changes/20260808030000_users_verification_status_ve_contact_attempts_eklendi.md*
+*v1.12 (önceki güncelleme): §2.9a Personel Sipariş Paneli'nin 3 açık mimari sorusu kullanıcı
 onayıyla KAPANDI: (1) Personel Auth — mevcut Auth.js sistemine `users.role` alanı eklenerek
 rol bazlı yetkilendirme (ayrı personel-hesap sistemi veya PIN yerine); (2) Real-Time —
 basit polling (WebSocket/SSE yerine); (3) Onay Kuyruğu UI — iki ayrı sekme/panel (Masaya
