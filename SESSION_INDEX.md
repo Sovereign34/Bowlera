@@ -110,6 +110,28 @@
 > Kullanıcı isteği üzerine bu turda **SADECE SESSION_INDEX güncellendi** — TEST_MATRIX.md
 > bilinçli olarak bu checkpoint'te GÜNCELLENMEDİ (bir sonraki checkpoint'e bırakıldı).
 
+> 🔴🐛 **[AYNI SOHBET, DEVAM — CANLI BUILD KIRIĞI BULUNDU VE ÇÖZÜLDÜ]** Kullanıcı Vercel
+> build log'u paylaştı: `components/registration/channel-options.ts` hâlâ
+> `RegistrationChannel`'a `"masaya-siparis"` değeri atıyordu — bu değer #68 kararıyla
+> (ARCHITECTURE.md v1.9, Session 12 devamı) tipten ÇIKARILMIŞTI, ama bu dosya o turda hiç
+> görülmediği için güncellenmemiş kalmıştı. **Kök neden:** DEPENDENCIES.md'de
+> `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts` KAYITLI DEĞİLDİ — #68
+> kapanırken bu yüzden atlandı. Bu, ÜÇÜNCÜ DERS'in (Session 8) bir varyantı: "kod+test
+> yeterli değil" ilkesi burada "tip değişikliği tüm tüketicilere yayıldı mı" şekline
+> genişletilmeli.
+> **Düzeltme:** `channel-options.ts`'ten `"masaya-siparis"` seçeneği kaldırıldı — kullanıcı
+> onayıyla uygulandı. Tek tüketici `RegistrationForm.tsx` görüldü, `.map()` ile dinamik
+> render ediyor — sabit-index/sabit-genişlik varsayımı yok, kırılma riski taşımıyor
+> (confidence: HIGH). DB etkisi yok — `consentRegistrations.channel` enum değil düz `text`,
+> geçmiş `"masaya-siparis"` kayıtları (Session 9) etkilenmedi, sadece yeni kayıt formundan
+> bu seçenek kalktı.
+> **Yeni Açık Sorun #71 açıldı:** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak
+> `channel-options.ts`'i (ve muhtemelen başka görülmemiş dosyaları) hiç listelemiyor — tip
+> daraltma kararları verilirken bu dosya sistematik olarak taranmalı. Bu turda DEPENDENCIES.md
+> paylaşılmadığı için dosyanın kendisi güncellenemedi, sadece Açık Sorun olarak loglandı.
+> CORE.md §7.3 gereği (🔴 blokaj + 🐛 kritik bug) bu SESSION_INDEX güncellemesi ZORUNLU
+> tetiklendi, checkpoint sorusu beklenmedi.
+
 ---
 
 ## 📌 KRİTİK TEKNİK/TASARIM KARARLARI (özet — hâlâ etkili olanlar + yeniden teyit edilmesi gerekenler)
@@ -173,6 +195,7 @@
 | 68 | 🟢 | **[KAPANDI, Session 12 devamı, ARCHITECTURE.md v1.9]** `RegistrationChannel` tipinden `"masaya-siparis"` ÇIKARILDI, `FulfillmentChannel`'a taşınmadı. `types/index.ts` ve `lib/db/schema.ts` bu turda görüldü — `consentRegistrations.channel` sütunu enum değil düz `text`, migration gerekmedi. Şema notu: `docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`. | `types/index.ts` |
 | 69 | 🟢 | **[KAPANDI, Session 12 devamı, ARCHITECTURE.md v1.10 — kapsamı GENİŞLETİLDİ bkz. #70]** `order_history.channel` (`"dine-in"\|"pickup"`) Masaya/Gel Al ayrımı için YETERLİ — ek alan gerekmedi. Bu gerekçe hâlâ doğru. Ama "aynı kanal içinde HANGİ masa" sorusunu hiç kapsamıyordu — o soru yeni Açık Soru #70. | `order_history` şeması, §2.9a |
 | 70 | 🟡 | **[YENİ SOHBET, 2026-08-08]** `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
+| 71 | 🟠 | **[YENİ, aynı sohbet — 🔴 build kırığından doğdu]** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor. #68 kapanırken bu dosya atlandığı için canlı build kırıldı (bu turda düzeltildi). DEPENDENCIES.md paylaşılıp `RegistrationChannel`'ın TÜM tüketicileri taranmalı — sadece bu 1 dosya mı, başka atlanan var mı belirsiz. | `DEPENDENCIES.md` (henüz görülmedi) |
 
 > **KAPANDI (bu turda):** #65 — Masaya Sipariş'in guest-girişi istisnasının middleware'e
 > eklenmesi görevi, ARCHITECTURE.md v1.7 kararıyla (Masaya'nın middleware kapsamı dışına,
@@ -180,6 +203,10 @@
 > kalmadı. Kod hâlâ yazılmadı (bkz. SIRADAKİ GÖREVLER 1b).
 > **#67** — Checkout varyantı sorusu, kullanıcı onayıyla Seçenek A (bağımsız mini-checkout)
 > olarak çözüldü, ARCHITECTURE.md v1.8'e işlendi. Kod hâlâ yazılmadı.
+> 🔴🐛 **[AYNI SOHBET]** Canlı build kırığı — `channel-options.ts`'te `"masaya-siparis"`
+> #68'den kalan bir artıktı, kaldırıldı, kullanıcı onayıyla dosya üretildi. Build'in tekrar
+> yeşile döndüğü kullanıcı tarafından AYRICA doğrulanmalı (ÜÇÜNCÜ DERS — "kod tamam" ile
+> "kullanıcı deneyimi tamam" ayrı kontrol noktaları).
 >
 > **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49, #64 —
 > detaylar `session_arşiv.md` ve `session_arşiv_1.md`'de.
@@ -212,7 +239,7 @@
 
 | Alan | Değer |
 |---|---|
-| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel, Vercel Production'da deploy'lar Ready. |
+| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. ⚠️ **[AYNI SOHBET]** `main`'deki son build (`d4d22c5`) `channel-options.ts` tip hatasıyla KIRILMIŞTI — düzeltme bu turda üretildi, kullanıcının commit edip yeniden deploy etmesi ve build'in yeşile döndüğünü DOĞRULAMASI gerekiyor (henüz teyit edilmedi). |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı. **[Yeni sohbet]:** ARCHITECTURE.md v1.11'e güncellendi, henüz koda yansımadı. |
 | Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). Genel `npm test` hâlâ tekrar çalıştırılmadı. |
 | Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. **[Session 12 devamı]:** Masaya Sipariş kanalı artık middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. |
@@ -232,6 +259,8 @@
 | 1 | #62 Personel Sipariş Paneli mimari tasarımı — personel auth yöntemi, real-time teknoloji, onay kuyruğu UI/veri modeli, `pending`/`confirmed` şeması. **[Session 12 devamı]:** #68/#69 KAPANDI, tasarıma başlanabilir. | 🔴 |
 | 1b | [GÜNCELLENDİ, yeni sohbet] Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) ~~Masaya Sipariş guest istisnası middleware'e eklenmeli~~ — ARTIK GEÇERSİZ, bkz. #65 KAPANDI; (iii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + **kendi mini-checkout'u**, #67 kararınca — YENİ: route artık `tableId` path segment'i taşıyor, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iv) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (v) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 1c | [YENİ, yeni sohbet] `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
+| 1d | [YENİ, aynı sohbet — 🔴'den doğdu] Build düzeltmesinin (`channel-options.ts`) commit edilip Vercel'de yeşil build verdiğini DOĞRULA (kullanıcı eylemi) | 🔴 |
+| 1e | [YENİ, aynı sohbet, #71] DEPENDENCIES.md paylaşılsın — `RegistrationChannel`'ın TÜM tüketicileri taransın, `channel-options.ts` gibi atlanan başka dosya var mı teyit edilsin | 🟠 |
 | 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
 | 3 | Kayıt sonrası oturum/kullanıcı adı gösterimini araştır ve çöz (#59) | 🟡 |
 | 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
@@ -258,21 +287,18 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v28 (v27'den: YENİ SOHBET — masa numarası kararı geriye dönük
-işlendi. Önceki sohbet bu konuyu SESSION_INDEX güncellenmeden bitirmişti [DÖRDÜNCÜ DERS'in
-tekrarı] — bu turda tamamlandı. Kullanıcı onayıyla: Masaya Sipariş'te masa numarası
-TUTULACAK, route `/masaya-siparis/[tableId]` (path segment) olacak, `useCartStore`'a
-`tableId`+`setTableId()` eklendi (ARCHITECTURE.md §2.3), `order_history`'ye nullable
-`table_number` eklenmesi kararlaştırıldı (şema notu üretildi, migration HENÜZ KOŞULMADI).
-ARCHITECTURE.md v1.10 → v1.11. #69 KAPALI kalmaya devam ediyor ama kapsamı genişletildi
-(gerekçesiz düşürme değil) — yeni Açık Soru #70 (table_number tipi + index gereksinimi)
-açıldı. Bir önceki turda yapılan bir öz-düzeltme de not edildi: `CartState`'in
-`types/index.ts`'te değil ARCHITECTURE.md §2.3'te tanımlı olduğu netleştirildi. Değişen
-bölümler: CURRENT FOCUS (yeni blok), KRİTİK KARARLAR (yeni satır), AÇIK SORUNLAR (#69 notu
-güncellendi + #70 eklendi), SESSION ÖZET (Session 12 satırı), GENEL DURUM (Planlama
-Belgeleri/Veritabanı/Personel Paneli/Mimari Dokümantasyon satırları), SIRADAKİ GÖREVLER
-(1b güncellendi, 1c eklendi). ⚠️ Kullanıcı isteği üzerine bu turda SADECE SESSION_INDEX
-güncellendi — TEST_MATRIX.md bilinçli olarak GÜNCELLENMEDİ, bir sonraki checkpoint'e
-bırakıldı. Kod bu turda da ÜRETİLMEDİ — sadece dokümantasyon senkronu. Dosya 400 satır
-eşiğinin hâlâ altında (bkz. satır sayısı), taşıma tetiklenmedi.
+*BOWLERA SESSION_INDEX.md — v29 (v28'den: AYNI SOHBET — 🔴 canlı build kırığı bulundu ve
+çözüldü. Kullanıcı Vercel build log'u paylaştı: `components/registration/channel-options.ts`
+hâlâ #68'de tipten çıkarılmış `"masaya-siparis"` değerini kullanıyordu — #68 kapanırken bu
+dosya DEPENDENCIES.md'de `RegistrationChannel` tüketicisi olarak kayıtlı olmadığı için
+atlanmıştı. Düzeltme kullanıcı onayıyla üretildi (`channel-options.ts`, 2 seçenekli hâle
+getirildi), tek tüketici `RegistrationForm.tsx` görülüp kırılma riski taşımadığı teyit
+edildi (confidence: HIGH). CORE.md §7.3 gereği (🔴 blokaj + 🐛 kritik bug) bu güncelleme
+ZORUNLU tetiklendi, checkpoint sorusu beklenmedi — TEST_MATRIX.md yine GÜNCELLENMEDİ (v28'de
+bırakıldığı yerde, sonraki checkpoint'e devrediliyor). Yeni Açık Sorun #71 açıldı:
+DEPENDENCIES.md'nin `RegistrationChannel` tüketicilerini eksik listelemesi — dosya henüz
+paylaşılmadığı için düzeltilemedi, sadece loglandı. Değişen bölümler: CURRENT FOCUS (yeni
+blok), AÇIK SORUNLAR (#71 eklendi), KAPANDI notu (build-fix eklendi), GENEL DURUM (Repo
+satırı — build kırığı + doğrulama bekliyor notu), SIRADAKİ GÖREVLER (1d, 1e eklendi). Dosya
+hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-08.*
