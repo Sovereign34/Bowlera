@@ -404,11 +404,14 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
   gösterimi (`SummaryPanel.tsx` gibi paylaşılan bir bileşen üzerinden) paylaşılabilir —
   paylaşılan, checkout AKIŞININ KENDİSİ değil, sadece gösterim katmanı olmalı.
 
-**HÂLÂ AÇIK olan sorular (kod üretilmeden netleşmeli):**
-1. `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri çıkarılacak
-   mı, yoksa `FulfillmentChannel`'da mı kalacak? (§3'teki not, henüz kararlaştırılmadı —
-   Açık Sorun #68)
-2. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
+**[#68 KAPANDI, bu güncelleme]** `RegistrationChannel` tipinden (`types/index.ts`)
+`"masaya-siparis"` değeri ÇIKARILDI, `FulfillmentChannel`'a taşınmadı (zaten oradaki
+`"dine-in"` karşılığı yeterli). `lib/db/schema.ts` incelendi: `consentRegistrations.channel`
+sütunu Postgres enum DEĞİL, düz `text` — migration gerekmedi. Şema notu:
+`docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
+
+**HÂLÂ AÇIK olan soru (kod üretilmeden netleşmeli):**
+1. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
    edeceği — `channel: "dine-in"` alanı zaten yeterli mi, yoksa ek bir kaynak/route
    alanı mı gerekiyor? (Açık Sorun #69)
 
@@ -507,12 +510,12 @@ type BowlItem = {
 }
 
 type FulfillmentChannel = "pickup" | "dine-in"
-// ⚠️ [Session 12 ile GÜNCELLENDİ, henüz kodlanmadı] "dine-in" değeri artık Gel Al kanalının
-// giriş/kayıt akışından DEĞİL, §2.7b'deki ayrı `/masaya-siparis/*` yüzeyinden geliyor.
-// Online Platform kanalı hâlâ checkout'u değil, ayrı bir yönlendirme sayfasını
-// (/online-siparis, Açık Sorun #57) kullanıyor. §2.7b Açık Soru #2: bu tipin üçüncü bir
-// değere ihtiyacı olup olmadığı (ya da RegistrationChannel'daki "masaya-siparis"in
-// FulfillmentChannel'a mı taşınacağı) HENÜZ KARARLAŞTIRILMADI.
+// ⚠️ [Session 12 ile GÜNCELLENDİ] "dine-in" değeri artık Gel Al kanalının giriş/kayıt
+// akışından DEĞİL, §2.7b'deki ayrı `/masaya-siparis/*` yüzeyinden geliyor. Online Platform
+// kanalı hâlâ checkout'u değil, ayrı bir yönlendirme sayfasını (/online-siparis, Açık
+// Sorun #57) kullanıyor. [#68 KAPANDI] Bu tipe üçüncü bir değer eklenmedi —
+// RegistrationChannel'daki "masaya-siparis" FulfillmentChannel'a taşınmadan, doğrudan
+// union'dan çıkarıldı (bkz. RegistrationChannel tanımı, types/index.ts).
 
 type CartItem = {
   cartId: string                 // uuid — sepet içi benzersiz kimlik
@@ -609,13 +612,23 @@ type OrderHistoryEntry = {
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
 | Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7a'daki karar, 1b görevinde kodlanacak | — |
-| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7b'deki 2 açık soru (#68/#69) netleşmeden kodlanamaz | `order_history` DB şeması (zaten canlıda, ayrı katman) |
+| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7b'deki açık soru (#69) netleşmeden kodlanamaz (#68 KAPANDI) | `order_history` DB şeması (zaten canlıda, ayrı katman) |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.8 — Session 12 devamı — 2026-08-08*
+*BOWLERA ARCHITECTURE.md — v1.9 — Session 12 devamı — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.8 (bu güncelleme): §2.7b Açık Soru #1 (checkout varyantı) KAPANDI — kullanıcı onayıyla
+*v1.9 (bu güncelleme): §2.7b Açık Soru #1 (RegistrationChannel/FulfillmentChannel tip etkisi)
+KAPANDI — Açık Sorun #68. `lib/db/schema.ts` ve `types/index.ts` bu turda görüldü (ilk kez).
+Karar: `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI, `FulfillmentChannel`'a
+taşınmadı. Gerekçe: `consentRegistrations.channel` sütunu Postgres enum değil düz `text` —
+migration gerekmedi, geçmiş Session 9 canlı satırları etkilenmedi. Şema notu:
+`docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
+§2.7b'deki açık soru listesi 2'den 1'e indi (sadece #69 kaldı). Değişiklikler: (1) §2.7b
+Açık Soru #1 KAPANDI notu; (2) §3 `FulfillmentChannel` yorumu senkronize edildi; (3) §5
+Personel Sipariş Paneli satırı güncellendi. ⚠️ Bu güncelleme dokümantasyon + tip değişikliği
+(`types/index.ts` düzenlendi) — Personel Paneli'nin kendisi hâlâ KODLANMADI (#69 açık).*
+*v1.8 (önceki güncelleme): §2.7b Açık Soru #1 (checkout varyantı) KAPANDI — kullanıcı onayıyla
 Seçenek A benimsendi: `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak,
 `app/siparis/page.tsx`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Session 12'nin
 Masaya'yı auth/kanal-seçimi mimarisinden tamamen izole etme kararıyla tutarlılık — `/siparis`'e
