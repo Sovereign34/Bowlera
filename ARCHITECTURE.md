@@ -410,10 +410,15 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 sütunu Postgres enum DEĞİL, düz `text` — migration gerekmedi. Şema notu:
 `docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
 
-**HÂLÂ AÇIK olan soru (kod üretilmeden netleşmeli):**
-1. Sipariş `order_history`'ye düştüğünde Personel Paneli'nin (§2.9a) bunu nasıl ayırt
-   edeceği — `channel: "dine-in"` alanı zaten yeterli mi, yoksa ek bir kaynak/route
-   alanı mı gerekiyor? (Açık Sorun #69)
+**[#69 KAPANDI, bu güncelleme]** `order_history.channel` sütunu (`"dine-in" | "pickup"`)
+Personel Paneli'nin Masaya/Gel Al ayrımı için YETERLİ — ek alan gerekmiyor. Gerekçe: Online
+Platform kanalı `order_history`'ye hiç yazmıyor (marketplace'e yönlendirme), bu yüzden mevcut
+iki değer zaten 1-1 karşılık veriyor. Gel Al'ın ilk-sipariş onay durumu (`pending`/`confirmed`)
+zaten `order_history`'de değil, `users.verificationStatus`'ta (kişi bazlı, `customerPhone` join'i
+ile) tutuluyor — sipariş bazlı ek bir onay alanına ihtiyaç yok.
+
+**Açık soru kalmadı.** §2.7b artık kod üretimine hazır (bkz. SIRADAKİ GÖREVLER 1b) — hem #68
+hem #69 kapandığı için mimari önünde engel yok.
 
 
 
@@ -612,13 +617,21 @@ type OrderHistoryEntry = {
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
 | Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7a'daki karar, 1b görevinde kodlanacak | — |
-| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7b'deki açık soru (#69) netleşmeden kodlanamaz (#68 KAPANDI) | `order_history` DB şeması (zaten canlıda, ayrı katman) |
+| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — mimari önü açık (#68/#69 KAPANDI), tasarım/kod HENÜZ YAPILMADI | `order_history` DB şeması (zaten canlıda, ayrı katman) |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.9 — Session 12 devamı — 2026-08-08*
+*BOWLERA ARCHITECTURE.md — v1.10 — Session 12 devamı — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.9 (bu güncelleme): §2.7b Açık Soru #1 (RegistrationChannel/FulfillmentChannel tip etkisi)
+*v1.10 (bu güncelleme): §2.7b Açık Soru #2 (order_history kanal ayrımı) KAPANDI — Açık Sorun
+#69. Karar: `order_history.channel` (`"dine-in"|"pickup"`) Masaya/Gel Al ayrımı için yeterli,
+ek alan gerekmedi — Online Platform bu tabloya hiç yazmıyor, Gel Al onay durumu zaten
+`users.verificationStatus`'ta (kişi bazlı, sipariş bazlı değil). §2.7b'nin açık soru listesi
+tamamen kapandı — yüzey artık kod üretimine hazır (SIRADAKİ GÖREVLER 1b). Değişiklikler:
+(1) §2.7b Açık Soru #2 KAPANDI notu; (2) §5 Personel Sipariş Paneli satırı güncellendi.
+⚠️ Bu güncelleme SADECE dokümantasyon — 1b'nin kendisi (route/component kodu) HENÜZ
+YAZILMADI, kullanıcı bilinçli olarak bu turda kodlamaya geçmedi.*
+*v1.9 (önceki güncelleme): §2.7b Açık Soru #1 (RegistrationChannel/FulfillmentChannel tip etkisi)
 KAPANDI — Açık Sorun #68. `lib/db/schema.ts` ve `types/index.ts` bu turda görüldü (ilk kez).
 Karar: `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI, `FulfillmentChannel`'a
 taşınmadı. Gerekçe: `consentRegistrations.channel` sütunu Postgres enum değil düz `text` —
