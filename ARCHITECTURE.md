@@ -70,7 +70,7 @@ app/kayit-ol/page.tsx ──► app/api/auth/register/route.ts ──► auth.ts
 
 app/api/orders/history/route.ts ──► order_history tablosu (Neon Postgres, Session 10'da
    migrate edildi ve doğrulandı) — Personel Sipariş Paneli (#62) için temel veri katmanı.
-   ⚠️ Bu route ve panelin kendisi HENÜZ KODLANMADI — sadece DB şeması hazır.
+   ⚠️ Bu route ve panelin kendisi HENÜZ KODLANMADI — mimari netleşti (§2.9a), kod yok.
 ```
 
 ### Katman Sınırı Kuralları
@@ -100,6 +100,9 @@ app/api/orders/history/route.ts ──► order_history tablosu (Neon Postgres, 
     yapılıp MANUEL ONAY verilmeden tamamlanamaz. Onay sonrası kullanıcının doğrulama durumu
     `confirmed` olarak işaretlenir, sonraki siparişler bu adımı tekrarlamaz (§2.7a, Açık
     Sorun #64 — KAPANDI).
+13. [YENİ, bu güncelleme] Personel Sipariş Paneli erişimi `users.role` alanına (rol bazlı
+    yetkilendirme, §2.9a) dayanır — bu alan HENÜZ users şemasında yok, panel kodlanmaya
+    başlanmadan ÖNCE CORE.md §7.4 formatında ayrı bir şema değişiklik notu üretilmeli.
 ```
 
 > ⚠️ **ÖNEMLİ NOT (bu güncelleme, Session 11 senkronu):** Yukarıdaki madde 7 ve 12 ile
@@ -180,7 +183,7 @@ import type { CartItem, FulfillmentChannel } from '@/types'
 interface CartState {
   cart: CartItem[]
   fulfillmentChannel: FulfillmentChannel | null   // sepet/oturum seviyesinde TEK alan — Karar #13
-  // 🆕 [YENİ, bu güncelleme — §2.7b masa numarası kararı] SADECE dine-in akışında anlamlı.
+  // 🆕 [§2.7b masa numarası kararı] SADECE dine-in akışında anlamlı.
   // `/masaya-siparis/[tableId]` route param'ından sayfa girişinde set edilir — fulfillmentChannel
   // gibi kendi setter'ı var ama kanal seçimiyle OTOMATİK ilişkilendirilmez (iki ayrı alan).
   tableId: string | null
@@ -298,8 +301,8 @@ export function buildWhatsAppOrderLink(branchPhone: string, cart: CartItem[]): s
 > "Şube telefon numaraları bekleniyor" diyor. `WhatsAppOrderButton.tsx` (§2.9) bilinçli
 > olarak bu fonksiyona bağlanmadı (Katman Sınırı Kuralı madde 11).
 > [Session 11] Bu akış artık Gel Al kanalının ilk-sipariş manuel onay kuyruğuyla da
-> kesişiyor (§2.7a, §2.9) — Personel Sipariş Paneli (#62) tasarımı netleşince bu bölüm
-> güncellenecek.
+> kesişiyor (§2.7a, §2.9) — Personel Sipariş Paneli (#62) mimarisi bu turda netleşti
+> (§2.9a), kod üretilince bu bölüm güncellenecek.
 
 ### 2.7 `app/api/auth/register/route.ts` — Rıza Esaslı Kayıt (`/kayit-ol`)
 
@@ -364,12 +367,10 @@ ilk siparişte gereklidir. Mimari yansıması: `AuthenticatedUser` tipine bir do
 alanı eklenir (bkz. §3, `verificationStatus: "pending" | "confirmed"`), ilk onaydan sonra
 sonraki siparişler otomatik "confirmed"/aktif sayılır.
 
-**Personel Sipariş Paneli ile kesişim (Açık Sorun #62 — hâlâ AÇIK, kapsam genişledi):**
-"Kasa paneli" ile Açık Sorun #62'de tanımlı Personel Sipariş Paneli AYNI panel olduğu
-teyit edildi. Panel artık hem Masaya Sipariş'in gerçek-zamanlı akışını (§2.7b'den gelen
-siparişler) hem Gel Al'ın ilk-sipariş manuel onay kuyruğunu yönetecek. Personel auth
-yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri modeli
-**HÂLÂ TASARLANMADI** — bkz. §2.9a.
+**Personel Sipariş Paneli ile kesişim (Açık Sorun #62 — kapsam netleşti, tasarım kararları
+bkz. §2.9a):** "Kasa paneli" ile Açık Sorun #62'de tanımlı Personel Sipariş Paneli AYNI
+panel olduğu teyit edildi. Panel hem Masaya Sipariş'in gerçek-zamanlı akışını (§2.7b'den
+gelen siparişler) hem Gel Al'ın ilk-sipariş manuel onay kuyruğunu yönetecek.
 
 ### 2.7b Masaya Sipariş — Ayrı QR Menü Sayfası — [Session 12, KARARLAŞTIRILDI, HENÜZ KODLANMADI]
 
@@ -387,14 +388,13 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 // app/masaya-siparis/[tableId]/page.tsx (+ app/masaya-siparis/[tableId]/customize/[id]/page.tsx)
 // Amaç:    Genel QR'dan gelen misafirin, HİÇBİR kimlik/rıza bilgisi vermeden menüyü
 //          gezip özelleştirip doğrudan sipariş verebildiği bağımsız yüzey — QR, masaya
-//          özel `tableId`'yi route param'ı olarak taşır (YENİ, bu güncelleme — masa
-//          numarası kararı, aşağıda)
+//          özel `tableId`'yi route param'ı olarak taşır (masa numarası kararı, altta)
 // Bağlı:   lib/menu-data.json (AYNI veri kaynağı, kopya YOK), store/useCartStore.ts
 //          (PAYLAŞILIR — §1 madde 7, `tableId` alanı dahil — bkz. §2.3), order_history
-//          tablosu (channel="dine-in", `table_number` kolonu — YENİ, bu güncelleme)
+//          tablosu (channel="dine-in", `table_number` kolonu — migration bekliyor)
 // Risk:    Bu route'un `/menu/customize/*` matcher'ına YANLIŞLIKLA dahil edilmesi guard'ı
 //          bozar (tüm masaya misafirlerini girişe zorlar); tersi de mümkün — matcher
-//          genişletilirken bu prefix'in dışarıda kaldığından emin olunmalı. [YENİ] `tableId`
+//          genişletilirken bu prefix'in dışarıda kaldığından emin olunmalı. `tableId`
 //          route param'ı sayfa girişinde `useCartStore.setTableId()` ile YAZILMAZSA personel
 //          siparişi hangi masaya götüreceğini bilemez (bkz. Katman Sınırı, altta).
 // Dokunma: middleware.ts matcher'ı DEĞİŞMİYOR — bu route zaten kapsamı dışında, bu
@@ -411,63 +411,41 @@ yöntemi, real-time teknoloji (WebSocket/SSE/polling) ve onay kuyruğu UI/veri m
 - Guest gate etkisi: `middleware.ts` matcher'ı `/menu/customize/:path*` olarak KALIYOR —
   `/masaya-siparis/*` bu prefix'in dışında olduğu için middleware'e YENİ BİR İSTİSNA
   YAZILMASINA GEREK YOK. Açık Sorun #65 bu kararla KAPANIYOR (kod üretildiğinde).
-- **[YENİ, #67 KAPANDI]** Checkout: `/masaya-siparis`'in **kendi bağımsız mini-checkout'u**
-  olacak — `app/siparis/page.tsx`'in (§2.9, artık Gel Al'a özel) bir varyantı DEĞİL, ayrı
+- Checkout: `/masaya-siparis`'in **kendi bağımsız mini-checkout'u** olacak —
+  `app/siparis/page.tsx`'in (§2.9, artık Gel Al'a özel) bir varyantı DEĞİL, ayrı
   bir bileşen/route (`app/masaya-siparis/checkout/page.tsx` gibi, kesin dosya adı bu
-  yüzey kodlanırken netleşecek). Gerekçe: bu bölümün başındaki KARAR GEREKÇESİ'yle
-  tutarlılık — Masaya'yı auth/kanal-seçimi mimarisinden TAMAMEN izole etmenin asıl amacı,
-  `/siparis`'e bağlanmanın Gel Al'a özel mantığı (hesap girişi zorunluluğu, ilk-sipariş
-  manuel onay) yanlışlıkla Masaya'ya sızdırma riskini taşımasıydı. Fiyat/sepet özet
-  gösterimi (`SummaryPanel.tsx` gibi paylaşılan bir bileşen üzerinden) paylaşılabilir —
-  paylaşılan, checkout AKIŞININ KENDİSİ değil, sadece gösterim katmanı olmalı.
+  yüzey kodlanırken netleşecek). Gerekçe: Masaya'yı auth/kanal-seçimi mimarisinden
+  TAMAMEN izole etmenin asıl amacı, `/siparis`'e bağlanmanın Gel Al'a özel mantığı
+  (hesap girişi zorunluluğu, ilk-sipariş manuel onay) yanlışlıkla Masaya'ya sızdırma
+  riskini taşımasıydı. Fiyat/sepet özet gösterimi (`SummaryPanel.tsx` gibi paylaşılan
+  bir bileşen üzerinden) paylaşılabilir — paylaşılan, checkout AKIŞININ KENDİSİ değil,
+  sadece gösterim katmanı olmalı.
+- `RegistrationChannel` tipinden (`types/index.ts`) `"masaya-siparis"` değeri ÇIKARILDI,
+  `FulfillmentChannel`'a taşınmadı (zaten oradaki `"dine-in"` karşılığı yeterli).
+  `lib/db/schema.ts` incelendi: `consentRegistrations.channel` sütunu Postgres enum
+  DEĞİL, düz `text` — migration gerekmedi. Şema notu:
+  `docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
+- `order_history.channel` sütunu (`"dine-in" | "pickup"`) Personel Paneli'nin Masaya/Gel
+  Al ayrımı için YETERLİ — ek alan gerekmiyor. Gerekçe: Online Platform kanalı
+  `order_history`'ye hiç yazmıyor (marketplace'e yönlendirme), bu yüzden mevcut iki değer
+  zaten 1-1 karşılık veriyor. Gel Al'ın ilk-sipariş onay durumu (`pending`/`confirmed`)
+  zaten `order_history`'de değil, `users.verificationStatus`'ta (kişi bazlı,
+  `customerPhone` join'i ile) tutuluyor — sipariş bazlı ek bir onay alanına ihtiyaç yok.
 
-**[#68 KAPANDI, bu güncelleme]** `RegistrationChannel` tipinden (`types/index.ts`)
-`"masaya-siparis"` değeri ÇIKARILDI, `FulfillmentChannel`'a taşınmadı (zaten oradaki
-`"dine-in"` karşılığı yeterli). `lib/db/schema.ts` incelendi: `consentRegistrations.channel`
-sütunu Postgres enum DEĞİL, düz `text` — migration gerekmedi. Şema notu:
-`docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
-
-**[#69 KAPANDI, önceki güncelleme]** `order_history.channel` sütunu (`"dine-in" | "pickup"`)
-Personel Paneli'nin Masaya/Gel Al ayrımı için YETERLİ — ek alan gerekmiyor. Gerekçe: Online
-Platform kanalı `order_history`'ye hiç yazmıyor (marketplace'e yönlendirme), bu yüzden mevcut
-iki değer zaten 1-1 karşılık veriyor. Gel Al'ın ilk-sipariş onay durumu (`pending`/`confirmed`)
-zaten `order_history`'de değil, `users.verificationStatus`'ta (kişi bazlı, `customerPhone` join'i
-ile) tutuluyor — sipariş bazlı ek bir onay alanına ihtiyaç yok.
-
-> ⚠️ **[YENİ, bu güncelleme] #69'un kapanış gerekçesi KISMEN yeniden değerlendirildi —
-> gerekçesiz düşürme DEĞİL, yeni bir gereksinimle genişletme:** #69, `channel` ayrımının
-> Masaya/Gel Al AYRIMI için yeterli olduğunu söylüyordu — bu hâlâ doğru ve DEĞİŞMEDİ. Ama
-> ayrı bir soru ortaya çıktı: aynı `channel="dine-in"` kanalı İÇİNDE, siparişin FİZİKSEL
-> OLARAK hangi masaya ait olduğu ayrıca tutulmalı mı? (#69'un kapsamı bu soruyu hiç
-> içermiyordu.) Cevap: EVET — bkz. aşağıdaki "Masa numarası kararı". `order_history`'ye
-> `table_number` kolonu eklenir. Bu, #69'u YANLIŞ hale getirmiyor, kapsamını genişletiyor.
-
-**[YENİ, bu güncelleme] Masa numarası kararı:** Masaya Sipariş'in amacı "QR'ı okut, birkaç
-saniyede sipariş ver" (bu felsefe CUSTOMIZER_SPEC.md §1 ile de tutarlı). Masa numarası
-olmadan personel siparişi hangi masaya götüreceğini BİLEMEZ — müşteriye "hangi masadaydınız?"
-diye sormak zorunda kalır, bu da QR akışının asıl kazancını (sürtünmesiz deneyim) sıfırlar.
-Bu mimari bir tercih değil, fiziksel bir zorunluluktur: dine-in sipariş sistemi masa
-eşlemesi olmadan eksik sayılır. (Not: Session 12'deki §2.7a→§2.7b izolasyon kararı SADECE
-kimlik/rıza akışını kaldırmıştı — "masa numarası gereksiz" diye bir gerekçe hiç geçmemişti;
-bu konu Session 9-12 arasında hiç ele alınmamış bir senkron boşluğuydu.)
-
+**Masa numarası kararı:** Masaya Sipariş'in amacı "QR'ı okut, birkaç saniyede sipariş ver"
+(bu felsefe CUSTOMIZER_SPEC.md §1 ile de tutarlı). Masa numarası olmadan personel siparişi
+hangi masaya götüreceğini BİLEMEZ.
 - **Route:** Path segment — `/masaya-siparis/[tableId]` (örn. `/masaya-siparis/14`). Query
-  param DEĞİL: bu kod tabanında zaten `/menu/customize/[id]` gibi dynamic route segment
-  konvansiyonu var, query param projede hiç kullanılmıyor — tutarlılık için path param
-  tercih edildi.
+  param DEĞİL — kod tabanında zaten `/menu/customize/[id]` gibi dynamic route segment
+  konvansiyonu var, query param projede hiç kullanılmıyor.
 - **Sepet:** `tableId`, sayfaya girişte `useCartStore`'a bir alan olarak yazılır (bkz. §2.3,
-  `CartState.tableId` + `setTableId()`) — çoklu sayfa akışında (menü→customize→checkout)
-  taşınması gerekiyor, sepet zaten paylaşılan tek state (§1 madde 7 ile tutarlı).
+  `CartState.tableId` + `setTableId()`).
 - **`order_history` şeması:** Sipariş tamamlanınca yeni bir `table_number` sütunu (nullable,
-  SADECE `channel="dine-in"` satırlarında dolu) eklenir. Bu gerçek bir DB şeması değişikliği
-  — CORE.md §7.4 formatında ayrı bir değişiklik notu üretildi (bkz. bu turun teslimatları),
-  ⚠️ migration HENÜZ KOŞULMADI.
+  SADECE `channel="dine-in"` satırlarında dolu) eklenir — CORE.md §7.4 formatında ayrı bir
+  değişiklik notu üretildi, ⚠️ migration HENÜZ KOŞULMADI.
 
-**Açık soru kalmadı** (checkout varyantı, tip etkisi, kanal ayrımı — #67/#68/#69 hepsi
-kapalı). §2.7b kod üretimine hazır (bkz. SIRADAKİ GÖREVLER 1b) — masa numarası kararı bu
-hazırlığı bloklamıyor, sadece route/store/şema kontratına bir alan daha ekliyor.
-
-
+**Açık soru kalmadı** (checkout varyantı, tip etkisi, kanal ayrımı, masa numarası — hepsi
+kapalı). §2.7b kod üretimine hazır (bkz. SIRADAKİ GÖREVLER 1b).
 
 ### 2.8 `app/api/user/profile/route.ts` + `app/hesap/page.tsx` — Kullanıcı Profili/Adres
 
@@ -492,9 +470,6 @@ hazırlığı bloklamıyor, sadece route/store/şema kontratına bir alan daha e
 //          bu sayfa tamamen opsiyonel, sepet/sipariş akışından bağımsızdır
 ```
 
-> ⚠️ **[Bu güncelleme]** Redirect hedefi `/giris` → `/kayit-ol` olarak düzeltildi (Session 8
-> ile birincil akış değişti, bu dosya güncellenmemişti — geriye dönük senkron).
->
 > ⚠️ Bilinen açıklar: `ProfileForm.tsx`'teki Tailwind renk sınıfları DESIGN_SYSTEM.md
 > görülmeden tahmin edildi, teyit edilmeli (Açık Sorun #38).
 
@@ -507,9 +482,7 @@ hazırlığı bloklamıyor, sadece route/store/şema kontratına bir alan daha e
 // Risk:    Kanal seçimi zorunlu kılınmazsa teslimat şekli belirsiz sipariş oluşur (Açık Sorun #26 — KAPANDI)
 // Dokunma: ⚠️ [Session 12 ile GÜNCELLENDİ] Bu sayfa artık SADECE Gel Al kanalı içindir —
 //          guest checkout istisnası TAMAMEN KALKTI (Masaya Sipariş §2.7b'ye taşındı, kendi
-//          ayrı akışı olacak). Gel Al kanalında artık hesap girişi ön koşuldur (§2.7a).
-//          §2.7b Açık Soru #1: Masaya'nın kendi checkout'u bu sayfanın varyantı mı olacak,
-//          netleşmedi — netleşene kadar bu sayfa Gel Al'a özel kalır.
+//          ayrı akışı var — §2.7b'de netleşti).
 ```
 
 > **Karar:** WhatsApp CTA'sı bilinçli olarak devre dışı bırakıldı —
@@ -517,28 +490,50 @@ hazırlığı bloklamıyor, sadece route/store/şema kontratına bir alan daha e
 > `lib/integrations/whatsapp.ts`'e bağlanmayacak (Katman Sınırı Kuralı madde 11, CORE §9).
 > Sayfa boş sepette mesaj gösterir, kanal seçilene kadar CTA'nın nedenini açıkça belirtir.
 
-### 2.9a Personel Sipariş Paneli — [Açık Sorun #62, TASARIM AŞAMASINDA]
+### 2.9a Personel Sipariş Paneli — [Açık Sorun #62, MİMARİ KARARLAR KAPANDI — HENÜZ KODLANMADI]
 
 ```
-// Amaç:    (1) Masaya Sipariş'in gerçek-zamanlı akışını (artık §2.7b'deki
-//          `/masaya-siparis/*` yüzeyinden gelir) VE (2) Gel Al'ın ilk-sipariş manuel
-//          telefon/WhatsApp onay kuyruğunu TEK panelde yönetmek
+// Amaç:    (1) Masaya Sipariş'in gerçek-zamanlı akışını (§2.7b'deki `/masaya-siparis/*`
+//          yüzeyinden gelir) VE (2) Gel Al'ın ilk-sipariş manuel telefon/WhatsApp onay
+//          kuyruğunu, İKİ AYRI sekme/panel altında yönetmek (bkz. altta, Onay Kuyruğu UI Kararı)
 // Bağlı:   order_history tablosu (Neon Postgres, Session 10'da migrate edildi ve
-//          doğrulandı — bu panelin temel veri katmanı hazır)
-// Risk:    Personel auth zayıfsa sipariş verisi/onay yetkisi yetkisiz erişime açılır (BSC ihlali riski)
-// Dokunma: Bu bölüm henüz bir dosya kontratı DEĞİL — aşağıdaki 3 karar netleşmeden
-//          kod üretilemez (AGENT.md Self-Check: "Tüm gerekli dosyalar sağlandı mı?")
-//          [Session 12] §2.7b Açık Soru #3 (order_history'de kanal ayrımı) burayı da etkiler.
+//          doğrulandı — bu panelin temel veri katmanı hazır); users.role (YENİ alan,
+//          HENÜZ ŞEMADA YOK — bkz. Personel Auth Kararı, migration gerektirir)
+// Risk:    Personel auth zayıfsa sipariş verisi/onay yetkisi yetkisiz erişime açılır (BSC ihlali riski).
+//          Polling aralığı çok uzun tutulursa Masaya siparişleri personel ekranında gecikir
+//          (QR akışının "saniyeler içinde" felsefesiyle çelişir) — bkz. Real-Time Kararı.
+// Dokunma: `users` tablosuna `role` alanı eklenmeden bu panelin auth katmanı kodlanamaz —
+//          CORE.md §7.4 şema değişiklik notu ÖNCE üretilmeli (Katman Sınırı Kuralı madde 13)
 ```
 
-**Hâlâ AÇIK olan 3 mimari soru:**
-1. Personel auth yöntemi (ayrı personel hesabı mı, rol bazlı mı, PIN mi?)
-2. Real-time teknoloji seçimi (WebSocket / SSE / polling?)
-3. Onay kuyruğu UI/veri modeli — `pending`/`confirmed` durumların panelde nasıl gösterileceği
+**Personel Auth Kararı [KAPANDI, bu güncelleme]:** Mevcut Auth.js JWT + Neon Postgres
+altyapısına rol bazlı yetkilendirme eklenir — `users` tablosuna `role: "customer" | "staff"`
+alanı, `/personel/*` route'u middleware'de role kontrolüyle korunur. Gerekçe: ayrı bir
+personel-hesap sistemi kurmak (Bağımlılık Disiplini kuralı "zaten mevcut mu?" testinden
+geçmez, iki paralel auth mantığı yaratır) veya paylaşımlı-cihaz PIN'i (BSC açısından
+zayıf — hangi personelin onay verdiği izlenemez) yerine, tek session mekanizması
+korunur, sadece bir yetki katmanı eklenir. ⚠️ Bu bir şema değişikliğidir — kod
+üretilmeden önce CORE.md §7.4 formatında ayrı bir değişiklik notu yazılmalı (migration
+HENÜZ KOŞULMADI, alan HENÜZ EKLENMEDİ).
 
-> Bu üç soru netleşmeden bu modül için `confidence: HIGH` verilemez (AGENT.md Self-Check,
-> Bağlam Katmanı). SIRADAKİ GÖREVLER listesinde öncelik 1 olarak duruyor — 1b tamamlandıktan
-> sonra ele alınacak (bkz. sohbetteki önceki KARAR BİLDİRİMİ gerekçesi).
+**Real-Time Teknoloji Kararı [KAPANDI, bu güncelleme]:** Basit polling (ör. 5 saniyede
+bir `order_history`'i fetch) — WebSocket/SSE yerine. Gerekçe: kullanıcı tercihi; ek
+altyapı (WebSocket sunucusu / SSE bağlantı yönetimi) olmadan mevcut Next.js Route
+Handler modeliyle uyumlu, ilk sürüm için yeterli. İleride gecikme sorun olursa SSE'ye
+geçiş değerlendirilebilir (kapsam dışı not).
+
+**Onay Kuyruğu UI Kararı [KAPANDI, bu güncelleme]:** İki ayrı sekme/panel — biri Masaya
+Sipariş akışı (real-time, `tableId` bazlı, "hazır/servis edildi" aksiyonu), diğeri Gel Al
+ilk-sipariş onay kuyruğu (`customerPhone` bazlı, "onayla/reddet" aksiyonu). Gerekçe: iki
+akış farklı veri şekli ve farklı aksiyon seti gerektiriyor — tek listede filtreyle ayırmak
+personel için kafa karıştırıcı olur; ayrı sekmeler kodlamayı da modülerleştirir (Masaya
+sekmesi önce, Gel Al onay sekmesi ayrı bir turda eklenebilir — Tek Problem Tek Çözüm
+kuralı).
+
+> Üç karar da kullanıcı onayıyla KAPANDI (bu sohbet). Mimari önü açık — kod üretimine
+> geçilmeden önce (i) `users.role` şema değişiklik notu ayrı üretilmeli, (ii) bu bölüm
+> normal bir modül kontratına (dosya + amaç/bağlı/risk/dokunma, route/component adları)
+> dönüştürülmeli. SIRADAKİ GÖREVLER'de öncelik 1 olarak duruyor.
 
 ---
 
@@ -565,7 +560,7 @@ type FulfillmentChannel = "pickup" | "dine-in"
 // ⚠️ [Session 12 ile GÜNCELLENDİ] "dine-in" değeri artık Gel Al kanalının giriş/kayıt
 // akışından DEĞİL, §2.7b'deki ayrı `/masaya-siparis/*` yüzeyinden geliyor. Online Platform
 // kanalı hâlâ checkout'u değil, ayrı bir yönlendirme sayfasını (/online-siparis, Açık
-// Sorun #57) kullanıyor. [#68 KAPANDI] Bu tipe üçüncü bir değer eklenmedi —
+// Sorun #57) kullanıyor. Bu tipe üçüncü bir değer eklenmedi —
 // RegistrationChannel'daki "masaya-siparis" FulfillmentChannel'a taşınmadan, doğrudan
 // union'dan çıkarıldı (bkz. RegistrationChannel tanımı, types/index.ts).
 
@@ -588,24 +583,27 @@ type AuthenticatedUser = {
   displayName?: string
   loyaltyPoints?: number          // sadakat programı — mekanik henüz netleşmedi (Açık Sorun #30)
   verificationStatus?: "pending" | "confirmed"
-  // ⚠️ [YENİ, Session 11, Açık Sorun #64 — KARAR KAPANDI, HENÜZ KODLANMADI]
+  // ⚠️ [Session 11, Açık Sorun #64 — KARAR KAPANDI, HENÜZ KODLANMADI]
   // Gel Al kanalında ilk sipariş onayı bekleniyorsa "pending", personel manuel onay
   // verdikten sonra "confirmed" — sonraki siparişler tekrar onay istemez (§2.7a).
   // Online Platform kanalında bu alan kullanılmaz (marketplace yönlendirmesi).
   // [Session 12] Masaya Sipariş artık AuthenticatedUser kapsamının dışında — §2.7b,
   // hiç kimlik/hesap oluşturmuyor.
+  // 🆕 [bu güncelleme, §2.9a Personel Auth Kararı] role?: "customer" | "staff" — HENÜZ
+  // users şemasına eklenmedi, HENÜZ bu tipe eklenmedi; CORE.md §7.4 notu üretilince
+  // hem şema hem bu tip güncellenecek. Şu an sadece kararın kendisi belgeleniyor.
 }
 
 type OrderHistoryEntry = {
-  // ⚠️ [YENİ, Session 10 — DB TABLOSU CANLIDA VAR, TypeScript tipi HENÜZ TANIMLANMADI]
+  // ⚠️ [Session 10 — DB TABLOSU CANLIDA VAR, TypeScript tipi HENÜZ TANIMLANMADI]
   // order_history tablosu migrate edildi ve doğrulandı ama bu tipin alan listesi bu
-  // güncellemenin kapsamı dışında — Personel Sipariş Paneli (§2.9a) tasarlanırken
+  // güncellemenin kapsamı dışında — Personel Sipariş Paneli (§2.9a) kodlanırken
   // netleştirilmeli. Burada YER TUTUCU olarak bırakılıyor, hardcode/varsayım YAPILMADI
   // (AGENT.md Kural #4, Sahte Veri Yasağı).
-  // [YENİ, bu güncelleme — §2.7b masa numarası kararı] `table_number` alanı (nullable,
-  // SADECE channel="dine-in" için dolu) tabloya EKLENMESİ KARARLAŞTIRILDI — migration
-  // HENÜZ KOŞULMADI. Tipin TAMAMI hâlâ netleşmedi, sadece bu tek alanın var olacağı
-  // kesinleşti. Şema notu: docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md
+  // [§2.7b masa numarası kararı] `table_number` alanı (nullable, SADECE channel="dine-in"
+  // için dolu) tabloya EKLENMESİ KARARLAŞTIRILDI — migration HENÜZ KOŞULMADI. Tipin
+  // TAMAMI hâlâ netleşmedi, sadece bu tek alanın var olacağı kesinleşti. Şema notu:
+  // docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md
 }
 ```
 
@@ -623,9 +621,9 @@ type OrderHistoryEntry = {
 ### 4.1 Deploy
 | Alan | Değer |
 |---|---|
-| Platform | ✅ Vercel — proje `bowlera-site` olarak bağlı, deploy yeşil |
+| Platform | ✅ Vercel — proje `bowlera-site` olarak bağlı, deploy yeşil (bu sohbette kullanıcı tarafından doğrulandı) |
 | Ortam Değişkenleri | CONFIG_SCHEMA.md'de tanımlı, platform dashboard'undan girilir — ⚠️ CONFIG_SCHEMA.md v1.2 de bu Session 8-11 kararlarına göre AYRI olarak güncellenmeli (bu görevin 2. adımı) |
-| Veritabanı | ✅ Neon Postgres (Vercel Marketplace, Frankfurt region) — Karar #20. Session 8: `consentRegistrations` tablosu eklendi. Session 10: `order_history` tablosu eklendi. ⚠️ [YENİ] `order_history.table_number` kolonu eklenmesi KARARLAŞTIRILDI (masa numarası kararı, §2.7b) — migration HENÜZ KOŞULMADI. |
+| Veritabanı | ✅ Neon Postgres (Vercel Marketplace, Frankfurt region) — Karar #20. Session 8: `consentRegistrations` tablosu eklendi. Session 10: `order_history` tablosu eklendi. ⚠️ `order_history.table_number` kolonu eklenmesi KARARLAŞTIRILDI (§2.7b) — migration HENÜZ KOŞULMADI. ⚠️ [YENİ] `users.role` kolonu eklenmesi KARARLAŞTIRILDI (§2.9a) — migration HENÜZ KOŞULMADI. |
 | Build Komutu | `next build` |
 | Önizleme | Her PR için otomatik preview deploy önerilir |
 
@@ -668,101 +666,42 @@ type OrderHistoryEntry = {
 | Kullanıcı profili/adres | `app/api/user/profile/route.ts`, `lib/db/queries/user-profile.ts` | Checkout/sipariş akışı (bloklamaz) |
 | Üçüncü parti iletişim | `lib/integrations/*` (server-side) | UI (WhatsApp CTA henüz bağlı değil) |
 | Genel giriş/kayıt akışı (guest gate, kanal seçimi zorunluluğu) | ⚠️ HENÜZ BİR DOSYA YOK — §2.7a'daki karar, 1b görevinde kodlanacak | — |
-| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — mimari önü açık (#68/#69 KAPANDI), tasarım/kod HENÜZ YAPILMADI | `order_history` DB şeması (zaten canlıda, ayrı katman) |
+| Personel Sipariş Paneli (#62) | ⚠️ HENÜZ BİR DOSYA YOK — mimari kararlar KAPANDI (§2.9a: auth/real-time/UI), kod HENÜZ YAZILMADI, `users.role` migration'ı bekliyor | `order_history` DB şeması (zaten canlıda, ayrı katman) |
 
 ---
 
-*BOWLERA ARCHITECTURE.md — v1.11 — Session 12 devamı — 2026-08-08*
+*BOWLERA ARCHITECTURE.md — v1.12 — 2026-08-08*
 *Kaynak: MASTER_PLAN.md §3, §5 · CORE.md §2, §4 · AGENT.md (BSC referansları) · SESSION_INDEX.md (Session 8-12 senkronu)*
-*v1.11 (bu güncelleme): Masa numarası kararı — kullanıcı onayıyla §2.7b'ye eklendi. Masaya
-Sipariş'in "QR okut, saniyeler içinde sipariş ver" felsefesi masa eşlemesi olmadan eksik
-kalıyordu (Session 9-12 arası hiç ele alınmamış bir senkron boşluğu — §2.7a→§2.7b izolasyon
-kararı sadece kimlik/rıza akışını kaldırmıştı, masa numarasını değil). Değişiklikler:
-(1) §2.3 `CartState`'e `tableId: string | null` + `setTableId()` eklendi — `store/useCartStore.ts`
-kontratı, `types/index.ts` DEĞİL (bu dosyanın bir önceki turunda `types/index.ts`'e eklenecek
-denmişti — bu YANLIŞTI, `CartState` o dosyada tanımlı değil, sadece §2.3'te dokümante
-ediliyor; bu turda düzeltildi). (2) §2.7b — route path segmente güncellendi
-(`/masaya-siparis/[tableId]`), "Masa numarası kararı" alt bölümü eklendi, #69'un kapanış
-gerekçesi KISMEN yeniden değerlendirildi (gerekçesiz düşürme değil, kapsam genişlemesi —
-bkz. ilgili not). (3) §3 `OrderHistoryEntry` yer tutucusuna `table_number` notu eklendi.
-(4) §4.1 Deploy tablosuna migration bekleyen kolon notu eklendi. ⚠️ Bu güncelleme
-dokümantasyon + tip kontratı — `store/useCartStore.ts`'in kendisi ve migration HENÜZ
-KODLANMADI/KOŞULMADI. Şema notu: docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md.
-SESSION_INDEX.md'ye bu turda HENÜZ işlenmedi — checkpoint onayı bekleniyor.*
-*v1.10 (önceki güncelleme): §2.7b Açık Soru #2 (order_history kanal ayrımı) KAPANDI — Açık Sorun
-#69. Karar: `order_history.channel` (`"dine-in"|"pickup"`) Masaya/Gel Al ayrımı için yeterli,
-ek alan gerekmedi — Online Platform bu tabloya hiç yazmıyor, Gel Al onay durumu zaten
-`users.verificationStatus`'ta (kişi bazlı, sipariş bazlı değil). §2.7b'nin açık soru listesi
-tamamen kapandı — yüzey artık kod üretimine hazır (SIRADAKİ GÖREVLER 1b). Değişiklikler:
-(1) §2.7b Açık Soru #2 KAPANDI notu; (2) §5 Personel Sipariş Paneli satırı güncellendi.
-⚠️ Bu güncelleme SADECE dokümantasyon — 1b'nin kendisi (route/component kodu) HENÜZ
-YAZILMADI, kullanıcı bilinçli olarak bu turda kodlamaya geçmedi.*
-*v1.9 (önceki güncelleme): §2.7b Açık Soru #1 (RegistrationChannel/FulfillmentChannel tip etkisi)
-KAPANDI — Açık Sorun #68. `lib/db/schema.ts` ve `types/index.ts` bu turda görüldü (ilk kez).
-Karar: `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI, `FulfillmentChannel`'a
-taşınmadı. Gerekçe: `consentRegistrations.channel` sütunu Postgres enum değil düz `text` —
-migration gerekmedi, geçmiş Session 9 canlı satırları etkilenmedi. Şema notu:
-`docs/schema-changes/20260808000000_registration_channel_masaya_siparis_cikarildi.md`.
-§2.7b'deki açık soru listesi 2'den 1'e indi (sadece #69 kaldı). Değişiklikler: (1) §2.7b
-Açık Soru #1 KAPANDI notu; (2) §3 `FulfillmentChannel` yorumu senkronize edildi; (3) §5
-Personel Sipariş Paneli satırı güncellendi. ⚠️ Bu güncelleme dokümantasyon + tip değişikliği
-(`types/index.ts` düzenlendi) — Personel Paneli'nin kendisi hâlâ KODLANMADI (#69 açık).*
-*v1.8 (önceki güncelleme): §2.7b Açık Soru #1 (checkout varyantı) KAPANDI — kullanıcı onayıyla
-Seçenek A benimsendi: `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak,
-`app/siparis/page.tsx`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Session 12'nin
-Masaya'yı auth/kanal-seçimi mimarisinden tamamen izole etme kararıyla tutarlılık — `/siparis`'e
-bağlanmak, Gel Al'a özel mantığın (hesap girişi zorunluluğu, ilk-sipariş manuel onay)
-yanlışlıkla Masaya'ya sızma riskini taşıyordu. Fiyat/sepet özet GÖSTERİMİ paylaşılabilir
-(`SummaryPanel.tsx` gibi), ama checkout AKIŞININ KENDİSİ paylaşılmayacak. §2.7b'deki açık
-soru listesi 3'ten 2'ye indi (#68, #69 hâlâ açık). Bu güncelleme SADECE dokümantasyon —
-mini-checkout'un kendisi HENÜZ KODLANMADI (kesin dosya adı/route kodlama turunda netleşecek).
-SESSION_INDEX.md v27 ile eşleştirildi.*
-*v1.7 (önceki güncelleme): Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI —
-yeni §2.7b eklendi (`/masaya-siparis/*`, auth gerektirmeyen bağımsız yüzey). Gerekçe: Session
-11 kararı ("Masaya Sipariş = bilgi vermeden guest girişi") ile mevcut kodun (`RegistrationForm.tsx`
-TÜM kanallar için aynı formu zorunlu tutuyordu) ÇELİŞTİĞİ Session 12'de kod incelemesiyle
-tespit edildi (Açık Sorun #65). Çözüm: istisna eklemek yerine Masaya Sipariş'i mimariden
-çıkarmak. Değişiklikler: (1) §1 madde 7 — Masaya Sipariş artık middleware matcher kapsamı
-dışında, YENİ İSTİSNA GEREKMİYOR; (2) §2.7a — tablo Gel Al/Online'a daraltıldı; (3) §2.7b
-YENİ — route (`/masaya-siparis`), sepet kararı (`useCartStore` PAYLAŞILIR, ayrı state YOK)
-ve 3 açık soru (checkout varyantı, RegistrationChannel/FulfillmentChannel tip etkisi,
-order_history kanal ayrımı); (4) §2.9 — checkout artık Gel Al'a özel; (5) §2.9a — Masaya
-akışının kaynağı güncellendi; (6) §3 — FulfillmentChannel ve AuthenticatedUser yorumları
-senkronize edildi. ⚠️ Bu güncelleme SADECE dokümantasyon — kod HENÜZ YAZILMADI (1b/§2.7b
-SIRADAKİ GÖREVLER'de duruyor).*
-*v1.6: Session 11 — 2026-08-07*
-*v1.6 (bu güncelleme): Dosya, kodun önceden ilerlediği ama dokümana hiç yansımadığı
-Session 8-11 aralığına SENKRONİZE edildi — bu, CORE.md'nin "kod yazılmadan önce Claude
-bu dosyayı okumak zorundadır" kuralının bozulmasını önlemek için yapıldı (dosya, SESSION_INDEX
-ile çelişen eski bir akışı "güncel" gibi gösteriyordu). Değişiklikler:
-(1) §1 genel akış diyagramı — `/giris` (Twilio OTP) birincil akış görselinden kaldırıldı,
-yerine `/kayit-ol` (rıza esaslı kayıt, Session 8) birincil akış olarak işlendi; Twilio
-PARKLI (#32/#56) notuyla küçültüldü.
-(2) §1 Katman Sınırı Kuralı madde 7 — "guest checkout her zaman geçerli" ifadesi, Session 11
-kararına göre "SADECE Masaya Sipariş kanalında geçerli" olarak güncellendi; yeni madde 12
-Gel Al ilk-sipariş manuel onay kuralını ekledi.
-(3) §2.7 — `/giris` yerine `app/api/auth/register/route.ts` (`/kayit-ol`) birincil kontrat
-olarak yazıldı, Twilio parklı durumu ayrı notla belirtildi.
-(4) YENİ §2.7a — Session 11'in genel giriş/kayıt akışı kararı (guest gezinme → giriş
-tetikleyici, giriş/kayıt seçimi, kanal bazlı tablo, doğrulama durumu alanı, Personel Panel
-kesişimi) KOD OLARAK HENÜZ ÜRETİLMEDİ notuyla belgelendi.
-(5) §2.8 — `/hesap` redirect hedefi `/giris` → `/kayit-ol` düzeltildi (geriye dönük senkron,
-Session 8'de koda yansımış ama dokümana hiç işlenmemiş bir değişiklik).
-(6) YENİ §2.9a — Personel Sipariş Paneli (#62) için 3 açık mimari soru + `order_history`
-tablosunun (Session 10, canlıda) bu panelin temel katmanı olduğu not edildi.
-(7) §3 Veri Modeli — `AuthenticatedUser.verificationStatus` alanı (KARAR kapandı #64, henüz
-kodlanmadı) ve yer tutucu `OrderHistoryEntry` tipi (alanları HENÜZ TANIMLANMADI — sahte veri
-yasağı gereği varsayım yapılmadı) eklendi. `FulfillmentChannel`'ın üçüncü kanal (Online
-Platform) ihtiyacı olup olmadığı AÇIK NOT olarak işaretlendi.
-(8) §4.1 — Neon tablo geçmişine `consentRegistrations` (Session 8) ve `order_history`
-(Session 10) eklendi; CONFIG_SCHEMA.md'nin AYRICA (bu görevin 2. adımında) güncellenmesi
-gerektiği not edildi.
-(9) §5 Sorumluluk Sınırları — kullanıcı kimliği satırı `/kayit-ol`'a güncellendi; genel
-giriş/kayıt akışı ve Personel Paneli için "henüz dosya yok" satırları eklendi.
-⚠️ Bu güncelleme SESSION_INDEX.md'nin ANLATI ÖZETİNE dayanıyor — Session 8-11'in ürettiği
-gerçek kod (route dosyaları, DB migration dosyaları) doğrudan görülmedi (confidence: MEDIUM,
-bkz. bu sohbetteki KARAR BİLDİRİMİ). Kod dosyaları paylaşılırsa bu senkron doğrulanmalı.
-Açık Sorun #35 (category enum) ve #10 (KAPANDI) önceki versiyondan değişmeden korundu.*
+*v1.12 (bu güncelleme): §2.9a Personel Sipariş Paneli'nin 3 açık mimari sorusu kullanıcı
+onayıyla KAPANDI: (1) Personel Auth — mevcut Auth.js sistemine `users.role` alanı eklenerek
+rol bazlı yetkilendirme (ayrı personel-hesap sistemi veya PIN yerine); (2) Real-Time —
+basit polling (WebSocket/SSE yerine); (3) Onay Kuyruğu UI — iki ayrı sekme/panel (Masaya
+real-time akışı / Gel Al onay kuyruğu), tek filtreli liste yerine. Değişiklikler:
+(1) §1 Katman Sınırı Kuralı'na madde 13 eklendi (`users.role` migration'ının CORE.md §7.4
+notu gerektirdiği uyarısı); (2) §2.9a üç karar bloğuyla genişletildi, "TASARIM AŞAMASINDA"
+durumu "MİMARİ KARARLAR KAPANDI — HENÜZ KODLANMADI"ya güncellendi; (3) §3 `AuthenticatedUser`
+tipine `role` alanı planı not olarak eklendi (henüz kodlanmadı); (4) §4.1 Deploy tablosuna
+`users.role` migration bekliyor notu + Vercel build yeşil doğrulaması eklendi; (5) §5
+Personel Sipariş Paneli satırı güncellendi. ⚠️ Bu güncelleme SADECE dokümantasyon — panel
+kodu, `users.role` migration'ı ve şema değişiklik notu HENÜZ ÜRETİLMEDİ (kullanıcı bilinçli
+olarak bu turda kodlamaya geçmedi, CORE.md §7.4 önce ayrı üretilmeli).*
+*v1.11 (önceki güncelleme): Masa numarası kararı — kullanıcı onayıyla §2.7b'ye eklendi.
+(1) §2.3 `CartState`'e `tableId: string | null` + `setTableId()` eklendi. (2) §2.7b — route
+path segmente güncellendi (`/masaya-siparis/[tableId]`), "Masa numarası kararı" alt bölümü
+eklendi. (3) §3 `OrderHistoryEntry` yer tutucusuna `table_number` notu eklendi. (4) §4.1
+Deploy tablosuna migration bekleyen kolon notu eklendi. ⚠️ `store/useCartStore.ts`'in kendisi
+ve migration HENÜZ KODLANMADI/KOŞULMADI. Şema notu:
+docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md.*
+*v1.10: §2.7b Açık Soru #2 (order_history kanal ayrımı) KAPANDI — Açık Sorun #69. Karar:
+`order_history.channel` Masaya/Gel Al ayrımı için yeterli, ek alan gerekmedi.*
+*v1.9: §2.7b Açık Soru #1 (RegistrationChannel/FulfillmentChannel tip etkisi) KAPANDI —
+Açık Sorun #68. `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI.*
+*v1.8: §2.7b Açık Soru #1 (checkout varyantı) KAPANDI — Seçenek A: `/masaya-siparis` KENDİ
+BAĞIMSIZ mini-checkout'unu kullanacak.*
+*v1.7: Masaya Sipariş, genel giriş/kayıt akışından (§2.7a) TAMAMEN AYRILDI — yeni §2.7b
+eklendi (`/masaya-siparis/*`, auth gerektirmeyen bağımsız yüzey).*
+*v1.6: Session 11 — dosya, kodun önceden ilerlediği ama dokümana hiç yansımadığı Session
+8-11 aralığına SENKRONİZE edildi.*
 *v1.5: Açık Sorun #10 kapatıldı — §2.4, CUSTOMIZER_SPEC.md §3.1'deki gerçek 5 adımlı state
 şemasıyla birebir senkronize edildi.*
 *v1.4: (1) SELF-CORRECTION — fulfillmentChannel'ın CartState seviyesinde tek alan olduğu
