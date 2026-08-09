@@ -74,6 +74,24 @@
 
 ## 🎯 CURRENT FOCUS
 
+> **[YENİ SOHBET (devamı, 10.), 2026-08-09 — #74 TAM KAPANDI ✅]**
+> **(1) Kod:** Çıkış (sign-out) mantığı `Header.tsx`'ten ayrıştırılıp `AccountMenu.tsx`'e
+> taşındı — hesap ikonuna tıklanınca "Hesabım"/"Çıkış Yap" menüsü açılıyor, next-auth'un
+> hazır `signOut({ callbackUrl: "/" })` fonksiyonu kullanıldı, yeni backend gerekmedi.
+> **(2) Test sürecinde bulunan gerçek bug:** `AccountMenu.test.tsx` (7 test, happy+edge+
+> failure) yazılırken failure testi bir açık ortaya çıkardı — `signOut()` çağrısı promise
+> reject olduğunda yakalanmıyordu (unhandled rejection), oysa dosyanın kendi yorumu "sessiz
+> başarısızlık" davranışını öngörüyordu. `.catch(() => {})` eklenerek koddaki gerçek
+> davranış, yorumdaki niyetle hizalandı.
+> **(3) Test altyapısı düzeltmesi:** İlk koşuda mock'un varsayılan dönüş değeri
+> tanımsızdı (`signOutMock` her çağrıda `undefined` dönüyordu), `.catch()` eklenince
+> `undefined.catch()` senkron `TypeError` fırlattı — `beforeEach`'e
+> `signOutMock.mockResolvedValue(undefined)` eklenerek çözüldü.
+> **(4) CANLI + TEST DOĞRULAMA TAM:** `npx vitest run AccountMenu` → 7/7 PASS, 0 error
+> (üç iterasyonluk teşhis: önce component'te unhandled rejection, sonra "hangi test"
+> yanlış atfı, sonunda mock'un varsayılan resolved value eksikliği bulundu ve düzeltildi).
+> Third Lesson'ın gerektirdiği hem kod+build hem test koşusu kontrol noktaları geçildi.
+
 > **[YENİ SOHBET (devamı, 9.), 2026-08-09 — #62 MASAYA SEKMESİ UÇTAN UCA TAMAMLANDI VE
 > CANLIDA DOĞRULANDI ✅ — #70 KAPANDI]**
 > **(1) Şema genişletmesi (#62+#70 birleşik karar):** `order_history`'ye `status`
@@ -249,11 +267,15 @@
 | 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 | 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
-| 74 | 🟠 | Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. **[BU TURDA TEKRAR YAŞANDI]** Rol testinde (staff güncellemesi sonrası) kullanıcının yeniden giriş yapması gerekti, buton olmadığı için `/api/auth/signout`'a doğrudan gidilerek AŞILDI (geçici çözüm) — önceliği yükseltildi, gerçek kullanımda engelleyici olduğu doğrulandı. | `Header.tsx`, `app/hesap/page.tsx` |
 | 81 | 🟢 | **[YENİ, bu turda — bilinçli erteleme]** Masaya Paneli'nde (1) iki personelin aynı siparişi eşzamanlı güncellemesine karşı optimistic lock yok (son yazan kazanır), (2) `usePersonelOrders` polling'i sekme arka plandayken duraklamıyor (Page Visibility API kullanılmadı). İkisi de MVP kapsamı dışı bırakıldı, kullanım yoğunlaşırsa ele alınmalı. | `hooks/usePersonelOrders.ts`, `app/api/personel/orders/[id]/route.ts` |
 | 80 | 🟢 | **[YENİ — kullanıcı kararıyla, 2026-08-09]** #79/#75 kapatıldı (mobil canlıda doğrulandı: "Sepete Ekle sorunu çözüldü"). Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — kod+test tarafı aynı (`isReadyToAddToCart()`), risk düşük görülüyor ama not olarak açık bırakılıyor. #75'in orijinal çift-tık/duplicate senaryosu da bu turda ayrıca test edilmedi. | `components/customizer/SummaryPanel.tsx` |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
 
+> **KAPANDI (BU TURDA ✅):** #74 — `AccountMenu.tsx`'e çıkış (sign-out) butonu eklendi,
+> `AccountMenu.test.tsx` (7/7 PASS, 0 error) yazıldı, test süreci `signOut()`'un yakalanmamış
+> reject durumunu ortaya çıkardı ve `.catch(() => {})` ile düzeltildi. Kod+build+canlı
+> doğrulama+test kapsamı hepsi tamamlandı.
+>
 > **KAPANDI (kullanıcı kararıyla, bu turda):** #79 + #75 — mobil canlıda doğrulandı
 > ("Sepete Ekle sorunu çözüldü"), kullanıcı kararıyla kapatıldı. **Not olarak açık
 > bırakıldı — bkz. #80:** masaüstü (`SummaryPanel.tsx`) aynı fix AYRICA canlıda
@@ -327,7 +349,6 @@
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
-| 0b | #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli — **[önceliği yükseltildi]** bu turda gerçek kullanımda engelleyici olduğu doğrulandı (`/api/auth/signout` ile geçici aşıldı) | 🟠 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** #62 Masaya sekmesi (UI, `/api/personel/orders*` route'ları, polling, durum makinesi) uçtan uca kodlandı VE canlıda doğrulandı. Sırada: **#62'nin Gel Al onay kuyruğu** — ARCHITECTURE.md §2.9a'daki ikinci sekme, ilk-sipariş manuel onay akışı (`users.verificationStatus`/`contactAttempts` ile bağlantılı). | 🔴 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
@@ -366,11 +387,8 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v44 (v43'ten: #62 Masaya sekmesi uçtan uca TAMAMLANDI ve
-canlıda doğrulandı — şema genişletmesi (#70 KAPANDI), `middleware.ts`'teki `/api/personel/*`
-güvenlik açığı kapatıldı, 10 dosya kodlandı, test siparişiyle PATCH→durum makinesi→DB→
-polling→UI zinciri kanıtlandı. #62 Gel Al kısmı için açık kaldı. #74 (çıkış butonu) bu
-turda gerçek kullanımda engelleyici olduğu doğrulanarak önceliği yükseltildi. 4 eski
-CURRENT FOCUS bloğu ((4.)-(7.) sohbet devamları) `session_arşiv_1.md`'ye taşındı — CORE.md
-§7.1 Adım 1 (400 satır eşiği), taşıma bloğu ayrı artifact olarak sunuldu.
+*BOWLERA SESSION_INDEX.md — v45 (v44'ten: #74 TAM KAPANDI ✅ — `AccountMenu.tsx`'e çıkış
+butonu eklendi, `.catch()` ile gerçek bir unhandled-rejection bug'ı düzeltildi,
+`AccountMenu.test.tsx` 7/7 PASS + 0 error ile kod+build+canlı+test dört kontrol noktası da
+tamamlandı. SIRADAKİ GÖREVLER'den 0b düşürüldü, Açık Sorunlar tablosundan #74 çıkarıldı.
 Güncellenme: 2026-08-09.*
