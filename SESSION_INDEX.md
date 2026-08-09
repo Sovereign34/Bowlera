@@ -173,9 +173,17 @@
 | 73 | 🟠 | **[YENİ, bu turda]** `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI (Vercel build cache / PostCSS-Tailwind sürüm uyuşmazlığı şüphesi). `text-olive-primary`'nin (Header.tsx) çalışıp çalışmadığı da TEYİT EDİLMEDİ — sadece `bg-*` test edildi. Site genelinde başka `bg-olive-*`/`bg-bronze`/`bg-espresso` kullanan yerler aynı sorunu taşıyor olabilir — sistematik tarama YAPILMADI. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
 | 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
 | 75 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, BSC-6 ihlali]** Customizer'da "Sepete Ekle" butonu ekleme sonrası disable/inaktif olmuyor — art arda basınca aynı seçim sepete DUPLICATE ekleniyor. AGENT.md §Edge Case listesinde önceden işaretli risk ("çift tıklama"), fiilen gerçekleşti. | `components/customizer/AddToCartButton.tsx`, `store/useCartStore.ts` |
-| 76 | 🟡 | **[Bu turda kod+test TAMAM]** Sepet ekranına "Siparişi Onayla" linki (`/siparis`) eklendi. Test: `CartDrawer.test.tsx` 5/5 PASS. Deploy yeşil. **CANLI DOĞRULAMA BEKLİYOR** — kullanıcı butona tıklayıp `/siparis`'e gerçekten gittiğini teyit etmeli (CORE.md Üçüncü Ders). | `components/cart/CartDrawer.tsx` |
-| 77 | 🟡 | **[Bu turda kod+test TAMAM]** MİMARİ İHLAL iki dosyada birden düzeltildi: `CartDrawer.tsx`'ten `FulfillmentChannelSelector` kaldırıldı; `FulfillmentGate.tsx`'ten "Masada" seçeneği kaldırıldı (tek "Gel Al" butonu kaldı, gelecekteki kanal genişlemesi — kendi kurye/online ödeme — için buton mimarisi bilinçli korundu), stale "dine-in" normalizasyonu eklendi. Test: `FulfillmentGate.test.tsx` 6/6 PASS. Deploy yeşil. **CANLI DOĞRULAMA BEKLİYOR** — `/siparis`'te artık sadece "Gel Al" göründüğü gözle teyit edilmeli. | `components/cart/CartDrawer.tsx`, `components/order/FulfillmentGate.tsx` |
-| 78 | 🟢 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, CORE.md §8 ihlali]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/SummaryPanel.tsx` |
+| 78 | 🟢 | **[YENİ SOHBET'te ek kanıtla yeniden doğrulandı]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/SummaryPanel.tsx` |
+
+> **KAPANDI (YENİ SOHBET, bu turda ✅):** #76 + #77 — kod+test geçen turda tamamlanmıştı,
+> BU turda kullanıcı canlı ortamda TAM DOĞRULADI (CORE.md Üçüncü Ders'in gerektirdiği ikinci
+> kontrol noktası): sepet → "Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76 KAPANDI),
+> `/siparis`'te SADECE "Gel Al" görünüyor, "Masada" seçeneği tamamen kayboldu (#77 KAPANDI).
+> Not: "Gel Al" butonuna tıklayınca görünürde değişiklik olmaması BEKLENEN davranış — buton
+> zaten seçili/idempotent (`aria-pressed=true`), tek seçenek kaldığı için tıklama aynı değeri
+> tekrar set ediyor. WhatsApp butonunun pasif/gri olması da AYRI ve bilinen bir durum — şube
+> telefon numaraları henüz tanımlanmadı (#58'in henüz kapanmamasının doğrudan sonucu, YENİ
+> bug değil).
 
 > **KAPANDI (bu turda):** #59 — kayıt sonrası oturum/isim gösterimi (gerçek kök neden:
 > `router.push()` sonrası `SessionProvider` cache'i yenilenmiyordu, `useSession().update()`
@@ -245,11 +253,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 0a | **[Bu turda kod+test TAMAM, CANLI DOĞRULAMA BEKLİYOR]** #77 — kullanıcı `/siparis`'te artık sadece "Gel Al" göründüğünü gözle teyit etmeli | 🟡 |
-| 0b | **[Bu turda kod+test TAMAM, CANLI DOĞRULAMA BEKLİYOR]** #76 — kullanıcı "Siparişi Onayla" linkine tıklayıp `/siparis`'e gittiğini teyit etmeli | 🟡 |
-| 0c | **[SIRADAKİ]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli, FAILURE_PATTERNS.md FP-1'de zaten tarif edilen kalıp) | 🔴 |
-| 0d | **[YENİ, bu turda]** #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
-| 0e | **[YENİ, bu turda]** #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı | 🟢 |
+| 0a | **[SIRADAKİ]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli, FAILURE_PATTERNS.md FP-1'de zaten tarif edilen kalıp) | 🔴 |
+| 0b | #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
+| 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 1c | `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
@@ -286,19 +292,17 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v36 (v35'ten: #76 + #77 KOD+TEST TAMAMLANDI. Kök neden ikili
-çıktı — hem `CartDrawer.tsx`'teki `FulfillmentChannelSelector` hem `FulfillmentGate.tsx`
-(`/siparis`) "dine-in" seçtiriyordu, ikisi de ARCHITECTURE.md §2.9/§2.7b'ye aykırıydı.
-Kullanıcının gelecek planı (kendi kurye + online ödeme kanalı) ışığında karar: tek-buton
-mimarisi korunarak sadece geçersiz seçenek ("Masada") kaldırıldı — gelecekteki kanal
-genişlemesi `OPTIONS` dizisine satır eklemekten ibaret kalacak. `CartDrawer.tsx`'ten
-selector tamamen kaldırıldı, yerine `/siparis`'e giden "Siparişi Onayla" linki eklendi.
-Stale "dine-in" localStorage değerini normalize eden edge-case koruması eklendi.
-Test: `CartDrawer.test.tsx` (5) + `FulfillmentGate.test.tsx` (6) = 11/11 PASS (Codespace'de
-`vitest run --reporter=verbose` ile koşturuldu, kullanıcı ekran görüntüsüyle doğruladı).
-Deploy YEŞİL. ⚠️ CORE.md Üçüncü Ders gereği HENÜZ TAM KAPANMADI — canlı/manuel buton
-tıklama doğrulaması bekliyor, bu yüzden #76/#77 🟡 statüsünde tutuluyor (🔴 değil, kod+test
-tamam olduğu için önceliği düştü ama açık kaldı). SIRADAKİ GÖREVLER'de 0a/0b canlı
-doğrulama bekleyen olarak işaretlendi, 0c (#75) öne çekildi.
+*BOWLERA SESSION_INDEX.md — v37 (v36'dan: YENİ SOHBET — #76 + #77 CANLI DOĞRULAMA
+TAMAMLANDI, İKİSİ DE TAM KAPANDI. Kullanıcı ekran görüntüleriyle teyit etti: sepetten
+"Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76), `/siparis`'te artık SADECE "Gel Al"
+görünüyor, "Masada" tamamen kayboldu (#77). İki gözlem netleştirildi (bug DEĞİL): "Gel Al"
+butonuna tıklayınca görsel değişiklik olmaması beklenen idempotent davranış (tek seçenek,
+zaten seçili); WhatsApp butonunun pasif olması AYRI ve bilinen bir durum (#58 henüz
+kapanmadı, şube telefon numaraları tanımlanmadı). #78 (özet panel gizli kalma sorunu) aynı
+sohbette ek ekran görüntüsüyle yeniden doğrulandı — zaten açık olan kayda ek kanıt olarak
+not düşüldü, yeni sorun AÇILMADI. Açık Sorunlar tablosundan #76/#77 satırları kaldırıldı,
+KAPANDI bloğuna taşındı (CORE.md kuralı: silinen görev mutlaka kapanış gerekçesiyle
+arşivlenir). SIRADAKİ GÖREVLER'de 0a/0b (canlı doğrulama bekleyenler) kaldırıldı, #75 0a'ya
+yükseldi, #74/#78 sırasıyla 0b/0c oldu.
 Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
