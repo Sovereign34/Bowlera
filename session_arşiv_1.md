@@ -327,3 +327,71 @@ ekleyin — dosyanın başka bir yerine dokunmayın.]
 > tablosunda aktif madde olarak duruyor, kayıp yok.
 
 ---
+
+> ⚠️ Bu blok mevcut `session_arşiv_1.md` dosyanızın SONUNA eklenir — dosyanın kendisi
+> yeniden üretilmez (CORE.md §7.1 Adım 1 / Bölüm 9 Mutlak Yasaklar).
+> Taşıma tarihi: 2026-08-09 — SESSION_INDEX.md 400 satır eşiğini aştığı için taşındı.
+
+---
+
+## [ARŞİV] 5 Yeni Bug/UX Tespiti — #74-78 Açılışı (2026-08-09)
+
+**Kapanış gerekçesi:** İçerik SESSION_INDEX.md'nin Açık Sorunlar tablosunda #74-78 satırları
+olarak kalıcı şekilde temsil ediliyor; bu turn-by-turn anlatı artık aktif takip gerektirmiyor.
+
+Kullanıcı canlı siteyi ekran görüntüleriyle taradı, 5 yeni sorun bulundu ve Açık Sorunlar
+tablosuna #74-#78 olarak eklendi. Henüz hiçbir kod değişikliği yapılmadı — bu tur sadece
+TESPİT+KAYIT turuydu.
+
+---
+
+## [ARŞİV] #76 + #77 — Kod+Test Tamam, Deploy Yeşil, Canlı Doğrulama (2026-08-09)
+
+**Kapanış gerekçesi:** #76/#77 aynı sohbette kullanıcı tarafından canlı ortamda TAM
+DOĞRULANDI ve KAPANDI ("KAPANDI (YENİ SOHBET, bu turda ✅): #76 + #77" notu SESSION_INDEX'te
+duruyor); bu ayrıntılı ara-durum anlatısı artık aktif takip gerektirmiyor.
+
+#77'nin kök nedeni ikili çıktı: (1) `CartDrawer.tsx`'teki `FulfillmentChannelSelector` genel
+sepette "dine-in" seçtiriyordu, (2) `FulfillmentGate.tsx` (`/siparis`'te) de AYNI ihlali
+tekrarlıyordu — "Masada" seçeneği sunuyordu, ama ARCHITECTURE.md §2.9'a göre bu sayfa artık
+SADECE Gel Al'a özel. Kullanıcı, gelecekte kendi kurye/online ödeme kanalı ekleneceğini
+belirtti (`FulfillmentChannel` tipi büyüyecek) — bu ışıkta karar: `FulfillmentGate.tsx`'te
+"Masada" kaldırıldı ama BUTON MİMARİSİ korundu (tek "Gel Al" butonu) ki gelecekteki kanal
+eklemeleri `OPTIONS` dizisine tek satır olsun, yeniden inşa gerekmesin. Ayrıca stale
+"dine-in" localStorage değerini "pickup"a normalize eden bir `useEffect` eklendi (edge case
+— eski oturumdan gelen kullanıcılar için).
+
+`CartDrawer.tsx`'ten `FulfillmentChannelSelector` TAMAMEN kaldırıldı, yerine `/siparis`'e
+giden "Siparişi Onayla" linki eklendi (#76 kapatıldı). Test: `CartDrawer.test.tsx` (5) +
+`FulfillmentGate.test.tsx` (6) = 11/11 PASS, Codespace'de `vitest run --reporter=verbose` ile
+koşturuldu, kullanıcı ekran görüntüsüyle doğruladı. Deploy YEŞİL.
+
+Değişen dosyalar: `components/cart/CartDrawer.tsx`, `components/order/FulfillmentGate.tsx`
+(+ 2 yeni test dosyası, aynı klasörlerde).
+
+---
+
+## [ARŞİV] #59 / #72 / users.role Migration / 1d — Kapanış Anlatıları (önceki turlar)
+
+**Kapanış gerekçesi:** Dördü de SESSION_INDEX.md'nin Kritik Kararlar tablosu ve/veya GENEL
+DURUM bölümünde özet olarak kalıcı şekilde duruyor; ayrıntılı turn-by-turn anlatı artık aktif
+takip gerektirmiyor.
+
+**#59** — kayıt sonrası oturum/isim gösterimi: gerçek kök neden `router.push()` sonrası
+`SessionProvider` cache'inin yenilenmemesiydi, `useSession().update()` ile düzeltildi; isim
+için `users.displayName` hiç doldurulmuyordu, `signIn()` credential'ına eklendi. `/hesap`'taki
+ölü `/giris` linki `/kayit-ol`'a düzeltildi. `ProfileForm.tsx`'teki kırık `bg-olive-600`
+butonu `bg-[#53502A]` ile kalıcı olarak çözüldü (kök neden #73'e devredildi, o KAPANMADI —
+sadece bu dosyadaki belirti giderildi).
+
+**#72** — `types/index.ts`'teki eski/yanlış yorum düzeltildi (auth.ts zaten role set
+ediyordu, yorum geride kalmıştı). #62'nin KOD tarafı (4 dosya) TAMAMEN kapandı — kullanıcı
+403 kararını onayladı, `next-auth.d.ts` eklendi, Vercel build yeşil doğrulandı. #62'nin
+KENDİSİ (panel UI+API+polling) hâlâ AÇIK.
+
+**users.role migration** — koşulması + doğrulanması tamamlandı.
+
+**1d** — Vercel build'in yeşil olduğu kullanıcı tarafından doğrulandı. #62'nin 3 açık
+mimari sorusu (personel auth, real-time teknoloji, onay kuyruğu UI) — ARCHITECTURE.md
+v1.12'ye işlendi.
+
