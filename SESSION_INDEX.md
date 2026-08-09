@@ -47,10 +47,55 @@
 > Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
 > gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
 > yapılıyor.
+> ⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
+> derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
+> süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
+> yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
+> koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
+> yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
+> taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
+> istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu (Bölüm 7.2) her büyük görev
+> ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
+> KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
+> düşülmeli, sohbetin kesilme anını beklemeden.
 
 ---
 
 ## 🎯 CURRENT FOCUS
+
+> **[YENİ SOHBET (devamı, 5.), 2026-08-09 — #75 derin çözüm turu, KOD TAMAM, TEST
+> RERUN/BUILD/PUSH/CANLI DOĞRULAMA BEKLİYOR — GERİYE DÖNÜK İŞLENDİ, bkz. ALTINCI DERS]**
+> **Kök teşhis:** `isAdding` bir `useRef` idi (state değil) → kilit fonksiyonel çalışıyordu
+> ama re-render tetiklemediği için buton görsel olarak HİÇ değişmiyordu (disabled/spinner/
+> "Eklendi" yok) → kullanıcı "çalışmadı sanıp" 500ms sonra gerçekten meşru sayılan bir
+> ikinci tıklama yapıyor, bu da duplicate ekliyordu. Yan bulgu: `bg-olive-primary` (#73'ün
+> kırık pattern'i) bu dosyada da vardı, #50'de "hiç görülmedi" idi — artık görüldü ve
+> `bg-[#53502A]`'ye çevrildi.
+> **3 iterasyonlu düzeltme:**
+> (1) `isAdding` → `useState`, buton artık "Ekleniyor…" gösteriyor.
+> (2) Süre-bazlı (500ms) kilit yetersiz bulundu → `selectionKey` (seçime bağlı kimlik,
+> `JSON.stringify(selections)`) tabanlı DURUM-bazlı kilide geçildi — `SummaryPanel.tsx`
+> bu key'i üretip geçiyor (confidence MEDIUM: `useCustomizerStore.ts`'in iç yapısı
+> görülmedi, `selections`'ın düz obje olduğu varsayıldı).
+> (3) `MobileSummaryDrawer.tsx`'te AYNI `<AddToCartButton>` çağrısına `selectionKey`
+> prop'u eksikti — bu, build'i kırıyordu (TypeScript prop tipi uyuşmazlığı). Eklendi;
+> bu bileşen #78'in kaynağıdır ama bu turda SADECE build kırığı düzeltildi, #78'in kendi
+> UX çözümüne (panel görünürlüğü) bilinçli olarak dokunulmadı (Kural #5 — ayrı konu, ayrı
+> karar).
+> **Testte yakalanan gerçek hata:** "kullanıcı DEĞİŞTİRİP tam aynı kombinasyona geri
+> dönerse kilit KORUNMALI" testi kırıldı — kök neden: tekil `lockedKey` seçim değişince
+> `null`'a sıfırlanıyordu, yani önceden eklenmiş kombinasyonları HATIRLAMIYORDU. Düzeltme:
+> `Set<string> addedKeys` — hem daha basit (artık `useEffect` gerekmiyor, `isAlreadyAdded`
+> doğrudan `addedKeys.has(selectionKey)`'den türetiliyor) hem daha doğru.
+> **Değişen dosyalar:** `AddToCartButton.tsx`, `SummaryPanel.tsx`, `MobileSummaryDrawer.tsx`
+> + `AddToCartButton.test.tsx` (revize, 8→10 test) + `MobileSummaryDrawer.test.tsx`
+> (regresyon testi eklendi). 4 kod/test dosyası SENKRON olmalı (biri eksik kalırsa
+> TypeScript hata verir).
+> ⚠️ **KAPANMADI — ÜÇÜNCÜ DERS + ALTINCI DERS gereği:** sohbet, `npx vitest run` sonucunun
+> (10/10 veya 12/12 PASS beklentisi), `npm run build`'in yerel yeşil çıktığının, VE
+> `git add . && git commit && git push`'un fiilen yapıldığının teyidi gelmeden kesildi.
+> Canlıda "Ekleniyor…" durumu + "Eklendi ✓" kalıcılığı + Base/Main/Flavor değişince
+> yeniden aktifleşme GÖZLE doğrulanmadan #75 TAM kapanmış sayılamaz.
 
 > ⚠️ **Arşiv taşıması — 2026-08-09:** 6 kapanmış CURRENT FOCUS bloğu (#62 kod kapanışı,
 > BEŞİNCİ DERS, `users.role` migration, şema notu üretimi, masa numarası kararı,
@@ -136,6 +181,7 @@
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.11]** Masa numarası TUTULACAK — terk edilmeyecek. Route: `/masaya-siparis/[tableId]` (path segment). `useCartStore`'a `tableId`+`setTableId()` eklendi (§2.3). `order_history`'ye nullable `table_number` eklenecek (SADECE dine-in) — şema notu: `20260808010000_order_history_tablenumber_eklendi.md`. #69'un kapsamı genişletildi (KAPALI kalıyor, gerekçesiz düşürülmedi). | ✅ Karar netleşti + doküman güncellendi, kod/migration HENÜZ YAZILMADI/KOŞULMADI |
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.12]** #62'nin 3 mimari sorusu KAPANDI: (1) Personel auth = `users.role` alanıyla mevcut Auth.js'e rol bazlı yetki (2) Real-time = basit polling (3) Onay kuyruğu UI = iki ayrı sekme/panel (Masaya / Gel Al). | ✅ Karar netleşti + doküman güncellendi |
 | 🗄️✅ | **[önceki tur — `users.role` MIGRATION KOŞULDU]** `lib/db/schema.ts`'e `role` sütunu eklendi (`text`, `NOT NULL`, `DEFAULT 'customer'`), kullanıcı GitHub'a manuel kaydetti. `ALTER TABLE` Neon SQL Editor'de koşuldu, `role text` sütunu Tables görünümünde DOĞRULANDI. `users` tablosu 0 satır (Twilio #32 kısıtı) — regresyon test edilemedi ama risk de fiilen yok. | ✅ DB tarafı TAMAM |
+| 🆕 | **[BU TURDA — #75 mimari kararı]** "Sepete Ekle" kilidi SÜRE-bazlı (500ms debounce) değil, DURUM-bazlı (`selectionKey` + `Set<string> addedKeys`) olacak — bir kombinasyon eklenince kalıcı "Eklendi ✓", SADECE seçim değişince yeniden aktif. Aynı kombinasyona geri dönülürse kilit KORUNUR (bilinçli, tekrar eklemeyi önler). | ✅ Karar netleşti, kod üretildi, TEST/BUILD/PUSH/canlı doğrulama BEKLİYOR |
 | 🗄️✅ | **[BU TURDA — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. | ✅ Kod TAMAM, canlı build YEŞİL |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
@@ -154,7 +200,7 @@
 | 34 | 🟢 | `VisualPreview.tsx`'in `className` davranışı — tam repo taraması eksik | `components/customizer/VisualPreview.tsx` |
 | 38 | 🟠 | **[Bu turda kısmen çözüldü]** `ProfileForm.tsx`'teki `bg-olive-600` KIRIKTI (tanımsız sınıf) — `bg-olive-primary`'ye çevrildi, O DA derlenmedi (bkz. #73). Kalıcı çözüm: `bg-[#53502A]` (arbitrary value). `RegistrationForm.tsx`'in Tailwind sınıfları hâlâ TAM teyit edilmedi — #73 bulgusuna göre AYNI riski taşıyabilir. | `components/registration/RegistrationForm.tsx` |
 | 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
-| 50 | 🟢 | `AddToCartButton.tsx` hiç görülmedi — BSC-6 teyit edilmedi | `components/customizer/AddToCartButton.tsx` |
+| 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
 | 52 | 🟡 | VisualPreview.tsx görsel katman klasörü boş | `components/customizer/VisualPreview.tsx` |
 | 53 | 🟢 | CONTENT_GUIDE.md §1/§2 â→a kararına göre güncellenmedi | `CONTENT_GUIDE.md` §1, §2 |
@@ -170,11 +216,15 @@
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
 | 70 | 🟡 | `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
-| 73 | 🟠 | **[YENİ, bu turda]** `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI (Vercel build cache / PostCSS-Tailwind sürüm uyuşmazlığı şüphesi). `text-olive-primary`'nin (Header.tsx) çalışıp çalışmadığı da TEYİT EDİLMEDİ — sadece `bg-*` test edildi. Site genelinde başka `bg-olive-*`/`bg-bronze`/`bg-espresso` kullanan yerler aynı sorunu taşıyor olabilir — sistematik tarama YAPILMADI. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
+| 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
 | 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
-| 75 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, BSC-6 ihlali]** Customizer'da "Sepete Ekle" butonu ekleme sonrası disable/inaktif olmuyor — art arda basınca aynı seçim sepete DUPLICATE ekleniyor. AGENT.md §Edge Case listesinde önceden işaretli risk ("çift tıklama"), fiilen gerçekleşti. | `components/customizer/AddToCartButton.tsx`, `store/useCartStore.ts` |
-| 78 | 🟢 | **[YENİ SOHBET'te ek kanıtla yeniden doğrulandı]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/SummaryPanel.tsx` |
+| 75 | 🔴 | **[Bu turda derinlemesine işlendi — KOD TAMAM, KAPANMADI]** Kök neden bulundu (`isAdding` useRef → görsel geri bildirim yok → kullanıcı "çalışmadı" sanıp meşru ikinci tıklama yapıyordu). 3 iterasyonlu çözüm uygulandı: useState geçişi + süre-bazlı'dan seçim-kimliği-bazlı kilide geçiş + testin yakaladığı `lockedKey`→`Set<string> addedKeys` düzeltmesi. `MobileSummaryDrawer.tsx`'teki eksik `selectionKey` prop'u (build kırığı) de düzeltildi. **BEKLEYEN:** test rerun sonucu (10/10 veya 12/12 PASS), `npm run build` yerel doğrulama, `git commit && push`, canlıda "Ekleniyor…"/"Eklendi ✓"/yeniden aktifleşme gözle teyidi — HİÇBİRİ bu sohbette teyit edilmedi (bkz. ALTINCI DERS). | `components/customizer/AddToCartButton.tsx`, `components/customizer/SummaryPanel.tsx`, `components/customizer/MobileSummaryDrawer.tsx` |
+| 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
 
+> **KAPANDI (BU TURDA):** #50 — `AddToCartButton.tsx` artık görüldü, BSC-6 doğrudan ele
+> alındı (bkz. #75). Not: #75'in KENDİSİ henüz kapanmadı (test/build/push/canlı doğrulama
+> bekliyor) — sadece #50'nin "dosya hiç görülmedi" durumu sona erdi.
+>
 > **KAPANDI (YENİ SOHBET, bu turda ✅):** #76 + #77 — kod+test geçen turda tamamlanmıştı,
 > BU turda kullanıcı canlı ortamda TAM DOĞRULADI (CORE.md Üçüncü Ders'in gerektirdiği ikinci
 > kontrol noktası): sepet → "Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76 KAPANDI),
@@ -253,7 +303,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 0a | **[SIRADAKİ]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli, FAILURE_PATTERNS.md FP-1'de zaten tarif edilen kalıp) | 🔴 |
+| 0a | **[SIRADAKİ]** #75 — kod TAMAM (3 dosya senkron), test rerun + `npm run build` yerel doğrulama + `git commit && push` + canlıda gözle teyit (Ekleniyor…/Eklendi ✓/yeniden aktifleşme) BEKLİYOR | 🔴 |
 | 0b | #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
@@ -292,17 +342,15 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v37 (v36'dan: YENİ SOHBET — #76 + #77 CANLI DOĞRULAMA
-TAMAMLANDI, İKİSİ DE TAM KAPANDI. Kullanıcı ekran görüntüleriyle teyit etti: sepetten
-"Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76), `/siparis`'te artık SADECE "Gel Al"
-görünüyor, "Masada" tamamen kayboldu (#77). İki gözlem netleştirildi (bug DEĞİL): "Gel Al"
-butonuna tıklayınca görsel değişiklik olmaması beklenen idempotent davranış (tek seçenek,
-zaten seçili); WhatsApp butonunun pasif olması AYRI ve bilinen bir durum (#58 henüz
-kapanmadı, şube telefon numaraları tanımlanmadı). #78 (özet panel gizli kalma sorunu) aynı
-sohbette ek ekran görüntüsüyle yeniden doğrulandı — zaten açık olan kayda ek kanıt olarak
-not düşüldü, yeni sorun AÇILMADI. Açık Sorunlar tablosundan #76/#77 satırları kaldırıldı,
-KAPANDI bloğuna taşındı (CORE.md kuralı: silinen görev mutlaka kapanış gerekçesiyle
-arşivlenir). SIRADAKİ GÖREVLER'de 0a/0b (canlı doğrulama bekleyenler) kaldırıldı, #75 0a'ya
-yükseldi, #74/#78 sırasıyla 0b/0c oldu.
-Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
+*BOWLERA SESSION_INDEX.md — v38 (v37'den: GERİYE DÖNÜK İŞLEME — #75 üzerinde yapılan derin
+çözüm turu (3 iterasyon: useRef→useState, süre-bazlı→seçim-kimliği kilidi, tekil
+lockedKey→Set addedKeys) SESSION_INDEX'e işlendi; bkz. ALTINCI DERS (Bölüm başı) — sohbet
+test rerun/build/push/canlı doğrulama teyidi gelmeden kesilmişti, kullanıcı tam metni yeni
+sohbete taşıyarak güncellemeyi yaptırdı. #50 KAPANDI (`AddToCartButton.tsx` artık görüldü).
+#73'e üçüncü dosyada (AddToCartButton.tsx) doğrulanan aynı kırık `bg-*` pattern'i ek kanıt
+olarak eklendi. #78'in kaynak bileşeninin `MobileSummaryDrawer.tsx` olduğu teyit edildi
+(referans dosyası güncellendi) — UX çözümü hâlâ AÇIK, bu turda dokunulmadı. #75 KAPANMADI —
+kod tamam ama test/build/push/canlı doğrulama bekliyor, SIRADAKİ GÖREVLER 0a buna göre
+güncellendi. Yeni Kritik Karar satırı: seçim-kimliği bazlı kilit mimarisi.
+Dosya 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
