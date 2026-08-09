@@ -52,12 +52,11 @@
 
 ## 🎯 CURRENT FOCUS
 
-> ⚠️ **[Bu turda, sıkıştırma notu]** Aşağıdaki bölüm 400 satır eşiğine yaklaştığı için
-> (348→bu ekleme sonrası taşacaktı) eski kapanmış CURRENT FOCUS blokları özetlendi —
-> hiçbir madde gerekçesiz düşürülmedi, tüm detaylar KRİTİK KARARLAR/AÇIK SORUNLAR
-> tablolarında ve KAPANDI log'unda zaten korunuyor. `session_arşiv.md` bu sohbette hiç
-> paylaşılmadığı için oraya taşınamadı — dosya paylaşılırsa tam metin geriye dönük
-> arşive işlenebilir.
+> ⚠️ **Arşiv taşıması — 2026-08-09:** 6 kapanmış CURRENT FOCUS bloğu (#62 kod kapanışı,
+> BEŞİNCİ DERS, `users.role` migration, şema notu üretimi, masa numarası kararı,
+> channel-options.ts build kırığı) `session_arşiv.md`'ye taşındı — CORE.md §7.1 Adım 1
+> (400 satır eşiği). Taşıma bloğu ayrı artifact olarak sunuldu, kullanıcı kendi
+> `session_arşiv.md`'sinin sonuna ekleyecek.
 
 > **[YENİ SOHBET (devamı, 4.), 2026-08-09 — İsim gösterimi + 3 bug düzeltmesi, TAMAMLANDI ✅]**
 > **(1) Açık Sorun #59'un GERÇEK kökeni bulundu:** `router.push()` (client-side SPA nav)
@@ -79,16 +78,6 @@
 > **Değişen dosyalar:** `useRegistrationForm.ts`, `auth.ts`, `app/api/registration/consent/route.ts`,
 > `Header.tsx`, `app/hesap/page.tsx`, `components/account/ProfileForm.tsx` — HEPSİ deploy
 > edildi, build yeşil, kullanıcı ekran görüntüleriyle her adımı doğruladı.
-
-> **[Eski geçmiş özeti — 2026-08-08 ve öncesi, TÜMÜ KAPANDI]** #62 Personel Sipariş
-> Paneli'nin auth/DB/kod tarafı (role, verificationStatus, contactAttempts, `/personel/*`
-> guard'ı — 4+ dosya) uçtan uca tamamlandı, canlı build yeşil (BEŞİNCİ DERS: bir ara turda
-> onay alınmadan sohbet kesilmişti, geriye dönük checkpoint'le kapatıldı). Açık Sorun #72
-> (types/index.ts'te eski yorum) düzeltildi. Masa numarası kararı (Masaya Sipariş'te
-> `tableId` korunuyor, `/masaya-siparis/[tableId]`) ARCHITECTURE.md v1.11'e işlendi. Bir
-> canlı build kırığı (`channel-options.ts`'te kalan `"masaya-siparis"` seçeneği) bulunup
-> düzeltildi. Açık Sorun #71 (DEPENDENCIES.md'nin RegistrationChannel tüketicilerini eksik
-> taraması) hâlâ AÇIK. Detaylar: KRİTİK KARARLAR ve AÇIK SORUNLAR tabloları.
 
 ---
 
@@ -268,13 +257,14 @@ kapatıldı) açıldı. Değişen dosyalar: `useRegistrationForm.ts`, `auth.ts`,
 `app/api/registration/consent/route.ts`, `Header.tsx`, `app/hesap/page.tsx`,
 `components/account/ProfileForm.tsx` — hepsi deploy edildi, build yeşil, kullanıcı her
 adımı ekran görüntüsüyle doğruladı.
-⚠️ **BÜYÜK SIKIŞTIRMA (bu turda):** CURRENT FOCUS bölümü 400 satır eşiğine yaklaştığı
-(348 satır) için eski kapanmış bloklar (BEŞİNCİ DERS, masa numarası kararı, channel-options.ts
-build kırığı vb.) tek bir özet paragrafa sıkıştırıldı — hiçbir madde gerekçesiz düşürülmedi,
-tam detaylar KRİTİK KARARLAR/AÇIK SORUNLAR tablolarında ve KAPANDI log'unda korunuyor.
-`session_arşiv.md` bu sohbette hiç paylaşılmadığı için tam metin oraya taşınamadı — ileride
-paylaşılırsa geriye dönük işlenebilir. Değişen bölümler: CURRENT FOCUS (sıkıştırıldı + yeni
-blok), AÇIK SORUNLAR (#38/#39 güncellendi, #59 KAPANDI'ya taşındı, #73 yeni), GENEL DURUM
-(Kullanıcı Profili/Kaydı satırları), SIRADAKİ GÖREVLER (#59 kaldırıldı, #73 eklendi).
+⚠️ **ÖZ-DÜZELTME (bu turda) — CORE.md §7.1 Adım 1 ihlali düzeltildi:** Bir önceki turda
+400 satır eşiği yaklaşınca eski CURRENT FOCUS blokları YANLIŞ ŞEKİLDE "sıkıştırılıp
+özetlenmişti" (gerçek ihlal — CORE.md açıkça yasaklıyor, ayrıca dosyayı kullanıcıdan
+istemek de "ASLA otomatik isteme" kuralını ihlal etmişti). Kullanıcı hatayı fark edip
+düzeltti: 6 blok artık TAM METİNLE, her biri kapanış gerekçesiyle, `session_arşiv.md`'ye
+eklenecek AYRI bir taşıma bloğu artifact'ı olarak üretildi (dosyanın kendisi asla
+istenmedi/üretilmedi — kural gereği sadece YENİ EKLEME verildi). SESSION_INDEX'in üst
+notu artık kurala uygun tek satırlık bir taşıma kaydı. Değişen bölümler: CURRENT FOCUS
+(hatalı özet paragrafı kaldırıldı, doğru tek-satır not eklendi).
 Dosya hâlâ 400 satır eşiğinin altında (bu sıkıştırma sayesinde), taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
