@@ -84,6 +84,28 @@
 > 5 yeni sorun bulundu ve Açık Sorunlar tablosuna #74-#78 olarak eklendi (aşağıya bkz.).
 > Henüz hiçbir kod değişikliği yapılmadı — bu tur sadece TESPİT+KAYIT turu.
 
+> **[AYNI SOHBET (devamı), 2026-08-09 — #76 + #77 kod+test TAMAM, deploy YEŞİL, CANLI/MANUEL
+> DOĞRULAMA BEKLİYOR]** #77'nin kök nedeni ikili çıktı: (1) `CartDrawer.tsx`'teki
+> `FulfillmentChannelSelector` genel sepette "dine-in" seçtiriyordu, (2) `FulfillmentGate.tsx`
+> (`/siparis`'te) de AYNI ihlali tekrarlıyordu — "Masada" seçeneği sunuyordu, ama
+> ARCHITECTURE.md §2.9'a göre bu sayfa artık SADECE Gel Al'a özel. Kullanıcı, gelecekte kendi
+> kurye/online ödeme kanalı ekleneceğini belirtti (`FulfillmentChannel` tipi büyüyecek) — bu
+> ışıkta karar: `FulfillmentGate.tsx`'te "Masada" kaldırıldı ama BUTON MİMARİSİ korundu (tek
+> "Gel Al" butonu) ki gelecekteki kanal eklemeleri `OPTIONS` dizisine tek satır olsun,
+> yeniden inşa gerekmesin. Ayrıca stale "dine-in" localStorage değerini "pickup"a normalize
+> eden bir `useEffect` eklendi (edge case — eski oturumdan gelen kullanıcılar için).
+> `CartDrawer.tsx`'ten `FulfillmentChannelSelector` TAMAMEN kaldırıldı, yerine `/siparis`'e
+> giden "Siparişi Onayla" linki eklendi (#76 kapatıldı). **Test:** `CartDrawer.test.tsx` (5)
+> + `FulfillmentGate.test.tsx` (6) = 11/11 PASS, Codespace'de `vitest run --reporter=verbose`
+> ile koşturuldu, kullanıcı ekran görüntüsüyle doğruladı. Deploy YEŞİL.
+> ⚠️ **KAPANMADI — CORE.md Üçüncü Ders gereği:** kod+test yeşil olması tek başına yeterli
+> değil, kullanıcının canlı sitede butonlara TIKLAYIP akışı GÖRDÜĞÜ ayrıca teyit edilmeli
+> (route bağlı mı, "Siparişi Onayla" gerçekten `/siparis`'e gidiyor mu, orada sadece "Gel Al"
+> görünüyor mu). Bu teyit HENÜZ gelmedi — #76/#77 bu yüzden "kod+test TAMAM, canlı doğrulama
+> BEKLİYOR" statüsünde tutuluyor, tam KAPANDI sayılmıyor.
+> **Değişen dosyalar:** `components/cart/CartDrawer.tsx`, `components/order/FulfillmentGate.tsx`
+> (+ 2 yeni test dosyası, aynı klasörlerde).
+
 ---
 
 ## 📌 KRİTİK TEKNİK/TASARIM KARARLARI (özet — hâlâ etkili olanlar + yeniden teyit edilmesi gerekenler)
@@ -151,8 +173,8 @@
 | 73 | 🟠 | **[YENİ, bu turda]** `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI (Vercel build cache / PostCSS-Tailwind sürüm uyuşmazlığı şüphesi). `text-olive-primary`'nin (Header.tsx) çalışıp çalışmadığı da TEYİT EDİLMEDİ — sadece `bg-*` test edildi. Site genelinde başka `bg-olive-*`/`bg-bronze`/`bg-espresso` kullanan yerler aynı sorunu taşıyor olabilir — sistematik tarama YAPILMADI. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
 | 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
 | 75 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, BSC-6 ihlali]** Customizer'da "Sepete Ekle" butonu ekleme sonrası disable/inaktif olmuyor — art arda basınca aynı seçim sepete DUPLICATE ekleniyor. AGENT.md §Edge Case listesinde önceden işaretli risk ("çift tıklama"), fiilen gerçekleşti. | `components/customizer/AddToCartButton.tsx`, `store/useCartStore.ts` |
-| 76 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Sepet ("Sepetim") ekranında onay/devam (checkout'a geçiş) butonu yok — Gel-Al/Masaya Servis seçimi ve toplam görünüyor ama kullanıcı `/siparis`'e geçemiyor. | `components/cart/CartDrawer.tsx` (veya ilgili sepet bileşeni) |
-| 77 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, MİMARİ İHLAL]** Genel `Sepetim` ekranında "Masaya Servis" toggle'ı aktif/tıklanabilir görünüyor — ama ARCHITECTURE.md v1.7/v1.8 kararına göre Masaya Sipariş TAMAMEN izole `/masaya-siparis/[tableId]/*` yüzeyinde yaşamalı, kendi bağımsız mini-checkout'una sahip olmalı ve genel Gel-Al sepetiyle KARIŞMAMALI. Bu toggle, henüz kodlanmamış bir akışa bağlanıyor olabilir ya da kanal verisi Gel-Al checkout'una sızıyor olabilir — kök neden ARAŞTIRILMADI. | `components/cart/CartDrawer.tsx`, `types/index.ts` (`RegistrationChannel`/`FulfillmentChannel`) |
+| 76 | 🟡 | **[Bu turda kod+test TAMAM]** Sepet ekranına "Siparişi Onayla" linki (`/siparis`) eklendi. Test: `CartDrawer.test.tsx` 5/5 PASS. Deploy yeşil. **CANLI DOĞRULAMA BEKLİYOR** — kullanıcı butona tıklayıp `/siparis`'e gerçekten gittiğini teyit etmeli (CORE.md Üçüncü Ders). | `components/cart/CartDrawer.tsx` |
+| 77 | 🟡 | **[Bu turda kod+test TAMAM]** MİMARİ İHLAL iki dosyada birden düzeltildi: `CartDrawer.tsx`'ten `FulfillmentChannelSelector` kaldırıldı; `FulfillmentGate.tsx`'ten "Masada" seçeneği kaldırıldı (tek "Gel Al" butonu kaldı, gelecekteki kanal genişlemesi — kendi kurye/online ödeme — için buton mimarisi bilinçli korundu), stale "dine-in" normalizasyonu eklendi. Test: `FulfillmentGate.test.tsx` 6/6 PASS. Deploy yeşil. **CANLI DOĞRULAMA BEKLİYOR** — `/siparis`'te artık sadece "Gel Al" göründüğü gözle teyit edilmeli. | `components/cart/CartDrawer.tsx`, `components/order/FulfillmentGate.tsx` |
 | 78 | 🟢 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, CORE.md §8 ihlali]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/SummaryPanel.tsx` |
 
 > **KAPANDI (bu turda):** #59 — kayıt sonrası oturum/isim gösterimi (gerçek kök neden:
@@ -223,9 +245,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 0a | **[YENİ, bu turda]** #77 — Sepetim'de mimariye aykırı "Masaya Servis" toggle'ının kök nedeni araştırılmalı ve düzeltilmeli (kanal sızıntısı riski, checkout karışması riski) | 🔴 |
-| 0b | **[YENİ, bu turda]** #76 — Sepet ekranına onay/devam (checkout'a geçiş) butonu eklenmeli | 🔴 |
-| 0c | **[YENİ, bu turda]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli) | 🔴 |
+| 0a | **[Bu turda kod+test TAMAM, CANLI DOĞRULAMA BEKLİYOR]** #77 — kullanıcı `/siparis`'te artık sadece "Gel Al" göründüğünü gözle teyit etmeli | 🟡 |
+| 0b | **[Bu turda kod+test TAMAM, CANLI DOĞRULAMA BEKLİYOR]** #76 — kullanıcı "Siparişi Onayla" linkine tıklayıp `/siparis`'e gittiğini teyit etmeli | 🟡 |
+| 0c | **[SIRADAKİ]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli, FAILURE_PATTERNS.md FP-1'de zaten tarif edilen kalıp) | 🔴 |
 | 0d | **[YENİ, bu turda]** #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
 | 0e | **[YENİ, bu turda]** #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
@@ -264,15 +286,19 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v35 (v34'ten: YENİ SOHBET — kullanıcı canlı siteyi ekran
-görüntüleriyle taradı, 5 yeni bug/UX sorunu bulundu ve Açık Sorunlar tablosuna #74-#78
-olarak eklendi: #74 (çıkış butonu yok, 🟡), #75 (customizer "Sepete Ekle" disable
-olmuyor → duplicate ekleme, BSC-6 ihlali, 🔴), #76 (sepet ekranında onay/devam butonu
-yok, 🔴), #77 (Sepetim'de "Masaya Servis" toggle'ı mimariye aykırı görünüyor — izole
-`/masaya-siparis/*` akışıyla çakışma riski, 🔴 MİMARİ İHLAL), #78 (customizer sticky
-özet panel collapsed halde "Sepete Ekle"yi gizliyor, CORE.md §8 "asla gizlenmez"
-ilkesiyle çelişiyor, 🟢). SIRADAKİ GÖREVLER tablosuna 0a-0e olarak öncelik sırasıyla
-eklendi (#77/#76/#75 → 🔴, #74 → 🟡, #78 → 🟢). Bu tur SADECE TESPİT+KAYIT — hiçbir kod
-değişikliği yapılmadı, çözümler bir sonraki adımda ele alınacak.
+*BOWLERA SESSION_INDEX.md — v36 (v35'ten: #76 + #77 KOD+TEST TAMAMLANDI. Kök neden ikili
+çıktı — hem `CartDrawer.tsx`'teki `FulfillmentChannelSelector` hem `FulfillmentGate.tsx`
+(`/siparis`) "dine-in" seçtiriyordu, ikisi de ARCHITECTURE.md §2.9/§2.7b'ye aykırıydı.
+Kullanıcının gelecek planı (kendi kurye + online ödeme kanalı) ışığında karar: tek-buton
+mimarisi korunarak sadece geçersiz seçenek ("Masada") kaldırıldı — gelecekteki kanal
+genişlemesi `OPTIONS` dizisine satır eklemekten ibaret kalacak. `CartDrawer.tsx`'ten
+selector tamamen kaldırıldı, yerine `/siparis`'e giden "Siparişi Onayla" linki eklendi.
+Stale "dine-in" localStorage değerini normalize eden edge-case koruması eklendi.
+Test: `CartDrawer.test.tsx` (5) + `FulfillmentGate.test.tsx` (6) = 11/11 PASS (Codespace'de
+`vitest run --reporter=verbose` ile koşturuldu, kullanıcı ekran görüntüsüyle doğruladı).
+Deploy YEŞİL. ⚠️ CORE.md Üçüncü Ders gereği HENÜZ TAM KAPANMADI — canlı/manuel buton
+tıklama doğrulaması bekliyor, bu yüzden #76/#77 🟡 statüsünde tutuluyor (🔴 değil, kod+test
+tamam olduğu için önceliği düştü ama açık kaldı). SIRADAKİ GÖREVLER'de 0a/0b canlı
+doğrulama bekleyen olarak işaretlendi, 0c (#75) öne çekildi.
 Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
