@@ -63,6 +63,17 @@
 
 ## 🎯 CURRENT FOCUS
 
+> **[YENİ SOHBET (devamı, 6.), 2026-08-09 — #75'in canlı doğrulaması YAPILDI, BAŞARISIZ →
+> #79 YENİ AÇILDI]** Kullanıcı önceki turun #75 düzeltmesinin (selectionKey tabanlı kilit)
+> push+deploy edildiğini ONAYLADI. 4 ekran görüntüsüyle canlı test edildi: orijinal "çift
+> tık → görünmez kilit" belirtisi ortadan kalktı, AMA add-to-cart sonrası `selections`
+> state'inin "—"e sıfırlanması kilidi de sıfırlıyor — ikinci tıklama sepete BOŞ SEÇİMLİ,
+> ₺0.00 fiyatlı bir "Benim Kasem" daha ekliyor (kanıt: sepet ekran görüntüsünde 2 satır,
+> ₺103.00 + ₺0.00). Bu, #75'in KENDİSİNDEN farklı ama İLİŞKİLİ yeni bir kırılma — #79
+> olarak açıldı. Kök neden HENÜZ TEYİT EDİLMEDİ (hipotez var, confidence DÜŞÜK) — hiçbir
+> kaynak dosya bu sohbette paylaşılmadı, AGENT.md "eksik dosyayla çözüm üretme" kuralı
+> gereği kod üretilmedi. #75 bu nedenle KAPANMADI, #79'a bağımlı olarak yeniden açık.
+
 > **[YENİ SOHBET (devamı, 5.), 2026-08-09 — #75 derin çözüm turu, KOD TAMAM, TEST
 > RERUN/BUILD/PUSH/CANLI DOĞRULAMA BEKLİYOR — GERİYE DÖNÜK İŞLENDİ, bkz. ALTINCI DERS]**
 > **Kök teşhis:** `isAdding` bir `useRef` idi (state değil) → kilit fonksiyonel çalışıyordu
@@ -218,7 +229,8 @@
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 | 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
 | 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
-| 75 | 🔴 | **[Bu turda derinlemesine işlendi — KOD TAMAM, KAPANMADI]** Kök neden bulundu (`isAdding` useRef → görsel geri bildirim yok → kullanıcı "çalışmadı" sanıp meşru ikinci tıklama yapıyordu). 3 iterasyonlu çözüm uygulandı: useState geçişi + süre-bazlı'dan seçim-kimliği-bazlı kilide geçiş + testin yakaladığı `lockedKey`→`Set<string> addedKeys` düzeltmesi. `MobileSummaryDrawer.tsx`'teki eksik `selectionKey` prop'u (build kırığı) de düzeltildi. **BEKLEYEN:** test rerun sonucu (10/10 veya 12/12 PASS), `npm run build` yerel doğrulama, `git commit && push`, canlıda "Ekleniyor…"/"Eklendi ✓"/yeniden aktifleşme gözle teyidi — HİÇBİRİ bu sohbette teyit edilmedi (bkz. ALTINCI DERS). | `components/customizer/AddToCartButton.tsx`, `components/customizer/SummaryPanel.tsx`, `components/customizer/MobileSummaryDrawer.tsx` |
+| 75 | 🔴 | **[BU TURDA — canlı doğrulama YAPILDI, BAŞARISIZ, YENİDEN AÇILDI]** Kullanıcı push+deploy'u ONAYLADI (selectionKey tabanlı kilit canlıda). Ekran görüntüleriyle test edildi: orijinal "çift tık → duplicate" belirtisi görünürde düzeldi AMA yeni ve daha ciddi bir belirti ortaya çıktı — bkz. #79. Kök neden (isAdding useRef→useState, süre-bazlı→seçim-kimliği kilidi, lockedKey→addedKeys Set) mimari olarak doğruydu ama YETERSİZ kaldı; asıl sorun #79'da. #75, #79 kapanmadan KAPANAMAZ. | `components/customizer/AddToCartButton.tsx`, `components/customizer/SummaryPanel.tsx`, `components/customizer/MobileSummaryDrawer.tsx` |
+| 79 | 🔴 | **[YENİ, bu turda — ekran görüntüsü dizisiyle tespit edildi, #75'in canlı doğrulamasında ortaya çıktı]** İlk "Sepete Ekle" başarılı (₺103.00, doğru seçimlerle) AMA hemen ardından özet panelde seçimler (`Base/Main/Flavor`) "—"e SIFIRLANIYOR. Kilit `selectionKey`'e (`JSON.stringify(selections)`) bağlı olduğu için, seçim boşalınca kilit de "boş seçim" için sıfırdan başlıyor → buton yanlışlıkla tekrar aktifleşiyor. İkinci tıklama sepete BOŞ SEÇİMLİ, **₺0.00** fiyatlı ikinci bir "Benim Kasem" ekliyor (kanıt: sepette 2 satır, biri ₺103/biri ₺0). Hipotez (dosya görülmeden TEYİT EDİLMEDİ, confidence DÜŞÜK): add-to-cart sonrası `selections` reset'i customizer state'inde bir yerde tetikleniyor, bu reset kilit/fiyat senkronundan ÖNCE oluyor. Gerekli dosyalar: `AddToCartButton.tsx`, `SummaryPanel.tsx`/`MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts` — HİÇBİRİ bu sohbette paylaşılmadı. | `useCustomizerStore.ts` (şüpheli), `components/customizer/AddToCartButton.tsx` |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
 
 > **KAPANDI (BU TURDA):** #50 — `AddToCartButton.tsx` artık görüldü, BSC-6 doğrudan ele
@@ -303,7 +315,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 0a | **[SIRADAKİ]** #75 — kod TAMAM (3 dosya senkron), test rerun + `npm run build` yerel doğrulama + `git commit && push` + canlıda gözle teyit (Ekleniyor…/Eklendi ✓/yeniden aktifleşme) BEKLİYOR | 🔴 |
+| 0a | **[SIRADAKİ, YÜKSELDİ]** #79 — add-to-cart sonrası `selections` sıfırlanması kilidi de sıfırlıyor, ₺0.00 duplicate ekleniyor. Teşhis için `AddToCartButton.tsx`, `SummaryPanel.tsx`/`MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts` gerekiyor — HENÜZ paylaşılmadı. #75 buna bağımlı, kapanamaz. | 🔴 |
 | 0b | #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
@@ -342,15 +354,12 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v38 (v37'den: GERİYE DÖNÜK İŞLEME — #75 üzerinde yapılan derin
-çözüm turu (3 iterasyon: useRef→useState, süre-bazlı→seçim-kimliği kilidi, tekil
-lockedKey→Set addedKeys) SESSION_INDEX'e işlendi; bkz. ALTINCI DERS (Bölüm başı) — sohbet
-test rerun/build/push/canlı doğrulama teyidi gelmeden kesilmişti, kullanıcı tam metni yeni
-sohbete taşıyarak güncellemeyi yaptırdı. #50 KAPANDI (`AddToCartButton.tsx` artık görüldü).
-#73'e üçüncü dosyada (AddToCartButton.tsx) doğrulanan aynı kırık `bg-*` pattern'i ek kanıt
-olarak eklendi. #78'in kaynak bileşeninin `MobileSummaryDrawer.tsx` olduğu teyit edildi
-(referans dosyası güncellendi) — UX çözümü hâlâ AÇIK, bu turda dokunulmadı. #75 KAPANMADI —
-kod tamam ama test/build/push/canlı doğrulama bekliyor, SIRADAKİ GÖREVLER 0a buna göre
-güncellendi. Yeni Kritik Karar satırı: seçim-kimliği bazlı kilit mimarisi.
+*BOWLERA SESSION_INDEX.md — v39 (v38'den: #75'İN CANLI DOĞRULAMASI YAPILDI, BAŞARISIZ.
+Kullanıcı push+deploy'u onayladı, 4 ekran görüntüsüyle test etti: orijinal çift-tık belirtisi
+düzeldi ama add-to-cart sonrası `selections` sıfırlanması kilidi de sıfırlıyor, ikinci
+tıklama ₺0.00 fiyatlı boş bir "Benim Kasem" daha ekliyor. YENİ AÇIK SORUN #79 eklendi (kök
+neden TEYİT EDİLMEDİ, kaynak dosyalar henüz paylaşılmadı — AGENT.md "eksik dosyayla çözüm
+üretme" kuralı gereği kod üretilmedi). #75 satırı "canlı doğrulama başarısız, #79'a bağımlı"
+olarak güncellendi, KAPANMADI. SIRADAKİ GÖREVLER 0a → #79'a yükseltildi.
 Dosya 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
