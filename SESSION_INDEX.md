@@ -79,6 +79,11 @@
 > `Header.tsx`, `app/hesap/page.tsx`, `components/account/ProfileForm.tsx` — HEPSİ deploy
 > edildi, build yeşil, kullanıcı ekran görüntüleriyle her adımı doğruladı.
 
+> **[YENİ SOHBET, 2026-08-09 — 5 yeni bug/UX sorunu ekran görüntüleriyle bildirildi, TESPİT
+> TAMAMLANDI, ÇÖZÜM HENÜZ ÜRETİLMEDİ]** Kullanıcı canlı siteyi ekran görüntüleriyle taradı,
+> 5 yeni sorun bulundu ve Açık Sorunlar tablosuna #74-#78 olarak eklendi (aşağıya bkz.).
+> Henüz hiçbir kod değişikliği yapılmadı — bu tur sadece TESPİT+KAYIT turu.
+
 ---
 
 ## 📌 KRİTİK TEKNİK/TASARIM KARARLARI (özet — hâlâ etkili olanlar + yeniden teyit edilmesi gerekenler)
@@ -144,6 +149,11 @@
 | 70 | 🟡 | `order_history.table_number` kolonunun TİPİ netleşmedi (text mi integer mı — masa numaralandırma şemasının kendisine bağlı). Index gereksinimi (#62 Personel Paneli'nin masa bazlı filtreleme yapıp yapmayacağına bağlı) de HENÜZ belirsiz. Migration bu iki karar netleşmeden koşulmamalı. | `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`, `lib/db/schema.ts` |
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 | 73 | 🟠 | **[YENİ, bu turda]** `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI (Vercel build cache / PostCSS-Tailwind sürüm uyuşmazlığı şüphesi). `text-olive-primary`'nin (Header.tsx) çalışıp çalışmadığı da TEYİT EDİLMEDİ — sadece `bg-*` test edildi. Site genelinde başka `bg-olive-*`/`bg-bronze`/`bg-espresso` kullanan yerler aynı sorunu taşıyor olabilir — sistematik tarama YAPILMADI. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
+| 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
+| 75 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, BSC-6 ihlali]** Customizer'da "Sepete Ekle" butonu ekleme sonrası disable/inaktif olmuyor — art arda basınca aynı seçim sepete DUPLICATE ekleniyor. AGENT.md §Edge Case listesinde önceden işaretli risk ("çift tıklama"), fiilen gerçekleşti. | `components/customizer/AddToCartButton.tsx`, `store/useCartStore.ts` |
+| 76 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Sepet ("Sepetim") ekranında onay/devam (checkout'a geçiş) butonu yok — Gel-Al/Masaya Servis seçimi ve toplam görünüyor ama kullanıcı `/siparis`'e geçemiyor. | `components/cart/CartDrawer.tsx` (veya ilgili sepet bileşeni) |
+| 77 | 🔴 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, MİMARİ İHLAL]** Genel `Sepetim` ekranında "Masaya Servis" toggle'ı aktif/tıklanabilir görünüyor — ama ARCHITECTURE.md v1.7/v1.8 kararına göre Masaya Sipariş TAMAMEN izole `/masaya-siparis/[tableId]/*` yüzeyinde yaşamalı, kendi bağımsız mini-checkout'una sahip olmalı ve genel Gel-Al sepetiyle KARIŞMAMALI. Bu toggle, henüz kodlanmamış bir akışa bağlanıyor olabilir ya da kanal verisi Gel-Al checkout'una sızıyor olabilir — kök neden ARAŞTIRILMADI. | `components/cart/CartDrawer.tsx`, `types/index.ts` (`RegistrationChannel`/`FulfillmentChannel`) |
+| 78 | 🟢 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi, CORE.md §8 ihlali]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/SummaryPanel.tsx` |
 
 > **KAPANDI (bu turda):** #59 — kayıt sonrası oturum/isim gösterimi (gerçek kök neden:
 > `router.push()` sonrası `SessionProvider` cache'i yenilenmiyordu, `useSession().update()`
@@ -213,6 +223,11 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| 0a | **[YENİ, bu turda]** #77 — Sepetim'de mimariye aykırı "Masaya Servis" toggle'ının kök nedeni araştırılmalı ve düzeltilmeli (kanal sızıntısı riski, checkout karışması riski) | 🔴 |
+| 0b | **[YENİ, bu turda]** #76 — Sepet ekranına onay/devam (checkout'a geçiş) butonu eklenmeli | 🔴 |
+| 0c | **[YENİ, bu turda]** #75 — Customizer "Sepete Ekle" butonuna disable-after-click/debounce koruması eklenmeli (BSC-6, duplicate ekleme önlenmeli) | 🔴 |
+| 0d | **[YENİ, bu turda]** #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
+| 0e | **[YENİ, bu turda]** #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 1c | `order_history.table_number` migration'ı koş — ÖNCE #70'in iki alt sorusu (kolon tipi: text/integer; index gereksinimi) netleşmeli. Şema notu hazır: `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md` | 🟡 (#70 netleşmeden koşulamaz) |
@@ -249,22 +264,15 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v34 (v33'ten: BÜYÜK KAPANIŞ TURU — #59 (kayıt sonrası oturum/isim
-gösterimi) GERÇEK kök nedeniyle çözüldü ve kapandı; 3 ek bug bulunup düzeltildi (`/hesap`'taki
-ölü `/giris` linki, `ProfileForm.tsx`'teki kırık `bg-olive-600` butonu); yeni Açık Sorun #73
-(Tailwind custom-color `bg-*` derleme sorunu, kök neden bulunamadı, kalıcı workaround'la
-kapatıldı) açıldı. Değişen dosyalar: `useRegistrationForm.ts`, `auth.ts`,
-`app/api/registration/consent/route.ts`, `Header.tsx`, `app/hesap/page.tsx`,
-`components/account/ProfileForm.tsx` — hepsi deploy edildi, build yeşil, kullanıcı her
-adımı ekran görüntüsüyle doğruladı.
-⚠️ **ÖZ-DÜZELTME (bu turda) — CORE.md §7.1 Adım 1 ihlali düzeltildi:** Bir önceki turda
-400 satır eşiği yaklaşınca eski CURRENT FOCUS blokları YANLIŞ ŞEKİLDE "sıkıştırılıp
-özetlenmişti" (gerçek ihlal — CORE.md açıkça yasaklıyor, ayrıca dosyayı kullanıcıdan
-istemek de "ASLA otomatik isteme" kuralını ihlal etmişti). Kullanıcı hatayı fark edip
-düzeltti: 6 blok artık TAM METİNLE, her biri kapanış gerekçesiyle, `session_arşiv.md`'ye
-eklenecek AYRI bir taşıma bloğu artifact'ı olarak üretildi (dosyanın kendisi asla
-istenmedi/üretilmedi — kural gereği sadece YENİ EKLEME verildi). SESSION_INDEX'in üst
-notu artık kurala uygun tek satırlık bir taşıma kaydı. Değişen bölümler: CURRENT FOCUS
-(hatalı özet paragrafı kaldırıldı, doğru tek-satır not eklendi).
-Dosya hâlâ 400 satır eşiğinin altında (bu sıkıştırma sayesinde), taşıma tetiklenmedi.
+*BOWLERA SESSION_INDEX.md — v35 (v34'ten: YENİ SOHBET — kullanıcı canlı siteyi ekran
+görüntüleriyle taradı, 5 yeni bug/UX sorunu bulundu ve Açık Sorunlar tablosuna #74-#78
+olarak eklendi: #74 (çıkış butonu yok, 🟡), #75 (customizer "Sepete Ekle" disable
+olmuyor → duplicate ekleme, BSC-6 ihlali, 🔴), #76 (sepet ekranında onay/devam butonu
+yok, 🔴), #77 (Sepetim'de "Masaya Servis" toggle'ı mimariye aykırı görünüyor — izole
+`/masaya-siparis/*` akışıyla çakışma riski, 🔴 MİMARİ İHLAL), #78 (customizer sticky
+özet panel collapsed halde "Sepete Ekle"yi gizliyor, CORE.md §8 "asla gizlenmez"
+ilkesiyle çelişiyor, 🟢). SIRADAKİ GÖREVLER tablosuna 0a-0e olarak öncelik sırasıyla
+eklendi (#77/#76/#75 → 🔴, #74 → 🟡, #78 → 🟢). Bu tur SADECE TESPİT+KAYIT — hiçbir kod
+değişikliği yapılmadı, çözümler bir sonraki adımda ele alınacak.
+Dosya hâlâ 400 satır eşiğinin altında, taşıma tetiklenmedi.
 Güncellenme: 2026-08-09.*
