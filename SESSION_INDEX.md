@@ -58,10 +58,61 @@
 > ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
 > KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
 > düşülmeli, sohbetin kesilme anını beklemeden.
+> ⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
+> masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası (`SummaryPanel.test.tsx`,
+> `MobileSummaryDrawer.test.tsx`) düzeltildi, `npm run build` yerelde temiz koştu, kullanıcı
+> 3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi TAM DOSYA olarak
+> üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT FOCUS bloğunun
+> `session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem TAMAMLANMADAN sohbet
+> kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak güncellemeyi GERİYE
+> DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/dosya-üretimi
+> "başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
+> kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
+> ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
 
 ---
 
 ## 🎯 CURRENT FOCUS
+
+> **[YENİ SOHBET (devamı, 8.), 2026-08-09 — #79'un iki test dosyası + masaüstü ayağı
+> düzeltildi, BUILD TEMİZ, GitHub'a MANUEL KAYDEDİLDİ — CANLI DOĞRULAMA HÂLÂ BEKLİYOR]**
+> **(1) `MobileSummaryDrawer.test.tsx` teşhisi:** Hata, önceki turda üretilen koddan değil,
+> ESKİ bir test mock'undan kaynaklanıyordu — `setupStore()` #75 döneminden (henüz
+> `isReadyToAddToCart` yokken) kalmıştı. Çözüm: mock'a gerçek store'daki mantığın aynısı
+> (`base`+`main`+`signatureFlavor` kontrolü) eklendi. Kod hatası değildi, sadece test dosyası
+> güncellendi.
+> **(2) `SummaryPanel.tsx` (masaüstü) doğrulandı:** #79'un AYNISI burada da vardı — buton
+> `isStepValid(5)`'e göre aktifleşiyordu, Finish adımı opsiyonel olduğu için `selections` boş
+> olsa bile her zaman `true` dönüyordu. Çözüm: `isStepValid` yerine `isReadyToAddToCart()`
+> kullanılacak şekilde güncellendi (SADECE 2 satır) — store'da hiçbir değişiklik gerekmedi,
+> metod zaten mevcuttu.
+> **(3) `SummaryPanel.test.tsx` güncellendi:** `mockStore()`'daki `overrides.isValid` zaten
+> genel amaçlı bir "buton aktif mi" bayrağıydı, `isReadyToAddToCart`'a aynen bağlanınca mevcut
+> 4 test DEĞİŞMEDEN geçti. 1 test adı (`isStepValid(5)` referansı) güncellendi, #79'un
+> masaüstü regresyon senaryosu için 1 yeni test eklendi.
+> **Değişen dosyalar (bu turda):** `SummaryPanel.tsx`, `SummaryPanel.test.tsx`,
+> `MobileSummaryDrawer.test.tsx`. (Not: `MobileSummaryDrawer.tsx` ve `useCustomizerStore.ts`
+> bu turdan ÖNCEKİ turda zaten GitHub'a kaydedilmişti.)
+> **Doğrulama:** `npm run build` yerelde koşuldu, route tablosu hatasız üretildi (temiz
+> çıktı) — build BAŞARILI kabul edildi. Kullanıcı git push kullanmadan yukarıdaki 3 dosyayı
+> GitHub'a MANUEL kaydettiğini onayladı.
+> ⚠️ **KAPANMADI — Üçüncü Ders gereği:** #79 tam "KAPANDI" değil, **"kod+test+build TAMAM,
+> canlı doğrulama BEKLİYOR"** statüsünde tutuluyor. Vercel'in bu 3 dosyayla fiilen deploy
+> ettiğinin VE canlıda masaüstünde/mobilde boş seçimle "Sepete Ekle"nin artık pasif kaldığının
+> GÖRSEL olarak doğrulanması gerekiyor. #75 de buna bağımlı, aynı şekilde açık kalıyor.
+> ⚠️ Bu turun kendisi de YARIM KALDI — bkz. YEDİNCİ DERS (yukarı).
+
+> **[YENİ SOHBET (devamı, 7.), 2026-08-09 — #79 KÖK NEDEN BULUNDU, KOD ÜRETİLDİ]**
+> `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts`
+> paylaşıldı. Gerçek kök neden: `MobileSummaryDrawer.tsx`'teki `canAddToCart = isStepValid(5)`
+> yanlış kullanımı — Finish (adım 5) opsiyonel olduğu için `isStepValid(5)` `selections` BOŞ
+> olsa bile HER ZAMAN `true` döner, bu da "sepete eklemeye hazır mıyız" sorusuyla yanlışlıkla
+> eşleniyordu. `selections`'ın NEDEN/NEREDE sıfırlandığı (reset() hipotezi) hâlâ teyit
+> edilmedi — ama yeni `isReadyToAddToCart()` metodu (base+main+signatureFlavor'ı ayrı
+> kontrol eder, `isStepValid(5)`'in kendisine dokunmaz) SEBEP ne olursa olsun sonucu
+> engelliyor. `MobileSummaryDrawer.tsx` güncellendi, 7 testlik yeni `useCustomizerStore.test.ts`
+> üretildi. **KAPANMADI:** `SummaryPanel.tsx` (masaüstü) hâlâ görülmedi — aynı riski taşıyabilir;
+> test rerun/build/push/canlı doğrulama BEKLİYOR.
 
 > **[YENİ SOHBET (devamı, 6.), 2026-08-09 — #75'in canlı doğrulaması YAPILDI, BAŞARISIZ →
 > #79 YENİ AÇILDI]** Kullanıcı önceki turun #75 düzeltmesinin (selectionKey tabanlı kilit)
@@ -135,32 +186,16 @@
 > `Header.tsx`, `app/hesap/page.tsx`, `components/account/ProfileForm.tsx` — HEPSİ deploy
 > edildi, build yeşil, kullanıcı ekran görüntüleriyle her adımı doğruladı.
 
-> **[YENİ SOHBET, 2026-08-09 — 5 yeni bug/UX sorunu ekran görüntüleriyle bildirildi, TESPİT
-> TAMAMLANDI, ÇÖZÜM HENÜZ ÜRETİLMEDİ]** Kullanıcı canlı siteyi ekran görüntüleriyle taradı,
-> 5 yeni sorun bulundu ve Açık Sorunlar tablosuna #74-#78 olarak eklendi (aşağıya bkz.).
-> Henüz hiçbir kod değişikliği yapılmadı — bu tur sadece TESPİT+KAYIT turu.
-
-> **[AYNI SOHBET (devamı), 2026-08-09 — #76 + #77 kod+test TAMAM, deploy YEŞİL, CANLI/MANUEL
-> DOĞRULAMA BEKLİYOR]** #77'nin kök nedeni ikili çıktı: (1) `CartDrawer.tsx`'teki
-> `FulfillmentChannelSelector` genel sepette "dine-in" seçtiriyordu, (2) `FulfillmentGate.tsx`
-> (`/siparis`'te) de AYNI ihlali tekrarlıyordu — "Masada" seçeneği sunuyordu, ama
-> ARCHITECTURE.md §2.9'a göre bu sayfa artık SADECE Gel Al'a özel. Kullanıcı, gelecekte kendi
-> kurye/online ödeme kanalı ekleneceğini belirtti (`FulfillmentChannel` tipi büyüyecek) — bu
-> ışıkta karar: `FulfillmentGate.tsx`'te "Masada" kaldırıldı ama BUTON MİMARİSİ korundu (tek
-> "Gel Al" butonu) ki gelecekteki kanal eklemeleri `OPTIONS` dizisine tek satır olsun,
-> yeniden inşa gerekmesin. Ayrıca stale "dine-in" localStorage değerini "pickup"a normalize
-> eden bir `useEffect` eklendi (edge case — eski oturumdan gelen kullanıcılar için).
-> `CartDrawer.tsx`'ten `FulfillmentChannelSelector` TAMAMEN kaldırıldı, yerine `/siparis`'e
-> giden "Siparişi Onayla" linki eklendi (#76 kapatıldı). **Test:** `CartDrawer.test.tsx` (5)
-> + `FulfillmentGate.test.tsx` (6) = 11/11 PASS, Codespace'de `vitest run --reporter=verbose`
-> ile koşturuldu, kullanıcı ekran görüntüsüyle doğruladı. Deploy YEŞİL.
-> ⚠️ **KAPANMADI — CORE.md Üçüncü Ders gereği:** kod+test yeşil olması tek başına yeterli
-> değil, kullanıcının canlı sitede butonlara TIKLAYIP akışı GÖRDÜĞÜ ayrıca teyit edilmeli
-> (route bağlı mı, "Siparişi Onayla" gerçekten `/siparis`'e gidiyor mu, orada sadece "Gel Al"
-> görünüyor mu). Bu teyit HENÜZ gelmedi — #76/#77 bu yüzden "kod+test TAMAM, canlı doğrulama
-> BEKLİYOR" statüsünde tutuluyor, tam KAPANDI sayılmıyor.
-> **Değişen dosyalar:** `components/cart/CartDrawer.tsx`, `components/order/FulfillmentGate.tsx`
-> (+ 2 yeni test dosyası, aynı klasörlerde).
+> ⚠️ **Arşiv taşıması — 2026-08-09 (devamı):** 2 kapanmış CURRENT FOCUS bloğu ("5 yeni
+> bug/UX tespiti — #74-78 açılışı" ve "#76+#77 kod+test tamam, deploy yeşil, canlı doğrulama
+> bekliyor") + eski "KAPANDI (önceki tur)" anlatı bloğu (#59, #72, `users.role` migration,
+> 1d) `session_arşiv_1.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış
+> gerekçesi: hepsinin içeriği SESSION_INDEX'te kalıcı olarak başka yerde temsil ediliyor —
+> #74-78 açılışı Açık Sorunlar tablosunda satır olarak duruyor, #76/#77'nin canlı doğrulaması
+> "KAPANDI (YENİ SOHBET, bu turda ✅)" notuyla, #59/#72/users.role/1d ise Kritik Kararlar
+> tablosu ve GENEL DURUM satırlarıyla zaten kapanmış görünüyor; turn-by-turn anlatı artık
+> aktif takip gerektirmiyor. Taşıma bloğu ayrı olarak sunuldu, kullanıcı kendi
+> `session_arşiv_1.md`'sinin sonuna ekleyecek.
 
 ---
 
@@ -230,7 +265,7 @@
 | 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
 | 74 | 🟡 | **[YENİ, bu turda — ekran görüntüsüyle bildirildi]** Hesabım sayfasında / hesap ikonunda çıkış (sign-out) butonu yok. Kullanıcı oturumu kapatamıyor. | `Header.tsx`, `app/hesap/page.tsx` |
 | 75 | 🔴 | **[BU TURDA — canlı doğrulama YAPILDI, BAŞARISIZ, YENİDEN AÇILDI]** Kullanıcı push+deploy'u ONAYLADI (selectionKey tabanlı kilit canlıda). Ekran görüntüleriyle test edildi: orijinal "çift tık → duplicate" belirtisi görünürde düzeldi AMA yeni ve daha ciddi bir belirti ortaya çıktı — bkz. #79. Kök neden (isAdding useRef→useState, süre-bazlı→seçim-kimliği kilidi, lockedKey→addedKeys Set) mimari olarak doğruydu ama YETERSİZ kaldı; asıl sorun #79'da. #75, #79 kapanmadan KAPANAMAZ. | `components/customizer/AddToCartButton.tsx`, `components/customizer/SummaryPanel.tsx`, `components/customizer/MobileSummaryDrawer.tsx` |
-| 79 | 🔴 | **[YENİ, bu turda — ekran görüntüsü dizisiyle tespit edildi, #75'in canlı doğrulamasında ortaya çıktı]** İlk "Sepete Ekle" başarılı (₺103.00, doğru seçimlerle) AMA hemen ardından özet panelde seçimler (`Base/Main/Flavor`) "—"e SIFIRLANIYOR. Kilit `selectionKey`'e (`JSON.stringify(selections)`) bağlı olduğu için, seçim boşalınca kilit de "boş seçim" için sıfırdan başlıyor → buton yanlışlıkla tekrar aktifleşiyor. İkinci tıklama sepete BOŞ SEÇİMLİ, **₺0.00** fiyatlı ikinci bir "Benim Kasem" ekliyor (kanıt: sepette 2 satır, biri ₺103/biri ₺0). Hipotez (dosya görülmeden TEYİT EDİLMEDİ, confidence DÜŞÜK): add-to-cart sonrası `selections` reset'i customizer state'inde bir yerde tetikleniyor, bu reset kilit/fiyat senkronundan ÖNCE oluyor. Gerekli dosyalar: `AddToCartButton.tsx`, `SummaryPanel.tsx`/`MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts` — HİÇBİRİ bu sohbette paylaşılmadı. | `useCustomizerStore.ts` (şüpheli), `components/customizer/AddToCartButton.tsx` |
+| 79 | 🔴 | **[BU TURDA — masaüstü ayağı + iki test dosyası düzeltildi, BUILD TEMİZ, GitHub'a MANUEL KAYDEDİLDİ, KAPANMADI]** Kök neden `selections` sıfırlanması DEĞİL (o hâlâ teyit edilmedi) — asıl sorun hem mobilde (`MobileSummaryDrawer.tsx`) hem masaüstünde (`SummaryPanel.tsx`) `canAddToCart`/buton aktifliğinin `isStepValid(5)`'ten türetilmesiydi. Finish OPSİYONEL olduğu için `isStepValid(5)` `selections` TAMAMEN BOŞ olsa bile HER ZAMAN `true` döner (CUSTOMIZER_SPEC.md §3.3'e göre doğru davranış, ama "sepete eklemeye hazır mıyız" sorusuyla KARIŞTIRILMIŞ). Çözüm: `useCustomizerStore.ts`'teki bağımsız `isReadyToAddToCart()` metodu her iki bileşende de kullanılacak şekilde bağlandı (`isStepValid(5)`'in kendisi DEĞİŞMEDİ). `MobileSummaryDrawer.test.tsx`'teki eski mock (`isReadyToAddToCart` eksikti, #75 döneminden kalma) ve `SummaryPanel.test.tsx`'teki `mockStore()` güncellendi + #79'a özel yeni regresyon testi eklendi. `npm run build` yerelde TEMİZ koştu, kullanıcı 3 dosyayı (`SummaryPanel.tsx`, `SummaryPanel.test.tsx`, `MobileSummaryDrawer.test.tsx`) GitHub'a MANUEL kaydettiğini onayladı. **KAPANMADI — Üçüncü Ders gereği:** Vercel'in bu dosyalarla deploy ettiği VE canlıda boş seçimle "Sepete Ekle"nin pasif kaldığı GÖRSEL olarak doğrulanmadı. `selections`'ın gerçekte NEREDE/NEDEN sıfırlandığı da hâlâ teyit edilmedi — bu fix SEBEP ne olursa olsun sonucu engelliyor ama tam harita eksik. | `store/useCustomizerStore.ts`, `components/customizer/MobileSummaryDrawer.tsx`, `components/customizer/SummaryPanel.tsx`, ilgili 3 test dosyası |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
 
 > **KAPANDI (BU TURDA):** #50 — `AddToCartButton.tsx` artık görüldü, BSC-6 doğrudan ele
@@ -247,27 +282,10 @@
 > telefon numaraları henüz tanımlanmadı (#58'in henüz kapanmamasının doğrudan sonucu, YENİ
 > bug değil).
 
-> **KAPANDI (bu turda):** #59 — kayıt sonrası oturum/isim gösterimi (gerçek kök neden:
-> `router.push()` sonrası `SessionProvider` cache'i yenilenmiyordu, `useSession().update()`
-> ile düzeltildi; isim için `users.displayName` hiç doldurulmuyordu, `signIn()` credential'ına
-> eklendi). `/hesap`'taki ölü `/giris` linki `/kayit-ol`'a düzeltildi. `ProfileForm.tsx`'teki
-> kırık `bg-olive-600` butonu `bg-[#53502A]` ile kalıcı olarak çözüldü (kök neden #73'e
-> devredildi, KAPANMADI — sadece bu dosyadaki belirti giderildi).
->
-> **KAPANDI (önceki tur):** #72 — `types/index.ts`'teki eski/yanlış yorum düzeltildi (auth.ts
-> zaten role set ediyordu, yorum geride kalmıştı). #62'nin KOD tarafı (4 dosya) TAMAMEN
-> kapandı — kullanıcı 403 kararını onayladı, `next-auth.d.ts` eklendi, Vercel build yeşil
-> doğrulandı. #62'nin KENDİSİ (panel UI+API+polling) hâlâ AÇIK, yukarıda daraltılmış
-> kapsamıyla listede duruyor — gerekçesiz düşürülmedi.
->
-> **KAPANDI (daha önceki tur):** `users.role` migration'ının koşulması + doğrulanması.
->
-> **KAPANDI (önceki tur):** 1d — Vercel build'in yeşil olduğu kullanıcı tarafından
-> doğrulandı. #62'nin 3 açık mimari sorusu (personel auth, real-time teknoloji, onay kuyruğu
-> UI) — ARCHITECTURE.md v1.12'ye işlendi.
->
-> **KAPANDI (önceki turlar):** #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49,
-> #64, #65, #67, #68, #69 — detaylar `session_arşiv.md` ve `session_arşiv_1.md`'de.
+> **KAPANDI (önceki turlar, ayrıntı `session_arşiv_1.md`'de):** #59, #72, `users.role`
+> migration, 1d (Vercel build), #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49,
+> #64, #65, #67, #68, #69 — hepsi Kritik Kararlar tablosunda ve/veya GENEL DURUM'da hâlâ
+> özet olarak duruyor; turn-by-turn anlatı arşive taşındı (2026-08-09, 400 satır eşiği).
 
 ---
 
@@ -315,7 +333,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| 0a | **[SIRADAKİ, YÜKSELDİ]** #79 — add-to-cart sonrası `selections` sıfırlanması kilidi de sıfırlıyor, ₺0.00 duplicate ekleniyor. Teşhis için `AddToCartButton.tsx`, `SummaryPanel.tsx`/`MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts` gerekiyor — HENÜZ paylaşılmadı. #75 buna bağımlı, kapanamaz. | 🔴 |
+| 0a | **[SIRADAKİ]** #79 — mobil+masaüstü kod, 3 test dosyası ve yerel build TAMAM; kullanıcı dosyaları GitHub'a manuel kaydetti. Kalan: Vercel'in bu dosyalarla deploy ettiğinin teyidi + canlıda boş seçimle "Sepete Ekle"nin pasif kaldığının GÖRSEL doğrulaması. #75 buna bağımlı, ikisi birlikte kapanacak. | 🔴 |
 | 0b | #74 — Hesabım/hesap ikonuna çıkış (sign-out) butonu eklenmeli | 🟡 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** `/personel/*` guard'ı 4 dosyayla (types/index.ts, auth.ts, middleware.ts, types/next-auth.d.ts) uçtan uca kapandı, canlı build yeşil. Sırada: **#62 Personel Sipariş Paneli'nin kendisi** — UI (Masaya/Gel Al iki sekme), API route, polling ile real-time. | 🔴 |
@@ -354,12 +372,17 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v39 (v38'den: #75'İN CANLI DOĞRULAMASI YAPILDI, BAŞARISIZ.
-Kullanıcı push+deploy'u onayladı, 4 ekran görüntüsüyle test etti: orijinal çift-tık belirtisi
-düzeldi ama add-to-cart sonrası `selections` sıfırlanması kilidi de sıfırlıyor, ikinci
-tıklama ₺0.00 fiyatlı boş bir "Benim Kasem" daha ekliyor. YENİ AÇIK SORUN #79 eklendi (kök
-neden TEYİT EDİLMEDİ, kaynak dosyalar henüz paylaşılmadı — AGENT.md "eksik dosyayla çözüm
-üretme" kuralı gereği kod üretilmedi). #75 satırı "canlı doğrulama başarısız, #79'a bağımlı"
-olarak güncellendi, KAPANMADI. SIRADAKİ GÖREVLER 0a → #79'a yükseltildi.
-Dosya 400 satır eşiğinin altında, taşıma tetiklenmedi.
+*BOWLERA SESSION_INDEX.md — v41 (v40'dan: #79'un masaüstü ayağı (`SummaryPanel.tsx`) düzeltildi
++ iki test dosyası (`SummaryPanel.test.tsx`, `MobileSummaryDrawer.test.tsx`) güncellendi —
+`MobileSummaryDrawer.test.tsx`'teki hata kod hatası değil, #75 döneminden kalma ESKİ bir mock
+eksiğiydi (kod hatası değil). `npm run build` yerelde TEMİZ koştu, kullanıcı 3 dosyayı
+(`SummaryPanel.tsx`, `SummaryPanel.test.tsx`, `MobileSummaryDrawer.test.tsx`) GitHub'a MANUEL
+kaydettiğini onayladı. #79 HÂLÂ KAPANMADI: Vercel deploy teyidi + canlı GÖRSEL doğrulama
+bekliyor (Üçüncü Ders). ⚠️ YEDİNCİ DERS eklendi — bu turun kendisi de SESSION_INDEX TAM DOSYA
+üretimi TAMAMLANMADAN kesildi, kullanıcı yine geriye dönük güncelletti (DÖRDÜNCÜ/BEŞİNCİ/
+ALTINCI DERS'in dördüncü tekrarı).
+400 SATIR EŞİĞİ TETİKLENDİ: 2 kapanmış CURRENT FOCUS bloğu ("5 yeni bug/UX tespiti" ve
+"#76+#77 kod+test tamam") `session_arşiv_1.md`'ye TAŞINDI (ayrı ek blok olarak sunuldu,
+kapanış gerekçesiyle) — CORE.md §7.1 Adım 1.
+Açık Sorunlar #79 satırı ve SIRADAKİ GÖREVLER 0a buna göre güncellendi.
 Güncellenme: 2026-08-09.*
