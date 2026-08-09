@@ -180,3 +180,150 @@ Sıradaki: (00) [YENİ, KRİTİK, GENİŞLEDİ — Session 11] #62 — Personel 
 
 *Bu blok, SESSION_INDEX.md v25 → v26 geçişinde, kullanıcı onayıyla taşındı (2026-08-08).
 Taşınan içerik BİREBİR korunmuştur, hiçbir madde özetlenmemiş/kırpılmamıştır.*
+
+[YENİ TAŞIMA BLOĞU — 2026-08-09, SESSION_INDEX.md 400 satır eşiğine yaklaşması nedeniyle
+6 kapanmış CURRENT FOCUS bloğu taşındı. Bu bloğu kendi session_arşiv.md dosyanızın SONUNA
+ekleyin — dosyanın başka bir yerine dokunmayın.]
+
+---
+
+## Arşiv Taşıması — 2026-08-09 (6 madde)
+
+> **[Taşındı — 2026-08-08, "#62 KOD TARAFI TAMAMEN KAPANDI"]**
+> Bir önceki turdaki 2 açık varsayım netleşti: (1) kullanıcı **403 kararını onayladı**
+> (`role !== 'staff'` → 403, redirect değil); (2) `types/next-auth.d.ts` paylaşıldı — `role`
+> alanı `phone` deseniyle Session/User/JWT'ye eklendi (literal union korunarak, `middleware.ts`
+> guard'ının tip-güvenliği bozulmadı). Bu değişiklik build'i açtı: kullanıcı Vercel'de
+> `Property 'role' does not exist...` hatasını paylaştı, `next-auth.d.ts` düzeltmesiyle
+> çözüldü, **kullanıcı deploy'un yeşil olduğunu doğruladı**.
+> **Açık Sorun #72 de bu turda KAPANDI:** `types/index.ts`'teki eski/yanlış yorum
+> ("auth.ts henüz role set etmiyor") düzeltildi — artık 4 dosyanın (`types/index.ts`,
+> `auth.ts`, `middleware.ts`, `types/next-auth.d.ts`) hem kodu hem de açıklayıcı yorumları
+> senkron ve repoda doğrulanmış durumda.
+> **#62'nin DURUM ÖZETİ:** Mimari kararlar ✅ + DB migration ✅ + kod (4 dosya) ✅ + canlı
+> build ✅ — hepsi TAMAM. Kalan TEK parça: panelin kendisi (UI: Masaya/Gel Al iki sekme,
+> API route, polling ile real-time) — bu HENÜZ YAZILMADI, sıradaki büyük görev budur.
+> **TEST_MATRIX.md hâlâ BEKLEMEDE** (dosya bu sohbette hiç paylaşılmadı) — önceki turda
+> önerilen 5 test senaryosu (403/redirect/staff-geçişi/guest-gate regresyon/masaya-sipariş
+> izolasyonu) oraya işlenmeli, dosya paylaşılınca yapılabilir.
+> **Kapanış gerekçesi:** Bu blokta anlatılan her şey artık SESSION_INDEX'in KRİTİK
+> KARARLAR/AÇIK SORUNLAR tablolarına ve daha sonraki bir turda #59/#64 kapanışına
+> işlendi — aktif takip gerektiren hiçbir açık uç kalmadı.
+
+> **[Taşındı — 2026-08-08, "Kod üretildi, ONAY BEKLİYOR (BEŞİNCİ DERS, geriye dönük
+> checkpoint)"]**
+> Önceki (kesilen) turda `types/index.ts` (`AuthenticatedUser.role` eklendi), `auth.ts`
+> (JWT/session callback'lerine `role` + `normalizeRole()` eklendi), `middleware.ts`
+> (`/personel/*` için role bazlı guard eklendi) üretilip [KARAR BİLDİRİMİ] ile sunulmuştu.
+> Kullanıcı 3 dosyayı + governance dosyalarını bu sohbete taşıdı; **kod tarafı henüz
+> onaylanmadı**, sadece SESSION_INDEX bu turda geriye dönük işleniyor.
+> **İki açık varsayım hâlâ AÇIK (kullanıcı onayı bekliyor):**
+> 1. `/personel/*` + oturumlu + `role: "customer"` → **403** (redirect DEĞİL) — tasarım
+>    kararı AI tarafından verildi, şema notu ikisini de olası bırakmıştı.
+> 2. `lib/auth/guest-gate.ts` VE `next-auth.d.ts` bu sohbette hâlâ görülmedi — `middleware.ts`
+>    guest-gate'e DOKUNMADAN yazıldı (varsayım), `auth.ts`/`middleware.ts`'teki
+>    `req.auth.user.role` erişimi `next-auth.d.ts` module augmentation olmadan TS hatası
+>    verebilir (runtime'da `as` cast ile güvenli okunuyor, ama tip güvenliği eksik).
+> **Yeni bulgu (dosya senkron kontrolü sırasında):** `types/index.ts`'in kendi yorum bloğu
+> hâlâ "auth.ts HENÜZ role set etmiyor" diyor — bu YANLIŞ, auth.ts fiilen set ediyor. Kod
+> senkron ama dokümantasyon yorumu geride kalmış → Açık Sorun #72 (yeni, aşağıda).
+> **Bu turda ÜRETİLEN kod YOK** — sadece SESSION_INDEX güncellendi ve yukarıdaki 3 nokta
+> (403 onayı, next-auth.d.ts, #72 yorum düzeltmesi) netleşene kadar `types/index.ts`/
+> `auth.ts`/`middleware.ts` "onaylandı" sayılmıyor (AGENT.md Kural #3).
+> **Kapanış gerekçesi:** Bu DERS kaydı (BEŞİNCİ DERS — onay alınmadan sohbetin kesilmesi
+> paterni) AGENT.md'nin GEÇMİŞ İHLAL KAYITLARI'na zaten işlenmiş olmalı; burada sadece
+> o turun ham anlatısı arşivleniyor. Açık varsayımların ikisi de sonraki turlarda
+> (403 onayı + next-auth.d.ts) kapandı.
+
+> **[Taşındı — 2026-08-08, "`users.role` migration KOŞULDU + DOĞRULANDI"]**
+> Önceki turda üretilen `20260808020000_users_role_alani_eklendi.md` şema notu temel
+> alınarak: (1) `lib/db/schema.ts`'e `role: text("role").notNull().default("customer")`
+> eklendi, kullanıcı bu dosyayı GitHub'a manuel kaydetti; (2) migration SQL'i
+> (`ALTER TABLE users ADD COLUMN IF NOT EXISTS role text NOT NULL DEFAULT 'customer';`)
+> Neon SQL Editor'de kullanıcı tarafından çalıştırıldı — "Statement executed successfully".
+> **Doğrulama (Tables görünümü, screenshot ile teyit edildi):** `users` tablosunda `role
+> text` sütunu mevcut. Tablo şu an **0 satır** (Twilio kısıtı #32 PARKLI olduğu için henüz
+> gerçek kullanıcı kaydı yok) — bu, migration'ın "mevcut kullanıcıyı kırma" riskini test
+> etmeyi imkânsız kıldı ama aynı zamanda bu riski de fiilen sıfırladı (kırılacak veri yoktu).
+> **`role` DB'de var ama HİÇBİR KODDA henüz OKUNMUYOR/YAZILMIYOR** — `types/index.ts`
+> (`AuthenticatedUser.role`), `auth.ts` (JWT session callback), `middleware.ts`
+> (`/personel/*` guard) hâlâ değiştirilmedi. AGENT.md Kural #5 ("tek problem, tek çözüm")
+> gereği bu üçü ayrı bir onay turunun konusu.
+> **Bu turda SADECE SESSION_INDEX güncellendi** — TEST_MATRIX.md güncellemesi dosya
+> paylaşılmadığı için BEKLEMEDE (gerekçesiz madde/test kaybı riskini önlemek için dosya
+> içeriği görülmeden düzenlenmedi).
+> **Kapanış gerekçesi:** `role` alanı sonraki turlarda kod tarafında tamamen bağlandı
+> (`types/index.ts`/`auth.ts`/`middleware.ts`), Vercel build yeşil doğrulandı — bu blok
+> sadece o sürecin migration adımının ham kaydı.
+
+> **[Taşındı — 2026-08-08, "Şema notu üretildi, migration henüz koşulmamıştı"]**
+> #62'nin 3 mimari sorusu (personel auth, real-time, onay kuyruğu UI) kullanıcı onayıyla
+> kapanmıştı; `users.role` için CORE.md §7.4 formatında şema değişiklik notu üretildi
+> (`20260808020000_users_role_alani_eklendi.md`), `lib/db/schema.ts` diff'i + migration
+> SQL'i artifact olarak sunuldu. Bu tur o adımın gerçek DB'ye uygulanmasıdır.
+> **Kapanış gerekçesi:** Migration bir sonraki turda koşuldu ve doğrulandı (yukarıdaki
+> blok) — bu, sadece şema notunun üretim anının ham kaydı.
+
+> **[Taşındı — 2026-08-08, "Masa Numarası Kararı, ARCHITECTURE.md v1.11"]** ⚠️
+> Önceki sohbet bu konuyu (masa numarası) konuşurken SESSION_INDEX güncellenmeden
+> kesilmişti — DÖRDÜNCÜ DERS'in tarif ettiği durumun bir tekrarı, bu sohbette geriye dönük
+> tamamlandı. **Karar (kullanıcı onaylı):** Masaya Sipariş akışında masa numarası
+> TUTULACAK — terk edilmeyecek. Gerekçe: QR akışının amacı "okut, saniyeler içinde
+> sipariş ver"; masa numarası olmadan personel siparişi hangi masaya götüreceğini
+> bilemez, bu da sürtünmesiz deneyimi sıfırlar. Session 9-12 arası bu konu hiç ele
+> alınmamış bir senkron boşluğuydu — §2.7a→§2.7b izolasyonu SADECE kimlik/rıza akışını
+> kaldırmıştı, masa numarasını değil. **Uygulama kararları:** (1) Route path segment —
+> `/masaya-siparis/[tableId]` (query param DEĞİL, projede o konvansiyon hiç yok);
+> (2) `tableId`, `useCartStore`'a alan olarak yazılır (`CartState.tableId` +
+> `setTableId()`) — ayrı state kurulmadı, paylaşılan sepetle tutarlı; (3) `order_history`'ye
+> nullable `table_number` kolonu eklenecek (SADECE channel="dine-in"). Bu (3), gerçek bir
+> DB şema değişikliği — CORE.md §7.4 formatında ayrı not üretildi:
+> `docs/schema-changes/20260808010000_order_history_tablenumber_eklendi.md`.
+> **ARCHITECTURE.md v1.10 → v1.11:** §2.3 (`CartState.tableId`), §2.7b (Masa numarası
+> kararı alt bölümü), §3 (`OrderHistoryEntry` yer tutucu notu), §4.1 (migration bekleyen
+> kolon notu) güncellendi.
+> ⚠️ **Öz-düzeltme (bu sohbette):** Bir önceki turda "`types/index.ts`'te `CartState`'e
+> `tableId` eklerim" denmişti — bu YANLIŞTI. `CartState`, `types/index.ts`'te tanımlı değil,
+> sadece ARCHITECTURE.md §2.3'te (`store/useCartStore.ts` kontratı olarak) dokümante
+> ediliyor. Düzeltme bu turda doğru yere (§2.3) yapıldı.
+> ⚠️ **#69'un kısmi yeniden değerlendirmesi:** #69 ("order_history.channel ayrımı YETERLİ,
+> ek alan gerekmiyor") gerekçesiz düşürülmedi — hâlâ doğru (channel ayrımı için). Ama farklı
+> bir soruyu (aynı kanal içinde HANGİ masa) hiç kapsamıyordu; bu yeni gereksinimle
+> `table_number` kolonu ekleniyor. #69 KAPALI kalıyor, kapsamı genişletildi (bkz. Açık Soru
+> #70, yeni).
+> **Bu turda SADECE dokümantasyon üretildi** (ARCHITECTURE.md + şema notu) — `store/useCartStore.ts`
+> kodu, `/masaya-siparis/[tableId]` route'u ve migration'ın kendisi HENÜZ YAZILMADI/KOŞULMADI.
+> **Kapanış gerekçesi:** Karar ARCHITECTURE.md v1.11'e kalıcı olarak işlendi (dosyanın
+> kendisinde yaşamaya devam ediyor); kodun kendisi (`store/useCartStore.ts`,
+> `/masaya-siparis/[tableId]`) SIRADAKİ GÖREVLER #1b'de aktif madde olarak duruyor —
+> madde kaybı yok, sadece bu ham anlatı arşive taşındı. #70 hâlâ AÇIK SORUNLAR'da aktif.
+
+> **[Taşındı — 2026-08-08, "🔴🐛 CANLI BUILD KIRIĞI BULUNDU VE ÇÖZÜLDÜ"]**
+> Kullanıcı Vercel build log'u paylaştı: `components/registration/channel-options.ts` hâlâ
+> `RegistrationChannel`'a `"masaya-siparis"` değeri atıyordu — bu değer #68 kararıyla
+> (ARCHITECTURE.md v1.9, Session 12 devamı) tipten ÇIKARILMIŞTI, ama bu dosya o turda hiç
+> görülmediği için güncellenmemiş kalmıştı. **Kök neden:** DEPENDENCIES.md'de
+> `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts` KAYITLI DEĞİLDİ — #68
+> kapanırken bu yüzden atlandı. Bu, ÜÇÜNCÜ DERS'in (Session 8) bir varyantı: "kod+test
+> yeterli değil" ilkesi burada "tip değişikliği tüm tüketicilere yayıldı mı" şekline
+> genişletilmeli.
+> **Düzeltme:** `channel-options.ts`'ten `"masaya-siparis"` seçeneği kaldırıldı — kullanıcı
+> onayıyla uygulandı. Tek tüketici `RegistrationForm.tsx` görüldü, `.map()` ile dinamik
+> render ediyor — sabit-index/sabit-genişlik varsayımı yok, kırılma riski taşımıyor
+> (confidence: HIGH). DB etkisi yok — `consentRegistrations.channel` enum değil düz `text`,
+> geçmiş `"masaya-siparis"` kayıtları (Session 9) etkilenmedi, sadece yeni kayıt formundan
+> bu seçenek kalktı.
+> **✅ [Önceki turda doğrulandı] 1d KAPANDI:** Kullanıcı Vercel deploy'unun yeşil olduğunu
+> teyit etti.
+> **Açık Sorun #71 hâlâ AÇIK:** DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak
+> `channel-options.ts`'i (ve muhtemelen başka görülmemiş dosyaları) hiç listelemiyor — tip
+> daraltma kararları verilirken bu dosya sistematik olarak taranmalı. DEPENDENCIES.md bu
+> sohbette paylaşıldı (v1.1, Session 3) ama #71'in düzeltmesi (RegistrationChannel
+> tüketicilerinin eksiksiz taranması) bu turun kapsamı dışında kaldı — ayrıca not: bu dosya
+> da genel olarak ESKİ (`useCartStore.tableId`, `order_history` gibi yeni alanlar/tablolar
+> haritada yok), bir sonraki uygun turda güncellenmeli.
+> **Kapanış gerekçesi:** Build kırığının kendisi düzeltildi ve deploy yeşil doğrulandı —
+> aktif takip gerektirmiyor. #71 (DEPENDENCIES.md'nin eskiliği) hâlâ AÇIK SORUNLAR
+> tablosunda aktif madde olarak duruyor, kayıp yok.
+
+---
