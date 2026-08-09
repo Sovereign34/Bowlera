@@ -395,3 +395,90 @@ KENDİSİ (panel UI+API+polling) hâlâ AÇIK.
 mimari sorusu (personel auth, real-time teknoloji, onay kuyruğu UI) — ARCHITECTURE.md
 v1.12'ye işlendi.
 
+# BOWLERA — session_arşiv_1.md'ye EKLENECEK BLOK
+> Taşıma tarihi: 2026-08-09. Gerekçe: CORE.md §7.1 Adım 1 (400 satır eşiği). Bu 4 blok
+> TAMAMEN kapanmış/geride kalmış durumda — içerikleri SESSION_INDEX.md'de başka yerlerde
+> (Açık Sorunlar #80, Kritik Kararlar tablosu satır "#75 mimari kararı") zaten kalıcı olarak
+> temsil ediliyor, turn-by-turn anlatı artık aktif takip gerektirmiyor.
+
+---
+
+> **[YENİ SOHBET (devamı, 7.), 2026-08-09 — #79 KÖK NEDEN BULUNDU, KOD ÜRETİLDİ]**
+> `AddToCartButton.tsx`, `MobileSummaryDrawer.tsx`, `useCustomizerStore.ts`, `useCartStore.ts`
+> paylaşıldı. Gerçek kök neden: `MobileSummaryDrawer.tsx`'teki `canAddToCart = isStepValid(5)`
+> yanlış kullanımı — Finish (adım 5) opsiyonel olduğu için `isStepValid(5)` `selections` BOŞ
+> olsa bile HER ZAMAN `true` döner, bu da "sepete eklemeye hazır mıyız" sorusuyla yanlışlıkla
+> eşleniyordu. `selections`'ın NEDEN/NEREDE sıfırlandığı (reset() hipotezi) hâlâ teyit
+> edilmedi — ama yeni `isReadyToAddToCart()` metodu (base+main+signatureFlavor'ı ayrı
+> kontrol eder, `isStepValid(5)`'in kendisine dokunmaz) SEBEP ne olursa olsun sonucu
+> engelliyor. `MobileSummaryDrawer.tsx` güncellendi, 7 testlik yeni `useCustomizerStore.test.ts`
+> üretildi. **KAPANMADI:** `SummaryPanel.tsx` (masaüstü) hâlâ görülmedi — aynı riski taşıyabilir;
+> test rerun/build/push/canlı doğrulama BEKLİYOR.
+
+> **[YENİ SOHBET (devamı, 6.), 2026-08-09 — #75'in canlı doğrulaması YAPILDI, BAŞARISIZ →
+> #79 YENİ AÇILDI]** Kullanıcı önceki turun #75 düzeltmesinin (selectionKey tabanlı kilit)
+> push+deploy edildiğini ONAYLADI. 4 ekran görüntüsüyle canlı test edildi: orijinal "çift
+> tık → görünmez kilit" belirtisi ortadan kalktı, AMA add-to-cart sonrası `selections`
+> state'inin "—"e sıfırlanması kilidi de sıfırlıyor — ikinci tıklama sepete BOŞ SEÇİMLİ,
+> ₺0.00 fiyatlı bir "Benim Kasem" daha ekliyor (kanıt: sepet ekran görüntüsünde 2 satır,
+> ₺103.00 + ₺0.00). Bu, #75'in KENDİSİNDEN farklı ama İLİŞKİLİ yeni bir kırılma — #79
+> olarak açıldı. Kök neden HENÜZ TEYİT EDİLMEDİ (hipotez var, confidence DÜŞÜK) — hiçbir
+> kaynak dosya bu sohbette paylaşılmadı, AGENT.md "eksik dosyayla çözüm üretme" kuralı
+> gereği kod üretilmedi. #75 bu nedenle KAPANMADI, #79'a bağımlı olarak yeniden açık.
+
+> **[YENİ SOHBET (devamı, 5.), 2026-08-09 — #75 derin çözüm turu, KOD TAMAM, TEST
+> RERUN/BUILD/PUSH/CANLI DOĞRULAMA BEKLİYOR — GERİYE DÖNÜK İŞLENDİ, bkz. ALTINCI DERS]**
+> **Kök teşhis:** `isAdding` bir `useRef` idi (state değil) → kilit fonksiyonel çalışıyordu
+> ama re-render tetiklemediği için buton görsel olarak HİÇ değişmiyordu (disabled/spinner/
+> "Eklendi" yok) → kullanıcı "çalışmadı sanıp" 500ms sonra gerçekten meşru sayılan bir
+> ikinci tıklama yapıyor, bu da duplicate ekliyordu. Yan bulgu: `bg-olive-primary` (#73'ün
+> kırık pattern'i) bu dosyada da vardı, #50'de "hiç görülmedi" idi — artık görüldü ve
+> `bg-[#53502A]`'ye çevrildi.
+> **3 iterasyonlu düzeltme:**
+> (1) `isAdding` → `useState`, buton artık "Ekleniyor…" gösteriyor.
+> (2) Süre-bazlı (500ms) kilit yetersiz bulundu → `selectionKey` (seçime bağlı kimlik,
+> `JSON.stringify(selections)`) tabanlı DURUM-bazlı kilide geçildi — `SummaryPanel.tsx`
+> bu key'i üretip geçiyor (confidence MEDIUM: `useCustomizerStore.ts`'in iç yapısı
+> görülmedi, `selections`'ın düz obje olduğu varsayıldı).
+> (3) `MobileSummaryDrawer.tsx`'te AYNI `<AddToCartButton>` çağrısına `selectionKey`
+> prop'u eksikti — bu, build'i kırıyordu (TypeScript prop tipi uyuşmazlığı). Eklendi;
+> bu bileşen #78'in kaynağıdır ama bu turda SADECE build kırığı düzeltildi, #78'in kendi
+> UX çözümüne (panel görünürlüğü) bilinçli olarak dokunulmadı (Kural #5 — ayrı konu, ayrı
+> karar).
+> **Testte yakalanan gerçek hata:** "kullanıcı DEĞİŞTİRİP tam aynı kombinasyona geri
+> dönerse kilit KORUNMALI" testi kırıldı — kök neden: tekil `lockedKey` seçim değişince
+> `null`'a sıfırlanıyordu, yani önceden eklenmiş kombinasyonları HATIRLAMIYORDU. Düzeltme:
+> `Set<string> addedKeys` — hem daha basit (artık `useEffect` gerekmiyor, `isAlreadyAdded`
+> doğrudan `addedKeys.has(selectionKey)`'den türetiliyor) hem daha doğru.
+> **Değişen dosyalar:** `AddToCartButton.tsx`, `SummaryPanel.tsx`, `MobileSummaryDrawer.tsx`
+> + `AddToCartButton.test.tsx` (revize, 8→10 test) + `MobileSummaryDrawer.test.tsx`
+> (regresyon testi eklendi). 4 kod/test dosyası SENKRON olmalı (biri eksik kalırsa
+> TypeScript hata verir).
+> ⚠️ **KAPANMADI — ÜÇÜNCÜ DERS + ALTINCI DERS gereği:** sohbet, `npx vitest run` sonucunun
+> (10/10 veya 12/12 PASS beklentisi), `npm run build`'in yerel yeşil çıktığının, VE
+> `git add . && git commit && git push`'un fiilen yapıldığının teyidi gelmeden kesildi.
+> Canlıda "Ekleniyor…" durumu + "Eklendi ✓" kalıcılığı + Base/Main/Flavor değişince
+> yeniden aktifleşme GÖZLE doğrulanmadan #75 TAM kapanmış sayılamaz.
+
+> **[YENİ SOHBET (devamı, 4.), 2026-08-09 — İsim gösterimi + 3 bug düzeltmesi, TAMAMLANDI ✅]**
+> **(1) Açık Sorun #59'un GERÇEK kökeni bulundu:** `router.push()` (client-side SPA nav)
+> next-auth'un `SessionProvider` cache'ini yenilemiyordu — `useRegistrationForm.ts`'e
+> `useSession().update()` eklendi, DOĞRULANDI (kullanıcı `/hesap`'a düştüğünü onayladı).
+> **(2) İsim gösterimi:** Kayıtta girilen isim SADECE `consentRegistrations.name`'e
+> yazılıyordu, `users.displayName` hiç dolmuyordu. `auth.ts`+`consent/route.ts`+`Header.tsx`
+> güncellendi — `signIn()` artık `displayName` de gönderiyor, `session.user.name` (next-auth
+> standart alanı, `next-auth.d.ts`'e dokunulmadı) Header'da gösteriliyor. DOĞRULANDI
+> (ekran görüntüsünde "bari" adı ikonun yanında görünüyor).
+> **(3) Ölü link:** `app/hesap/page.tsx`'teki `redirect("/giris")` — o sayfa Session 8'de
+> KALDIRILMIŞTI, oturumsuz kullanıcı 404'e düşüyordu. `/kayit-ol`'a düzeltildi.
+> **(4) Kaydet butonu görünmezliği:** `bg-olive-600` (hiç tanımlı değildi) →
+> `bg-olive-primary` (config'te var) denendi, YİNE görünmedi. Teşhis: `bg-red-500` DOĞRU
+> render oldu ama HİÇBİR custom `extend.colors` token'ı (`bg-olive-primary`) derlenmiyor —
+> kök neden BULUNAMADI (Açık Sorun #73, yeni). Kullanıcı kararıyla KALICI ÇÖZÜM: arbitrary
+> value (`bg-[#53502A]`) — DOĞRULANDI çalışıyor, DESIGN_SYSTEM.md §1 Kural 6'nın bilinçli
+> istisnası olarak koda not düşüldü.
+> **Değişen dosyalar:** `useRegistrationForm.ts`, `auth.ts`, `app/api/registration/consent/route.ts`,
+> `Header.tsx`, `app/hesap/page.tsx`, `components/account/ProfileForm.tsx` — HEPSİ deploy
+> edildi, build yeşil, kullanıcı ekran görüntüleriyle her adımı doğruladı.
+
+
