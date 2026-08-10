@@ -74,114 +74,59 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 10.), 2026-08-09 — #74 TAM KAPANDI ✅]**
-> **(1) Kod:** Çıkış (sign-out) mantığı `Header.tsx`'ten ayrıştırılıp `AccountMenu.tsx`'e
-> taşındı — hesap ikonuna tıklanınca "Hesabım"/"Çıkış Yap" menüsü açılıyor, next-auth'un
-> hazır `signOut({ callbackUrl: "/" })` fonksiyonu kullanıldı, yeni backend gerekmedi.
-> **(2) Test sürecinde bulunan gerçek bug:** `AccountMenu.test.tsx` (7 test, happy+edge+
-> failure) yazılırken failure testi bir açık ortaya çıkardı — `signOut()` çağrısı promise
-> reject olduğunda yakalanmıyordu (unhandled rejection), oysa dosyanın kendi yorumu "sessiz
-> başarısızlık" davranışını öngörüyordu. `.catch(() => {})` eklenerek koddaki gerçek
-> davranış, yorumdaki niyetle hizalandı.
-> **(3) Test altyapısı düzeltmesi:** İlk koşuda mock'un varsayılan dönüş değeri
-> tanımsızdı (`signOutMock` her çağrıda `undefined` dönüyordu), `.catch()` eklenince
-> `undefined.catch()` senkron `TypeError` fırlattı — `beforeEach`'e
-> `signOutMock.mockResolvedValue(undefined)` eklenerek çözüldü.
-> **(4) CANLI + TEST DOĞRULAMA TAM:** `npx vitest run AccountMenu` → 7/7 PASS, 0 error
-> (üç iterasyonluk teşhis: önce component'te unhandled rejection, sonra "hangi test"
-> yanlış atfı, sonunda mock'un varsayılan resolved value eksikliği bulundu ve düzeltildi).
-> Third Lesson'ın gerektirdiği hem kod+build hem test koşusu kontrol noktaları geçildi.
+> **[YENİ SOHBET (devamı, 11.), 2026-08-10 — #82 (telefon+şifre girişi) VE #83 (şifre
+> sıfırlama) KODLANDI + CANLIDA KISMEN DOĞRULANDI]**
+> **(1) #82 — mimari revizyon:** Önceki turda planlanan "telefon eşleşirse onay ekranı"
+> yaklaşımı kullanıcı kararıyla TERK EDİLDİ — gerçek güvenlik gerektiği için tam
+> telefon+şifre girişine geçildi. `bcryptjs` eklendi (native derleme sorunu yaratan
+> `bcrypt` yerine, Vercel serverless uyumluluğu için). `users.passwordHash` eklendi.
+> `authorize()`: telefon DB'de yoksa yeni kayıt (şifre hash'lenip kaydedilir), varsa
+> `bcrypt.compare` ile doğrulanır — eşleşmezse `null` (fail-closed). `consent/route.ts`
+> artık authorize()'ı çağırmadan ÖNCE telefonun var olup olmadığını kontrol ediyor — 409
+> ALREADY_REGISTERED dönerse form otomatik "giriş yap" moduna geçiyor (şifre asla sessizce
+> ezilmiyor). Yeni `app/api/auth/login/route.ts`. `verificationStatus`'un giriş erişimini
+> ETKİLEMEDİĞİNE karar verildi (sadece UI rozeti) — personel PATCH route'unda sipariş
+> "preparing"e geçince `users.verificationStatus` → `confirmed` hook'u eklendi.
+> **(2) #83 — şifre sıfırlama (OTP olmadığı için manuel):** Yeni `passwordResetRequests`
+> tablosu. Müşteri "Şifremi Unuttum"a basınca talep oluşuyor (rate-limitli). Personel
+> panelinde YENİ "Şifre Talepleri" sekmesi (dosyanın kendi eski notu — "Gel Al eklenince
+> 2 sekmeli olacak" — #83 ile şimdi gerçekleşti, Kural #5 ihlali değil, erken soyutlama
+> yapılmamıştı). Personel "Sıfırla"ya basınca `crypto.randomInt` ile 6 haneli kod üretiliyor
+> (Math.random DEĞİL — BSC-2), ekranda gösteriliyor, otomatik gönderim YOK (personel elle
+> WhatsApp/SMS'ten iletiyor).
+> **(3) Build/deploy sürecinde 2 gerçek hata bulundu ve düzeltildi:** (a) `consent-
+> registration.ts`'teki `upsertConsentRegistration` hâlâ eski `RegistrationData` (şifre
+> dahil) tipini bekliyordu — route artık şifreyi destructure ile çıkardığı için tip
+> uyuşmazlığı verdi, `Omit<RegistrationData, "password">` ile düzeltildi. (b) `Registration
+> Form.tsx`'te login modunda telefon alanı `readOnly` yapılmıştı (409-sonrası otomatik
+> geçişte telefon dolu kalsın diye) — ama sayfa yenilenince/manuel moda geçilince alan boş
+> VE yazılamaz kalıyordu, kullanıcı hiç giremiyordu. `readOnly` kaldırıldı.
+> **(4) Dosya yerleştirme hatası (kullanıcı tespit etti, KENDİ başına düzeltti):** Yeni
+> route/component dosyaları ("kolay tanınsın" diye verilen isimlerle, örn. `reset-request-
+> route.ts`, `personel-page.tsx`) yanlış klasör yapısına (`app/api/auth/reset-request-
+> route.ts` gibi düz dosya, doğrusu `app/api/auth/reset-request/route.ts`) commit edilmişti
+> — kullanıcı `mv` ile doğru konuma taşıdı, `find`/`ls` ile teyit etti.
+> **(5) CANLI DOĞRULAMA — KISMİ:** ✅ Kayıt+şifre akışı build+deploy yeşil. ✅ "Şifremi
+> Unuttum" → talep oluşturma CANLIDA doğrulandı (ekran görüntüsü: "Talebin alındı..."). ✅
+> Personel panelinde "Şifre Talepleri" sekmesi CANLIDA doğrulandı (bekleyen talep telefon
+> numarasıyla listelendi). ✅ Telefon+şifre girişi CANLIDA doğrulandı — ama Twilio döneminden
+> kalma bir hesabın (`passwordHash` boştu) Neon'da elle `crypt()`/`pgcrypto` ile şifre
+> atanıp o şifreyle giriş yapılarak (staff rolüyle `/personel`'e erişildi). ⚠️ **KALAN:**
+> "Sıfırla" butonuna basıp üretilen kodla GERÇEKTEN giriş yapma döngüsü henüz test
+> edilmedi; orijinal kayıt sırasında belirlenen şifreyle (Neon'da elle atanmadan) çıkış-
+> giriş döngüsü de ayrıca doğrulanmalı.
+> **(6) YENİ AÇIK SORUN — isim gösterilmiyor:** Kullanıcı giriş sonrası (kayıt sonrası
+> DEĞİL, spesifik olarak LOGIN akışında) Header'da ismin görünmediğini bildirdi.
+> `auth.ts`'in son hâli incelendi, `authorize()`'ın mevcut-kullanıcı dalı teorik olarak
+> DB'deki `displayName`'i doğru taşıyor görünüyor — kök neden BULUNAMADI, DB'de gerçekten
+> `display_name` dolu mu diye sorgu istendi ama kullanıcı #83'e odaklandığı için bu adım
+> YARIM KALDI (bkz. Açık Sorunlar #84).
 
-> **[YENİ SOHBET (devamı, 9.), 2026-08-09 — #62 MASAYA SEKMESİ UÇTAN UCA TAMAMLANDI VE
-> CANLIDA DOĞRULANDI ✅ — #70 KAPANDI]**
-> **(1) Şema genişletmesi (#62+#70 birleşik karar):** `order_history`'ye `status`
-> (`text NOT NULL DEFAULT 'pending'`), `table_number` (`text`, nullable — masa adları
-> sayısal olmayabilir), `customer_notes` (`text`, nullable) eklendi. Şema notu:
-> `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md`.
-> Migration (`ALTER TABLE` + `status` üzerine `CREATE INDEX`) Neon'da koşuldu, Tables
-> görünümünde DOĞRULANDI (ekran görüntüsü). #70'in iki açık sorusu kapandı: tip=`text`,
-> index sadece `status`'ta (`table_number` filtrelenmeyecek, sadece görüntülenecek).
-> **(2) `types/index.ts`:** `DineInOrderStatus`/`PickupOrderStatus`/`OrderStatus`,
-> `OrderItemSummary`, `OrderHistoryEntry` tipleri eklendi — panelin okuma modeli.
-> **(3) KRİTİK güvenlik düzeltmesi:** Panel API route'ları (`/api/personel/orders/*`)
-> planlanırken fark edildi — `middleware.ts`'in matcher'ı SADECE `/personel/:path*`
-> kapsıyordu, `/api/personel/*` guard'sızdı (yetki sızıntısı riski, personel olmayan
-> biri API'yi doğrudan çağırabilirdi). Kullanıcı onayıyla bu turda düzeltildi: matcher'a
-> `/api/personel/:path*` eklendi, guard mantığı API rotalarında JSON 401/403, sayfalarda
-> eski davranış (redirect/403 metin) döner. Aynı dosya zaten değiştiği için içindeki
-> eski "TASARIM KARARI (teyit bekliyor)" yorumu da senkronize edildi (SESSION_INDEX'e göre
-> bu karar zaten kapanmıştı, sadece yorum geride kalmıştı — ayrı görev açılmadı).
-> **(4) Kod üretildi (10 dosya):** `lib/personel/order-status.ts` (durum makinesi —
-> sunucu tarafında SADECE bir sonraki duruma geçişe izin verir, geri gitme/atlama
-> reddedilir), `lib/personel/api-guards.ts` (`requireStaffSession()` — middleware'e ek
-> defense-in-depth), `lib/personel/queries.ts` (DB sorguları route handler'lardan ayrık),
-> `app/api/personel/orders/route.ts` (GET — aktif dine-in kuyruğu), `app/api/personel/orders/[id]/route.ts`
-> (PATCH — durum ilerletme, sunucu tarafı validasyonlu), `hooks/usePersonelOrders.ts`
-> (5sn polling — ARCHITECTURE.md §2.9a "real-time=polling" kararı), `components/personel/OrderCard.tsx`
-> + `MasayaPanel.tsx` (DESIGN_SYSTEM.md paleti — Cream arka plan, Primary Olive CTA
-> arbitrary value `bg-[#53502A]`, bkz. #73), `app/personel/page.tsx`.
-> **(5) Edge case'ler ele alındı:** boş kuyruk ("Aktif sipariş yok"), `tableNumber: null`
-> güvenli gösterim ("—"), network hatası UI'ı çökertmiyor (sessiz retry + banner),
-> geri/atlama-durum geçişi UI'dan mümkün değil (sadece sıradaki durum butonu gösteriliyor).
-> Bilinçli ERTELENEN: eşzamanlı iki personelin aynı siparişi güncellemesi (optimistic lock
-> yok, son yazan kazanır), polling'in sekme arka plandayken duraklatılmaması (Page
-> Visibility API) — İKİSİ DE Açık Sorunlar'a not düşüldü (#81, aşağıda).
-> **(6) CANLI DOĞRULAMA TAM — Üçüncü Ders'in gerektirdiği ikinci kontrol noktası geçildi:**
-> `npm run build` yerelde ve Codespaces'te temiz koştu (route tablosunda `/personel` +
-> `/api/personel/orders(/[id])` hatasız listelendi), git push yapıldı, Vercel deploy
-> YEŞİL. Canlıda gerçek bir engelle karşılaşıldı ve ÇÖZÜLDÜ: kullanıcının `users.role`'ü
-> hâlâ `customer`'dı (staff olarak hiç set edilmemişti) — Neon'da elle `UPDATE` ile
-> `staff`'a çevrildi, ardından **JWT/session eski rolü taşımaya devam ettiği için** (aynı
-> kalıp: #59'daki `SessionProvider` cache sorunu) kullanıcı çıkış yapıp yeniden giriş yaptı
-> (çıkış butonu olmadığı fark edildi — bkz. #74 güncellemesi altta — `/api/auth/signout`'a
-> doğrudan gidilerek aşıldı). Yeniden girişten SONRA `/personel` 403 vermeden açıldı.
-> Neon'da elle 1 test siparişi (`dine-in`, masa "Bahçe 3", not "Az baharatlı olsun")
-> eklendi — panelde doğru kart olarak göründü (masa no, saat, ürün, not, "Bekliyor"
-> rozeti). "Hazırlanmaya Başla" butonuna tıklandı — durum "Hazırlanıyor"a geçti, buton
-> etiketi "Hazır Olarak İşaretle"ye döndü, polling listeyi otomatik tazeledi. **PATCH →
-> durum makinesi validasyonu → DB güncelleme → polling tazelemesi → UI güncellemesi**
-> zincirinin TAMAMI canlıda kanıtlandı.
-> **#62 KAPSAM NOTU:** SADECE Masaya sekmesi bu turda kapandı (§2.9a kararı — "önce Masaya,
-> Gel Al ayrı tur"). Gel Al onay kuyruğu HENÜZ YAZILMADI, #62 bu nedenle TAM kapanmadı —
-> Masaya kısmı ✅, Gel Al kısmı için #62 açık kalıyor (aşağıda SIRADAKİ GÖREVLER'de).
-
-> **[YENİ SOHBET (devamı, 8.), 2026-08-09 — #79'un iki test dosyası + masaüstü ayağı
-> düzeltildi, BUILD TEMİZ, GitHub'a MANUEL KAYDEDİLDİ — CANLI DOĞRULAMA HÂLÂ BEKLİYOR]**
-> **(1) `MobileSummaryDrawer.test.tsx` teşhisi:** Hata, önceki turda üretilen koddan değil,
-> ESKİ bir test mock'undan kaynaklanıyordu — `setupStore()` #75 döneminden (henüz
-> `isReadyToAddToCart` yokken) kalmıştı. Çözüm: mock'a gerçek store'daki mantığın aynısı
-> (`base`+`main`+`signatureFlavor` kontrolü) eklendi. Kod hatası değildi, sadece test dosyası
-> güncellendi.
-> **(2) `SummaryPanel.tsx` (masaüstü) doğrulandı:** #79'un AYNISI burada da vardı — buton
-> `isStepValid(5)`'e göre aktifleşiyordu, Finish adımı opsiyonel olduğu için `selections` boş
-> olsa bile her zaman `true` dönüyordu. Çözüm: `isStepValid` yerine `isReadyToAddToCart()`
-> kullanılacak şekilde güncellendi (SADECE 2 satır) — store'da hiçbir değişiklik gerekmedi,
-> metod zaten mevcuttu.
-> **(3) `SummaryPanel.test.tsx` güncellendi:** `mockStore()`'daki `overrides.isValid` zaten
-> genel amaçlı bir "buton aktif mi" bayrağıydı, `isReadyToAddToCart`'a aynen bağlanınca mevcut
-> 4 test DEĞİŞMEDEN geçti. 1 test adı (`isStepValid(5)` referansı) güncellendi, #79'un
-> masaüstü regresyon senaryosu için 1 yeni test eklendi.
-> **Değişen dosyalar (bu turda):** `SummaryPanel.tsx`, `SummaryPanel.test.tsx`,
-> `MobileSummaryDrawer.test.tsx`. (Not: `MobileSummaryDrawer.tsx` ve `useCustomizerStore.ts`
-> bu turdan ÖNCEKİ turda zaten GitHub'a kaydedilmişti.)
-> **Doğrulama:** `npm run build` yerelde koşuldu, route tablosu hatasız üretildi (temiz
-> çıktı) — build BAŞARILI kabul edildi. Kullanıcı git push kullanmadan yukarıdaki 3 dosyayı
-> GitHub'a MANUEL kaydettiğini onayladı.
-> ⚠️ **KISMEN KAPANDI — Üçüncü Ders gereği:** #79 tam "KAPANDI" değil. **MOBİL taraf
-> CANLIDA DOĞRULANDI** (kullanıcı: "Sepete Ekle sorunu çözüldü" — mobilde test edildi,
-> boş seçimle artık öğe eklenmiyor). **MASAÜSTÜ (`SummaryPanel.tsx`) HÂLÂ DOĞRULANMADI** —
-> aynı fix'in orada da çalıştığı ayrıca GÖRSEL olarak teyit edilmeli. #75 de aynı gerekçeyle
-> KISMEN açık: mobil senaryo (bu turda test edilen boş-seçim/₺0 belirtisi) düzeldi, ama
-> #75'in kendi orijinal belirtisi (çift tık → duplicate ekleme) bu turda AYRICA test
-> edilmedi — o da doğrulanmadan #75 tam kapanamaz.
-> ⚠️ Bu turun kendisi de YARIM KALDI — bkz. YEDİNCİ DERS (yukarı).
-> **[ÇÖZÜLDÜ — 2026-08-09, mobil canlı doğrulama]** Kullanıcı önceki turda paylaştığı
-> ekran görüntüsündeki (Base/Main/Flavor boş, "Sepete Ekle" görsel olarak aktif stildeydi)
-> butona fiilen tıkladı ve "Sepete Ekle sorunu çözüldü" olarak onayladı — boş seçimle artık
-> sepete öğe eklenmiyor. Görsel stil sorusu (buton gradient'inin disabled durumunu
-> göstermemesi) önemsiz kaldı — davranış doğru, sadece kozmetik bir ayrım olabilir, ayrı
-> bir görev olarak açılmadı (öncelik yok, kullanıcı rahatsız olmadı). **KALAN:** masaüstü
-> (`SummaryPanel.tsx`) aynı senaryoyla canlıda test edilmeli.
+> ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
+> kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
+> taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış gerekçesi: hepsi Kritik Kararlar
+> tablosunda ve/veya Açık Sorunlar tablosunda satır olarak zaten özetli duruyor, turn-by-turn
+> anlatı artık aktif takip gerektirmiyor. Taşıma bloğu ayrı olarak sunulacak.
 
 > ⚠️ **Arşiv taşıması — 2026-08-09:** 6 kapanmış CURRENT FOCUS bloğu (#62 kod kapanışı,
 > BEŞİNCİ DERS, `users.role` migration, şema notu üretimi, masa numarası kararı,
@@ -233,6 +178,8 @@
 | 🆕 | **[BU TURDA — #75 mimari kararı]** "Sepete Ekle" kilidi SÜRE-bazlı (500ms debounce) değil, DURUM-bazlı (`selectionKey` + `Set<string> addedKeys`) olacak — bir kombinasyon eklenince kalıcı "Eklendi ✓", SADECE seçim değişince yeniden aktif. Aynı kombinasyona geri dönülürse kilit KORUNUR (bilinçli, tekrar eklemeyi önler). | ✅ Karar netleşti, kod üretildi, TEST/BUILD/PUSH/canlı doğrulama BEKLİYOR |
 | 🗄️✅ | **[önceki tur — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. | ✅ Kod TAMAM, canlı build YEŞİL |
 | 🗄️✅ | **[BU TURDA — #62 MASAYA SEKMESİ UÇTAN UCA TAMAMLANDI + CANLI DOĞRULANDI]** `order_history` şeması genişletildi (`status`/`table_number`/`customer_notes`, migration koşuldu+doğrulandı, #70 KAPANDI). `middleware.ts` matcher'ına `/api/personel/:path*` eklendi (ÖNCEDEN korumasız olan API guard açığı kapatıldı). 10 dosya (durum makinesi, API route'ları, polling hook'u, `MasayaPanel`/`OrderCard`, sayfa) kodlandı. Canlıda gerçek bir test siparişiyle PATCH→durum makinesi→DB→polling→UI zinciri UÇTAN UCA doğrulandı (ekran görüntüleriyle). | ✅ Masaya kısmı TAMAM, canlı doğrulandı. Gel Al onay kuyruğu ayrı tur (#62 bu yüzden tam kapanmadı). |
+| 🆕 | **[BU TURDA — #82 KARARI, mimari revizyon]** Telefon eşleşirse "onay ekranı" fikri TERK EDİLDİ — gerçek güvenlik için tam telefon+şifre girişine geçildi (`bcryptjs`, `users.passwordHash`). `verificationStatus` giriş erişimini ETKİLEMEZ (sadece UI rozeti) — kimlik teyidi hâlâ personelin "preparing"e geçirme anı. | ✅ Karar netleşti, kod üretildi, canlıda KISMEN doğrulandı (bkz. Açık Sorunlar #82) |
+| 🆕 | **[BU TURDA — #83 KARARI]** Şifre sıfırlama tamamen manuel: müşteri talep açar → personel panelinde "Şifre Talepleri" sekmesinde görünür → personel 6 haneli kodu (crypto.randomInt) üretip WhatsApp/SMS'ten elle iletir. Otomatik gönderim YOK. | ✅ Karar netleşti, kod üretildi, canlıda KISMEN doğrulandı (bkz. Açık Sorunlar #83) |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -270,6 +217,9 @@
 | 81 | 🟢 | **[YENİ, bu turda — bilinçli erteleme]** Masaya Paneli'nde (1) iki personelin aynı siparişi eşzamanlı güncellemesine karşı optimistic lock yok (son yazan kazanır), (2) `usePersonelOrders` polling'i sekme arka plandayken duraklamıyor (Page Visibility API kullanılmadı). İkisi de MVP kapsamı dışı bırakıldı, kullanım yoğunlaşırsa ele alınmalı. | `hooks/usePersonelOrders.ts`, `app/api/personel/orders/[id]/route.ts` |
 | 80 | 🟢 | **[YENİ — kullanıcı kararıyla, 2026-08-09]** #79/#75 kapatıldı (mobil canlıda doğrulandı: "Sepete Ekle sorunu çözüldü"). Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — kod+test tarafı aynı (`isReadyToAddToCart()`), risk düşük görülüyor ama not olarak açık bırakılıyor. #75'in orijinal çift-tık/duplicate senaryosu da bu turda ayrıca test edilmedi. | `components/customizer/SummaryPanel.tsx` |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
+| 82 | 🟠 | **[YENİ, bu turda]** Telefon+şifre girişi (#82) kod+build+deploy TAMAM, kısmen canlı doğrulandı (bir hesap Neon'da elle şifre atanarak login edildi, staff paneline erişti). **KALAN:** orijinal kayıt akışında (Neon'a elle dokunmadan) belirlenen şifreyle çıkış→giriş döngüsü henüz test edilmedi — authorize()'ın "yeni kayıt" dalı (bcrypt.hash + insert) hiç canlı doğrulanmadı, sadece "mevcut kullanıcı" dalı (bcrypt.compare) doğrulandı. | `auth.ts`, `app/api/registration/consent/route.ts` |
+| 83 | 🟠 | **[YENİ, bu turda]** Şifre sıfırlama (#83) kod+build+deploy TAMAM. Talep oluşturma VE personel panelinde listelenme canlıda doğrulandı. **KALAN:** "Sıfırla" butonuna basıp üretilen 6 haneli kodla gerçekten giriş yapma döngüsü henüz test edilmedi. | `components/personel/PasswordResetPanel.tsx`, `lib/personel/password-reset-queries.ts` |
+| 84 | 🟠 | **[YENİ, bu turda]** Kullanıcı, LOGIN akışında (kayıt sonrası değil) Header'da isminin görünmediğini bildirdi. `auth.ts` incelendi, `authorize()`'ın mevcut-kullanıcı dalı teorik olarak `displayName`'i DB'den doğru taşıyor görünüyor — kök neden BULUNAMADI. Teşhis için istenen `SELECT phone, display_name ... WHERE phone = '+90...'` (E.164 formatında) sorgusu kullanıcı tarafından henüz doğru formatla çalıştırılmadı (ilk deneme yerel format `05...` ile "No result" döndü). | `auth.ts`, `Header.tsx` |
 
 > **KAPANDI (BU TURDA ✅):** #74 — `AccountMenu.tsx`'e çıkış (sign-out) butonu eklendi,
 > `AccountMenu.test.tsx` (7/7 PASS, 0 error) yazıldı, test süreci `signOut()`'un yakalanmamış
@@ -348,6 +298,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| -1 | **[YENİ, bu turda]** #84 — isim gösterilmiyor bug'ının kök nedeni: `SELECT phone, display_name, password_hash IS NOT NULL FROM users WHERE phone = '+90...'` (E.164 formatında!) Neon'da koşulup sonuç paylaşılmalı | 🔴 |
+| 0 | **[YENİ, bu turda]** #83 canlı doğrulamayı tamamla: "Sıfırla"ya bas, üretilen kodla giriş dene | 🔴 |
+| 0b | **[YENİ, bu turda]** #82 canlı doğrulamayı tamamla: Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü test edilmeli | 🟠 |
 | 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** #62 Masaya sekmesi (UI, `/api/personel/orders*` route'ları, polling, durum makinesi) uçtan uca kodlandı VE canlıda doğrulandı. Sırada: **#62'nin Gel Al onay kuyruğu** — ARCHITECTURE.md §2.9a'daki ikinci sekme, ilk-sipariş manuel onay akışı (`users.verificationStatus`/`contactAttempts` ile bağlantılı). | 🔴 |
@@ -387,8 +340,10 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v45 (v44'ten: #74 TAM KAPANDI ✅ — `AccountMenu.tsx`'e çıkış
-butonu eklendi, `.catch()` ile gerçek bir unhandled-rejection bug'ı düzeltildi,
-`AccountMenu.test.tsx` 7/7 PASS + 0 error ile kod+build+canlı+test dört kontrol noktası da
-tamamlandı. SIRADAKİ GÖREVLER'den 0b düşürüldü, Açık Sorunlar tablosundan #74 çıkarıldı.
-Güncellenme: 2026-08-09.*
+*BOWLERA SESSION_INDEX.md — v46 (v45'ten: #82 telefon+şifre girişi VE #83 şifre sıfırlama
+kodlandı, build+deploy yeşil, canlıda KISMEN doğrulandı — talep oluşturma+personel panel
+listelemesi + bir hesabın girişi doğrulandı, ama "Sıfırla"+yeni kodla giriş döngüsü ve
+orijinal-kayıt-şifresiyle giriş döngüsü henüz test edilmedi (#82/#83 açık sorun olarak
+kaldı). YENİ açık sorun #84: login sonrası isim gösterilmiyor, kök neden bulunamadı. 3 eski
+CURRENT FOCUS bloğu (#74, #62-Masaya, #79-masaüstü) session_arşiv_1.md'ye taşındı (400 satır
+eşiği). Güncellenme: 2026-08-10.*
