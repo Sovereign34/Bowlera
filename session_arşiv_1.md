@@ -480,5 +480,157 @@ v1.12'ye işlendi.
 > **Değişen dosyalar:** `useRegistrationForm.ts`, `auth.ts`, `app/api/registration/consent/route.ts`,
 > `Header.tsx`, `app/hesap/page.tsx`, `components/account/ProfileForm.tsx` — HEPSİ deploy
 > edildi, build yeşil, kullanıcı ekran görüntüleriyle her adımı doğruladı.
+---
+
+## [TAŞIMA — 2026-08-10, 13. sohbet devamı] SESSION_INDEX.md 400 satır eşiğini geçti (463 satır) — 4 CURRENT FOCUS bloğu buraya taşındı
+
+> CORE.md §7.1 Adım 1 gereği: bu 4 madde SESSION_INDEX.md'den TAMAMEN kaldırılmıştır (özetlenmemiş,
+> silinmemiş — TAM metinleriyle buraya taşınmıştır). Her biri için kapanış gerekçesi aşağıda.
+
+### 1) "SOHBET KAYBI" uyarı bloğu (v49→v50 arası kayıp sohbet)
+
+**Kapanış gerekçesi:** Bu blok, kayıp sohbetin kapsamını netleştirip "bilgi yokluğunda hiçbir
+madde tamamlandı sayılmasın" uyarısı içindi. O tarihten bu yana kayıp sohbetin etkilediği tüm
+alanlar (Gel Al #62 GERİYE DÖNÜK teyit, #82/#83/#84 canlı doğrulama, #86 Kayıt Onayları) ayrı
+ayrı ele alınıp Açık Sorunlar/GENEL DURUM tablolarında güncel duruma kavuşturuldu — blok artık
+aktif bir belirsizliği işaret etmiyor, sadece tarihsel bağlam.
+
+> ⚠️ **[YENİ SOHBET, 2026-08-10 — SOHBET KAYBI: içerik BİLİNMİYOR, sadece nihai durum
+> biliniyor]** Kullanıcı, bu dosyanın en son güncellendiği tur (v49) ile şu an arasında BİR
+> TAM SOHBET daha yaptı, ancak o sohbeti kazara SİLDİ — dosyalar, KARAR BİLDİRİMİ'leri,
+> hangi Açık Sorun/SIRADAKİ GÖREV maddelerinin ele alındığı BİLİNMİYOR. Kullanıcının
+> verebildiği tek somut bilgi: `npm run build` çalıştı ve site şu an CANLIDA çalışıyor
+> (deploy yeşil kabul ediliyor, kullanıcı gözlemiyle). **Bu, önceki YEDİ DERS'ten farklı bir
+> durum:** onlarda en azından KOD/KARAR bu sohbette görülmüştü, sadece checkpoint eksikti.
+> Burada içeriğin KENDİSİ kayıp — bu yüzden hiçbir SIRADAKİ GÖREV/Açık Sorun maddesi bu
+> notla "tamamlandı" işaretlenmiyor; bilgi yokluğunda böyle bir iddia doğrulanamaz (KARAR
+> BİLDİRİMİ ilkesiyle çelişir). **Kural:** SIRADAKİ GÖREVLER listesindeki bir maddeye
+> başlanmadan önce, o maddeyle ilgili dosyaların GÜNCEL (kayıp sohbette değişmiş olabilecek)
+> halini gerçek repodan/kullanıcıdan görmeden hiçbir varsayım yapılmayacak (Kural #2) —
+> aksi halde v49'daki bilgiyle çalışıp kayıp sohbetteki değişikliklerin üzerine yazma riski
+> var. Aşağıdaki GENEL DURUM ve SIRADAKİ GÖREVLER tabloları hâlâ v49 anlık görüntüsünü
+> yansıtıyor ve DOĞRULANMAMIŞ olarak ele alınmalı.
+
+### 2) "#62 Gel Al: npm run build YEŞİL (kullanıcı doğruladı), kalite/güvenlik bulguları AÇIK"
+
+**Kapanış gerekçesi:** Bu blok bir sonraki bloğa (madde 3) ve Açık Sorun #85'e TAMAMEN
+absorbe oldu — aynı bilgi (build yeşil, kalite bulguları açık) orada daha detaylı ve güncel
+olarak duruyor. Bağımsız bilgi kaybı yok.
+
+> **[YENİ SOHBET (devamı, 12. — aynı sohbetin devamı), 2026-08-10 — #62 Gel Al: `npm run
+> build` YEŞİL (kullanıcı doğruladı), kalite/güvenlik bulguları AÇIK]**
+> Kullanıcı `npm run build`'i çalıştırdı, sorun bildirmedi — **build tarafı YEŞİL kabul
+> edildi.** Ancak bu turda yapılan tam kod incelemesinde (statik, dosyalar zip'ten okunarak)
+> Kural #6 + BSC-4 + reduced-motion + 2 bayat yorum tespit edildi — bunlar build'i
+> ETKİLEMEZ ama "TAMAMLANDI" sayılmadan önce ayrıca ele alınmalı (CORE.md Kural #6: "Test
+> yoksa Claude modülü tamamlandı saymaz"). Detaylar Açık Sorun #85'te. **Hâlâ YAPILMADI:**
+> test seti (happy/edge/failure), canlı ortamda 3 aksiyonun (Onayla/Ulaşamadım/Reddet)
+> gerçek kullanıcı testi. Bu yüzden #62 satırı hâlâ tam KAPANMADI.
+
+### 3) "#62 Gel Al onay kuyruğu, KOD TARAFI TAMAMLANDI, build/test/canlı doğrulama BEKLİYOR"
+
+**Kapanış gerekçesi:** Bu bloktaki tüm teknik kararlar (buton tasarımı, dosya listesi,
+`types/index.ts`/`page.tsx` senkron teyidi) fiilen koda geçti ve Açık Sorunlar tablosundaki
+#62/#85 satırları + GENEL DURUM'daki "Personel Sipariş Paneli" satırı bunu güncel haliyle
+özetliyor. Turn-by-turn anlatı artık aktif takip gerektirmiyor.
+
+> **[YENİ SOHBET (devamı, 12.), 2026-08-10 — #62 Gel Al onay kuyruğu, KOD TARAFI
+> TAMAMLANDI, build/test/canlı doğrulama BEKLİYOR]**
+> ⚠️ **Yeniden tekrar eden desen (DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS'in DÖRDÜNCÜ+
+> tekrarı):** Önceki sohbette Gel Al onay kuyruğu için [KARAR BİLDİRİMİ] (confidence MEDIUM,
+> 2 açık nokta: `types/index.ts` görülmemişti + `page.tsx` entegrasyonu belirsizdi) verilmiş
+> ve kod muhtemelen kullanıcı tarafından uygulanmıştı — ama sohbet kapanırken SESSION_INDEX
+> güncellenmedi. Kullanıcı bu turda durumu bildirip iki dosyayı (`types/index.ts`,
+> `app/personel/page.tsx`) paylaştı, GERİYE DÖNÜK teyit bu turda yapıldı.
+> **(1) Tasarım kararı (önceki turdan taşındı):** Gel Al onay kartı — isim yoksa "İsimsiz
+> müşteri", deneme sayacı rozeti (3+ olunca kırmızı "⚠️ şüpheli" + kırmızı kenarlık), 3 buton
+> (Onayla=büyük/birincil, Ulaşamadım=orta/sayaç+1, Reddet=küçük/soluk/bilinçli az göze
+> çarpan). 7 dosya üretilmişti: `GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `gel-al-route.ts`
+> (→`app/api/personel/gel-al/route.ts`), `gel-al-id-route.ts`
+> (→`app/api/personel/gel-al/[id]/route.ts`), `gel-al-queries.ts`, `usePersonelGelAlQueue.ts`,
+> `types-EKLENECEK.ts`.
+> **(2) Açık nokta #1 KAPANDI — `types/index.ts` teyidi:** Dosya bu turda paylaşıldı.
+> `PickupApprovalEntry` (satır 256-265) zaten dosyada TAM SENKRON — `items:
+> OrderItemSummary[]`, `displayName: string | null`, `contactAttempts: number`, `status:
+> PickupOrderStatus` hepsi önceki turdaki MEDIUM-confidence çıkarımla birebir eşleşiyor.
+> **Confidence MEDIUM → HIGH yükseltildi** (tip katmanı için).
+> **(3) Açık nokta #2 KAPANDI — `page.tsx` entegrasyonu:** Dosya bu turda paylaşıldı.
+> Üçüncü sekme ("Gel Al") zaten eklenmiş — `GelAlPanel` import+render edilmiş, `Tab` union'ı
+> `"gel-al"` içeriyor. Kullanıcı bilinçli olarak Açık Sorun #73'teki kırık `border-olive-
+> primary` deseninden kaçınıp bilinen-çalışan `border-[#53502A]` (arbitrary value) desenini
+> kullanmış — dosyanın kendi niyet yorumunda da belirtilmiş (Kural #2/BİLEŞEN yorumu
+> disiplinine uygun).
+> **(4) HÂLÂ DOĞRULANMADI (bu yüzden #62-Gel Al "TAMAMLANDI" değil, "kod tamam, doğrulama
+> bekliyor"):** Diğer 5 dosya (`GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `gel-al-route.ts`,
+> `gel-al-id-route.ts`, `gel-al-queries.ts`, `usePersonelGelAlQueue.ts`) bu sohbette hiç
+> GÖRÜLMEDİ — build/test/canlı erişim teyidi yapılamadı (ÜÇÜNCÜ DERS: kod var olması ≠
+> kullanıcı deneyimi tamam). Ayrıca test seti (Kural #6 — happy path/edge case/failure path)
+> üretilip üretilmediği bu turda teyit edilmedi.
+> ⚠️ **SEKİZİNCİ DERS adayı (not olarak düşülüyor, ayrı bir DERS bloğu açılmadı — tekrar
+> eden kalıp zaten DÖRDÜNCÜ-YEDİNCİ DERS'te belgeli):** Bu, en az dördüncü kez yaşanan
+> "sohbet kapandı, SESSION_INDEX güncellenmeden kaldı, kullanıcı bir sonraki sohbete
+> dosyaları taşıyarak geriye dönük teyit ettirdi" örneği. Kural aynı kalıyor: mümkünse ara
+> KARAR BİLDİRİMİ'nden hemen sonra "beklemede" statüsüyle taslak satır düşülmeli.
+
+### 4) "#82 (telefon+şifre girişi), #83 (şifre sıfırlama) VE #84 (isim gösterme) — ÜÇÜ DE CANLIDA TAM DOĞRULANDI, KAPANDI"
+
+**Kapanış gerekçesi:** Blok başlığının kendisi zaten "KAPANDI" diyor — üçü de canlıda tam
+doğrulandı. SIRADAKİ GÖREVLER tablosundaki -1/0/0b satırları (✅ TAMAMLANDI) ve GENEL
+DURUM'daki "Auth" satırı bu kapanışı zaten özetliyor, turn-by-turn anlatı aktif takip
+gerektirmiyor.
+
+> **[YENİ SOHBET (devamı, 11.), 2026-08-10 — #82 (telefon+şifre girişi), #83 (şifre
+> sıfırlama) VE #84 (isim gösterme) — ÜÇÜ DE CANLIDA TAM DOĞRULANDI, KAPANDI]**
+> **(1) #82 — mimari revizyon:** Önceki turda planlanan "telefon eşleşirse onay ekranı"
+> yaklaşımı kullanıcı kararıyla TERK EDİLDİ — gerçek güvenlik gerektiği için tam
+> telefon+şifre girişine geçildi. `bcryptjs` eklendi (native derleme sorunu yaratan
+> `bcrypt` yerine, Vercel serverless uyumluluğu için). `users.passwordHash` eklendi.
+> `authorize()`: telefon DB'de yoksa yeni kayıt (şifre hash'lenip kaydedilir), varsa
+> `bcrypt.compare` ile doğrulanır — eşleşmezse `null` (fail-closed). `consent/route.ts`
+> artık authorize()'ı çağırmadan ÖNCE telefonun var olup olmadığını kontrol ediyor — 409
+> ALREADY_REGISTERED dönerse form otomatik "giriş yap" moduna geçiyor (şifre asla sessizce
+> ezilmiyor). Yeni `app/api/auth/login/route.ts`. `verificationStatus`'un giriş erişimini
+> ETKİLEMEDİĞİNE karar verildi (sadece UI rozeti) — personel PATCH route'unda sipariş
+> "preparing"e geçince `users.verificationStatus` → `confirmed` hook'u eklendi.
+> **(2) #83 — şifre sıfırlama (OTP olmadığı için manuel):** Yeni `passwordResetRequests`
+> tablosu. Müşteri "Şifremi Unuttum"a basınca talep oluşuyor (rate-limitli). Personel
+> panelinde YENİ "Şifre Talepleri" sekmesi (dosyanın kendi eski notu — "Gel Al eklenince
+> 2 sekmeli olacak" — #83 ile şimdi gerçekleşti, Kural #5 ihlali değil, erken soyutlama
+> yapılmamıştı). Personel "Sıfırla"ya basınca `crypto.randomInt` ile 6 haneli kod üretiliyor
+> (Math.random DEĞİL — BSC-2), ekranda gösteriliyor, otomatik gönderim YOK (personel elle
+> WhatsApp/SMS'ten iletiyor).
+> **(3) Build/deploy sürecinde 2 gerçek hata bulundu ve düzeltildi:** (a) `consent-
+> registration.ts`'teki `upsertConsentRegistration` hâlâ eski `RegistrationData` (şifre
+> dahil) tipini bekliyordu — route artık şifreyi destructure ile çıkardığı için tip
+> uyuşmazlığı verdi, `Omit<RegistrationData, "password">` ile düzeltildi. (b) `Registration
+> Form.tsx`'te login modunda telefon alanı `readOnly` yapılmıştı (409-sonrası otomatik
+> geçişte telefon dolu kalsın diye) — ama sayfa yenilenince/manuel moda geçilince alan boş
+> VE yazılamaz kalıyordu, kullanıcı hiç giremiyordu. `readOnly` kaldırıldı.
+> **(4) Dosya yerleştirme hatası (kullanıcı tespit etti, KENDİ başına düzeltti):** Yeni
+> route/component dosyaları ("kolay tanınsın" diye verilen isimlerle, örn. `reset-request-
+> route.ts`, `personel-page.tsx`) yanlış klasör yapısına (`app/api/auth/reset-request-
+> route.ts` gibi düz dosya, doğrusu `app/api/auth/reset-request/route.ts`) commit edilmişti
+> — kullanıcı `mv` ile doğru konuma taşıdı, `find`/`ls` ile teyit etti.
+> **(5) CANLI DOĞRULAMA — KISMİ:** ✅ Kayıt+şifre akışı build+deploy yeşil. ✅ "Şifremi
+> Unuttum" → talep oluşturma CANLIDA doğrulandı (ekran görüntüsü: "Talebin alındı..."). ✅
+> Personel panelinde "Şifre Talepleri" sekmesi CANLIDA doğrulandı (bekleyen talep telefon
+> numarasıyla listelendi). ✅ Telefon+şifre girişi CANLIDA doğrulandı — ilk turda Twilio
+> döneminden kalma bir hesabın (`passwordHash` boştu) Neon'da elle `crypt()`/`pgcrypto` ile
+> şifre atanıp o şifreyle giriş yapılarak (staff rolüyle `/personel`'e erişildi).
+> ✅ **[Aynı sohbet, devamı] TAMAMLANDI:** "Sıfırla" butonuna basıldı, üretilen 6 haneli
+> geçici kodla (460244) giriş DENENDİ VE BAŞARILI oldu (ekran görüntüsüyle doğrulandı) — #83
+> TAM kapandı. ✅ **TAMAMLANDI:** orijinal kayıt sırasında belirlenen şifreyle (Neon'a elle
+> dokunmadan) çıkış→giriş döngüsü de ayrıca test edildi ve BAŞARILI oldu — #82 TAM kapandı,
+> `authorize()`'ın "yeni kayıt"/mevcut kullanıcı dallarının ikisi de artık canlı doğrulanmış
+> durumda.
+> **(6) #84 — isim gösterilmiyor, ÇÖZÜLDÜ (ama kök neden FORMEL olarak izole edilmedi):**
+> Kullanıcı giriş sonrası Header'da ismin görünmediğini bildirmişti. Teşhis için istenen
+> `SELECT phone, display_name ... WHERE phone = '+90...'` sorgusu hiç koşulmadı — bunun
+> yerine kullanıcı sonraki turda (#83 canlı doğrulama sırasında) ekran görüntüsüyle Header'da
+> "bari" isminin göründüğünü doğruladı. ⚠️ **Not:** Kök neden teknik olarak KANITLANMADI —
+> muhtemel açıklama, aynı turda yapılan `authorize()`/JWT-session değişikliklerinin (bkz. #82
+> mimari revizyonu) yan etkisiyle düzelmiş olması, ama bu doğrulanmadı. Regresyon riski
+> düşük görülüyor (kullanıcı deneyimi seviyesinde doğrulandı) ama kesin izolasyon
+> yapılmadığından ileride tekrar edebilir.
 
 
