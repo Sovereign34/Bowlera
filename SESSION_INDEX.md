@@ -69,70 +69,60 @@
 > "başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
 > kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
 > ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
+> ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
+> (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
+> FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
+> bloğu) TAM metinleriyle `session_arşiv_1.md`'ye taşındı — kullanıcıya ayrı bir eklenti
+> dosyası (`session_arsiv_1_EKLENTI_2026-08-10.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_1.md`'nizin sonuna eklemeniz gerekiyor. Her taşınan madde için kapanış
+> gerekçesi o dosyada mevcut.
 
 ---
 
 ## 🎯 CURRENT FOCUS
-
-> **[YENİ SOHBET (devamı, 11.), 2026-08-10 — #82 (telefon+şifre girişi), #83 (şifre
-> sıfırlama) VE #84 (isim gösterme) — ÜÇÜ DE CANLIDA TAM DOĞRULANDI, KAPANDI]**
-> **(1) #82 — mimari revizyon:** Önceki turda planlanan "telefon eşleşirse onay ekranı"
-> yaklaşımı kullanıcı kararıyla TERK EDİLDİ — gerçek güvenlik gerektiği için tam
-> telefon+şifre girişine geçildi. `bcryptjs` eklendi (native derleme sorunu yaratan
-> `bcrypt` yerine, Vercel serverless uyumluluğu için). `users.passwordHash` eklendi.
-> `authorize()`: telefon DB'de yoksa yeni kayıt (şifre hash'lenip kaydedilir), varsa
-> `bcrypt.compare` ile doğrulanır — eşleşmezse `null` (fail-closed). `consent/route.ts`
-> artık authorize()'ı çağırmadan ÖNCE telefonun var olup olmadığını kontrol ediyor — 409
-> ALREADY_REGISTERED dönerse form otomatik "giriş yap" moduna geçiyor (şifre asla sessizce
-> ezilmiyor). Yeni `app/api/auth/login/route.ts`. `verificationStatus`'un giriş erişimini
-> ETKİLEMEDİĞİNE karar verildi (sadece UI rozeti) — personel PATCH route'unda sipariş
-> "preparing"e geçince `users.verificationStatus` → `confirmed` hook'u eklendi.
-> **(2) #83 — şifre sıfırlama (OTP olmadığı için manuel):** Yeni `passwordResetRequests`
-> tablosu. Müşteri "Şifremi Unuttum"a basınca talep oluşuyor (rate-limitli). Personel
-> panelinde YENİ "Şifre Talepleri" sekmesi (dosyanın kendi eski notu — "Gel Al eklenince
-> 2 sekmeli olacak" — #83 ile şimdi gerçekleşti, Kural #5 ihlali değil, erken soyutlama
-> yapılmamıştı). Personel "Sıfırla"ya basınca `crypto.randomInt` ile 6 haneli kod üretiliyor
-> (Math.random DEĞİL — BSC-2), ekranda gösteriliyor, otomatik gönderim YOK (personel elle
-> WhatsApp/SMS'ten iletiyor).
-> **(3) Build/deploy sürecinde 2 gerçek hata bulundu ve düzeltildi:** (a) `consent-
-> registration.ts`'teki `upsertConsentRegistration` hâlâ eski `RegistrationData` (şifre
-> dahil) tipini bekliyordu — route artık şifreyi destructure ile çıkardığı için tip
-> uyuşmazlığı verdi, `Omit<RegistrationData, "password">` ile düzeltildi. (b) `Registration
-> Form.tsx`'te login modunda telefon alanı `readOnly` yapılmıştı (409-sonrası otomatik
-> geçişte telefon dolu kalsın diye) — ama sayfa yenilenince/manuel moda geçilince alan boş
-> VE yazılamaz kalıyordu, kullanıcı hiç giremiyordu. `readOnly` kaldırıldı.
-> **(4) Dosya yerleştirme hatası (kullanıcı tespit etti, KENDİ başına düzeltti):** Yeni
-> route/component dosyaları ("kolay tanınsın" diye verilen isimlerle, örn. `reset-request-
-> route.ts`, `personel-page.tsx`) yanlış klasör yapısına (`app/api/auth/reset-request-
-> route.ts` gibi düz dosya, doğrusu `app/api/auth/reset-request/route.ts`) commit edilmişti
-> — kullanıcı `mv` ile doğru konuma taşıdı, `find`/`ls` ile teyit etti.
-> **(5) CANLI DOĞRULAMA — KISMİ:** ✅ Kayıt+şifre akışı build+deploy yeşil. ✅ "Şifremi
-> Unuttum" → talep oluşturma CANLIDA doğrulandı (ekran görüntüsü: "Talebin alındı..."). ✅
-> Personel panelinde "Şifre Talepleri" sekmesi CANLIDA doğrulandı (bekleyen talep telefon
-> numarasıyla listelendi). ✅ Telefon+şifre girişi CANLIDA doğrulandı — ilk turda Twilio
-> döneminden kalma bir hesabın (`passwordHash` boştu) Neon'da elle `crypt()`/`pgcrypto` ile
-> şifre atanıp o şifreyle giriş yapılarak (staff rolüyle `/personel`'e erişildi).
-> ✅ **[Aynı sohbet, devamı] TAMAMLANDI:** "Sıfırla" butonuna basıldı, üretilen 6 haneli
-> geçici kodla (460244) giriş DENENDİ VE BAŞARILI oldu (ekran görüntüsüyle doğrulandı) — #83
-> TAM kapandı. ✅ **TAMAMLANDI:** orijinal kayıt sırasında belirlenen şifreyle (Neon'a elle
-> dokunmadan) çıkış→giriş döngüsü de ayrıca test edildi ve BAŞARILI oldu — #82 TAM kapandı,
-> `authorize()`'ın "yeni kayıt"/mevcut kullanıcı dallarının ikisi de artık canlı doğrulanmış
-> durumda.
-> **(6) #84 — isim gösterilmiyor, ÇÖZÜLDÜ (ama kök neden FORMEL olarak izole edilmedi):**
-> Kullanıcı giriş sonrası Header'da ismin görünmediğini bildirmişti. Teşhis için istenen
-> `SELECT phone, display_name ... WHERE phone = '+90...'` sorgusu hiç koşulmadı — bunun
-> yerine kullanıcı sonraki turda (#83 canlı doğrulama sırasında) ekran görüntüsüyle Header'da
-> "bari" isminin göründüğünü doğruladı. ⚠️ **Not:** Kök neden teknik olarak KANITLANMADI —
-> muhtemel açıklama, aynı turda yapılan `authorize()`/JWT-session değişikliklerinin (bkz. #82
-> mimari revizyonu) yan etkisiyle düzelmiş olması, ama bu doğrulanmadı. Regresyon riski
-> düşük görülüyor (kullanıcı deneyimi seviyesinde doğrulandı) ama kesin izolasyon
-> yapılmadığından ileride tekrar edebilir.
 
 > ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
 > kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
 > taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış gerekçesi: hepsi Kritik Kararlar
 > tablosunda ve/veya Açık Sorunlar tablosunda satır olarak zaten özetli duruyor, turn-by-turn
 > anlatı artık aktif takip gerektirmiyor. Taşıma bloğu ayrı olarak sunulacak.
+
+> **[YENİ SOHBET (devamı, 13.), 2026-08-10 — #86 Kayıt Onayları (4. sekme), KOD TARAFI
+> TAMAMLANDI, build/test/canlı doğrulama BEKLİYOR]**
+> **(1) Kapsam:** `users.verificationStatus: "pending"→"confirmed"` — Gel Al'ın onayladığı
+> SİPARİŞLERDEN (`orderHistory`) ayrı, ilgisiz bir akış: bu panel doğrudan KAYITLARI
+> (`users`) onaylıyor. Liste `users.createdAt` sırasına göre (en eski üstte), Gel Al
+> kuyruğuyla aynı desen. 2 aksiyon: Teyit Et (`verificationStatus="confirmed"`), Reddet/Sil
+> (hem `users` hem `consentRegistrations` satırı `customerPhone` eşleşmesiyle KALICI silinir).
+> **(2) Referans dosyalar zip'ten (`Bowlera_site-main`) tam repo taramasıyla doğrulandı:**
+> `GelAlPanel.tsx`, `gel-al-queries.ts`, `gel-al/route.ts`, `gel-al/[id]/route.ts`,
+> `api-guards.ts`, `usePersonelGelAlQueue.ts`, `GelAlOrderCard.tsx` — hepsi görüldü, aynı
+> iskelet bilinçli olarak kopyalandı (Kural #5 gerekçesiyle ortak üst bileşene ÇIKARILMADI).
+> **(3) Çakışma notu ele alındı:** Masaya'nın #82 auto-confirm'ü (`preparing`'e geçince
+> `verificationStatus="confirmed"`) ve Gel Al'ın confirm'ü de aynı alana yazıyor — ama liste
+> sorgusu zaten `verificationStatus="pending"` filtreli olduğu için gerçek bir çakışma değil,
+> kayıt başka bir yoldan confirm olursa bu kuyruktan otomatik düşer.
+> **(4) Gel Al'dan sapan tek nokta (bilinçli, KARAR BİLDİRİMİ'nde gerekçeli):** race
+> durumunda 404 "zaten işlenmiş" dönebilmesi için `confirmRegistration`/`deleteRegistration`
+> içine varlık kontrolü eklendi — Gel Al'ın basit UPDATE'inde bu kontrol yok, oradaki risk
+> orderId bazlı olduğu için daha düşük görülmüştü.
+> **(5) 8 dosya üretildi (kullanıcıya TAM dosya olarak verildi, "eklenecek" notu YOK —
+> önceki turda bu konuda kullanıcı şikâyeti oldu, düzeltildi):** `types/index.ts` (tam dosya,
+> `RegistrationApprovalEntry` eklendi), `lib/personel/kayit-onaylari-queries.ts`,
+> `app/api/personel/kayit-onaylari/route.ts`, `app/api/personel/kayit-onaylari/[id]/route.ts`,
+> `hooks/usePersonelRegistrationQueue.ts`, `components/personel/KayitOnayCard.tsx`,
+> `components/personel/KayitOnaylariPanel.tsx`, `app/personel/page.tsx` (4. sekme eklenmiş
+> tam dosya, `border-[#53502A]` bilinen-çalışan deseni kullanıldı, #73'teki kırık
+> `border-olive-primary`'den kaçınıldı).
+> **(6) [GÜNCELLEME, aynı sohbet devamı] Build tarafı DOĞRULANDI:** Kullanıcı Codespaces'te
+> `tsc --noEmit` (hatasız) ve `npm run build` (route tablosu/boyut özeti üretildi — bu,
+> Next.js'in SADECE başarılı derlemede yazdırdığı bir çıktı, dolaylı ama güvenilir kanıt)
+> çalıştırdı, sonucu GitHub'a manuel push etti (bu arada ilgisiz 4 eski dosya —
+> `orders/[id]/confirm`+`reject` route'ları, `WhatsAppOrderButton.tsx`+testi — kullanıcı
+> tarafından BİLİNÇLİ olarak ayrıca silinmiş, kayıt onayları değişikliğiyle ilgisi yok).
+> #86 build tarafı KAPANDI. **HÂLÂ DOĞRULANMADI:** test seti (Kural #6) yok, canlı ortamda
+> (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bekleyen kayıtla hiç test
+> edilmedi. middleware.ts'e DOKUNULMADI (öneki `/api/personel` zaten kapsıyor).
 
 > ⚠️ **Arşiv taşıması — 2026-08-09:** 6 kapanmış CURRENT FOCUS bloğu (#62 kod kapanışı,
 > BEŞİNCİ DERS, `users.role` migration, şema notu üretimi, masa numarası kararı,
@@ -214,7 +204,9 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 62 | 🟡 | Personel Sipariş Paneli — **Masaya sekmesi BU TURDA TAMAMLANDI + canlı doğrulandı** (UI, API route'ları, polling, durum makinesi — hepsi çalışıyor). **KALAN:** Gel Al ilk-sipariş manuel onay kuyruğu (§2.9a'da "ayrı tur" olarak bilinçli ertelenmişti) HENÜZ YAZILMADI. | ARCHITECTURE.md §2.9a |
+| 62 | 🟠 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. **Gel Al onay kuyruğu:** 7 dosya kodlandı, tam repo zip'inden statik incelendi, `types/index.ts`+`page.tsx` senkron (HIGH confidence), **`npm run build` YEŞİL (kullanıcı doğruladı)**. **KALAN:** test seti yok + BSC-4/reduced-motion/bayat yorum bulguları (bkz. #85) + canlı ortamda 3 aksiyon (Onayla/Ulaşamadım/Reddet) hiç test edilmedi. | ARCHITECTURE.md §2.9a |
+| 85 | 🟡 | **[YENİ, bu turda]** Gel Al kod incelemesi bulguları: (1) `GelAlPanel.tsx` `catch{}` sessiz — BSC-4, MasayaPanel'deki AYNI kalıbın tekrarı; (2) `GelAlOrderCard.tsx` `hover:scale-[1.02]` reduced-motion kontrolsüz; (3) `GelAlOrderCard.tsx` + `gel-al-queries.ts`'de BAYAT yorum ("types/index.ts'e eklenecek" — artık eklenmiş durumda, BEŞİNCİ DERS kalıbı); (4) eşzamanlı-güncelleme/optimistic-lock riski (#81'in Masaya'daki karşılığı) Gel Al için hiç loglanmamış; (5) test seti (Kural #6) hiç yok. Build'i etkilemiyor ama "tamamlandı" sayılmadan önce ele alınmalı. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` |
+| 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, tam repo zip'inden statik incelendi, Gel Al deseniyle tutarlı. Kullanıcı Codespaces'te `tsc --noEmit` (hatasız) VE `npm run build` (route tablosu/size özeti başarıyla üretildi — Next.js bu tabloyu SADECE derleme başarılıyken yazdırır) çalıştırdı, GitHub'a push edildi. **Build tarafı KAPANDI.** **KALAN:** test seti (Kural #6) yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi (ÜÇÜNCÜ DERS — kod+build ≠ kullanıcı deneyimi doğrulandı). | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
 | 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
@@ -300,7 +292,7 @@
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. **[Bu turda]** `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). |
-| Personel Sipariş Paneli (#62) | 🟢 **Masaya sekmesi TAMAMLANDI + canlı doğrulandı** (UI, `/api/personel/orders*` API'leri, polling, durum makinesi). `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. **KALAN:** Gel Al onay kuyruğu (ikinci sekme) HENÜZ YAZILMADI. |
+| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟠 Gel Al onay kuyruğu (3. sekme) — tip katmanı + `page.tsx` entegrasyonu teyit edildi, tam kod incelendi, `npm run build` YEŞİL. Test seti + BSC-4/reduced-motion bulguları (#85) + canlı doğrulama BEKLİYOR. 🟡 **[Bu turda]** Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, **`npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi)**. Test seti + canlı doğrulama BEKLİYOR. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). |
 
 ---
@@ -314,7 +306,8 @@
 | 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
 | 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
-| 1 | **[TAMAMLANDI, bu turda ✅]** #62 Masaya sekmesi (UI, `/api/personel/orders*` route'ları, polling, durum makinesi) uçtan uca kodlandı VE canlıda doğrulandı. Sırada: **#62'nin Gel Al onay kuyruğu** — ARCHITECTURE.md §2.9a'daki ikinci sekme, ilk-sipariş manuel onay akışı (`users.verificationStatus`/`contactAttempts` ile bağlantılı). | 🔴 |
+| 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). **[Bu turda]** Gel Al onay kuyruğu — 7 dosya kodlandı+incelendi, `npm run build` YEŞİL. **KALAN:** #85'teki 5 bulgu (test seti, BSC-4, reduced-motion, 2 bayat yorum, race-condition notu) ele alınmalı, sonra canlı doğrulama (Onayla/Ulaşamadım/Reddet üçü de). | 🟠 |
+| 1c | **[Bu turda]** #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI (Codespaces'te `tsc --noEmit` + `npm run build` başarılı, GitHub'a push edildi). **KALAN:** test seti yazılmalı, canlı ortamda (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bir bekleyen kayıtla test edilmeli. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
@@ -351,10 +344,7 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v47 (v46'dan: #82 VE #83'ün KALAN canlı doğrulama döngüleri
-tamamlandı — "Sıfırla"+üretilen kodla giriş (460244) BAŞARILI, orijinal kayıt şifresiyle
-çıkış→giriş döngüsü BAŞARILI — ikisi de TAM KAPANDI. #84 (login sonrası isim gösterilmiyor)
-kullanıcı tarafından canlıda ("bari" görünür, ekran görüntüsü) doğrulandı ve KAPANDI —
-⚠️ kök neden SQL sorgusuyla formel izole edilmedi, muhtemelen #82'nin auth.ts/JWT-session
-değişikliğinin yan etkisi ama kanıtlanmadı. Açık Sorunlar tablosundan #82/#83/#84 silindi,
-KAPANDI bloğuna eklendi. Güncellenme: 2026-08-10.*
+*BOWLERA SESSION_INDEX.md — v53 (v52'den: 400 satır eşiği aşıldığı için 4 kapanmış CURRENT
+FOCUS bloğu `session_arşiv_1.md`'ye taşındı — bkz. üstteki TAŞIMA NOTU + ayrı eklenti
+dosyası. İçerik/karar/durum DEĞİŞMEDİ, sadece dosya hafifletildi (463→~344 satır).
+Güncellenme: 2026-08-10.*
