@@ -74,8 +74,8 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 11.), 2026-08-10 — #82 (telefon+şifre girişi) VE #83 (şifre
-> sıfırlama) KODLANDI + CANLIDA KISMEN DOĞRULANDI]**
+> **[YENİ SOHBET (devamı, 11.), 2026-08-10 — #82 (telefon+şifre girişi), #83 (şifre
+> sıfırlama) VE #84 (isim gösterme) — ÜÇÜ DE CANLIDA TAM DOĞRULANDI, KAPANDI]**
 > **(1) #82 — mimari revizyon:** Önceki turda planlanan "telefon eşleşirse onay ekranı"
 > yaklaşımı kullanıcı kararıyla TERK EDİLDİ — gerçek güvenlik gerektiği için tam
 > telefon+şifre girişine geçildi. `bcryptjs` eklendi (native derleme sorunu yaratan
@@ -109,18 +109,24 @@
 > **(5) CANLI DOĞRULAMA — KISMİ:** ✅ Kayıt+şifre akışı build+deploy yeşil. ✅ "Şifremi
 > Unuttum" → talep oluşturma CANLIDA doğrulandı (ekran görüntüsü: "Talebin alındı..."). ✅
 > Personel panelinde "Şifre Talepleri" sekmesi CANLIDA doğrulandı (bekleyen talep telefon
-> numarasıyla listelendi). ✅ Telefon+şifre girişi CANLIDA doğrulandı — ama Twilio döneminden
-> kalma bir hesabın (`passwordHash` boştu) Neon'da elle `crypt()`/`pgcrypto` ile şifre
-> atanıp o şifreyle giriş yapılarak (staff rolüyle `/personel`'e erişildi). ⚠️ **KALAN:**
-> "Sıfırla" butonuna basıp üretilen kodla GERÇEKTEN giriş yapma döngüsü henüz test
-> edilmedi; orijinal kayıt sırasında belirlenen şifreyle (Neon'da elle atanmadan) çıkış-
-> giriş döngüsü de ayrıca doğrulanmalı.
-> **(6) YENİ AÇIK SORUN — isim gösterilmiyor:** Kullanıcı giriş sonrası (kayıt sonrası
-> DEĞİL, spesifik olarak LOGIN akışında) Header'da ismin görünmediğini bildirdi.
-> `auth.ts`'in son hâli incelendi, `authorize()`'ın mevcut-kullanıcı dalı teorik olarak
-> DB'deki `displayName`'i doğru taşıyor görünüyor — kök neden BULUNAMADI, DB'de gerçekten
-> `display_name` dolu mu diye sorgu istendi ama kullanıcı #83'e odaklandığı için bu adım
-> YARIM KALDI (bkz. Açık Sorunlar #84).
+> numarasıyla listelendi). ✅ Telefon+şifre girişi CANLIDA doğrulandı — ilk turda Twilio
+> döneminden kalma bir hesabın (`passwordHash` boştu) Neon'da elle `crypt()`/`pgcrypto` ile
+> şifre atanıp o şifreyle giriş yapılarak (staff rolüyle `/personel`'e erişildi).
+> ✅ **[Aynı sohbet, devamı] TAMAMLANDI:** "Sıfırla" butonuna basıldı, üretilen 6 haneli
+> geçici kodla (460244) giriş DENENDİ VE BAŞARILI oldu (ekran görüntüsüyle doğrulandı) — #83
+> TAM kapandı. ✅ **TAMAMLANDI:** orijinal kayıt sırasında belirlenen şifreyle (Neon'a elle
+> dokunmadan) çıkış→giriş döngüsü de ayrıca test edildi ve BAŞARILI oldu — #82 TAM kapandı,
+> `authorize()`'ın "yeni kayıt"/mevcut kullanıcı dallarının ikisi de artık canlı doğrulanmış
+> durumda.
+> **(6) #84 — isim gösterilmiyor, ÇÖZÜLDÜ (ama kök neden FORMEL olarak izole edilmedi):**
+> Kullanıcı giriş sonrası Header'da ismin görünmediğini bildirmişti. Teşhis için istenen
+> `SELECT phone, display_name ... WHERE phone = '+90...'` sorgusu hiç koşulmadı — bunun
+> yerine kullanıcı sonraki turda (#83 canlı doğrulama sırasında) ekran görüntüsüyle Header'da
+> "bari" isminin göründüğünü doğruladı. ⚠️ **Not:** Kök neden teknik olarak KANITLANMADI —
+> muhtemel açıklama, aynı turda yapılan `authorize()`/JWT-session değişikliklerinin (bkz. #82
+> mimari revizyonu) yan etkisiyle düzelmiş olması, ama bu doğrulanmadı. Regresyon riski
+> düşük görülüyor (kullanıcı deneyimi seviyesinde doğrulandı) ama kesin izolasyon
+> yapılmadığından ileride tekrar edebilir.
 
 > ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
 > kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
@@ -178,8 +184,8 @@
 | 🆕 | **[BU TURDA — #75 mimari kararı]** "Sepete Ekle" kilidi SÜRE-bazlı (500ms debounce) değil, DURUM-bazlı (`selectionKey` + `Set<string> addedKeys`) olacak — bir kombinasyon eklenince kalıcı "Eklendi ✓", SADECE seçim değişince yeniden aktif. Aynı kombinasyona geri dönülürse kilit KORUNUR (bilinçli, tekrar eklemeyi önler). | ✅ Karar netleşti, kod üretildi, TEST/BUILD/PUSH/canlı doğrulama BEKLİYOR |
 | 🗄️✅ | **[önceki tur — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. | ✅ Kod TAMAM, canlı build YEŞİL |
 | 🗄️✅ | **[BU TURDA — #62 MASAYA SEKMESİ UÇTAN UCA TAMAMLANDI + CANLI DOĞRULANDI]** `order_history` şeması genişletildi (`status`/`table_number`/`customer_notes`, migration koşuldu+doğrulandı, #70 KAPANDI). `middleware.ts` matcher'ına `/api/personel/:path*` eklendi (ÖNCEDEN korumasız olan API guard açığı kapatıldı). 10 dosya (durum makinesi, API route'ları, polling hook'u, `MasayaPanel`/`OrderCard`, sayfa) kodlandı. Canlıda gerçek bir test siparişiyle PATCH→durum makinesi→DB→polling→UI zinciri UÇTAN UCA doğrulandı (ekran görüntüleriyle). | ✅ Masaya kısmı TAMAM, canlı doğrulandı. Gel Al onay kuyruğu ayrı tur (#62 bu yüzden tam kapanmadı). |
-| 🆕 | **[BU TURDA — #82 KARARI, mimari revizyon]** Telefon eşleşirse "onay ekranı" fikri TERK EDİLDİ — gerçek güvenlik için tam telefon+şifre girişine geçildi (`bcryptjs`, `users.passwordHash`). `verificationStatus` giriş erişimini ETKİLEMEZ (sadece UI rozeti) — kimlik teyidi hâlâ personelin "preparing"e geçirme anı. | ✅ Karar netleşti, kod üretildi, canlıda KISMEN doğrulandı (bkz. Açık Sorunlar #82) |
-| 🆕 | **[BU TURDA — #83 KARARI]** Şifre sıfırlama tamamen manuel: müşteri talep açar → personel panelinde "Şifre Talepleri" sekmesinde görünür → personel 6 haneli kodu (crypto.randomInt) üretip WhatsApp/SMS'ten elle iletir. Otomatik gönderim YOK. | ✅ Karar netleşti, kod üretildi, canlıda KISMEN doğrulandı (bkz. Açık Sorunlar #83) |
+| 🆕 | **[BU TURDA — #82 KARARI, mimari revizyon]** Telefon eşleşirse "onay ekranı" fikri TERK EDİLDİ — gerçek güvenlik için tam telefon+şifre girişine geçildi (`bcryptjs`, `users.passwordHash`). `verificationStatus` giriş erişimini ETKİLEMEZ (sadece UI rozeti) — kimlik teyidi hâlâ personelin "preparing"e geçirme anı. | ✅ Karar netleşti, kod üretildi, canlıda TAM doğrulandı — #82 KAPANDI |
+| 🆕 | **[BU TURDA — #83 KARARI]** Şifre sıfırlama tamamen manuel: müşteri talep açar → personel panelinde "Şifre Talepleri" sekmesinde görünür → personel 6 haneli kodu (crypto.randomInt) üretip WhatsApp/SMS'ten elle iletir. Otomatik gönderim YOK. | ✅ Karar netleşti, kod üretildi, canlıda TAM doğrulandı — #83 KAPANDI |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -217,10 +223,15 @@
 | 81 | 🟢 | **[YENİ, bu turda — bilinçli erteleme]** Masaya Paneli'nde (1) iki personelin aynı siparişi eşzamanlı güncellemesine karşı optimistic lock yok (son yazan kazanır), (2) `usePersonelOrders` polling'i sekme arka plandayken duraklamıyor (Page Visibility API kullanılmadı). İkisi de MVP kapsamı dışı bırakıldı, kullanım yoğunlaşırsa ele alınmalı. | `hooks/usePersonelOrders.ts`, `app/api/personel/orders/[id]/route.ts` |
 | 80 | 🟢 | **[YENİ — kullanıcı kararıyla, 2026-08-09]** #79/#75 kapatıldı (mobil canlıda doğrulandı: "Sepete Ekle sorunu çözüldü"). Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — kod+test tarafı aynı (`isReadyToAddToCart()`), risk düşük görülüyor ama not olarak açık bırakılıyor. #75'in orijinal çift-tık/duplicate senaryosu da bu turda ayrıca test edilmedi. | `components/customizer/SummaryPanel.tsx` |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
-| 82 | 🟠 | **[YENİ, bu turda]** Telefon+şifre girişi (#82) kod+build+deploy TAMAM, kısmen canlı doğrulandı (bir hesap Neon'da elle şifre atanarak login edildi, staff paneline erişti). **KALAN:** orijinal kayıt akışında (Neon'a elle dokunmadan) belirlenen şifreyle çıkış→giriş döngüsü henüz test edilmedi — authorize()'ın "yeni kayıt" dalı (bcrypt.hash + insert) hiç canlı doğrulanmadı, sadece "mevcut kullanıcı" dalı (bcrypt.compare) doğrulandı. | `auth.ts`, `app/api/registration/consent/route.ts` |
-| 83 | 🟠 | **[YENİ, bu turda]** Şifre sıfırlama (#83) kod+build+deploy TAMAM. Talep oluşturma VE personel panelinde listelenme canlıda doğrulandı. **KALAN:** "Sıfırla" butonuna basıp üretilen 6 haneli kodla gerçekten giriş yapma döngüsü henüz test edilmedi. | `components/personel/PasswordResetPanel.tsx`, `lib/personel/password-reset-queries.ts` |
-| 84 | 🟠 | **[YENİ, bu turda]** Kullanıcı, LOGIN akışında (kayıt sonrası değil) Header'da isminin görünmediğini bildirdi. `auth.ts` incelendi, `authorize()`'ın mevcut-kullanıcı dalı teorik olarak `displayName`'i DB'den doğru taşıyor görünüyor — kök neden BULUNAMADI. Teşhis için istenen `SELECT phone, display_name ... WHERE phone = '+90...'` (E.164 formatında) sorgusu kullanıcı tarafından henüz doğru formatla çalıştırılmadı (ilk deneme yerel format `05...` ile "No result" döndü). | `auth.ts`, `Header.tsx` |
 
+
+> **KAPANDI (BU TURDA ✅):** #82 + #83 + #84 — üçü de canlıda TAM doğrulandı. #82: orijinal
+> kayıt şifresiyle (Neon'a elle dokunmadan) çıkış→giriş döngüsü BAŞARILI. #83: "Sıfırla" →
+> üretilen geçici kod (460244) → o kodla giriş BAŞARILI. #84: Header'da isim ("bari")
+> canlıda görünür durumda (ekran görüntüsüyle doğrulandı) — ⚠️ kök neden FORMEL olarak
+> izole edilmedi (istenen SQL sorgusu hiç koşulmadı), muhtemelen #82'nin auth.ts/JWT-session
+> değişikliklerinin yan etkisi, ama bu kanıtlanmadı; regresyon riski düşük görülüyor.
+>
 > **KAPANDI (BU TURDA ✅):** #74 — `AccountMenu.tsx`'e çıkış (sign-out) butonu eklendi,
 > `AccountMenu.test.tsx` (7/7 PASS, 0 error) yazıldı, test süreci `signOut()`'un yakalanmamış
 > reject durumunu ortaya çıkardı ve `.catch(() => {})` ile düzeltildi. Kod+build+canlı
@@ -284,7 +295,7 @@
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. `lib/db/schema.ts` (users.role eklendi) kullanıcı tarafından manuel push edildi. ✅ Önceki turdaki `channel-options.ts` build kırığı düzeltildi, Vercel deploy YEŞİL (1d KAPANDI). |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 (Personel Sipariş Paneli) hiç işlenmemiş, ayrı bir oturum/kalem olarak eklenmesi gerekebilir. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı (DB var, kod yok). |
 | Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). Genel `npm test` hâlâ tekrar çalıştırılmadı. ⚠️ `users.role` migration'ı için TEST_MATRIX.md güncellemesi BEKLEMEDE (dosya paylaşılmadı). |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. **[Bu turda]** `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya (`types/index.ts`, `auth.ts`, `middleware.ts`, `types/next-auth.d.ts`) senkron, canlı build yeşil doğrulandı. |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Bu turda]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
@@ -298,9 +309,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -1 | **[YENİ, bu turda]** #84 — isim gösterilmiyor bug'ının kök nedeni: `SELECT phone, display_name, password_hash IS NOT NULL FROM users WHERE phone = '+90...'` (E.164 formatında!) Neon'da koşulup sonuç paylaşılmalı | 🔴 |
-| 0 | **[YENİ, bu turda]** #83 canlı doğrulamayı tamamla: "Sıfırla"ya bas, üretilen kodla giriş dene | 🔴 |
-| 0b | **[YENİ, bu turda]** #82 canlı doğrulamayı tamamla: Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü test edilmeli | 🟠 |
+| -1 | **[TAMAMLANDI, bu turda ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda ("bari" görünür) doğrulandı. Kök neden SQL sorgusuyla izole edilmedi, kullanıcı deneyimi seviyesinde kapandı. | ✅ |
+| 0 | **[TAMAMLANDI, bu turda ✅]** #83 — "Sıfırla" → üretilen geçici kodla (460244) giriş canlıda BAŞARILI test edildi. | ✅ |
+| 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
 | 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | **[TAMAMLANDI, bu turda ✅]** #62 Masaya sekmesi (UI, `/api/personel/orders*` route'ları, polling, durum makinesi) uçtan uca kodlandı VE canlıda doğrulandı. Sırada: **#62'nin Gel Al onay kuyruğu** — ARCHITECTURE.md §2.9a'daki ikinci sekme, ilk-sipariş manuel onay akışı (`users.verificationStatus`/`contactAttempts` ile bağlantılı). | 🔴 |
@@ -340,10 +351,10 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v46 (v45'ten: #82 telefon+şifre girişi VE #83 şifre sıfırlama
-kodlandı, build+deploy yeşil, canlıda KISMEN doğrulandı — talep oluşturma+personel panel
-listelemesi + bir hesabın girişi doğrulandı, ama "Sıfırla"+yeni kodla giriş döngüsü ve
-orijinal-kayıt-şifresiyle giriş döngüsü henüz test edilmedi (#82/#83 açık sorun olarak
-kaldı). YENİ açık sorun #84: login sonrası isim gösterilmiyor, kök neden bulunamadı. 3 eski
-CURRENT FOCUS bloğu (#74, #62-Masaya, #79-masaüstü) session_arşiv_1.md'ye taşındı (400 satır
-eşiği). Güncellenme: 2026-08-10.*
+*BOWLERA SESSION_INDEX.md — v47 (v46'dan: #82 VE #83'ün KALAN canlı doğrulama döngüleri
+tamamlandı — "Sıfırla"+üretilen kodla giriş (460244) BAŞARILI, orijinal kayıt şifresiyle
+çıkış→giriş döngüsü BAŞARILI — ikisi de TAM KAPANDI. #84 (login sonrası isim gösterilmiyor)
+kullanıcı tarafından canlıda ("bari" görünür, ekran görüntüsü) doğrulandı ve KAPANDI —
+⚠️ kök neden SQL sorgusuyla formel izole edilmedi, muhtemelen #82'nin auth.ts/JWT-session
+değişikliğinin yan etkisi ama kanıtlanmadı. Açık Sorunlar tablosundan #82/#83/#84 silindi,
+KAPANDI bloğuna eklendi. Güncellenme: 2026-08-10.*
