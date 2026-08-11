@@ -82,31 +82,25 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 14.), 2026-08-11 — Sekme rozetleri + DESIGN_SYSTEM.md §2.2
-> istisnası, TAMAMLANDI, GitHub'a push edildi]**
-> **(1) Kapsam:** Personel panelindeki 4 sekmeden 3'üne (Şifre Talepleri, Gel Al, Kayıt
-> Onayları) bekleyen kayıt sayısını gösteren kırmızı rozet eklendi. Masaya'ya BİLİNÇLİ
-> olarak eklenmedi — kullanıcı kararı: `/masaya-siparis` yüzeyi henüz hiç kodlanmadı
-> (1b), dükkan küçük olduğu için gerekli görülmedi.
-> **(2) Tasarım sistemi çakışması bulundu ve çözüldü:** DESIGN_SYSTEM.md §2 renk
-> paletinde kırmızı hiç yok, §7.3 açıkça "yeni bir uyarı kırmızısı YOK" diyor — ama
-> kullanıcı personel için kırmızının "acil aksiyon" anlamını önemsedi. **Karar:** dar
-> kapsamlı istisna eklendi (§2.2, v1.2) — SADECE `/personel/*` rotalarında standart
-> Tailwind `red-700`/`red-800` izinli, müşteri yüzü sayfalarda yasak aynen sürüyor. Yan
-> bulgu: `GelAlOrderCard.tsx`'teki mevcut şüpheli-deneme rozeti zaten kırmızı kullanıyordu
-> (fark edilmemiş bir tutarsızlıktı, #85 turunda kontrol edilmemişti) — bu istisna o
-> kullanımı GERİYE DÖNÜK resmileştirdi, yeni bir sapma yaratmadı.
-> **(3) 2 yeni/değişen dosya:** `hooks/usePersonelPasswordResetQueue.ts` (YENİ —
-> `PasswordResetPanel.tsx`'e HİÇ dokunulmadı, panelden bağımsız ayrı bir hook), `app/
-> personel/page.tsx` (3 sekmeye `TabBadge` bileşeni + rozet mantığı eklendi).
-> **(4) Bilinçli trade-off (kod içi yorumla belgelendi):** Gel Al ve Kayıt Onayları
-> sekmesi aktifken ilgili API endpoint'i 5sn aralıkla 2 KEZ sorgulanıyor (biri rozet
-> için page.tsx'te, biri panelin kendi iç hook'u için) — state'i page.tsx'e taşıyıp
-> panellere prop geçirmek daha fazla dosyaya dokunmayı gerektirirdi (Kural #5), dükkan
-> küçük olduğu için DB yükü önemsiz görüldü.
-> **(5) Kullanıcı 3 dosyayı da GitHub'a push ettiğini onayladı. HÂLÂ DOĞRULANMADI:**
-> test yazılmadı (rozet sayısının doğru göründüğü/0 iken gizlendiği test edilmedi),
-> canlı ortamda (Vercel) görsel olarak hiç kontrol edilmedi.
+> **[YENİ SOHBET (devamı, 14.), 2026-08-11 — #38 kod+push TAMAM, canlı doğrulama BEKLİYOR]**
+> `RegistrationForm.tsx`'in Tailwind sınıfları #73 açısından teyit edildi — submit
+> butonundaki `bg-olive-primary`/`text-cream` (önceki turda "düzeltildi" denmişti ama
+> #73'ün DE aynı kırık desende olduğu daha sonra bulunmuştu) VE iki mod-değiştirme
+> linkindeki `text-espresso` (hiç test edilmemişti) hepsi arbitrary value'ya çevrildi —
+> #38/#50/#79 ile AYNI kalıcı çözüm. Renk DEĞİŞMEDİ. Kullanıcı push etti, **görsel canlı
+> kontrol henüz yapılmadı** — ÜÇÜNCÜ DERS gereği bu olmadan #38 TAM kapanmış sayılamaz.
+
+> ⚠️ **Arşiv taşıması — 2026-08-11 (devamı):** 1b(ii) kapsam-dışı kararının kapanmış
+> CURRENT FOCUS bloğu `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır
+> eşiği). Kapanış gerekçesi: karar Kritik Kararlar tablosunda, 1b satırında ve #66
+> satırında zaten tam özetli duruyor.
+
+> ⚠️ **Arşiv taşıması — 2026-08-11 (3. kez):** Sekme rozetleri + DESIGN_SYSTEM.md §2.2
+> istisnası bloğu `session_arşiv_2.md`'ye (TAŞIMA BLOĞU #2 olarak) taşındı — CORE.md §7.1
+> Adım 1 (400 satır eşiği #38 kapanışıyla tekrar aşıldı). Kapanış gerekçesi: içerik Açık
+> Sorunlar tablosunda (#88), GENEL DURUM satırında ve DESIGN_SYSTEM.md v1.2 notunda zaten
+> özetli. Taşıma bloğu ayrı eklenti (`session_arsiv_2_EKLENTI_2026-08-11.md`) olarak
+> verildi, kendi elinizle `session_arşiv_2.md`'nin sonuna ekleyin.
 
 > ⚠️ **Arşiv taşıması — 2026-08-11:** Kapanmış #85 CURRENT FOCUS bloğu
 > `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği aşıldı).
@@ -217,6 +211,7 @@
 | 🆕 | **[BU TURDA — #82 KARARI, mimari revizyon]** Telefon eşleşirse "onay ekranı" fikri TERK EDİLDİ — gerçek güvenlik için tam telefon+şifre girişine geçildi (`bcryptjs`, `users.passwordHash`). `verificationStatus` giriş erişimini ETKİLEMEZ (sadece UI rozeti) — kimlik teyidi hâlâ personelin "preparing"e geçirme anı. | ✅ Karar netleşti, kod üretildi, canlıda TAM doğrulandı — #82 KAPANDI |
 | 🆕 | **[BU TURDA — #83 KARARI]** Şifre sıfırlama tamamen manuel: müşteri talep açar → personel panelinde "Şifre Talepleri" sekmesinde görünür → personel 6 haneli kodu (crypto.randomInt) üretip WhatsApp/SMS'ten elle iletir. Otomatik gönderim YOK. | ✅ Karar netleşti, kod üretildi, canlıda TAM doğrulandı — #83 KAPANDI |
 | 🆕 | **[BU TURDA — #85 bulgu 4 KARARI]** Gel Al'da eşzamanlı güncelleme koruması: `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (ucuz+doğru, her koşulda yapılır). `confirmPickupOrder`/`rejectPickupOrder` için optimistic lock EKLENMEDİ — kullanıcı beyanı: tek personel/tek masaüstü panel, pratik risk düşük. Masaya/#81 ile aynı kapsam kararı, #87 olarak loglandı. | ✅ Karar netleşti, kod+test üretildi, 15/15 PASS, push edildi |
+| 🆕 | **[BU TURDA — 1b(ii) KARARI, 2026-08-11]** `/masaya-siparis/[tableId]/*` (müşterinin kendi masasından sipariş vermesi) RESMEN KAPSAM DIŞI bırakıldı — gerekçe: dükkan küçük, personel masa siparişini zaten eliyle giriyor. **Personel-tarafı Masaya PANELİ (#62, `/personel` sekmesi) bu karardan ETKİLENMEDİ** — o zaten kod+canlı doğrulama ile TAMAMLANDI, sadece personelin kendi girdiği siparişleri yönetiyor. #66 (Sepete Ekle bypass guard) bu kapsam dışı bırakmadan bağımsız hâle geldi, hâlâ ayrı bir karar bekliyor. | ✅ Karar netleşti, kod değişikliği YOK (zaten kodlanmamıştı, sadece hedef listeden çıkarıldı) |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -232,7 +227,7 @@
 | 28/29 | 🟢 | Customizer adım başlıkları hâlâ İngilizce | `components/customizer/Step*.tsx` |
 | 32 | 🟠 | Twilio TR SMS kısıtı — PARKLI (`users` tablosunun hâlâ 0 satır olmasının kök nedeni) | `lib/auth/send-otp.ts` |
 | 34 | 🟢 | `VisualPreview.tsx`'in `className` davranışı — tam repo taraması eksik | `components/customizer/VisualPreview.tsx` |
-| 38 | 🟠 | **[Bu turda kısmen çözüldü]** `ProfileForm.tsx`'teki `bg-olive-600` KIRIKTI (tanımsız sınıf) — `bg-olive-primary`'ye çevrildi, O DA derlenmedi (bkz. #73). Kalıcı çözüm: `bg-[#53502A]` (arbitrary value). `RegistrationForm.tsx`'in Tailwind sınıfları hâlâ TAM teyit edilmedi — #73 bulgusuna göre AYNI riski taşıyabilir. | `components/registration/RegistrationForm.tsx` |
+| 38 | 🟡 | **[BU TURDA — kod+push TAMAM, canlı doğrulama BEKLİYOR]** `RegistrationForm.tsx`'te AYNI #73 kırık deseni doğrulandı ve düzeltildi: submit butonundaki `bg-olive-primary`/`text-cream` VE iki linkteki `text-espresso` (bu üçü daha önce hiç test edilmemişti) arbitrary value'ya (`bg-[#53502A]`/`text-[#F4F0E7]`/`text-[#38221D]`) çevrildi. Kullanıcı GitHub'a push etti. **KALAN:** ÜÇÜNCÜ DERS gereği canlıda butonun gerçekten göründüğü GÖZLE doğrulanmadı. | `components/registration/RegistrationForm.tsx` |
 | 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
 | 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
@@ -251,7 +246,7 @@
 | 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri (Şifre Talepleri/Gel Al/Kayıt Onayları) kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. Ayrıca Gel Al/Kayıt Onayları sekmesi aktifken ilgili endpoint 5sn'de 2 kez sorgulanıyor (rozet + panel ayrı hook, bilinçli trade-off) — kullanım yoğunlaşırsa state page.tsx'e taşınıp panellere prop geçirilmesi düşünülebilir. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
 | 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, tam repo zip'inden statik incelendi, Gel Al deseniyle tutarlı. Kullanıcı Codespaces'te `tsc --noEmit` (hatasız) VE `npm run build` (route tablosu/size özeti başarıyla üretildi — Next.js bu tabloyu SADECE derleme başarılıyken yazdırır) çalıştırdı, GitHub'a push edildi. **Build tarafı KAPANDI.** **KALAN:** test seti (Kural #6) yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi (ÜÇÜNCÜ DERS — kod+build ≠ kullanıcı deneyimi doğrulandı). | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
-| 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
+| 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür. **[2026-08-11 güncellemesi]:** 1b(ii) (`/masaya-siparis`) kapsam dışı bırakıldığı için bu sorunun "1b'nin alt-görevi mi" ikilemi ORTADAN KALKTI — artık sadece kendi başına bir karar: component-guard eklensin mi, yoksa bilinçli açık mı bırakılsın? Hâlâ kullanıcı kararı bekliyor. | `components/customizer/AddToCartButton.tsx` |
 | 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
 | 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
 | 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
@@ -351,7 +346,7 @@
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). **[Bu turda]** Gel Al onay kuyruğu — 7 dosya kodlandı+incelendi, `npm run build` YEŞİL. **KALAN:** #85'teki 5 bulgu (test seti, BSC-4, reduced-motion, 2 bayat yorum, race-condition notu) ele alınmalı, sonra canlı doğrulama (Onayla/Ulaşamadım/Reddet üçü de). | 🟠 |
 | 1c | **[Bu turda]** #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI (Codespaces'te `tsc --noEmit` + `npm run build` başarılı, GitHub'a push edildi). **KALAN:** test seti yazılmalı, canlı ortamda (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bir bekleyen kayıtla test edilmeli. | 🟡 |
-| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (`page.tsx` + `customize/[id]/page.tsx` + kendi mini-checkout'u, sayfa girişinde `useCartStore.setTableId()` çağrılmalı) HENÜZ KODLANMADI — mimari önü açık, başlanabilir; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🔴 |
+| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (müşterinin kendi masasından sipariş vermesi) **[BU TURDA KAPSAM DIŞI BIRAKILDI — kullanıcı kararı, 2026-08-11: dükkan küçük, personel masa siparişini zaten eliyle giriyor. Personel-tarafı Masaya PANELİ (#62) bundan ETKİLENMİYOR, o zaten TAMAMLANDI.]**; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor, 1b'den BAĞIMSIZ hâle geldi); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🟡 (ii) kapandı, (iii)/(iv) açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
@@ -387,9 +382,7 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v55 (v54'ten: Personel panelinin 3 sekmesine (Şifre
-Talepleri/Gel Al/Kayıt Onayları) bekleyen sayısı rozeti eklendi — DESIGN_SYSTEM.md v1.2
-§2.2 ile SADECE /personel/* rotalarında kırmızıya dar kapsamlı istisna açıldı (müşteri
-sayfalarında yasak sürüyor), `GelAlOrderCard.tsx`'teki önceden fark edilmemiş kırmızı
-kullanımı geriye dönük resmileşti. 2 dosya (yeni hook + page.tsx) push edildi. Yeni açık
-sorun #88 (rozet test/canlı doğrulama eksik) açıldı. Güncellenme: 2026-08-11.*
+*BOWLERA SESSION_INDEX.md — v57 (v56'dan: #38 için `RegistrationForm.tsx`'teki kırık
+Tailwind custom token'ları (`bg-olive-primary`/`text-cream`/`text-espresso`) arbitrary
+value'ya çevrildi, kullanıcı push etti. Canlı görsel doğrulama HENÜZ yapılmadı, #38 sarı
+kalmaya devam ediyor (ÜÇÜNCÜ DERS). Güncellenme: 2026-08-11.*
