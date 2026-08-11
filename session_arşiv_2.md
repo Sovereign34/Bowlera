@@ -113,4 +113,48 @@
 > **(5) Kullanıcı 3 dosyayı da GitHub'a push ettiğini onayladı. HÂLÂ DOĞRULANMADI:**
 > test yazılmadı (rozet sayısının doğru göründüğü/0 iken gizlendiği test edilmedi),
 > canlı ortamda (Vercel) görsel olarak hiç kontrol edilmedi. Bkz. Açık Sorun #88.
+## TAŞIMA BLOĞU — 2026-08-11 (devamı, 4. kez)
+
+> ⚠️ CORE.md §7.1 Adım 1 (400 satır eşiği) — bu turda (#89 IP delili + engellenen deneme
+> logu eklenince) tekrar aşıldı. Aşağıdaki kapanmış CURRENT FOCUS bloğu TAM metniyle
+> buraya taşındı. Kapanış gerekçesi: içerik Açık Sorunlar tablosunda #86 satırında ve
+> Kritik Kararlar tablosunda zaten özetli duruyor — turn-by-turn anlatı artık aktif takip
+> gerektirmiyor.
+
+> **[YENİ SOHBET (devamı, 13.), 2026-08-10 — #86 Kayıt Onayları (4. sekme), KOD TARAFI
+> TAMAMLANDI, build/test/canlı doğrulama BEKLİYOR]**
+> **(1) Kapsam:** `users.verificationStatus: "pending"→"confirmed"` — Gel Al'ın onayladığı
+> SİPARİŞLERDEN (`orderHistory`) ayrı, ilgisiz bir akış: bu panel doğrudan KAYITLARI
+> (`users`) onaylıyor. Liste `users.createdAt` sırasına göre (en eski üstte), Gel Al
+> kuyruğuyla aynı desen. 2 aksiyon: Teyit Et (`verificationStatus="confirmed"`), Reddet/Sil
+> (hem `users` hem `consentRegistrations` satırı `customerPhone` eşleşmesiyle KALICI silinir).
+> **(2) Referans dosyalar zip'ten (`Bowlera_site-main`) tam repo taramasıyla doğrulandı:**
+> `GelAlPanel.tsx`, `gel-al-queries.ts`, `gel-al/route.ts`, `gel-al/[id]/route.ts`,
+> `api-guards.ts`, `usePersonelGelAlQueue.ts`, `GelAlOrderCard.tsx` — hepsi görüldü, aynı
+> iskelet bilinçli olarak kopyalandı (Kural #5 gerekçesiyle ortak üst bileşene ÇIKARILMADI).
+> **(3) Çakışma notu ele alındı:** Masaya'nın #82 auto-confirm'ü (`preparing`'e geçince
+> `verificationStatus="confirmed"`) ve Gel Al'ın confirm'ü de aynı alana yazıyor — ama liste
+> sorgusu zaten `verificationStatus="pending"` filtreli olduğu için gerçek bir çakışma değil,
+> kayıt başka bir yoldan confirm olursa bu kuyruktan otomatik düşer.
+> **(4) Gel Al'dan sapan tek nokta (bilinçli, KARAR BİLDİRİMİ'nde gerekçeli):** race
+> durumunda 404 "zaten işlenmiş" dönebilmesi için `confirmRegistration`/`deleteRegistration`
+> içine varlık kontrolü eklendi — Gel Al'ın basit UPDATE'inde bu kontrol yok, oradaki risk
+> orderId bazlı olduğu için daha düşük görülmüştü.
+> **(5) 8 dosya üretildi (kullanıcıya TAM dosya olarak verildi, "eklenecek" notu YOK —
+> önceki turda bu konuda kullanıcı şikâyeti oldu, düzeltildi):** `types/index.ts` (tam dosya,
+> `RegistrationApprovalEntry` eklendi), `lib/personel/kayit-onaylari-queries.ts`,
+> `app/api/personel/kayit-onaylari/route.ts`, `app/api/personel/kayit-onaylari/[id]/route.ts`,
+> `hooks/usePersonelRegistrationQueue.ts`, `components/personel/KayitOnayCard.tsx`,
+> `components/personel/KayitOnaylariPanel.tsx`, `app/personel/page.tsx` (4. sekme eklenmiş
+> tam dosya, `border-[#53502A]` bilinen-çalışan deseni kullanıldı, #73'teki kırık
+> `border-olive-primary`'den kaçınıldı).
+> **(6) [GÜNCELLEME, aynı sohbet devamı] Build tarafı DOĞRULANDI:** Kullanıcı Codespaces'te
+> `tsc --noEmit` (hatasız) ve `npm run build` (route tablosu/boyut özeti üretildi — bu,
+> Next.js'in SADECE başarılı derlemede yazdırdığı bir çıktı, dolaylı ama güvenilir kanıt)
+> çalıştırdı, sonucu GitHub'a manuel push etti (bu arada ilgisiz 4 eski dosya —
+> `orders/[id]/confirm`+`reject` route'ları, `WhatsAppOrderButton.tsx`+testi — kullanıcı
+> tarafından BİLİNÇLİ olarak ayrıca silinmiş, kayıt onayları değişikliğiyle ilgisi yok).
+> #86 build tarafı KAPANDI. **HÂLÂ DOĞRULANMADI:** test seti (Kural #6) yok, canlı ortamda
+> (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bekleyen kayıtla hiç test
+> edilmedi. middleware.ts'e DOKUNULMADI (öneki `/api/personel` zaten kapsıyor).
 
