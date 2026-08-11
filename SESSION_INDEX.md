@@ -4,11 +4,12 @@
 > Her session kapanışında TAM DOSYA olarak güncellenir.
 > **Şişmeyi önleme yöntemi:** Bu dosya SADECE anlık durumu tutar — tamamlanmış görevler
 > Açık Sorunlar tablosundan silinir. Turn-by-turn geçmiş (📜 GEÇMİŞ/ARŞİV) burada TUTULMAZ,
-> `session_arşiv.md` / `session_arşiv_1.md`'ye taşınır. Bu, arşivi SİLMEK değil DOĞRU
-> DOSYAYA TAŞIMAK'tır. **[Session 12 devamı, 2026-08-08]:** Arşiv artık İKİ dosyaya
-> bölünmüştür — Session 0-10 → `session_arşiv.md`, Session 11'den itibaren →
-> `session_arşiv_1.md` (ilişki notu o dosyanın başlığında). Bölünme sadece hacim
-> nedeniyledir, kural değişmedi.
+> `session_arşiv.md` / `session_arşiv_1.md` / `session_arşiv_2.md`'ye taşınır. Bu, arşivi
+> SİLMEK değil DOĞRU DOSYAYA TAŞIMAK'tır. **[Session 12 devamı, 2026-08-08]:** Arşiv önce
+> İKİ dosyaya bölünmüştü — Session 0-10 → `session_arşiv.md`, Session 11'den 2026-08-10'a
+> kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
+> hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
+> (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
 > ⚠️ GEÇMİŞ İHLAL KAYDI (ders çıkarıldı, hâlâ geçerli):
 > 2026-07-20'de üretilen bir "v2 sıkıştırılmış" SESSION_INDEX dosyası, kapanış notu
 > olmadan 7 açık sorunu (#4,7,15,16,20,22,34) ve 2 kararı (#11,#12) tablolardan düşürmüştü.
@@ -108,11 +109,17 @@
 > canlı ortamda (Vercel) görsel olarak hiç kontrol edilmedi.
 
 > ⚠️ **Arşiv taşıması — 2026-08-11:** Kapanmış #85 CURRENT FOCUS bloğu
-> `session_arşiv_1.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği aşıldı).
-> Kapanış gerekçesi: #85 Açık Sorunlar tablosunda (✅), Kritik Kararlar tablosunda ve
-> GENEL DURUM satırında zaten özetli duruyor, turn-by-turn anlatı artık aktif takip
-> gerektirmiyor. Taşıma bloğu ayrı eklenti dosyası (`session_arsiv_1_EKLENTI_2026-08-11.md`)
-> olarak verildi, kendi elinizle mevcut `session_arşiv_1.md`'nizin sonuna ekleyin.
+> `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği aşıldı).
+> **[GÜNCELLEME, aynı gün]** Kullanıcı `session_arşiv_1.md`'nin hacimce şiştiğini belirtti
+> ve YENİ bir dosya (`session_arşiv_2.md`) açılmasını istedi — bu blok başlangıçta ayrı bir
+> eklenti (`session_arsiv_1_EKLENTI_2026-08-11.md`) olarak üretilmişti, sonradan doğrudan
+> `session_arşiv_2.md`'nin İLK taşıma bloğu olarak yeniden paketlendi (kullanıcıya TAM
+> dosya olarak verildi, ayrıca eklenmesine gerek yok). Kapanış gerekçesi: #85 Açık
+> Sorunlar tablosunda (✅), Kritik Kararlar tablosunda ve GENEL DURUM satırında zaten
+> özetli duruyor, turn-by-turn anlatı artık aktif takip gerektirmiyor.
+> ⚠️ **Bekleyen madde:** `session_arsiv_1_EKLENTI_2026-08-10.md` (4 blok — SOHBET KAYBI,
+> 2x Gel Al ara-durum, #82/#83/#84) hâlâ `session_arşiv_1.md`'nin sonuna eklenmemiş
+> görünüyor — kronolojik olarak arşiv_1'e ait, arşiv_2'ye DEĞİL.
 
 > ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
 > kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
