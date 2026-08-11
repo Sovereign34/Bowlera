@@ -35,6 +35,29 @@ tutarlılığını korurken logo enerjisini dijital deneyime taşır.
 > ⚠️ **Bronze küçük gövde metninde kullanılmaz** — sadece 18px+ kalın başlıklarda
 > veya dekoratif sınır/illüstrasyonlarda (AGENT.md YASAK LİSTE).
 
+### 2.2 Personel Paneli İstisnası — Kırmızı (DAR KAPSAMLI)
+
+> **[BU TURDA EKLENDİ, 2026-08-11]** `/personel/*` altındaki dahili araçlarda (müşteri
+> ASLA görmez) "acil aksiyon bekliyor" anlamı taşıyan rozet/uyarılarda standart Tailwind
+> `red-700`/`red-800` kullanımına izin verilir — Bölüm 2'deki toprak tonu paletin
+> **dışında**, SADECE bu dar kapsamda.
+
+```
+Kapsam:     SADECE /personel/* rotaları (sekme rozetleri, GelAlOrderCard şüpheli-eşik
+            rozeti gibi dahili uyarılar). Müşteri yüzü sayfalarda (menü, sepet,
+            customizer, /siparis vb.) HÂLÂ YASAK — Bölüm 7.3 aynen geçerli.
+Renkler:    bg-red-700, text-red-800, border-red-700/40 (Tailwind standart, yeni hex
+            icat edilmedi)
+Gerekçe:    Kırmızı, personel için evrensel "acil/bekliyor" konvansiyonu — dahili araç
+            olduğu için marka tutarlılığı riski yok. Ayrıca GelAlOrderCard.tsx'teki
+            şüpheli-deneme rozeti bu kuraldan ÖNCE zaten kırmızı kullanıyordu (fark
+            edilmemiş bir tutarsızlıktı) — bu ekleme o kullanımı GERİYE DÖNÜK olarak
+            resmileştiriyor, yeni bir sapma YARATMIYOR.
+```
+
+> ⚠️ Bu istisna Bölüm 8 Self-Check'teki "Yeni renk kullanılıyor mu?" sorusunu geçersiz
+> KILMAZ — kontrol ederken "personel rotası mı?" sorusu da eklenmiş sayılmalı.
+
 ### 2.1 Logo Degradesi — Sınırlı Kullanım
 
 ```css
@@ -215,7 +238,7 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 ## 8. KALİTE KONTROL — DESIGN_SYSTEM SELF-CHECK
 
 ```
-[ ] Yeni renk kullanılıyor mu?          → Bölüm 2 tablosunda var mı?
+[ ] Yeni renk kullanılıyor mu?          → Bölüm 2 tablosunda var mı? Değilse: /personel/* rotası mı (Bölüm 2.2 istisnası) yoksa gerçek ihlal mi?
 [ ] Logo degrade kullanılıyor mu?        → Sadece 4 izinli yerden biri mi? (Bölüm 2.1)
 [ ] Bronze rengi kullanılıyor mu?        → 18px+ başlık/dekoratif mi?
 [ ] Yeni animasyon ekleniyor mu?         → prefers-reduced-motion kontrolü var mı?
@@ -228,8 +251,13 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.1 — Session 1 (2026-07-17), Session 4 (2026-07-21)*
+*BOWLERA DESIGN_SYSTEM.md — v1.2 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
 maddesi eklendi.*
+*v1.2: §2.2 "Personel Paneli İstisnası — Kırmızı" eklendi (dar kapsamlı, SADECE
+/personel/* rotaları, müşteri yüzü sayfalarda yasak aynen sürüyor). Bölüm 8
+Self-Check'e personel-rotası kontrolü eklendi. GelAlOrderCard.tsx'teki önceden
+var olan kırmızı kullanımını geriye dönük resmileştiriyor.*
