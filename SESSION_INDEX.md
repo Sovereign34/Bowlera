@@ -81,41 +81,38 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 14.), 2026-08-10 — #85 (Gel Al kod incelemesi bulguları)
-> TAMAMLANDI, kod+test+canlı(Codespaces) doğrulandı, GitHub'a push edildi]**
-> **(1) 5 bulgu tek tek ele alındı (Kural #5 — tek problem/tek çözüm, sırayla onay
-> alınarak):**
-> - Bulgu 1 (BSC-4, sessiz catch) → `GelAlPanel.tsx`'te `handleAction`'ın catch bloğu
->   artık structured log (`console.error`, `event: GEL_AL_ACTION_FAILED`) + kullanıcıya
->   görünür güvenli mesaj ("İşlem kaydedilemedi, tekrar dener misin?") üretiyor.
->   MasayaPanel.tsx'teki AYNI kalıp bilinçli olarak DOKUNULMADI — ayrı açık sorun (bkz. #87).
-> - Bulgu 2 (reduced-motion) → `GelAlOrderCard.tsx`'teki "Onayla" hover animasyonu
->   Tailwind'in yerleşik `motion-safe:` varyantına sarıldı, yeni bağımlılık YOK.
-> - Bulgu 3 (bayat yorum) → `GelAlOrderCard.tsx` + `gel-al-queries.ts`'teki "types/index.ts'e
->   eklenecek" notları kaldırıldı (tip zaten mevcut/kullanımda).
-> - Bulgu 4 (eşzamanlı güncelleme) → KARAR: `recordFailedContactAttempt` read-modify-write
->   yerine TEK atomik SQL UPDATE'e (`contactAttempts + 1`, `RETURNING`) çevrildi — kullanıcı
->   pratikte tek personel/tek masaüstü panel olduğunu belirtti ama fix ucuz+doğru olduğu için
->   yine de yapıldı. `confirmPickupOrder`/`rejectPickupOrder` BİLİNÇLİ dokunulmadı (Masaya/#81
->   ile aynı kapsam kararı) — yeni açık sorun #87 olarak loglandı.
->   ⚠️ **Yan bulgu (kod sonrası fark edildi, edge case analizi ÖNCESİNDE yakalanmalıydı):**
->   atomik `RETURNING` sayesinde eşleşmeyen telefon durumunda fonksiyon artık doğru şekilde
->   `0` döner — eski read-modify-write kodu bu durumda YANLIŞLIKLA `1` dönüyordu (SELECT boş
->   dönse bile UPDATE koşulsuz çalıştırılıyordu). Davranış farkı kullanıcıya bildirildi, sorun
->   olarak görülmedi (daha doğru davranış).
-> - Bulgu 5 (test yok) → 3 test dosyası yazıldı: `GelAlPanel.test.tsx` (3 senaryo),
->   `GelAlOrderCard.test.tsx` (5 senaryo), `gel-al-queries.test.ts` (7 senaryo, `fetch`/
->   `recordFailedContactAttempt`/`confirmPickupOrder`/`rejectPickupOrder` kapsıyor).
-> **(2) Canlı doğrulama (Codespaces, kullanıcı tarafından koşuldu):** İlk turda dosya
-> konumlandırma hatası yaşandı (2 test dosyası yanlış/eksik yerdeydi, `ls` ile teşhis edildi),
-> sonra 1 gerçek test hatası bulundu — `gel-al-queries.test.ts`'teki failure-path testinin
-> KENDİ mock zinciri gerçek kodun `.where().returning()` şeklini yanlış taklit ediyordu
-> (kod hatası DEĞİL, test hatası). Düzeltildi. **Nihai sonuç: 15/15 PASS (3 dosya, 3 ayrı
-> `npx vitest run` koşumuyla teyit edildi).**
-> **(3) Kullanıcı 6 dosyayı (3 kod + 3 test) GitHub'a manuel push ettiğini onayladı.**
-> **#85 TAMAMEN KAPANDI.** #62'nin geri kalan tek maddesi: canlı ortamda (Vercel deploy
-> sonrası) 3 aksiyonun (Onayla/Ulaşamadım/Reddet) gerçek bekleyen bir siparişle test
-> edilmesi — ÜÇÜNCÜ DERS gereği kod+test ≠ kullanıcı deneyimi doğrulandı, bu hâlâ bekliyor.
+> **[YENİ SOHBET (devamı, 14.), 2026-08-11 — Sekme rozetleri + DESIGN_SYSTEM.md §2.2
+> istisnası, TAMAMLANDI, GitHub'a push edildi]**
+> **(1) Kapsam:** Personel panelindeki 4 sekmeden 3'üne (Şifre Talepleri, Gel Al, Kayıt
+> Onayları) bekleyen kayıt sayısını gösteren kırmızı rozet eklendi. Masaya'ya BİLİNÇLİ
+> olarak eklenmedi — kullanıcı kararı: `/masaya-siparis` yüzeyi henüz hiç kodlanmadı
+> (1b), dükkan küçük olduğu için gerekli görülmedi.
+> **(2) Tasarım sistemi çakışması bulundu ve çözüldü:** DESIGN_SYSTEM.md §2 renk
+> paletinde kırmızı hiç yok, §7.3 açıkça "yeni bir uyarı kırmızısı YOK" diyor — ama
+> kullanıcı personel için kırmızının "acil aksiyon" anlamını önemsedi. **Karar:** dar
+> kapsamlı istisna eklendi (§2.2, v1.2) — SADECE `/personel/*` rotalarında standart
+> Tailwind `red-700`/`red-800` izinli, müşteri yüzü sayfalarda yasak aynen sürüyor. Yan
+> bulgu: `GelAlOrderCard.tsx`'teki mevcut şüpheli-deneme rozeti zaten kırmızı kullanıyordu
+> (fark edilmemiş bir tutarsızlıktı, #85 turunda kontrol edilmemişti) — bu istisna o
+> kullanımı GERİYE DÖNÜK resmileştirdi, yeni bir sapma yaratmadı.
+> **(3) 2 yeni/değişen dosya:** `hooks/usePersonelPasswordResetQueue.ts` (YENİ —
+> `PasswordResetPanel.tsx`'e HİÇ dokunulmadı, panelden bağımsız ayrı bir hook), `app/
+> personel/page.tsx` (3 sekmeye `TabBadge` bileşeni + rozet mantığı eklendi).
+> **(4) Bilinçli trade-off (kod içi yorumla belgelendi):** Gel Al ve Kayıt Onayları
+> sekmesi aktifken ilgili API endpoint'i 5sn aralıkla 2 KEZ sorgulanıyor (biri rozet
+> için page.tsx'te, biri panelin kendi iç hook'u için) — state'i page.tsx'e taşıyıp
+> panellere prop geçirmek daha fazla dosyaya dokunmayı gerektirirdi (Kural #5), dükkan
+> küçük olduğu için DB yükü önemsiz görüldü.
+> **(5) Kullanıcı 3 dosyayı da GitHub'a push ettiğini onayladı. HÂLÂ DOĞRULANMADI:**
+> test yazılmadı (rozet sayısının doğru göründüğü/0 iken gizlendiği test edilmedi),
+> canlı ortamda (Vercel) görsel olarak hiç kontrol edilmedi.
+
+> ⚠️ **Arşiv taşıması — 2026-08-11:** Kapanmış #85 CURRENT FOCUS bloğu
+> `session_arşiv_1.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği aşıldı).
+> Kapanış gerekçesi: #85 Açık Sorunlar tablosunda (✅), Kritik Kararlar tablosunda ve
+> GENEL DURUM satırında zaten özetli duruyor, turn-by-turn anlatı artık aktif takip
+> gerektirmiyor. Taşıma bloğu ayrı eklenti dosyası (`session_arsiv_1_EKLENTI_2026-08-11.md`)
+> olarak verildi, kendi elinizle mevcut `session_arşiv_1.md`'nizin sonuna ekleyin.
 
 > ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
 > kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
@@ -244,6 +241,7 @@
 | 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. **Gel Al onay kuyruğu:** kod+test+build hepsi TAMAM (#85 bu turda kapandı — BSC-4/reduced-motion/bayat yorum/atomik increment düzeltildi, 15/15 test PASS, push edildi). **KALAN:** SADECE canlı ortamda (Vercel deploy sonrası) 3 aksiyonun (Onayla/Ulaşamadım/Reddet) gerçek bekleyen bir siparişle test edilmesi. | ARCHITECTURE.md §2.9a |
 | 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
 | 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız (#81'in Gel Al karşılığı) — bilinçli MVP-dışı bırakıldı (kullanıcı: tek personel/tek masaüstü panel, pratik risk düşük). Kullanım yoğunlaşırsa ele alınmalı. | `lib/personel/gel-al-queries.ts` |
+| 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri (Şifre Talepleri/Gel Al/Kayıt Onayları) kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. Ayrıca Gel Al/Kayıt Onayları sekmesi aktifken ilgili endpoint 5sn'de 2 kez sorgulanıyor (rozet + panel ayrı hook, bilinçli trade-off) — kullanım yoğunlaşırsa state page.tsx'e taşınıp panellere prop geçirilmesi düşünülebilir. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
 | 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, tam repo zip'inden statik incelendi, Gel Al deseniyle tutarlı. Kullanıcı Codespaces'te `tsc --noEmit` (hatasız) VE `npm run build` (route tablosu/size özeti başarıyla üretildi — Next.js bu tabloyu SADECE derleme başarılıyken yazdırır) çalıştırdı, GitHub'a push edildi. **Build tarafı KAPANDI.** **KALAN:** test seti (Kural #6) yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi (ÜÇÜNCÜ DERS — kod+build ≠ kullanıcı deneyimi doğrulandı). | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
 | 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür — Masaya artık ayrı `/masaya-siparis/*` yüzeyinde olduğu ve zaten auth gerektirmediği için bu sorunla kesişmiyor. AÇIK KARAR (kullanıcıdan teyit bekliyor): 1b'nin ayrı alt-görevi mi, bilinçli açık mı? | `components/customizer/AddToCartButton.tsx` |
@@ -330,7 +328,7 @@
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. **[Bu turda]** `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). |
-| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[Bu turda]** Gel Al onay kuyruğu (3. sekme) — #85'in 5 bulgusu kapandı (BSC-4/reduced-motion/bayat yorum/atomik increment), 3 test dosyası yazıldı, Codespaces'te 15/15 PASS, GitHub'a push edildi. **SADECE canlı ortamda 3 aksiyon testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. |
+| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[Bu turda]** Gel Al onay kuyruğu (3. sekme) — #85'in 5 bulgusu kapandı (BSC-4/reduced-motion/bayat yorum/atomik increment), 3 test dosyası yazıldı, Codespaces'te 15/15 PASS, GitHub'a push edildi. **SADECE canlı ortamda 3 aksiyon testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[Bu turda]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). |
 
 ---
@@ -382,9 +380,9 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v54 (v53'ten: #85 TAMAMEN KAPANDI — Gel Al onay kuyruğundaki
-5 kod incelemesi bulgusu tek tek KARAR BİLDİRİMİ + onay ile düzeltildi (BSC-4 sessiz catch,
-reduced-motion, bayat yorumlar, atomik increment), 3 test dosyası yazıldı, Codespaces'te
-15/15 PASS doğrulandı, 6 dosya GitHub'a push edildi. Yeni açık sorun #87 (Gel Al confirm/
-reject optimistic lock, bilinçli MVP-dışı) açıldı. #62'nin kalan tek maddesi canlı ortam
-doğrulaması. Güncellenme: 2026-08-10.*
+*BOWLERA SESSION_INDEX.md — v55 (v54'ten: Personel panelinin 3 sekmesine (Şifre
+Talepleri/Gel Al/Kayıt Onayları) bekleyen sayısı rozeti eklendi — DESIGN_SYSTEM.md v1.2
+§2.2 ile SADECE /personel/* rotalarında kırmızıya dar kapsamlı istisna açıldı (müşteri
+sayfalarında yasak sürüyor), `GelAlOrderCard.tsx`'teki önceden fark edilmemiş kırmızı
+kullanımı geriye dönük resmileşti. 2 dosya (yeni hook + page.tsx) push edildi. Yeni açık
+sorun #88 (rozet test/canlı doğrulama eksik) açıldı. Güncellenme: 2026-08-11.*
