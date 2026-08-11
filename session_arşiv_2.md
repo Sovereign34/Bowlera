@@ -81,3 +81,36 @@
 > **#85 TAMAMEN KAPANDI.** #62'nin geri kalan tek maddesi: canlı ortamda (Vercel deploy
 > sonrası) 3 aksiyonun (Onayla/Ulaşamadım/Reddet) gerçek bekleyen bir siparişle test
 > edilmesi — ÜÇÜNCÜ DERS gereği kod+test ≠ kullanıcı deneyimi doğrulandı, bu hâlâ bekliyor.
+## TAŞIMA BLOĞU #2 — 2026-08-11 (14. sohbet devamı, 400 satır eşiği tekrar aşıldığı için)
+
+> **Taşınma gerekçesi:** SESSION_INDEX.md v57, #38 kapanışıyla 406 satıra ulaştı (400
+> satır eşiği aşıldı, CORE.md §7.1 Adım 1). Aşağıdaki blok — sekme rozetleri +
+> DESIGN_SYSTEM.md §2.2 istisnası — Açık Sorunlar tablosunda (#88), GENEL DURUM satırında
+> ve DESIGN_SYSTEM.md'nin kendi versiyon notunda özleri zaten korunduğu için
+> "kapanmış/geçmiş anlatı" sayılıp taşındı.
+
+> **[Sekme rozetleri + DESIGN_SYSTEM.md §2.2 istisnası, TAMAMLANDI, GitHub'a push edildi]**
+> **(1) Kapsam:** Personel panelindeki 4 sekmeden 3'üne (Şifre Talepleri, Gel Al, Kayıt
+> Onayları) bekleyen kayıt sayısını gösteren kırmızı rozet eklendi. Masaya'ya BİLİNÇLİ
+> olarak eklenmedi — kullanıcı kararı: `/masaya-siparis` yüzeyi henüz hiç kodlanmadı
+> (1b), dükkan küçük olduğu için gerekli görülmedi.
+> **(2) Tasarım sistemi çakışması bulundu ve çözüldü:** DESIGN_SYSTEM.md §2 renk
+> paletinde kırmızı hiç yok, §7.3 açıkça "yeni bir uyarı kırmızısı YOK" diyor — ama
+> kullanıcı personel için kırmızının "acil aksiyon" anlamını önemsedi. **Karar:** dar
+> kapsamlı istisna eklendi (§2.2, v1.2) — SADECE `/personel/*` rotalarında standart
+> Tailwind `red-700`/`red-800` izinli, müşteri yüzü sayfalarda yasak aynen sürüyor. Yan
+> bulgu: `GelAlOrderCard.tsx`'teki mevcut şüpheli-deneme rozeti zaten kırmızı kullanıyordu
+> (fark edilmemiş bir tutarsızlıktı, #85 turunda kontrol edilmemişti) — bu istisna o
+> kullanımı GERİYE DÖNÜK resmileştirdi, yeni bir sapma yaratmadı.
+> **(3) 2 yeni/değişen dosya:** `hooks/usePersonelPasswordResetQueue.ts` (YENİ —
+> `PasswordResetPanel.tsx`'e HİÇ dokunulmadı, panelden bağımsız ayrı bir hook), `app/
+> personel/page.tsx` (3 sekmeye `TabBadge` bileşeni + rozet mantığı eklendi).
+> **(4) Bilinçli trade-off (kod içi yorumla belgelendi):** Gel Al ve Kayıt Onayları
+> sekmesi aktifken ilgili API endpoint'i 5sn aralıkla 2 KEZ sorgulanıyor (biri rozet
+> için page.tsx'te, biri panelin kendi iç hook'u için) — state'i page.tsx'e taşıyıp
+> panellere prop geçirmek daha fazla dosyaya dokunmayı gerektirirdi (Kural #5), dükkan
+> küçük olduğu için DB yükü önemsiz görüldü.
+> **(5) Kullanıcı 3 dosyayı da GitHub'a push ettiğini onayladı. HÂLÂ DOĞRULANMADI:**
+> test yazılmadı (rozet sayısının doğru göründüğü/0 iken gizlendiği test edilmedi),
+> canlı ortamda (Vercel) görsel olarak hiç kontrol edilmedi. Bkz. Açık Sorun #88.
+
