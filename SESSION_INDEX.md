@@ -348,7 +348,7 @@
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
 | 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). **[Bu turda]** Gel Al onay kuyruğu — 7 dosya kodlandı+incelendi, `npm run build` YEŞİL. **KALAN:** #85'teki 5 bulgu (test seti, BSC-4, reduced-motion, 2 bayat yorum, race-condition notu) ele alınmalı, sonra canlı doğrulama (Onayla/Ulaşamadım/Reddet üçü de). | 🟠 |
 | 1c | **[Bu turda]** #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI (Codespaces'te `tsc --noEmit` + `npm run build` başarılı, GitHub'a push edildi). **KALAN:** test seti yazılmalı, canlı ortamda (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bir bekleyen kayıtla test edilmeli. | 🟡 |
-| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (müşterinin kendi masasından sipariş vermesi) **[BU TURDA KAPSAM DIŞI BIRAKILDI — kullanıcı kararı, 2026-08-11: dükkan küçük, personel masa siparişini zaten eliyle giriyor. Personel-tarafı Masaya PANELİ (#62) bundan ETKİLENMİYOR, o zaten TAMAMLANDI.]**; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor, 1b'den BAĞIMSIZ hâle geldi); (iv) kayıt sayfasında zorunlu kanal seçimi adımı hâlâ kodlanmadı | 🟡 (ii) kapandı, (iii)/(iv) açık |
+| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (müşterinin kendi masasından sipariş vermesi) **[BU TURDA KAPSAM DIŞI BIRAKILDI — kullanıcı kararı, 2026-08-11: dükkan küçük, personel masa siparişini zaten eliyle giriyor. Personel-tarafı Masaya PANELİ (#62) bundan ETKİLENMİYOR, o zaten TAMAMLANDI.]**; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor, 1b'den BAĞIMSIZ hâle geldi); (iv) **[BU TURDA KAPANDI ✅ — sadece doğrulama, kod değişikliği YOK]** kayıt sayfasında zorunlu kanal seçimi ZATEN kodluymuş: `useRegistrationForm.ts`'te `channel` state'i `useState<RegistrationChannel \| null>(null)` ile başlıyor (varsayılan seçim YOK) ve `submitRegistration()` içinde `if (!channel)` guard'ı POST'u engelliyor. Zincir uçtan uca teyit edildi: form→hook→`route.ts`→`upsertConsentRegistration`→`schema.ts`'teki `channel: text("channel").notNull()` — UI/API/DB üç katmanda da zorunlu, DB'ye kanal bilgisi olmadan hiçbir kayıt yazılamıyor. SESSION_INDEX'teki eski "hâlâ kodlanmadı" notu GÜNCELLİĞİNİ YİTİRMİŞTİ, düzeltildi. | 🟡 (ii) kapandı, (iv) kapandı, (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
@@ -385,10 +385,8 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v58 (v57'den: #89 IP delili + engellenen deneme logu uçtan uca
-TAMAMLANDI — `consentRegistrations.ipAddress` + yeni `registrationBlockedAttempts` tablosu,
-migration Neon'da koşuldu ve 6 sorguyla doğrulandı, test 6/6 PASS, Vercel deploy yeşil. 2 açık
-madde flag'lendi: KVKK metni güncellemesi (madde 6'ya bağlı), `route.ts POST`'un 20 satır
-sınırı ihlali (ayrı refactor önerisi). 400 satır eşiği tekrar aşıldığı için kapanmış #86
-CURRENT FOCUS bloğu `session_arşiv_2.md`'ye (4. taşıma bloğu) taşındı. Güncellenme:
-2026-08-11.*
+*BOWLERA SESSION_INDEX.md — v59 (v58'den: 1b(iv) KAPANDI — kod incelemesiyle kanal seçiminin
+UI+API+DB üç katmanda ZATEN zorunlu olduğu doğrulandı [`channel: RegistrationChannel | null`
+başlangıç null, `submitRegistration()`'da `if (!channel)` guard'ı, `schema.ts`'te `NOT NULL`],
+kod değişikliği yapılmadı — sadece güncelliğini yitirmiş "kodlanmadı" notu düzeltildi. 1b'de
+sadece (iii)/#66 açık kaldı. Güncellenme: 2026-08-11.*
