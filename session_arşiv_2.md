@@ -158,3 +158,41 @@
 > (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bekleyen kayıtla hiç test
 > edilmedi. middleware.ts'e DOKUNULMADI (öneki `/api/personel` zaten kapsıyor).
 
+
+<!--
+EKLENTİ NOTU: Bu blok, SESSION_INDEX.md'nin 400 satır eşiğini aşması nedeniyle
+(CORE.md §7.1 Adım 1) 2026-08-12'de CURRENT FOCUS'tan taşındı. Kapanış gerekçesi:
+içerik Kritik Kararlar tablosunda (#89 satırı) ve Açık Sorunlar tablosunda (#89, ✅)
+zaten tam özetli duruyor — turn-by-turn anlatı artık aktif takip gerektirmiyor.
+Kendi elinizle mevcut session_arşiv_2.md dosyanızın SONUNA ekleyin.
+-->
+
+> **[YENİ SOHBET (devamı, 15.), 2026-08-11 — #89 IP delili + engellenen deneme logu,
+> UÇTAN UCA TAMAMLANDI ✅]**
+> **(1) Kapsam:** `consentRegistrations.phone` unique+upsert olduğu için aynı telefon tekrar
+> tekrar gelirse zaten çoğalmıyor — asıl risk FARKLI SAHTE TELEFONLARLA aynı IP'den art arda
+> kayıt denemesiydi. İki parça: (a) `consentRegistrations`'a `ipAddress` (nullable) eklendi —
+> her yeni/güncellenen kayıtta hangi IP'den geldiği tutuluyor; (b) yeni
+> `registrationBlockedAttempts` tablosu — rate limiter 429 döndürdüğünde INSERT-ONLY (upsert
+> DEĞİL) olarak kalıcı loglanıyor, aynı IP'den N engellenen deneme N ayrı satır oluşturuyor.
+> **(2) Değişen dosyalar (4):** `lib/db/schema.ts`, `lib/db/queries/consent-registration.ts`
+> (`upsertConsentRegistration` artık `ipAddress` parametresi alıyor + yeni
+> `logBlockedRegistrationAttempt`), `app/api/registration/consent/route.ts` (zaten çıkarılan
+> `ip` her iki fonksiyona geçirildi, 429 dalında best-effort try/catch ile loglama — BSC-4:
+> loglama hatası 429 yanıtını ENGELLEMEZ), `lib/db/queries/consent-registration.test.ts`
+> (yeni — happy/edge/failure, 6/6 PASS).
+> **(3) Şema notu + migration SQL üretildi:**
+> `docs/schema-changes/20260811140000_consent_ip_ve_blocked_attempts_eklendi.md` (+ `.sql`).
+> **(4) Migration Neon'da koşuldu VE 6 ayrı doğrulama sorgusuyla teyit edildi:**
+> `consent_registrations.ip_address` (text, nullable) doğru yerde; `registration_blocked_attempts`
+> (id/ip_address/attempted_at) + index doğru şemada; `users`/`order_history`/
+> `password_reset_requests` HİÇ ETKİLENMEDİ (tam sütun listesi karşılaştırıldı, fark yok);
+> `registration_blocked_attempts` 0 satır (henüz 429 tetiklenmedi, beklenen); mevcut 8
+> `consent_registrations` satırının hepsi `ip_address IS NULL` (geriye dönük doldurma
+> BİLİNÇLİ yapılmadı, beklenen — yeni kayıtlarda dolacak).
+> **(5) Testler Codespaces'te koşturuldu: 6/6 PASS.** Vercel deploy YEŞİL.
+> **(6) Açık bırakılan 2 madde (bkz. Açık Sorunlar #89):** (a) KVKK aydınlatma metnine IP
+> kaydı maddesi eklenmesi gerekiyor — kapsam dışı, madde 6/SIRADAKİ GÖREVLER'e bağlı; (b)
+> `route.ts`'teki `POST` fonksiyonu AGENT.md Kural #1'deki 20 satır sınırını (bu değişiklikten
+> ÖNCE de) aşıyordu — "Tek problem, tek çözüm" kuralı gereği bu turda bölünmedi, ayrı bir
+> refactor turu önerisiyle flag'lendi.
