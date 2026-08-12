@@ -82,39 +82,43 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 16.), 2026-08-12 — Gel Al 3-durumlu revizyon (KARAR A), kod+test
-> TAMAM, canlı doğrulama KISMEN]**
-> **(1) Bulgu:** Canlı testte Gel Al'ın "Onayla" butonuna basınca sipariş panelden tamamen
-> kayboluyordu — kök neden: `confirmed` durumu şemada BİLİNÇLİ olarak terminal tasarlanmıştı
-> (`pending→confirmed|rejected`, 2 durum), ama gerçek ihtiyaç 3 aşama: Onayla→Hazırlanıyor→
-> Teslim Edildi.
-> **(2) KARAR A:** `confirmed` artık terminal DEĞİL — anlamı "Hazırlanıyor"a genişledi. Yeni
-> terminal durum `completed` ("Teslim Edildi") eklendi. Zincir: `pending → confirmed
-> (Hazırlanıyor) → completed(Teslim Edildi)`, `rejected` hâlâ SADECE `pending`'den dallanıyor.
-> Migration GEREKMEDİ (`order_history.status` DB'de düz text, CHECK constraint yok).
-> **(3) Değişen dosyalar (7):** `types/index.ts` (`PickupOrderStatus`'a `completed` eklendi),
-> `lib/personel/gel-al-queries.ts` (`fetchPreparingPickupOrders`+`completePickupOrder` yeni,
-> paylaşılan `fetchPickupOrdersByStatus` helper'ı), `hooks/usePersonelGelAlQueue.ts`
-> (parametrik `status`), `app/api/personel/gel-al/route.ts` (`?status=` query param,
-> fail-closed), `app/api/personel/gel-al/[id]/route.ts` (`"complete"` action — ⚠️ Kural #1
-> self-correction: `handleSimpleAction` helper'ına bölündü, 20 satır aşıyordu),
-> `components/personel/GelAlPanel.tsx` (Onay Bekleyen/Hazırlanıyor sekmeleri),
-> `components/personel/GelAlOrderCard.tsx` (`variant` prop — ⚠️ Kural #1 self-correction:
-> `PendingActions`/`PreparingActions` alt-bileşenlerine bölündü).
-> **(4) Testler:** 5 dosya (3 güncellendi: `gel-al-queries.test.ts`/`GelAlPanel.test.tsx`/
-> `GelAlOrderCard.test.tsx`, +7 yeni test; 2 YENİ: `route.test.ts`+`[id]/route.test.ts` —
-> PROJEDEKİ İLK API ROUTE TESTLERİ, emsal yoktu). Codespaces'te **37/37 PASS**.
-> **(5) Test ortamı bulgusu (düzeltildi):** İlk koşuda 2 route testi `next/server` modül
-> hatasıyla FAIL etti — `vi.mock("@/lib/personel/api-guards")` factory'siz çağrılınca Vitest
-> otomatik-mock için gerçek modülü (next-auth üzerinden `next/server`'ı tetikleyen) import
-> etmeye çalışıyordu. Her iki mock'a AÇIK factory verilerek düzeltildi, 37/37 yeşile döndü.
-> **Not (gelecekteki route testleri için REFERANS):** api-guards/next-auth zincirini
-> mock'larken factory'siz `vi.mock(path)` KULLANILMAMALI.
-> **(6) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Hazırlanıyor sekmesinin doğru render
-> olduğu ekran görüntüsüyle doğrulandı (3 kart, "Teslim Edildi" butonlarıyla). "Teslim
-> Edildi" butonuna TIKLANIP gerçekten `completed`'e geçtiği, Hazırlanıyor listesinden
-> düştüğü VE Onayla→Hazırlanıyor geçişinin uçtan uca (DB dahil) çalıştığı henüz canlıda
-> TIKLANARAK doğrulanmadı.
+> **[YENİ SOHBET (devamı, 17.), 2026-08-12 — #90 YENİ: Customizer masaüstü layout, kod TAMAM,
+> canlı doğrulama BEKLİYOR]**
+> **(1) Bulgu:** Kullanıcı önce personel paneli genişlik sorunu sandı (o iz sonuçsuz kapandı —
+> `page.tsx`/`layout.tsx`/`globals.css`/`MasayaPanel.tsx`/`GelAlPanel.tsx`/`GelAlOrderCard.tsx`/
+> `KayitOnaylariPanel.tsx`/`PasswordResetPanel.tsx` tek tek kontrol edildi, hiçbirinde genişlik
+> kısıtı bulunamadı — muhtemelen o paneller yeniden yazılırken kendiliğinden düzelmiş).
+> Kullanıcı sonradan gerçek sayfayı düzeltti: `/menu/customize/[id]` ("Kâseni Oluştur" sonrası
+> açılan sayfa) — masaüstünde Sepetim (`SummaryPanel`) görünüyor ama adım alanı (StepBase vb.)
+> görünmüyor, pencere küçültülünce (mobil genişliğe inince) tekrar görünüyor.
+> **(2) Kök neden:** `VisualPreview.tsx`'te kâse görseli `aspect-square w-full` — yükseklik
+> genişlikle birebir orantılı. `page.tsx`'teki sarmalayıcı `mx-auto max-w-sm md:max-w-none`
+> masaüstünde tavanı tamamen kaldırıyordu — sol grid kolonu (`minmax(0,1fr)`) geniş ekranlarda
+> 700-900px'e büyüyünce görsel de aynı oranda devasalaşıp adım alanını ekranın çok aşağısına
+> itiyordu (kayıp değil, sadece scroll ile ulaşılamayacak kadar aşağıda).
+> **(3) Uygulanan çözüm (kullanıcı onayıyla, KARAR BİLDİRİMİ sonrası):** `app/menu/customize/
+> [id]/page.tsx`'te 4 değişiklik — (a) görsel tavanı `md:max-w-none` → `md:max-w-[280px]`;
+> (b) `<main>`e `md:h-screen md:overflow-hidden` (masaüstünde sayfa artık viewport'a kilitli);
+> (c) sol kolona (`space-y-6`) `md:h-full md:overflow-y-auto md:pr-2` (sığmazsa SADECE bu kolon
+> kendi içinde scroll olur, sayfa değil); (d) `SummaryPanel` sarmalayıcısına `md:sticky md:top-8
+> md:self-start` (kaydırsan da sepet sabit kalır). DESIGN_SYSTEM.md kontrol edildi, çakışan
+> kural yok (görsel boyutlandırma için tavan kuralı tanımlı değil). Tasarım skoru: 7/7.
+> **(4) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Kod üretildi ve dosya kullanıcıya verildi,
+> ama Codespaces'te build/test koşulmadı VE kullanıcının kendi `page.tsx`'ine uygulayıp
+> masaüstünde gerçekten tek ekrana sığdığını GÖZLE doğrulaması bekleniyor. `SummaryPanel`
+> içeriği çok uzarsa (çok malzeme seçilirse) sticky panelin kendisi de taşabilir — canlı testte
+> ayrıca gözlenmeli.
+
+> ⚠️ **Arşiv taşıması — 2026-08-12 (devamı, #90 sonrası):** Kapanmış Gel Al 3-durumlu
+> revizyon (KARAR A, 16. sohbet) CURRENT FOCUS bloğu `session_arşiv_2.md`'ye taşındı —
+> CORE.md §7.1 Adım 1 (400 satır eşiği, bu turda eklenen #90 bloğu ile tekrar aşıldı).
+> Kapanış gerekçesi: içerik Kritik Kararlar tablosunda (KARAR A satırı), Açık Sorunlar
+> tablosunda (#62 satırı), GENEL DURUM'da (Personel Sipariş Paneli satırı) ve SIRADAKİ
+> GÖREVLER'de (sıra 1) zaten tam özetli duruyor — "Teslim Edildi" canlı doğrulaması hâlâ
+> BEKLİYOR durumda ama bu KALAN iş zaten dört tabloda da görünür, turn-by-turn anlatı
+> ayrıca aktif takip gerektirmiyor. Taşıma bloğu ayrı eklenti
+> (`session_arsiv_2_EKLENTI_2026-08-12-devam2.md`) olarak verildi, kendi elinizle
+> `session_arşiv_2.md`'nin sonuna ekleyin.
 
 > ⚠️ **Arşiv taşıması — 2026-08-12:** Kapanmış #89 CURRENT FOCUS bloğu (IP delili +
 > engellenen deneme logu, uçtan uca tamamlandı notu) `session_arşiv_2.md`'ye taşındı —
@@ -124,13 +128,13 @@
 > (`session_arsiv_2_EKLENTI_2026-08-12.md`) olarak verildi, kendi elinizle
 > `session_arşiv_2.md`'nin sonuna ekleyin.
 
-> **[YENİ SOHBET (devamı, 14.), 2026-08-11 — #38 kod+push TAMAM, canlı doğrulama BEKLİYOR]**
-> `RegistrationForm.tsx`'in Tailwind sınıfları #73 açısından teyit edildi — submit
-> butonundaki `bg-olive-primary`/`text-cream` (önceki turda "düzeltildi" denmişti ama
-> #73'ün DE aynı kırık desende olduğu daha sonra bulunmuştu) VE iki mod-değiştirme
-> linkindeki `text-espresso` (hiç test edilmemişti) hepsi arbitrary value'ya çevrildi —
-> #38/#50/#79 ile AYNI kalıcı çözüm. Renk DEĞİŞMEDİ. Kullanıcı push etti, **görsel canlı
-> kontrol henüz yapılmadı** — ÜÇÜNCÜ DERS gereği bu olmadan #38 TAM kapanmış sayılamaz.
+> ⚠️ **Arşiv taşıması — 2026-08-12 (devamı, #90 sonrası, 3. kez):** Kapanmış #38 CURRENT
+> FOCUS bloğu (14. sohbet, `RegistrationForm.tsx` kod+push tamam notu) `session_arşiv_2.md`'ye
+> taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış gerekçesi: içerik Açık Sorunlar
+> tablosunda (#38 satırı) zaten tam özetli duruyor — canlı görsel doğrulama hâlâ BEKLİYOR ama
+> bu KALAN iş o satırda görünür. Taşıma bloğu ayrı eklenti
+> (`session_arsiv_2_EKLENTI_2026-08-12-devam3.md`) olarak verildi, kendi elinizle
+> `session_arşiv_2.md`'nin sonuna ekleyin.
 
 > ⚠️ **Arşiv taşıması — 2026-08-11 (devamı):** 1b(ii) kapsam-dışı kararının kapanmış
 > CURRENT FOCUS bloğu `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır
@@ -254,6 +258,7 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
+| 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı (görsel tavanı `md:max-w-[280px]`, `<main>` `md:h-screen md:overflow-hidden`, sol kolon `md:overflow-y-auto`, `SummaryPanel` `md:sticky`) ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
 | 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri, emsal yoktu) kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin ve Hazırlanıyor listesinden düştüğünün doğrulanması. | ARCHITECTURE.md §2.9a |
 | 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
 | 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız (#81'in Gel Al karşılığı) — bilinçli MVP-dışı bırakıldı (kullanıcı: tek personel/tek masaüstü panel, pratik risk düşük). Kullanım yoğunlaşırsa ele alınmalı. | `lib/personel/gel-al-queries.ts` |
@@ -354,6 +359,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| -2 | **[YENİ, bu turda]** #90 — `/menu/customize/[id]` masaüstü tek-ekrana-sığma düzeltmesi kodlandı, kullanıcıya verildi. **KALAN:** kendi `page.tsx`'ine uygulanmalı, Codespaces'te build koşulmalı, GitHub'a push edilmeli, masaüstünde GÖZLE doğrulanmalı. | 🟠 |
 | -1 | **[TAMAMLANDI, bu turda ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda ("bari" görünür) doğrulandı. Kök neden SQL sorgusuyla izole edilmedi, kullanıcı deneyimi seviyesinde kapandı. | ✅ |
 | 0 | **[TAMAMLANDI, bu turda ✅]** #83 — "Sıfırla" → üretilen geçici kodla (460244) giriş canlıda BAŞARILI test edildi. | ✅ |
 | 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
@@ -398,11 +404,13 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v60 (v59'dan: Gel Al 3-durumlu revizyon — KARAR A. Canlı bulgu:
-"Onayla" tıklanınca sipariş panelden kayboluyordu (`confirmed` BİLİNÇLİ terminal tasarlanmıştı).
-`confirmed` artık terminal DEĞİL ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi")
-eklendi — migration gerekmedi. 7 kaynak + 5 test dosyası (2'si YENİ, projedeki ilk API route
-testleri) kodlandı, Codespaces'te 37/37 PASS (ilk koşuda 2 route testi `next/server` modül
-hatası verdi — factory'siz `vi.mock` kök nedeniydi, düzeltildi). #89 CURRENT FOCUS bloğu
-400 satır eşiği nedeniyle `session_arşiv_2.md`'ye taşındı (eklenti dosyası ayrı verildi).
-KALAN: canlı ortamda "Teslim Edildi" tıklama testi. Güncellenme: 2026-08-12.*
+*BOWLERA SESSION_INDEX.md — v62 (v61'den: kullanıcı 400-satır ihlalini fark etti, önceki
+"taşınacak kapalı blok yok" değerlendirmesi YANLIŞ uygulanmıştı — dosyadaki emsale (#89/#86)
+göre kriter "sıfır kalan iş" değil "içerik zaten Açık Sorunlar/Kritik Kararlar tablosunda özetli
+mi". Düzeltme: Gel Al 3-durumlu revizyon (16. sohbet) ve #38 (14. sohbet) CURRENT FOCUS
+blokları arşive taşındı, 439→416 satır. Ayrı bir denemede 3 kapanmış (✅) Açık Sorunlar
+satırı (#50/#85/#70) da gerekçeyle silinmeye çalışıldı ama tek-satırlık kayıtları çok
+satırlı gerekçe bildirimiyle değiştirmek net satır SAYISINI ARTIRDIĞI için bu adım GERİ
+ALINDI — üçü de tabloda duruyor. KALAN: 416 satır hâlâ 400 eşiğinin 16 satır üstünde;
+CURRENT FOCUS'ta taşınabilecek başka kapanmış anlatı bloğu kalmadı (geri kalanı ya zaten
+kompakt arşiv bildirimleri ya da bu turun açık #90 bloğu). Güncellenme: 2026-08-12.*
