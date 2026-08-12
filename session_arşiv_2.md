@@ -196,3 +196,47 @@ Kendi elinizle mevcut session_arşiv_2.md dosyanızın SONUNA ekleyin.
 > `route.ts`'teki `POST` fonksiyonu AGENT.md Kural #1'deki 20 satır sınırını (bu değişiklikten
 > ÖNCE de) aşıyordu — "Tek problem, tek çözüm" kuralı gereği bu turda bölünmedi, ayrı bir
 > refactor turu önerisiyle flag'lendi.
+
+> **[YENİ SOHBET (devamı, 14.), 2026-08-11 — #38 kod+push TAMAM, canlı doğrulama BEKLİYOR]**
+> `RegistrationForm.tsx`'in Tailwind sınıfları #73 açısından teyit edildi — submit
+> butonundaki `bg-olive-primary`/`text-cream` (önceki turda "düzeltildi" denmişti ama
+> #73'ün DE aynı kırık desende olduğu daha sonra bulunmuştu) VE iki mod-değiştirme
+> linkindeki `text-espresso` (hiç test edilmemişti) hepsi arbitrary value'ya çevrildi —
+> #38/#50/#79 ile AYNI kalıcı çözüm. Renk DEĞİŞMEDİ. Kullanıcı push etti, **görsel canlı
+> kontrol henüz yapılmadı** — ÜÇÜNCÜ DERS gereği bu olmadan #38 TAM kapanmış sayılamaz.
+
+> **[YENİ SOHBET (devamı, 16.), 2026-08-12 — Gel Al 3-durumlu revizyon (KARAR A), kod+test
+> TAMAM, canlı doğrulama KISMEN]**
+> **(1) Bulgu:** Canlı testte Gel Al'ın "Onayla" butonuna basınca sipariş panelden tamamen
+> kayboluyordu — kök neden: `confirmed` durumu şemada BİLİNÇLİ olarak terminal tasarlanmıştı
+> (`pending→confirmed|rejected`, 2 durum), ama gerçek ihtiyaç 3 aşama: Onayla→Hazırlanıyor→
+> Teslim Edildi.
+> **(2) KARAR A:** `confirmed` artık terminal DEĞİL — anlamı "Hazırlanıyor"a genişledi. Yeni
+> terminal durum `completed` ("Teslim Edildi") eklendi. Zincir: `pending → confirmed
+> (Hazırlanıyor) → completed(Teslim Edildi)`, `rejected` hâlâ SADECE `pending`'den dallanıyor.
+> Migration GEREKMEDİ (`order_history.status` DB'de düz text, CHECK constraint yok).
+> **(3) Değişen dosyalar (7):** `types/index.ts` (`PickupOrderStatus`'a `completed` eklendi),
+> `lib/personel/gel-al-queries.ts` (`fetchPreparingPickupOrders`+`completePickupOrder` yeni,
+> paylaşılan `fetchPickupOrdersByStatus` helper'ı), `hooks/usePersonelGelAlQueue.ts`
+> (parametrik `status`), `app/api/personel/gel-al/route.ts` (`?status=` query param,
+> fail-closed), `app/api/personel/gel-al/[id]/route.ts` (`"complete"` action — ⚠️ Kural #1
+> self-correction: `handleSimpleAction` helper'ına bölündü, 20 satır aşıyordu),
+> `components/personel/GelAlPanel.tsx` (Onay Bekleyen/Hazırlanıyor sekmeleri),
+> `components/personel/GelAlOrderCard.tsx` (`variant` prop — ⚠️ Kural #1 self-correction:
+> `PendingActions`/`PreparingActions` alt-bileşenlerine bölündü).
+> **(4) Testler:** 5 dosya (3 güncellendi: `gel-al-queries.test.ts`/`GelAlPanel.test.tsx`/
+> `GelAlOrderCard.test.tsx`, +7 yeni test; 2 YENİ: `route.test.ts`+`[id]/route.test.ts` —
+> PROJEDEKİ İLK API ROUTE TESTLERİ, emsal yoktu). Codespaces'te **37/37 PASS**.
+> **(5) Test ortamı bulgusu (düzeltildi):** İlk koşuda 2 route testi `next/server` modül
+> hatasıyla FAIL etti — `vi.mock("@/lib/personel/api-guards")` factory'siz çağrılınca Vitest
+> otomatik-mock için gerçek modülü (next-auth üzerinden `next/server`'ı tetikleyen) import
+> etmeye çalışıyordu. Her iki mock'a AÇIK factory verilerek düzeltildi, 37/37 yeşile döndü.
+> **Not (gelecekteki route testleri için REFERANS):** api-guards/next-auth zincirini
+> mock'larken factory'siz `vi.mock(path)` KULLANILMAMALI.
+> **(6) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Hazırlanıyor sekmesinin doğru render
+> olduğu ekran görüntüsüyle doğrulandı (3 kart, "Teslim Edildi" butonlarıyla). "Teslim
+> Edildi" butonuna TIKLANIP gerçekten `completed`'e geçtiği, Hazırlanıyor listesinden
+> düştüğü VE Onayla→Hazırlanıyor geçişinin uçtan uca (DB dahil) çalıştığı henüz canlıda
+> TIKLANARAK doğrulanmadı.
+
+
