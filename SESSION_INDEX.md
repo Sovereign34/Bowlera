@@ -82,35 +82,47 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 15.), 2026-08-11 — #89 IP delili + engellenen deneme logu,
-> UÇTAN UCA TAMAMLANDI ✅]**
-> **(1) Kapsam:** `consentRegistrations.phone` unique+upsert olduğu için aynı telefon tekrar
-> tekrar gelirse zaten çoğalmıyor — asıl risk FARKLI SAHTE TELEFONLARLA aynı IP'den art arda
-> kayıt denemesiydi. İki parça: (a) `consentRegistrations`'a `ipAddress` (nullable) eklendi —
-> her yeni/güncellenen kayıtta hangi IP'den geldiği tutuluyor; (b) yeni
-> `registrationBlockedAttempts` tablosu — rate limiter 429 döndürdüğünde INSERT-ONLY (upsert
-> DEĞİL) olarak kalıcı loglanıyor, aynı IP'den N engellenen deneme N ayrı satır oluşturuyor.
-> **(2) Değişen dosyalar (4):** `lib/db/schema.ts`, `lib/db/queries/consent-registration.ts`
-> (`upsertConsentRegistration` artık `ipAddress` parametresi alıyor + yeni
-> `logBlockedRegistrationAttempt`), `app/api/registration/consent/route.ts` (zaten çıkarılan
-> `ip` her iki fonksiyona geçirildi, 429 dalında best-effort try/catch ile loglama — BSC-4:
-> loglama hatası 429 yanıtını ENGELLEMEZ), `lib/db/queries/consent-registration.test.ts`
-> (yeni — happy/edge/failure, 6/6 PASS).
-> **(3) Şema notu + migration SQL üretildi:**
-> `docs/schema-changes/20260811140000_consent_ip_ve_blocked_attempts_eklendi.md` (+ `.sql`).
-> **(4) Migration Neon'da koşuldu VE 6 ayrı doğrulama sorgusuyla teyit edildi:**
-> `consent_registrations.ip_address` (text, nullable) doğru yerde; `registration_blocked_attempts`
-> (id/ip_address/attempted_at) + index doğru şemada; `users`/`order_history`/
-> `password_reset_requests` HİÇ ETKİLENMEDİ (tam sütun listesi karşılaştırıldı, fark yok);
-> `registration_blocked_attempts` 0 satır (henüz 429 tetiklenmedi, beklenen); mevcut 8
-> `consent_registrations` satırının hepsi `ip_address IS NULL` (geriye dönük doldurma
-> BİLİNÇLİ yapılmadı, beklenen — yeni kayıtlarda dolacak).
-> **(5) Testler Codespaces'te koşturuldu: 6/6 PASS.** Vercel deploy YEŞİL.
-> **(6) Açık bırakılan 2 madde (bkz. Açık Sorunlar #89):** (a) KVKK aydınlatma metnine IP
-> kaydı maddesi eklenmesi gerekiyor — kapsam dışı, madde 6/SIRADAKİ GÖREVLER'e bağlı; (b)
-> `route.ts`'teki `POST` fonksiyonu AGENT.md Kural #1'deki 20 satır sınırını (bu değişiklikten
-> ÖNCE de) aşıyordu — "Tek problem, tek çözüm" kuralı gereği bu turda bölünmedi, ayrı bir
-> refactor turu önerisiyle flag'lendi.
+> **[YENİ SOHBET (devamı, 16.), 2026-08-12 — Gel Al 3-durumlu revizyon (KARAR A), kod+test
+> TAMAM, canlı doğrulama KISMEN]**
+> **(1) Bulgu:** Canlı testte Gel Al'ın "Onayla" butonuna basınca sipariş panelden tamamen
+> kayboluyordu — kök neden: `confirmed` durumu şemada BİLİNÇLİ olarak terminal tasarlanmıştı
+> (`pending→confirmed|rejected`, 2 durum), ama gerçek ihtiyaç 3 aşama: Onayla→Hazırlanıyor→
+> Teslim Edildi.
+> **(2) KARAR A:** `confirmed` artık terminal DEĞİL — anlamı "Hazırlanıyor"a genişledi. Yeni
+> terminal durum `completed` ("Teslim Edildi") eklendi. Zincir: `pending → confirmed
+> (Hazırlanıyor) → completed(Teslim Edildi)`, `rejected` hâlâ SADECE `pending`'den dallanıyor.
+> Migration GEREKMEDİ (`order_history.status` DB'de düz text, CHECK constraint yok).
+> **(3) Değişen dosyalar (7):** `types/index.ts` (`PickupOrderStatus`'a `completed` eklendi),
+> `lib/personel/gel-al-queries.ts` (`fetchPreparingPickupOrders`+`completePickupOrder` yeni,
+> paylaşılan `fetchPickupOrdersByStatus` helper'ı), `hooks/usePersonelGelAlQueue.ts`
+> (parametrik `status`), `app/api/personel/gel-al/route.ts` (`?status=` query param,
+> fail-closed), `app/api/personel/gel-al/[id]/route.ts` (`"complete"` action — ⚠️ Kural #1
+> self-correction: `handleSimpleAction` helper'ına bölündü, 20 satır aşıyordu),
+> `components/personel/GelAlPanel.tsx` (Onay Bekleyen/Hazırlanıyor sekmeleri),
+> `components/personel/GelAlOrderCard.tsx` (`variant` prop — ⚠️ Kural #1 self-correction:
+> `PendingActions`/`PreparingActions` alt-bileşenlerine bölündü).
+> **(4) Testler:** 5 dosya (3 güncellendi: `gel-al-queries.test.ts`/`GelAlPanel.test.tsx`/
+> `GelAlOrderCard.test.tsx`, +7 yeni test; 2 YENİ: `route.test.ts`+`[id]/route.test.ts` —
+> PROJEDEKİ İLK API ROUTE TESTLERİ, emsal yoktu). Codespaces'te **37/37 PASS**.
+> **(5) Test ortamı bulgusu (düzeltildi):** İlk koşuda 2 route testi `next/server` modül
+> hatasıyla FAIL etti — `vi.mock("@/lib/personel/api-guards")` factory'siz çağrılınca Vitest
+> otomatik-mock için gerçek modülü (next-auth üzerinden `next/server`'ı tetikleyen) import
+> etmeye çalışıyordu. Her iki mock'a AÇIK factory verilerek düzeltildi, 37/37 yeşile döndü.
+> **Not (gelecekteki route testleri için REFERANS):** api-guards/next-auth zincirini
+> mock'larken factory'siz `vi.mock(path)` KULLANILMAMALI.
+> **(6) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Hazırlanıyor sekmesinin doğru render
+> olduğu ekran görüntüsüyle doğrulandı (3 kart, "Teslim Edildi" butonlarıyla). "Teslim
+> Edildi" butonuna TIKLANIP gerçekten `completed`'e geçtiği, Hazırlanıyor listesinden
+> düştüğü VE Onayla→Hazırlanıyor geçişinin uçtan uca (DB dahil) çalıştığı henüz canlıda
+> TIKLANARAK doğrulanmadı.
+
+> ⚠️ **Arşiv taşıması — 2026-08-12:** Kapanmış #89 CURRENT FOCUS bloğu (IP delili +
+> engellenen deneme logu, uçtan uca tamamlandı notu) `session_arşiv_2.md`'ye taşındı —
+> CORE.md §7.1 Adım 1 (400 satır eşiği, bu turdaki Gel Al 3-durumlu revizyon bloğu eklenince
+> aşıldı). Kapanış gerekçesi: içerik Kritik Kararlar tablosunda (#89 satırı) ve Açık
+> Sorunlar tablosunda (#89, ✅) zaten tam özetli duruyor. Taşıma bloğu ayrı eklenti
+> (`session_arsiv_2_EKLENTI_2026-08-12.md`) olarak verildi, kendi elinizle
+> `session_arşiv_2.md`'nin sonuna ekleyin.
 
 > **[YENİ SOHBET (devamı, 14.), 2026-08-11 — #38 kod+push TAMAM, canlı doğrulama BEKLİYOR]**
 > `RegistrationForm.tsx`'in Tailwind sınıfları #73 açısından teyit edildi — submit
@@ -213,6 +225,7 @@
 | 🆕 | **[BU TURDA — #85 bulgu 4 KARARI]** Gel Al'da eşzamanlı güncelleme koruması: `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (ucuz+doğru, her koşulda yapılır). `confirmPickupOrder`/`rejectPickupOrder` için optimistic lock EKLENMEDİ — kullanıcı beyanı: tek personel/tek masaüstü panel, pratik risk düşük. Masaya/#81 ile aynı kapsam kararı, #87 olarak loglandı. | ✅ Karar netleşti, kod+test üretildi, 15/15 PASS, push edildi |
 | 🆕 | **[BU TURDA — 1b(ii) KARARI, 2026-08-11]** `/masaya-siparis/[tableId]/*` (müşterinin kendi masasından sipariş vermesi) RESMEN KAPSAM DIŞI bırakıldı — gerekçe: dükkan küçük, personel masa siparişini zaten eliyle giriyor. **Personel-tarafı Masaya PANELİ (#62, `/personel` sekmesi) bu karardan ETKİLENMEDİ** — o zaten kod+canlı doğrulama ile TAMAMLANDI, sadece personelin kendi girdiği siparişleri yönetiyor. #66 (Sepete Ekle bypass guard) bu kapsam dışı bırakmadan bağımsız hâle geldi, hâlâ ayrı bir karar bekliyor. | ✅ Karar netleşti, kod değişikliği YOK (zaten kodlanmamıştı, sadece hedef listeden çıkarıldı) |
 | 🗄️✅ | **[BU TURDA — #89 KARARI, 2026-08-11]** `consentRegistrations.phone` zaten unique+upsert olduğu için IP delili AMACI "aynı telefonu tekrar yazan" değil "farklı sahte telefonlarla aynı IP'den art arda deneyen"i yakalamak. `ipAddress` (nullable) consent tablosuna, ayrı INSERT-ONLY `registrationBlockedAttempts` tablosu (429'ların kalıcı logu) eklendi — upsert DEĞİL, çünkü "kaç kez denendi" bilgisi kaybolmamalı. Migration Neon'da koşuldu, 6 sorguyla doğrulandı (diğer tablolar etkilenmedi), test 6/6 PASS, Vercel yeşil. | ✅ Uçtan uca TAMAMLANDI |
+| 🆕 | **[BU TURDA — Gel Al 3-durumlu revizyon, KARAR A, 2026-08-12]** Canlı bulgu: "Onayla" tıklanınca sipariş panelden kayboluyordu (`confirmed` BİLİNÇLİ olarak terminal tasarlanmıştı). `confirmed` artık terminal DEĞİL ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. Zincir: `pending→confirmed(Hazırlanıyor)→completed(Teslim Edildi)`. Migration gerekmedi (status düz text). | ✅ Karar netleşti, kod+test üretildi (37/37 PASS, Codespaces), canlı doğrulama (Teslim Edildi tıklaması) BEKLİYOR |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -241,7 +254,7 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. **Gel Al onay kuyruğu:** kod+test+build hepsi TAMAM (#85 bu turda kapandı — BSC-4/reduced-motion/bayat yorum/atomik increment düzeltildi, 15/15 test PASS, push edildi). **KALAN:** SADECE canlı ortamda (Vercel deploy sonrası) 3 aksiyonun (Onayla/Ulaşamadım/Reddet) gerçek bekleyen bir siparişle test edilmesi. | ARCHITECTURE.md §2.9a |
+| 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri, emsal yoktu) kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin ve Hazırlanıyor listesinden düştüğünün doğrulanması. | ARCHITECTURE.md §2.9a |
 | 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
 | 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız (#81'in Gel Al karşılığı) — bilinçli MVP-dışı bırakıldı (kullanıcı: tek personel/tek masaüstü panel, pratik risk düşük). Kullanım yoğunlaşırsa ele alınmalı. | `lib/personel/gel-al-queries.ts` |
 | 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri (Şifre Talepleri/Gel Al/Kayıt Onayları) kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. Ayrıca Gel Al/Kayıt Onayları sekmesi aktifken ilgili endpoint 5sn'de 2 kez sorgulanıyor (rozet + panel ayrı hook, bilinçli trade-off) — kullanım yoğunlaşırsa state page.tsx'e taşınıp panellere prop geçirilmesi düşünülebilir. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
@@ -332,7 +345,7 @@
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). **[Bu turda]** `consentRegistrations.ipAddress` (nullable) + yeni `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI — diğer tablolar etkilenmedi. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). |
-| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[Bu turda]** Gel Al onay kuyruğu (3. sekme) — #85'in 5 bulgusu kapandı (BSC-4/reduced-motion/bayat yorum/atomik increment), 3 test dosyası yazıldı, Codespaces'te 15/15 PASS, GitHub'a push edildi. **SADECE canlı ortamda 3 aksiyon testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[Bu turda]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
+| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[BU TURDA]** Gel Al onay kuyruğu — canlı bulgu üzerine 3-durumlu revizyon (KARAR A): `confirmed` artık terminal değil ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri) kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[önceki tur]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). |
 
 ---
@@ -346,7 +359,7 @@
 | 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
 | 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
 | 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
-| 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). **[Bu turda]** Gel Al onay kuyruğu — 7 dosya kodlandı+incelendi, `npm run build` YEŞİL. **KALAN:** #85'teki 5 bulgu (test seti, BSC-4, reduced-motion, 2 bayat yorum, race-condition notu) ele alınmalı, sonra canlı doğrulama (Onayla/Ulaşamadım/Reddet üçü de). | 🟠 |
+| 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). Gel Al onay kuyruğu #85 KAPANDI (önceki tur). **[BU TURDA]** 3-durumlu revizyon (KARAR A) — canlı bulgu üzerine `confirmed` terminal olmaktan çıkarıldı, `completed` eklendi, 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **KALAN:** canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin doğrulanması. | 🟠 |
 | 1c | **[Bu turda]** #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI (Codespaces'te `tsc --noEmit` + `npm run build` başarılı, GitHub'a push edildi). **KALAN:** test seti yazılmalı, canlı ortamda (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bir bekleyen kayıtla test edilmeli. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (müşterinin kendi masasından sipariş vermesi) **[BU TURDA KAPSAM DIŞI BIRAKILDI — kullanıcı kararı, 2026-08-11: dükkan küçük, personel masa siparişini zaten eliyle giriyor. Personel-tarafı Masaya PANELİ (#62) bundan ETKİLENMİYOR, o zaten TAMAMLANDI.]**; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor, 1b'den BAĞIMSIZ hâle geldi); (iv) **[BU TURDA KAPANDI ✅ — sadece doğrulama, kod değişikliği YOK]** kayıt sayfasında zorunlu kanal seçimi ZATEN kodluymuş: `useRegistrationForm.ts`'te `channel` state'i `useState<RegistrationChannel \| null>(null)` ile başlıyor (varsayılan seçim YOK) ve `submitRegistration()` içinde `if (!channel)` guard'ı POST'u engelliyor. Zincir uçtan uca teyit edildi: form→hook→`route.ts`→`upsertConsentRegistration`→`schema.ts`'teki `channel: text("channel").notNull()` — UI/API/DB üç katmanda da zorunlu, DB'ye kanal bilgisi olmadan hiçbir kayıt yazılamıyor. SESSION_INDEX'teki eski "hâlâ kodlanmadı" notu GÜNCELLİĞİNİ YİTİRMİŞTİ, düzeltildi. | 🟡 (ii) kapandı, (iv) kapandı, (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
@@ -385,8 +398,11 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v59 (v58'den: 1b(iv) KAPANDI — kod incelemesiyle kanal seçiminin
-UI+API+DB üç katmanda ZATEN zorunlu olduğu doğrulandı [`channel: RegistrationChannel | null`
-başlangıç null, `submitRegistration()`'da `if (!channel)` guard'ı, `schema.ts`'te `NOT NULL`],
-kod değişikliği yapılmadı — sadece güncelliğini yitirmiş "kodlanmadı" notu düzeltildi. 1b'de
-sadece (iii)/#66 açık kaldı. Güncellenme: 2026-08-11.*
+*BOWLERA SESSION_INDEX.md — v60 (v59'dan: Gel Al 3-durumlu revizyon — KARAR A. Canlı bulgu:
+"Onayla" tıklanınca sipariş panelden kayboluyordu (`confirmed` BİLİNÇLİ terminal tasarlanmıştı).
+`confirmed` artık terminal DEĞİL ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi")
+eklendi — migration gerekmedi. 7 kaynak + 5 test dosyası (2'si YENİ, projedeki ilk API route
+testleri) kodlandı, Codespaces'te 37/37 PASS (ilk koşuda 2 route testi `next/server` modül
+hatası verdi — factory'siz `vi.mock` kök nedeniydi, düzeltildi). #89 CURRENT FOCUS bloğu
+400 satır eşiği nedeniyle `session_arşiv_2.md`'ye taşındı (eklenti dosyası ayrı verildi).
+KALAN: canlı ortamda "Teslim Edildi" tıklama testi. Güncellenme: 2026-08-12.*
