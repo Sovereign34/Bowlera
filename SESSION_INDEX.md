@@ -82,32 +82,37 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 17.), 2026-08-12 — #90 YENİ: Customizer masaüstü layout, kod TAMAM,
-> canlı doğrulama BEKLİYOR]**
-> **(1) Bulgu:** Kullanıcı önce personel paneli genişlik sorunu sandı (o iz sonuçsuz kapandı —
-> `page.tsx`/`layout.tsx`/`globals.css`/`MasayaPanel.tsx`/`GelAlPanel.tsx`/`GelAlOrderCard.tsx`/
-> `KayitOnaylariPanel.tsx`/`PasswordResetPanel.tsx` tek tek kontrol edildi, hiçbirinde genişlik
-> kısıtı bulunamadı — muhtemelen o paneller yeniden yazılırken kendiliğinden düzelmiş).
-> Kullanıcı sonradan gerçek sayfayı düzeltti: `/menu/customize/[id]` ("Kâseni Oluştur" sonrası
-> açılan sayfa) — masaüstünde Sepetim (`SummaryPanel`) görünüyor ama adım alanı (StepBase vb.)
-> görünmüyor, pencere küçültülünce (mobil genişliğe inince) tekrar görünüyor.
-> **(2) Kök neden:** `VisualPreview.tsx`'te kâse görseli `aspect-square w-full` — yükseklik
-> genişlikle birebir orantılı. `page.tsx`'teki sarmalayıcı `mx-auto max-w-sm md:max-w-none`
-> masaüstünde tavanı tamamen kaldırıyordu — sol grid kolonu (`minmax(0,1fr)`) geniş ekranlarda
-> 700-900px'e büyüyünce görsel de aynı oranda devasalaşıp adım alanını ekranın çok aşağısına
-> itiyordu (kayıp değil, sadece scroll ile ulaşılamayacak kadar aşağıda).
-> **(3) Uygulanan çözüm (kullanıcı onayıyla, KARAR BİLDİRİMİ sonrası):** `app/menu/customize/
-> [id]/page.tsx`'te 4 değişiklik — (a) görsel tavanı `md:max-w-none` → `md:max-w-[280px]`;
-> (b) `<main>`e `md:h-screen md:overflow-hidden` (masaüstünde sayfa artık viewport'a kilitli);
-> (c) sol kolona (`space-y-6`) `md:h-full md:overflow-y-auto md:pr-2` (sığmazsa SADECE bu kolon
-> kendi içinde scroll olur, sayfa değil); (d) `SummaryPanel` sarmalayıcısına `md:sticky md:top-8
-> md:self-start` (kaydırsan da sepet sabit kalır). DESIGN_SYSTEM.md kontrol edildi, çakışan
-> kural yok (görsel boyutlandırma için tavan kuralı tanımlı değil). Tasarım skoru: 7/7.
-> **(4) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Kod üretildi ve dosya kullanıcıya verildi,
-> ama Codespaces'te build/test koşulmadı VE kullanıcının kendi `page.tsx`'ine uygulayıp
-> masaüstünde gerçekten tek ekrana sığdığını GÖZLE doğrulaması bekleniyor. `SummaryPanel`
-> içeriği çok uzarsa (çok malzeme seçilirse) sticky panelin kendisi de taşabilir — canlı testte
-> ayrıca gözlenmeli.
+> **[YENİ SOHBET (devamı, 18.), 2026-08-13 — #91 YENİ: Güvenlik Denetimi SEC-01+SEC-02, kod+test+
+> build+tsc TAMAM, SADECE canlı manuel doğrulama BEKLİYOR]**
+> **(1) Kapsam:** Ayrı bir "Güvenlik Denetim Raporu" checklist'inden auth/JWT/role-revocation
+> grubu (auth.ts, middleware.ts, schema.ts, types/next-auth.d.ts+index.ts) checkpoint'li (Kural
+> #5) incelendi, 2 HIGH bulgu koda döküldü.
+> **(2) SEC-01 (rol revocation gecikmesi):** `jwt()` callback'i role'ü SADECE ilk girişte set
+> ediyordu — DB'de "staff"→"customer" düşse bile eski JWT (maxAge 30gün) `/personel/*`'e
+> erişmeye devam ediyordu. Fix: `middleware.ts` artık staff route'a her girişte role'ü
+> `db.select()` ile TAZE okuyor (Edge-uyumlu Neon HTTP driver doğrulandı), fail-closed.
+> **(3) SEC-02 (login rate-limit yokluğu):** `authorize()`'da hiçbir deneme sınırı yoktu,
+> middleware matcher'ı `/api/auth/*`'i kapsamıyordu. Fix: `rate-limit.ts`'e mevcut desenle
+> birebir aynı `checkLoginRateLimit(phone)` eklendi (10dk/5 deneme), `authorize()` DB
+> sorgusundan ÖNCE bunu çağırıyor.
+> **(4) Test süreci (dürüst kayıt — 2 gerçek hata bulunup düzeltildi, tahmin değil):**
+> `auth.test.ts` ilk yazımda TÜM testler `ReferenceError` ile çöktü (`vi.mock` hoisting/TDZ —
+> `let capturedConfig` → `vi.hoisted()` ile düzeltildi). İkinci koşuda 7/13 test hâlâ FAIL —
+> kök neden 3 adımlı izole debug turuyla KANITLANDI (`.toString()` çıktısı gözle incelendi):
+> `next-auth/providers/credentials` paketi `authorize()`'ı `provider.authorize`'a DEĞİL
+> `provider.options.authorize`'a koyuyor. Düzeltme sonrası **33/33 test PASS** (rate-limit 11 +
+> middleware 10 + auth 13→13, kullanıcı ekran görüntüsüyle doğruladı), `npx tsc --noEmit` ve
+> `npm run build` TEMİZ (middleware bundle 145 kB'a çıktı — Edge limiti içinde, DB client
+> import'unun beklenen etkisi).
+> **(5) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Mock'lu testler + statik build/tsc yeterli
+> değil. Canlı ortamda: (a) bir staff hesabının role'ünü DB'de elle customer'a çekip eski JWT
+> ile `/personel`'e girmeyi deneyip 403 almak, (b) aynı telefonla 6 kez yanlış şifre deneyip
+> 6.'nın reddedildiğini görmek — İKİSİ DE HENÜZ YAPILMADI.
+>
+> **[Önceki tur, 17. sohbet, #90 — KOD ÜRETİLDİ, KALAN AYNEN AÇIK]** Customizer masaüstü
+> layout (`/menu/customize/[id]`) tek-ekrana-sığma düzeltmesi kodlandı (4 satır, `page.tsx`),
+> kullanıcıya verildi. Detay Açık Sorunlar #90'da korunuyor — build/push/canlı doğrulama HÂLÂ
+> BEKLİYOR, bu turda dokunulmadı.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -168,6 +173,7 @@
 | 🆕 | **[BU TURDA — 1b(ii) KARARI, 2026-08-11]** `/masaya-siparis/[tableId]/*` (müşterinin kendi masasından sipariş vermesi) RESMEN KAPSAM DIŞI bırakıldı — gerekçe: dükkan küçük, personel masa siparişini zaten eliyle giriyor. **Personel-tarafı Masaya PANELİ (#62, `/personel` sekmesi) bu karardan ETKİLENMEDİ** — o zaten kod+canlı doğrulama ile TAMAMLANDI, sadece personelin kendi girdiği siparişleri yönetiyor. #66 (Sepete Ekle bypass guard) bu kapsam dışı bırakmadan bağımsız hâle geldi, hâlâ ayrı bir karar bekliyor. | ✅ Karar netleşti, kod değişikliği YOK (zaten kodlanmamıştı, sadece hedef listeden çıkarıldı) |
 | 🗄️✅ | **[BU TURDA — #89 KARARI, 2026-08-11]** `consentRegistrations.phone` zaten unique+upsert olduğu için IP delili AMACI "aynı telefonu tekrar yazan" değil "farklı sahte telefonlarla aynı IP'den art arda deneyen"i yakalamak. `ipAddress` (nullable) consent tablosuna, ayrı INSERT-ONLY `registrationBlockedAttempts` tablosu (429'ların kalıcı logu) eklendi — upsert DEĞİL, çünkü "kaç kez denendi" bilgisi kaybolmamalı. Migration Neon'da koşuldu, 6 sorguyla doğrulandı (diğer tablolar etkilenmedi), test 6/6 PASS, Vercel yeşil. | ✅ Uçtan uca TAMAMLANDI |
 | 🆕 | **[BU TURDA — Gel Al 3-durumlu revizyon, KARAR A, 2026-08-12]** Canlı bulgu: "Onayla" tıklanınca sipariş panelden kayboluyordu (`confirmed` BİLİNÇLİ olarak terminal tasarlanmıştı). `confirmed` artık terminal DEĞİL ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. Zincir: `pending→confirmed(Hazırlanıyor)→completed(Teslim Edildi)`. Migration gerekmedi (status düz text). | ✅ Karar netleşti, kod+test üretildi (37/37 PASS, Codespaces), canlı doğrulama (Teslim Edildi tıklaması) BEKLİYOR |
+| 🗄️✅ | **[YENİ, bu turda — #91 SEC-01/SEC-02 KARARI, 2026-08-13]** Güvenlik denetimi: SEC-01 (rol revocation gecikmesi, HIGH) — `middleware.ts` artık `/personel/*` girişinde role'ü JWT değil DB'den taze okuyor. SEC-02 (login rate-limit yokluğu, HIGH) — `authorize()`'a telefon-bazlı `checkLoginRateLimit` (10dk/5 deneme) eklendi. 5 dosya (middleware.ts, rate-limit.ts, auth.ts + 3 test dosyası) kodlandı, Codespaces'te 33/33 PASS + `tsc --noEmit`/`npm run build` TEMİZ (2 gerçek test-kurulum hatası debug turlarıyla bulunup düzeltildi, detay CURRENT FOCUS'ta). | ✅ Karar netleşti, kod+test+build+tsc TAMAM, canlı manuel doğrulama (#91) BEKLİYOR |
 
 *(Tam gerekçe/tarih dökümü için: `session_arşiv.md` [Session 0-10], `session_arşiv_1.md` [Session 11+].)*
 
@@ -196,6 +202,7 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
+| 91 | 🟠 | **[YENİ, bu turda]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. **KALAN:** (a) canlıda bir staff hesabının role'ünü DB'de elle `customer`'a çekip eski JWT ile `/personel`'e girip 403 aldığını GÖZLE görmek; (b) aynı telefonla 6 kez yanlış şifre deneyip 6.'nın reddedildiğini GÖZLE görmek. İkisi de mock'lu testlerle DOLAYLI kanıtlandı ama GERÇEK ortamda hiç denenmedi (ÜÇÜNCÜ DERS). | `middleware.ts`, `auth.ts`, `lib/auth/rate-limit.ts` |
 | 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı (görsel tavanı `md:max-w-[280px]`, `<main>` `md:h-screen md:overflow-hidden`, sol kolon `md:overflow-y-auto`, `SummaryPanel` `md:sticky`) ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
 | 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri, emsal yoktu) kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin ve Hazırlanıyor listesinden düştüğünün doğrulanması. | ARCHITECTURE.md §2.9a |
 | 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
@@ -282,8 +289,8 @@
 |---|---|
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. `lib/db/schema.ts` (users.role eklendi) kullanıcı tarafından manuel push edildi. ✅ Önceki turdaki `channel-options.ts` build kırığı düzeltildi, Vercel deploy YEŞİL (1d KAPANDI). |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 (Personel Sipariş Paneli) hiç işlenmemiş, ayrı bir oturum/kalem olarak eklenmesi gerekebilir. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı (DB var, kod yok). |
-| Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). Genel `npm test` hâlâ tekrar çalıştırılmadı. ⚠️ `users.role` migration'ı için TEST_MATRIX.md güncellemesi BEKLEMEDE (dosya paylaşılmadı). |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Bu turda]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). |
+| Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). **[BU TURDA]** `rate-limit.test.ts` (11) + `middleware.test.ts` (10) + `auth.test.ts` (13) = 33/33 PASS, Codespaces'te kullanıcı tarafından koşuldu ve doğrulandı — SEC-01/SEC-02 kapsamı. Genel `npm test` (TÜM proje, tüm dosyalar) hâlâ hiç çalıştırılmadı. ⚠️ `users.role` migration'ı için TEST_MATRIX.md güncellemesi BEKLEMEDE (dosya paylaşılmadı). |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Önceki tur]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). **[BU TURDA]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) kod+test (33/33)+build+tsc TAMAM — canlı manuel doğrulama BEKLİYOR (#91). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
@@ -297,6 +304,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| -3 | **[YENİ, bu turda]** #91 — Güvenlik denetimi SEC-01/SEC-02 kod+test+build+tsc TAMAM. **KALAN:** canlıda (a) role-revocation 403 testi, (b) 6. yanlış şifre denemesinin reddi — ikisi de GÖZLE doğrulanmalı, sonra 5 dosya GitHub'a push edilmeli. | 🔴 |
 | -2 | **[YENİ, bu turda]** #90 — `/menu/customize/[id]` masaüstü tek-ekrana-sığma düzeltmesi kodlandı, kullanıcıya verildi. **KALAN:** kendi `page.tsx`'ine uygulanmalı, Codespaces'te build koşulmalı, GitHub'a push edilmeli, masaüstünde GÖZLE doğrulanmalı. | 🟠 |
 | -1 | **[TAMAMLANDI, bu turda ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda ("bari" görünür) doğrulandı. Kök neden SQL sorgusuyla izole edilmedi, kullanıcı deneyimi seviyesinde kapandı. | ✅ |
 | 0 | **[TAMAMLANDI, bu turda ✅]** #83 — "Sıfırla" → üretilen geçici kodla (460244) giriş canlıda BAŞARILI test edildi. | ✅ |
@@ -342,13 +350,11 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v63 (v62'den: CURRENT FOCUS içindeki 9 adet çok-satırlı "Arşiv
-taşıması" makbuzu (81 satır, 112-192) CORE.md §7.1 Adım 1.5'in kendi kuralına ("taşımanın
-tarihi, kaç madde, hangi parçaya — TEK SATIRLA kaydedilir") uygun tek bir kompakt tabloya
-indirildi (~14 satır) — hiçbir bilgi kaybolmadı, zaten Kritik Kararlar/Açık Sorunlar
-tablolarında ve ilgili arşiv dosyalarının kendi taşıma bloklarında kalıcı olarak duran bir
-tekrar kaldırıldı. Ayrıca 1b(ii) taşıma iddiası artık "DOĞRULANAMADI" olarak işaretlendi —
-2026-08-13 taramasında bu blok session_arşiv_2.md içinde bulunamadı (muhtemelen eklenti hiç
-üretilmedi/eklenmedi); bekleyen 6 eklenti dosyasının hangilerinin fiilen ana arşiv dosyalarına
-eklendiği ayrıca listelendi. Net değişim: 416→354 satır, 400 eşiğinin altına indi.
-Güncellenme: 2026-08-13.*
+*BOWLERA SESSION_INDEX.md — v64 (v63'ten: #91 YENİ — Güvenlik Denetimi SEC-01 (rol revocation
+gecikmesi, HIGH) + SEC-02 (login rate-limit yokluğu, HIGH). CURRENT FOCUS #90'dan #91'e
+güncellendi (#90'ın detayı veri kaybı olmadan Açık Sorunlar #90'da korunuyor). Kritik Kararlar
++ Açık Sorunlar + SIRADAKİ GÖREVLER + GENEL DURUM (Auth, Test Suite satırları) güncellendi.
+Kod+test (33/33 PASS, 3 dosya)+build+tsc TAMAM — canlı manuel doğrulama (2 adım) BEKLİYOR,
+henüz GitHub'a push EDİLMEDİ. Test sürecinde 2 gerçek hata (vi.mock TDZ + next-auth
+Credentials provider'ının authorize()'ı `.options.authorize`'da saklaması) izole debug
+turlarıyla bulunup düzeltildi — tahmin değil, kanıtlı. Güncellenme: 2026-08-13.*
