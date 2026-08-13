@@ -31,7 +31,7 @@ Kullanıcı              → Onaylar → kod uygulanır → loglanır
 6. **Her değişiklik öncesi KARAR BİLDİRİMİ** — Atlanamaz
 7. **Tasarım Sistemi bypass yasak** — Hiçbir çözüm DESIGN_SYSTEM.md kurallarını (renk, kalori zorunluluğu, animasyon) es geçemez
 8. **Onaylanmamış üçüncü parti entegrasyonu canlıya alma** — WhatsApp/Adisyo/QR test edilmeden "tamamlandı" sayılmaz
-9. **Üretilen her dosya artifact olarak verilir** — CORE.md, AGENT.md, SESSION_INDEX.md, ROADMAP.md, ARCHITECTURE.md, DESIGN_SYSTEM.md, CUSTOMIZER_SPEC.md, CONTENT_GUIDE.md, INTEGRATIONS.md, DEPENDENCIES.md, FAILURE_PATTERNS.md, TEST_MATRIX.md, CONFIG_SCHEMA.md, session_arşiv.md'ye eklenen taşıma blokları ve tüm kod dosyaları dahil — chat içine düz metin/kod bloğu olarak yapıştırılmaz. Kullanıcı dosyayı indirir, kendi reposuna taşır.
+9. **Üretilen her dosya artifact olarak verilir** — CORE.md, AGENT.md, SESSION_INDEX.md, ROADMAP.md, ARCHITECTURE.md, DESIGN_SYSTEM.md, CUSTOMIZER_SPEC.md, CONTENT_GUIDE.md, INTEGRATIONS.md, DEPENDENCIES.md, FAILURE_PATTERNS.md, TEST_MATRIX.md, CONFIG_SCHEMA.md, aktif arşiv parçasına (session_arşiv.md veya _1/_2/...) eklenen taşıma blokları ve tüm kod dosyaları dahil — chat içine düz metin/kod bloğu olarak yapıştırılmaz. Kullanıcı dosyayı indirir, kendi reposuna taşır.
 
 ---
 
@@ -198,7 +198,7 @@ Tüm kriterler geçerse:
 ```
 1.  SESSION_INDEX.md oku
 2.  Sağlık Kontrolü yap (CORE.md Bölüm 10)
-3.  session_arşiv.md'yi ASLA otomatik isteme
+3.  AKTİF arşiv parçasını (session_arşiv.md veya _1/_2/...) ASLA otomatik isteme
 4.  Görevi anla
 5.  Tetikleyici tablosundan (CORE.md Bölüm 3) gerekli dosyaları belirle
 6.  Eksik dosyaları iste
@@ -208,8 +208,9 @@ Tüm kriterler geçerse:
 10. Risk analizi + Confidence belirle
 11. Kalite skoru + Güvenlik skoru bildir (X/5 + X/8)
 12. SESSION_INDEX.md güncelle → TAM DOSYA olarak ver
-13. SESSION_INDEX 400 satırı geçtiyse → session_arşiv.md'ye taşıma bloğu ekle (SADECE yeni blok)
-14. Kullanıcı onayı al
+13. SESSION_INDEX 400 satırı geçtiyse → AKTİF arşiv parçasına taşıma bloğu ekle (SADECE yeni blok)
+14. AKTİF arşiv parçasının kendisi şiştiyse → yeni parça aç + CORE.md'yi aynı turda güncelle (CORE.md §7.1 Adım 1.7)
+15. Kullanıcı onayı al
 ```
 
 ---
@@ -556,13 +557,19 @@ Sebep: [HIGH ise hangi checklar geçti / LOW ise ne eksik]
 [SESSION_INDEX.md dosyasının TAMAMI — güncellendi]
 
 ## Session Arşiv (SADECE SESSION_INDEX 400 satırı geçtiyse doldurulur)
-[SADECE YENİ TAŞIMA BLOĞU — kullanıcı session_arşiv.md'ye kendisi ekler. 400 satır
-eşiği tetiklenmediyse bu bölüm tamamen boş bırakılır/atlanır.]
+[SADECE YENİ TAŞIMA BLOĞU — kullanıcı AKTİF arşiv parçasının (session_arşiv.md veya
+session_arşiv_N.md, SESSION_INDEX üst notuna bakılarak belirlenir) sonuna kendisi ekler.
+400 satır eşiği tetiklenmediyse bu bölüm tamamen boş bırakılır/atlanır. Eğer AKTİF arşiv
+parçasının kendisi de bu turda parçalandıysa (CORE.md §7.1 Adım 1.7), bu bölümün altına
+ayrıca CORE.md'nin güncellenmiş hâli de eklenir — atlanamaz.]
 ```
 
 > ⚠️ Session Arşiv bölümü SADECE 400 satır eşiği tetiklendiğinde doldurulur, SADECE YENİ
-> TAŞIMA BLOĞU verilir — dosyanın kendisi asla tam olarak yeniden üretilmez.
+> TAŞIMA BLOĞU verilir — hiçbir arşiv parçası (session_arşiv.md, _1, _2, ...) asla tam
+> olarak yeniden üretilmez.
 > ⚠️ Session Index her session sonunda TAM DOSYA olarak verilir.
+> ⚠️ Arşiv parçalandıysa (dosyanın kendisi şiştiyse), CORE.md da aynı turda güncellenmiş
+> TAM DOSYA olarak verilir — bkz. CORE.md §7.1 Adım 1.7.
 
 ---
 
@@ -584,15 +591,17 @@ eşiği tetiklenmediyse bu bölüm tamamen boş bırakılır/atlanır.]
 | Truncated dosya | Kod veya dosya kesildi | Hemen devam et — tam ver |
 | SESSION_INDEX arşivi kırpıldı | Eski oturum/arşiv bloğu içerik yerine "önceki versiyona bakılmalı" gibi bir referansla değiştirildi | Dur — arşiv bloğunu TAM içerikle alta taşı, asla dışarıya referansla değiştirme |
 | Dosya chat içine düz metin olarak yapıştırıldı | Artifact yerine kod bloğu/markdown metni verildi | Dur — dosyayı artifact olarak yeniden üret |
-| session_arşiv TAM DOSYA | Yeni taşıma bloğu yerine tam dosya verildi (400 satır eşiği tetiklenmiş olsa bile) | Dur — sadece yeni taşıma bloğunu ver |
+| Arşiv parçası TAM DOSYA | Yeni taşıma bloğu yerine bir arşiv parçasının (session_arşiv.md veya _1/_2/...) tamamı yeniden üretildi (400 satır eşiği tetiklenmiş olsa bile) | Dur — sadece yeni taşıma bloğunu ver |
 | SESSION_INDEX güncellenmedi | Session kapanışında index verilmedi | Hemen üret ve sun |
 | Checkpoint sorulmadan dosya üretildi | Büyük görev sonrası "Checkpoint alayım mı?" sorulmadan SESSION_INDEX/TEST_MATRIX güncellendi | Dur — önce checkpoint sorusunu sor, onay bekle |
 | Bileşen/fonksiyon 20 satır geçti | Büyük bileşen yazıldı | Dur — bölme önerisi sun |
 | Niyet yorumu yok | Dosya başında yorum bloğu yok | Dur — bloğu ekle |
 | Edge case atlandı | 3-5 senaryo düşünülmedi | Dur — edge case listele |
 | BSC ihlali | 8 güvenlik kuralından biri çiğnendi | Dur — ihlali bildir, düzeltilmiş kodu sun |
-| SESSION_INDEX 400 satır eşiği atlandı | Dosya 400 satırı geçti ama sıkıştırılıp/silinip session_arşiv.md'ye taşınmadı (CORE.md §7.1 Adım 1) | Dur — gerekçeli taşımayı yap, ikisini aynı turda ver |
-| Gerekçesiz madde düşürüldü | Açık Sorun/Karar, session_arşiv.md'ye eklenen blokta kapanış gerekçesi bırakılmadan tablodan kayboldu | Dur — maddeyi "teyit edilmeli" olarak geri ekle, gerekçe ara |
+| SESSION_INDEX 400 satır eşiği atlandı | Dosya 400 satırı geçti ama sıkıştırılıp/silinip aktif arşiv parçasına taşınmadı (CORE.md §7.1 Adım 1) | Dur — gerekçeli taşımayı yap, ikisini aynı turda ver |
+| Gerekçesiz madde düşürüldü | Açık Sorun/Karar, arşiv parçasına eklenen blokta kapanış gerekçesi bırakılmadan tablodan kayboldu | Dur — maddeyi "teyit edilmeli" olarak geri ekle, gerekçe ara |
+| Arşiv parçalandı ama CORE.md güncellenmedi | Yeni `session_arşiv_N.md` açıldı (arşivin kendisi şiştiği için, CORE.md §7.1 Adım 1.7) ama CORE.md'nin Dosya Haritası/Versiyon Geçmişi aynı turda güncellenmedi | Dur — CORE.md'yi hemen aynı turda güncelle; geriye dönük eksik parçalamalar varsa tek seferde hepsini belgele |
+| SESSION_INDEX "taşındı" dediği içerik arşivde yok | SESSION_INDEX bir bloğun arşiv parçasına taşındığını iddia ediyor ama o parça dosyasında/eklentisinde bu blok fiilen bulunmuyor | Dur — kullanıcıya eksik eklenti dosyasını sor, teyit gelmeden "taşındı" notunu doğru kabul etme |
 
 **Sapma fark edilince Claude şunu söyler:**
 > "⚠️ Kural sapması tespit ettim — [ne yaptım]. Düzeltiyorum: [doğru adım]."
@@ -616,7 +625,8 @@ eşiği tetiklenmediyse bu bölüm tamamen boş bırakılır/atlanır.]
 | Üretilen dosyayı artifact yerine chat içi düz metin olarak ver |
 | Onaysız birden fazla bileşen/modülü aynı anda değiştir |
 | Context eksikken HIGH confidence ver |
-| session_arşiv.md'yi TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
+| Herhangi bir arşiv parçasını (session_arşiv.md, _1, _2, ...) TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
+| Arşiv parçalanınca CORE.md güncellemesini "bir sonraki turda yaparım" diyerek ertele |
 | [KARAR BİLDİRİMİ] bloğu olmadan kod değişikliği öner |
 | Veri şeması değiştir — değişiklik notu yazmadan geç |
 | Math.random() / hardcode fiyat / hardcode kalori production'da kullan |
@@ -632,8 +642,9 @@ eşiği tetiklenmediyse bu bölüm tamamen boş bırakılır/atlanır.]
 | Test seti olmadan modülü "tamamlandı" say |
 | Yeni npm paketi kullanıcı onayı olmadan ekle |
 | SESSION_INDEX.md 400 satırı geçtiğinde "sıkıştırma" yap — gerekçesiz madde sil/özetle (CORE.md §7.1 Adım 1) |
-| Açık Sorun/Karar'ı session_arşiv.md'ye eklenen blokta kapanış gerekçesi bırakmadan tablodan düşür |
+| Açık Sorun/Karar'ı arşiv parçasına eklenen blokta kapanış gerekçesi bırakmadan tablodan düşür |
 | Checkpoint sorusu sormadan ("Checkpoint alayım mı?") SESSION_INDEX/TEST_MATRIX güncellemesi üret |
+| Arşiv dosyasının kendisi parçalara ayrılırken (session_arşiv_N.md açılırken) CORE.md Dosya Haritası/Versiyon Geçmişini aynı turda güncellemeden geç (CORE.md §7.1 Adım 1.7) |
 
 ---
 
@@ -671,7 +682,7 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 
 ---
 
-*BOWLERA AGENT.md — v1.4*
+*BOWLERA AGENT.md — v1.5*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
@@ -681,3 +692,13 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 *v1.4: `session_log.md` kaldırıldı, `session_arşiv.md` (tek işlev: 400 satır eşiği taşıması)
 getirildi. Checkpoint protokolüne uyulmadan dosya üretme ihlali SELF-CORRECTION'a eklendi.
 CORE.md v1.3 ile eşleştirildi (Session 8, 2026-08-07).*
+*v1.5: Arşiv dosyasının KENDİSİNİN de parçalara ayrılabileceği (session_arşiv.md →
+session_arşiv_1.md → session_arşiv_2.md → ...) resmen tanındı — SESSION_INDEX'in 400 satır
+eşiğinden AYRI, bağımsız bir tetikleyici (CORE.md §7.1 Adım 1.7). ÇALIŞMA AKIŞI'na madde 14
+eklendi, tüm tekil "session_arşiv.md" referansları "AKTİF arşiv parçası" olarak genelleştirildi,
+SELF-CORRECTION'a "Arşiv parçalandı ama CORE.md güncellenmedi" ve "SESSION_INDEX 'taşındı'
+dediği içerik arşivde yok" satırları, YASAK LİSTE'ye "CORE.md güncellemesini erteleme" satırı
+eklendi. Gerekçe: 2026-08-08/2026-08-11'de fiilen iki yeni arşiv parçası açılmıştı ama bu hiçbir
+zaman AGENT.md/CORE.md'ye işlenmemişti — governance dosyaları ile fiili uygulama arasında
+senkron kopukluğu oluşmuştu (kullanıcı tarafından fark edildi, 2026-08-12). CORE.md v1.4 ile
+eşleştirildi.*

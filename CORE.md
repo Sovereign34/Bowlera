@@ -15,9 +15,12 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 1.  SESSION_INDEX.md oku
     → Anlık durum, açık sorunlar, sıradaki görevler, kritik teknik kararlar
 
-2.  session_arşiv.md'yi ASLA otomatik isteme
-    → Sadece kullanıcı geçmişe bakmak isterse veya
-      ilgili session numarasını belirtince o bloğu iste
+2.  Arşiv dosyalarını ASLA otomatik isteme
+    → Arşiv birden fazla parçaya ayrılmış olabilir (session_arşiv.md,
+      session_arşiv_1.md, session_arşiv_2.md, ...). Hangi parçanın AKTİF
+      (yeni taşıma bloklarının eklendiği) parça olduğunu SESSION_INDEX.md'nin
+      üst notundan teyit et. Sadece kullanıcı geçmişe bakmak isterse veya
+      ilgili session numarasını/parça dosyasını belirtince o bloğu iste
 
 3.  Sağlık Kontrolü yap (Bölüm 10)
     → Sonucu tek cümleyle söyle, sorun varsa 🔴 ile işaretle
@@ -93,8 +96,8 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Performans / Core Web Vitals | `ARCHITECTURE.md` + `DESIGN_SYSTEM.md §Animasyon` | `TEST_MATRIX.md` |
 | Responsive / mobil uyarlama | `ARCHITECTURE.md` + `CUSTOMIZER_SPEC.md §Mobil UX` | — |
 | Şubeler / konum bulucu | `ARCHITECTURE.md` + `CONTENT_GUIDE.md §SEO` | — |
-| Bug fix (geçmiş kayıt lazımsa) | `session_arşiv.md` ilgili taşınmış blok (varsa) | `FAILURE_PATTERNS.md` |
-| Rollback / deploy geri alma | `ARCHITECTURE.md §Deploy` | `session_arşiv.md` |
+| Bug fix (geçmiş kayıt lazımsa) | AKTİF arşiv parçasındaki ilgili taşınmış blok (SESSION_INDEX üst notundan hangi parça olduğunu teyit et) | `FAILURE_PATTERNS.md` |
+| Rollback / deploy geri alma | `ARCHITECTURE.md §Deploy` | AKTİF arşiv parçası |
 | Test / doğrulama / çalışıyor mu | `TEST_MATRIX.md` | — |
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
@@ -108,10 +111,23 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 CORE.md                    ← Sen buradasın
 AGENT.md                   ← Ajan davranış kuralları
 SESSION_INDEX.md           ← Anlık durum pusulası — TEK aktif hafıza dosyası
-session_arşiv.md           ← Uzak/değiştirilemez hafıza. SADECE SESSION_INDEX.md 400
-                             satırı geçtiğinde, kapanmış içerik oraya taşınır. Ayrı bir
-                             "session kaydı" mekanizması DEĞİLDİR — tek işlevi SESSION_INDEX'in
-                             boyutunu küçük tutmaktır (Bölüm 7.1).
+
+session_arşiv.md,          ← Uzak/değiştirilemez hafıza, PARÇALARA AYRILABİLİR.
+session_arşiv_1.md,          İki BAĞIMSIZ tetikleyici vardır, karıştırılmaz:
+session_arşiv_2.md,          (A) SESSION_INDEX.md 400 satırı geçince, kapanmış
+... (N)                       içerik AKTİF arşiv parçasına taşınır (Bölüm 7.1).
+                              (B) AKTİF arşiv parçasının KENDİSİ hacimce
+                              yönetilemez hale gelirse (kullanıcı bunu belirtir/
+                              talep eder), yeni bir sonraki parça (`_N+1`) açılır
+                              — bu, SESSION_INDEX'in 400 satır kuralından AYRIDIR.
+                              Her iki tetikleyici de "Ayrı bir 'session kaydı'
+                              mekanizması" YARATMAZ — tek işlev hâlâ SESSION_INDEX'in
+                              (veya bir önceki arşiv parçasının) boyutunu küçük
+                              tutmaktır. Parçalama (B) yapıldığı ANDA, aynı turda
+                              bu bölüm (Dosya Haritası) ve VERSİYON GEÇMİŞİ
+                              güncellenir — atlanamaz (bkz. Bölüm 7.1 Adım 1.7).
+                              SESSION_INDEX.md'nin üst notunda HER ZAMAN hangi
+                              parçanın şu an AKTİF olduğu tek satırla belirtilir.
 
 ── REFERANS ──────────────────────────────────────────────
 MASTER_PLAN.md              ← Bowlera Master Teknik Referans v2.0
@@ -260,29 +276,45 @@ public/
   kapsar. Geçmiş oturumların **arşiv blokları** (SESSION ÖZET tablosu, 📜 GEÇMİŞ/ARŞİV başlıklı
   bölümler) TAM içerikle korunur — özetlenip "önceki versiyona bakılmalı" gibi bir referansla
   DEĞİŞTİRİLMEZ. Bu, AGENT.md Kural #4'ün (Truncated çıktı yasak) doğrudan bir uzantısıdır.
-- ⚠️ **400 SATIR EŞİĞİ — session_arşiv.md'ye taşıma zorunluluğu — TEK taşıma mekanizması:**
-  SESSION_INDEX.md ile session_arşiv.md arasındaki ilişki SADECE bu eşikle çalışır; ayrı,
+- ⚠️ **400 SATIR EŞİĞİ — aktif arşiv parçasına taşıma zorunluluğu:**
+  SESSION_INDEX.md ile aktif arşiv parçası arasındaki ilişki SADECE bu eşikle çalışır; ayrı,
   her-session-kapanışında-yazılan bir "log" mekanizması YOKTUR (kaldırıldı — bkz. VERSİYON
   GEÇMİŞİ, session_log→session_arşiv geçişi). Kapanışta güncellenmiş SESSION_INDEX.md
   **400 satırı geçerse**, dosya "sıkıştırılarak" küçültülemez. Bunun yerine:
   1. Artık aktif olmayan içerik (kapanmış Açık Sorunlar, süresi geçmiş/uygulanmış Kararlar,
-     eski CURRENT FOCUS metinleri, en eski SESSION ÖZET satırları) **session_arşiv.md'ye
-     TAŞINIR** — silinmez, özetlenmez.
-  2. Taşınan HER madde için session_arşiv.md'ye eklenen blokta en az 1-2 cümlelik **kapanış
+     eski CURRENT FOCUS metinleri, en eski SESSION ÖZET satırları) o anki **AKTİF arşiv
+     parçasına TAŞINIR** — silinmez, özetlenmez. Hangi parçanın aktif olduğu SESSION_INDEX
+     üst notundan teyit edilir; belirsizse kullanıcıya sorulur.
+  2. Taşınan HER madde için arşiv parçasına eklenen blokta en az 1-2 cümlelik **kapanış
      gerekçesi** bırakılır. Gerekçesiz "artık etkili değil" diyerek satırı silmek KESİNLİKLE
      YASAKTIR — bu, 2026-07-20'de yaşanan gerçek bir ihlaldi: bir "sıkıştırılmış" SESSION_INDEX
      sürümü 7 açık sorunu (#4/7/15/16/20/22/34) ve 2 kararı (#11/#12) hiçbir kapanış notu
      olmadan tablolardan düşürmüştü.
   3. Taşıma işlemi kendi başına bir session kapanışı gerektirir: SESSION_INDEX.md'nin
-     400 satırın ALTINA inmiş TAM güncel hâli + session_arşiv.md'ye eklenen taşıma bloğu
+     400 satırın ALTINA inmiş TAM güncel hâli + aktif arşiv parçasına eklenen taşıma bloğu
      **aynı turda birlikte** verilir — biri verilip diğeri sonraya bırakılamaz.
-  4. session_arşiv.md'ye eklenen taşıma bloğu **SADECE YENİ EKLEME olarak** verilir —
-     dosyanın kendisi asla tam olarak yeniden üretilmez, kullanıcı kendi elinle
-     mevcut session_arşiv.md'sinin sonuna ekler. (Bkz. Bölüm 9 Mutlak Yasaklar.)
-  5. SESSION_INDEX.md'nin en üstündeki uyarı notuna, taşımanın tarihi ve kaç madde
-     taşındığı tek satırla kaydedilir.
+  4. Arşiv parçasına eklenen taşıma bloğu **SADECE YENİ EKLEME olarak** verilir —
+     hiçbir arşiv parçası (session_arşiv.md, _1, _2, ...) asla tam olarak yeniden
+     üretilmez, kullanıcı kendi elinle ilgili parçanın sonuna ekler. (Bkz. Bölüm 9
+     Mutlak Yasaklar.)
+  5. SESSION_INDEX.md'nin en üstündeki uyarı notuna, taşımanın tarihi, kaç madde
+     taşındığı VE hangi arşiv parçasına taşındığı tek satırla kaydedilir.
   6. Bu adım atlanırsa Self-Correction tetiklenir — bkz. AGENT.md SELF-CORRECTION tablosu,
      "SESSION_INDEX 400 satır eşiği atlandı" satırı.
+  7. ⚠️ **ARŞİV PARÇALAMA (dosyanın kendisi bölündüğünde) — AYRI, BAĞIMSIZ tetikleyici:**
+     Yukarıdaki 400 satır eşiği SESSION_INDEX.md içindir. Bundan tamamen ayrı olarak, eğer
+     AKTİF arşiv parçasının (`session_arşiv_N.md`) kendisi hacimce yönetilemez hale geldiyse
+     (kullanıcı bunu fark eder/talep eder), yeni bir `session_arşiv_(N+1).md` açılır. Bu
+     durumda:
+     - Yeni parçanın başına, önceki parça(lar)la kronolojik ilişkiyi açıklayan bir not
+       yazılır (bkz. mevcut arşiv dosyalarındaki örnek üst notlar).
+     - **Aynı turda, atlanmadan** CORE.md'nin Bölüm 4 (Dosya Haritası) ve VERSİYON GEÇMİŞİ
+       güncellenir — yeni parça dosyasının varlığı ve hangi tarihten itibaren aktif olduğu
+       CORE.md'ye işlenir. CORE.md güncellenmeden parçalama "tamamlanmış" sayılmaz.
+     - SESSION_INDEX.md'nin üst notu, yeni AKTİF parçanın adını yansıtacak şekilde
+       güncellenir.
+     - Bu adım atlanırsa Self-Correction tetiklenir — bkz. AGENT.md SELF-CORRECTION tablosu,
+       "Arşiv parçalandı ama CORE.md güncellenmedi" satırı.
 
 **Adım 2 — TEST_MATRIX.md**
 - Bu session'da dokunulan bileşen/modül var mı?
@@ -316,8 +348,8 @@ public/
 **Kullanıcı "Evet" derse:**
 - SESSION_INDEX.md ve TEST_MATRIX.md güncellenir
 - TAM DOSYA olarak verilir
-- session_arşiv.md'ye BU ADIMDA dokunulmaz — sadece SESSION_INDEX 400 satırı geçerse
-  (Bölüm 7.1 Adım 1) devreye girer
+- Hiçbir arşiv parçasına BU ADIMDA dokunulmaz — sadece SESSION_INDEX 400 satırı geçerse
+  (Bölüm 7.1 Adım 1) ya da aktif parça kendisi şişerse (Bölüm 7.1 Adım 1.7) devreye girer
 - Kullanıcı kopyalar — kesinti olsa bile buradan devam edilir
 
 **Kullanıcı "Hayır" derse:**
@@ -415,7 +447,8 @@ YYYYMMDDHHMMSS_aciklama.md
 | Onaysız birden fazla modülü aynı anda değiştir |
 | Context eksikken HIGH confidence ver |
 | Truncated dosya ver |
-| session_arşiv.md'yi TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
+| Herhangi bir arşiv parçasını (session_arşiv.md, _1, _2, ...) TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
+| Arşiv parçalaması yapıp CORE.md'nin Dosya Haritası/Versiyon Geçmişini aynı turda güncellemeden geç |
 | Üçüncü parti entegrasyonu (WhatsApp/Adisyo/QR) gerçek anahtar/test olmadan "tamamlandı" say |
 
 ---
@@ -434,6 +467,7 @@ Her session açılışında kontrol et, sonucu kullanıcıya söyle:
 | 6 | Açık oturum/faz görevi var mı? | ROADMAP.md → aktif oturum |
 | 7 | Core Web Vitals hedefleri karşılanıyor mu? (LCP<2.5s, CLS<0.1) | SESSION_INDEX.md veya kullanıcıya sor |
 | 8 | Kalori/alerjen verisi eksik ürün var mı? | menu-data.json veya kullanıcıya sor |
+| 9 | Arşiv parçalarının SESSION_INDEX üst notu ile CORE.md Dosya Haritası senkron mu? | SESSION_INDEX üst notu ↔ CORE.md Bölüm 4 karşılaştır |
 
 **Format:**
 > "Sağlık: ⚠️ [kaç sorun] açık — [kısa liste]. Devam edelim mi?"
@@ -491,3 +525,15 @@ getirildi: TEK işlevi, SESSION_INDEX.md 400 satırı geçtiğinde kapanmış i�
 SESSION_INDEX'in (aktif hafızanın) boyutunu küçük tutup sistemin hafif çalışmasını sağlamak.
 "session_arşiv.md asla tam dosya olarak yeniden üretilmez, sadece yeni taşıma bloğu verilir"
 güvenlik kuralı DEĞİŞMEDİ, sadece tek mekanizmaya indirgendi. AGENT.md v1.4 ile eşleştirildi.*
+*v1.4 — Arşivin KENDİSİNİN de hacimce yönetilemez hale gelince parçalara ayrılabileceği
+(session_arşiv.md → session_arşiv_1.md → session_arşiv_2.md → ...) resmen tanımlandı. Bu,
+SESSION_INDEX'in 400 satır eşiğinden (Bölüm 7.1 Adım 1.1-1.6) AYRI, BAĞIMSIZ bir tetikleyicidir
+(Adım 1.7). Bölüm 1 (Session Açılış), Bölüm 3 (Tetikleyici Tablosu), Bölüm 4 (Dosya Haritası),
+Bölüm 9 (Mutlak Yasaklar) ve Bölüm 10 (Sağlık Kontrol Listesi, yeni madde 9) buna göre
+güncellendi. Gerekçe: 2026-08-08 ve 2026-08-11'de fiilen `session_arşiv_1.md` ve
+`session_arşiv_2.md` açılmıştı, kullanıcı tarafından onaylanmıştı, ama bu değişiklik hiçbir
+zaman CORE.md'ye işlenmemişti — SESSION_INDEX.md ile CORE.md arasında senkron kopukluğu
+oluşmuştu (kullanıcı tarafından fark edildi, 2026-08-12). Kural artık açık: bir arşiv parçası
+açıldığı ANDA, aynı turda CORE.md güncellenir — aksi halde Self-Correction tetiklenir (bkz.
+AGENT.md SELF-CORRECTION, "Arşiv parçalandı ama CORE.md güncellenmedi" satırı). AGENT.md v1.5
+ile eşleştirildi.*
