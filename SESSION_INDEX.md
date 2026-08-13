@@ -109,87 +109,25 @@
 > içeriği çok uzarsa (çok malzeme seçilirse) sticky panelin kendisi de taşabilir — canlı testte
 > ayrıca gözlenmeli.
 
-> ⚠️ **Arşiv taşıması — 2026-08-12 (devamı, #90 sonrası):** Kapanmış Gel Al 3-durumlu
-> revizyon (KARAR A, 16. sohbet) CURRENT FOCUS bloğu `session_arşiv_2.md`'ye taşındı —
-> CORE.md §7.1 Adım 1 (400 satır eşiği, bu turda eklenen #90 bloğu ile tekrar aşıldı).
-> Kapanış gerekçesi: içerik Kritik Kararlar tablosunda (KARAR A satırı), Açık Sorunlar
-> tablosunda (#62 satırı), GENEL DURUM'da (Personel Sipariş Paneli satırı) ve SIRADAKİ
-> GÖREVLER'de (sıra 1) zaten tam özetli duruyor — "Teslim Edildi" canlı doğrulaması hâlâ
-> BEKLİYOR durumda ama bu KALAN iş zaten dört tabloda da görünür, turn-by-turn anlatı
-> ayrıca aktif takip gerektirmiyor. Taşıma bloğu ayrı eklenti
-> (`session_arsiv_2_EKLENTI_2026-08-12-devam2.md`) olarak verildi, kendi elinizle
-> `session_arşiv_2.md`'nin sonuna ekleyin.
+### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
-> ⚠️ **Arşiv taşıması — 2026-08-12:** Kapanmış #89 CURRENT FOCUS bloğu (IP delili +
-> engellenen deneme logu, uçtan uca tamamlandı notu) `session_arşiv_2.md`'ye taşındı —
-> CORE.md §7.1 Adım 1 (400 satır eşiği, bu turdaki Gel Al 3-durumlu revizyon bloğu eklenince
-> aşıldı). Kapanış gerekçesi: içerik Kritik Kararlar tablosunda (#89 satırı) ve Açık
-> Sorunlar tablosunda (#89, ✅) zaten tam özetli duruyor. Taşıma bloğu ayrı eklenti
-> (`session_arsiv_2_EKLENTI_2026-08-12.md`) olarak verildi, kendi elinizle
-> `session_arşiv_2.md`'nin sonuna ekleyin.
+| Tarih | Taşınan | Hedef | Durum |
+|---|---|---|---|
+| 2026-08-09 | 6 blok (#62 kod kapanışı, BEŞİNCİ DERS, `users.role` migration, şema notu, masa no kararı, channel-options.ts kırığı) | `session_arşiv.md` | ✅ Kritik Kararlar/GENEL DURUM'da özetli |
+| 2026-08-09 (devamı) | 2 blok (#74-78 açılışı, #76+#77 kapanışı) + eski kapanış anlatısı (#59/#72/users.role/1d) | `session_arşiv_1.md` | ✅ Açık Sorunlar/Kritik Kararlar'da özetli |
+| 2026-08-10 | 3 blok (#74 çıkış butonu, #62 Masaya tam kapanış, #79 masaüstü fix) | `session_arşiv_1.md` | ✅ özetli. ⚠️ Eklenti (`session_arsiv_1_EKLENTI_2026-08-10.md`, 4 blok) HÂLÂ `session_arşiv_1.md`'nin sonuna eklenmemiş |
+| 2026-08-11 | #85 bloğu (İLK taşıma, session_arşiv_2.md'yi açan blok) | `session_arşiv_2.md` | ✅ Açık Sorun #85/Kritik Kararlar'da özetli, TAM dosya olarak verildi |
+| 2026-08-11 (3. kez) | Sekme rozetleri + DESIGN_SYSTEM.md §2.2 istisnası | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-11.md`) | ✅ Açık Sorun #88'de özetli |
+| 2026-08-11 (devamı) | 1b(ii) kapsam-dışı kararı | `session_arşiv_2.md` (iddia edilen) | ⚠️ **DOĞRULANAMADI** — 2026-08-13 taramasında bu blok `session_arşiv_2.md` içinde bulunamadı, muhtemelen eklenti hiç üretilmedi/eklenmedi. Karar Kritik Kararlar tablosunda ve Açık Sorun #66'da özetli, içerik kaybı değil, sadece turn-by-turn anlatı eksik |
+| 2026-08-11 (devamı, 4. kez) | #86 Kayıt Onayları (build doğrulandı notu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-11-devam4.md`) | ✅ Açık Sorun #86'da özetli |
+| 2026-08-12 | #89 bloğu (IP delili + engellenen deneme logu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12.md`) | ✅ Kritik Kararlar/#89'da özetli |
+| 2026-08-12 (3. kez) | #38 bloğu (RegistrationForm kod+push) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam3.md`) | ✅ Açık Sorun #38'de özetli |
+| 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
 
-> ⚠️ **Arşiv taşıması — 2026-08-12 (devamı, #90 sonrası, 3. kez):** Kapanmış #38 CURRENT
-> FOCUS bloğu (14. sohbet, `RegistrationForm.tsx` kod+push tamam notu) `session_arşiv_2.md`'ye
-> taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış gerekçesi: içerik Açık Sorunlar
-> tablosunda (#38 satırı) zaten tam özetli duruyor — canlı görsel doğrulama hâlâ BEKLİYOR ama
-> bu KALAN iş o satırda görünür. Taşıma bloğu ayrı eklenti
-> (`session_arsiv_2_EKLENTI_2026-08-12-devam3.md`) olarak verildi, kendi elinizle
-> `session_arşiv_2.md`'nin sonuna ekleyin.
-
-> ⚠️ **Arşiv taşıması — 2026-08-11 (devamı):** 1b(ii) kapsam-dışı kararının kapanmış
-> CURRENT FOCUS bloğu `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır
-> eşiği). Kapanış gerekçesi: karar Kritik Kararlar tablosunda, 1b satırında ve #66
-> satırında zaten tam özetli duruyor.
-
-> ⚠️ **Arşiv taşıması — 2026-08-11 (3. kez):** Sekme rozetleri + DESIGN_SYSTEM.md §2.2
-> istisnası bloğu `session_arşiv_2.md`'ye (TAŞIMA BLOĞU #2 olarak) taşındı — CORE.md §7.1
-> Adım 1 (400 satır eşiği #38 kapanışıyla tekrar aşıldı). Kapanış gerekçesi: içerik Açık
-> Sorunlar tablosunda (#88), GENEL DURUM satırında ve DESIGN_SYSTEM.md v1.2 notunda zaten
-> özetli. Taşıma bloğu ayrı eklenti (`session_arsiv_2_EKLENTI_2026-08-11.md`) olarak
-> verildi, kendi elinizle `session_arşiv_2.md`'nin sonuna ekleyin.
-
-> ⚠️ **Arşiv taşıması — 2026-08-11:** Kapanmış #85 CURRENT FOCUS bloğu
-> `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği aşıldı).
-> **[GÜNCELLEME, aynı gün]** Kullanıcı `session_arşiv_1.md`'nin hacimce şiştiğini belirtti
-> ve YENİ bir dosya (`session_arşiv_2.md`) açılmasını istedi — bu blok başlangıçta ayrı bir
-> eklenti (`session_arsiv_1_EKLENTI_2026-08-11.md`) olarak üretilmişti, sonradan doğrudan
-> `session_arşiv_2.md`'nin İLK taşıma bloğu olarak yeniden paketlendi (kullanıcıya TAM
-> dosya olarak verildi, ayrıca eklenmesine gerek yok). Kapanış gerekçesi: #85 Açık
-> Sorunlar tablosunda (✅), Kritik Kararlar tablosunda ve GENEL DURUM satırında zaten
-> özetli duruyor, turn-by-turn anlatı artık aktif takip gerektirmiyor.
-> ⚠️ **Bekleyen madde:** `session_arsiv_1_EKLENTI_2026-08-10.md` (4 blok — SOHBET KAYBI,
-> 2x Gel Al ara-durum, #82/#83/#84) hâlâ `session_arşiv_1.md`'nin sonuna eklenmemiş
-> görünüyor — kronolojik olarak arşiv_1'e ait, arşiv_2'ye DEĞİL.
-
-> ⚠️ **Arşiv taşıması — 2026-08-10:** 3 kapanmış CURRENT FOCUS bloğu (#74 çıkış butonu
-> kapanışı, #62 Masaya sekmesi tam kapanışı, #79 masaüstü fix'i) `session_arşiv_1.md`'ye
-> taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış gerekçesi: hepsi Kritik Kararlar
-> tablosunda ve/veya Açık Sorunlar tablosunda satır olarak zaten özetli duruyor, turn-by-turn
-> anlatı artık aktif takip gerektirmiyor. Taşıma bloğu ayrı olarak sunulacak.
-
-> ⚠️ **Arşiv taşıması — 2026-08-11 (devamı, 4. kez):** Kapanmış #86 Kayıt Onayları CURRENT
-> FOCUS bloğu (build DOĞRULANDI notu) `session_arşiv_2.md`'ye taşındı — CORE.md §7.1 Adım 1
-> (400 satır eşiği #89 IP delili eklenince tekrar aşıldı). Kapanış gerekçesi: içerik Açık
-> Sorunlar tablosunda #86 satırında ve Kritik Kararlar tablosunda zaten özetli duruyor.
-> Taşıma bloğu ayrı eklenti (`session_arsiv_2_EKLENTI_2026-08-11-devam4.md`) olarak verildi,
-> kendi elinizle `session_arşiv_2.md`'nin sonuna ekleyin.
-
-> ⚠️ **Arşiv taşıması — 2026-08-09:** 6 kapanmış CURRENT FOCUS bloğu (#62 kod kapanışı,
-> BEŞİNCİ DERS, `users.role` migration, şema notu üretimi, masa numarası kararı,
-> channel-options.ts build kırığı) `session_arşiv.md`'ye taşındı — CORE.md §7.1 Adım 1
-> (400 satır eşiği). Taşıma bloğu ayrı artifact olarak sunuldu, kullanıcı kendi
-> `session_arşiv.md`'sinin sonuna ekleyecek.
-
-> ⚠️ **Arşiv taşıması — 2026-08-09 (devamı):** 2 kapanmış CURRENT FOCUS bloğu ("5 yeni
-> bug/UX tespiti — #74-78 açılışı" ve "#76+#77 kod+test tamam, deploy yeşil, canlı doğrulama
-> bekliyor") + eski "KAPANDI (önceki tur)" anlatı bloğu (#59, #72, `users.role` migration,
-> 1d) `session_arşiv_1.md`'ye taşındı — CORE.md §7.1 Adım 1 (400 satır eşiği). Kapanış
-> gerekçesi: hepsinin içeriği SESSION_INDEX'te kalıcı olarak başka yerde temsil ediliyor —
-> #74-78 açılışı Açık Sorunlar tablosunda satır olarak duruyor, #76/#77'nin canlı doğrulaması
-> "KAPANDI (YENİ SOHBET, bu turda ✅)" notuyla, #59/#72/users.role/1d ise Kritik Kararlar
-> tablosu ve GENEL DURUM satırlarıyla zaten kapanmış görünüyor; turn-by-turn anlatı artık
-> aktif takip gerektirmiyor. Taşıma bloğu ayrı olarak sunuldu, kullanıcı kendi
-> `session_arşiv_1.md`'sinin sonuna ekleyecek.
+> ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
+> `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
+> `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`
+> — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
 
@@ -404,13 +342,13 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v62 (v61'den: kullanıcı 400-satır ihlalini fark etti, önceki
-"taşınacak kapalı blok yok" değerlendirmesi YANLIŞ uygulanmıştı — dosyadaki emsale (#89/#86)
-göre kriter "sıfır kalan iş" değil "içerik zaten Açık Sorunlar/Kritik Kararlar tablosunda özetli
-mi". Düzeltme: Gel Al 3-durumlu revizyon (16. sohbet) ve #38 (14. sohbet) CURRENT FOCUS
-blokları arşive taşındı, 439→416 satır. Ayrı bir denemede 3 kapanmış (✅) Açık Sorunlar
-satırı (#50/#85/#70) da gerekçeyle silinmeye çalışıldı ama tek-satırlık kayıtları çok
-satırlı gerekçe bildirimiyle değiştirmek net satır SAYISINI ARTIRDIĞI için bu adım GERİ
-ALINDI — üçü de tabloda duruyor. KALAN: 416 satır hâlâ 400 eşiğinin 16 satır üstünde;
-CURRENT FOCUS'ta taşınabilecek başka kapanmış anlatı bloğu kalmadı (geri kalanı ya zaten
-kompakt arşiv bildirimleri ya da bu turun açık #90 bloğu). Güncellenme: 2026-08-12.*
+*BOWLERA SESSION_INDEX.md — v63 (v62'den: CURRENT FOCUS içindeki 9 adet çok-satırlı "Arşiv
+taşıması" makbuzu (81 satır, 112-192) CORE.md §7.1 Adım 1.5'in kendi kuralına ("taşımanın
+tarihi, kaç madde, hangi parçaya — TEK SATIRLA kaydedilir") uygun tek bir kompakt tabloya
+indirildi (~14 satır) — hiçbir bilgi kaybolmadı, zaten Kritik Kararlar/Açık Sorunlar
+tablolarında ve ilgili arşiv dosyalarının kendi taşıma bloklarında kalıcı olarak duran bir
+tekrar kaldırıldı. Ayrıca 1b(ii) taşıma iddiası artık "DOĞRULANAMADI" olarak işaretlendi —
+2026-08-13 taramasında bu blok session_arşiv_2.md içinde bulunamadı (muhtemelen eklenti hiç
+üretilmedi/eklenmedi); bekleyen 6 eklenti dosyasının hangilerinin fiilen ana arşiv dosyalarına
+eklendiği ayrıca listelendi. Net değişim: 416→354 satır, 400 eşiğinin altına indi.
+Güncellenme: 2026-08-13.*
