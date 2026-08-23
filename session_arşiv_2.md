@@ -319,4 +319,52 @@ Kendi elinizle mevcut session_arşiv_2.md dosyanızın SONUNA ekleyin.
 > tekrar set ediyor. WhatsApp butonunun pasif/gri olması da AYRI ve bilinen bir durum — şube
 > telefon numaraları henüz tanımlanmadı (#58'in henüz kapanmamasının doğrudan sonucu, YENİ
 > bug değil).
+# EKLENTİ — session_arşiv_2.md'nin sonuna eklenecek
+# Taşıma tarihi: 2026-08-23 (22. sohbet, SESSION_INDEX.md 400 satır eşiği ikinci kez aşıldı)
+# Kaynak: SESSION_INDEX.md CURRENT FOCUS — "SEKİZİNCİ DERS (21. sohbet)" bloğu
+# Kapanış gerekçesi: İçerik Açık Sorunlar #95/#96/#97/#98'de ve Kritik Kararlar'da zaten
+# tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşınıyor.
+
+---
+
+> ⚠️ **SEKİZİNCİ DERS (2026-08-23, 21. sohbet — YEDİNCİ DERS'in TEKRARI, farklı telafi
+> şekli):** Kullanıcı bir Vercel build hatası paylaştığında, o hatanın kaynağı olan kod
+> turunun (S3/S6 çözümü, `SandwichCustomizer.tsx`/`SandwichSummaryPanel.tsx`/`StepDots.tsx`/
+> tam `useSandwichStore.ts` üretimi) BU SESSION_INDEX'e HİÇ işlenmediği ortaya çıktı — yukarıdaki
+> "S1-S6 hâlâ bekliyor" notu YANLIŞTI, S3/S6 aslında kapanmıştı. Kullanıcı bu kez tam sohbeti
+> taşımadı, dosya dosya paylaşarak (GitHub ekran görüntüleri + tek tek dosya yüklemeleri)
+> parça parça telafi ettirdi. Kural aynı, beşinci kez doğrulandı: bir kod turu üretildiğinde,
+> sohbet kapanmadan SESSION_INDEX güncellenmezse iz kaybolur — sonraki sohbet dosyanın
+> kendisine değil, KULLANICININ HAFIZASINA bağımlı kalır.
+>
+> **Bu turda fiilen yapılanlar (21. sohbet, 2026-08-23):**
+> 1. Build hatası düzeltildi — `sandwich-data.json` yanlış konumda (`public/data/`) aranıyordu,
+>    proje konvansiyonuna (`lib/menu-data.json` emsali) uyularak `lib/sandwich-data.json`'a
+>    taşındı, `useSandwichStore.ts` import satırı düzeltildi.
+> 2. `sandwich-data.json` hiç yoktu (S1'in ta kendisi) — TEST VERİSİ iskeleti üretildi (`_META`
+>    alanıyla açıkça işaretli, tüm fiyat/kalori placeholder). **S1/S2/S5 gerçek veri gelene
+>    kadar açık kalmaya devam ediyor (bkz. Açık Sorun #95).**
+> 3. `useCartStore.ts` gerçek dosyası görüldü — `SandwichCustomizer.tsx`'in "confidence: MEDIUM,
+>    doğrulanmadı" notu KAPANDI: import yolu + `addToCart(item: CartItem)` imzası birebir eşleşti.
+> 4. Anasayfa CTA düzeni değişti (`Hero.tsx`) — "Menüyü Keşfet" üstte tek, "Kaseni Oluştur" +
+>    "Sandviçini Oluştur" altta yan yana. Yeni CTA `/sandwich/customize/build-your-own-sandwich`'e
+>    gidiyor (Bowl'un `build-your-own-kasem` konvansiyonuna uygun).
+> 5. 6 adım bileşeni sıfırdan kodlandı (`StepBread/StepSize/StepProtein/StepCheese/StepVeggies/
+>    StepSauceToastExtras.tsx`) — Bowl'un `StepBase.tsx` deseni birebir kopyalandı.
+>    `SandwichCustomizer.tsx` bu 6 bileşeni `currentStep`'e göre render edecek şekilde
+>    güncellendi (`handleAddToCart` mantığına DOKUNULMADI).
+> 6. Eksik `app/sandwich/customize/[id]/page.tsx` üretildi — kullanıcının "buton/sayfa yok"
+>    şikayetinin KÖK NEDENİ buydu. `[id]` şu an kullanılmıyor.
+> 7. AGENT.md §6 ihlali kullanıcı tarafından yakalandı: 7 dosya testsiz teslim edilmişti.
+>    7 test dosyası (happy/edge/failure) sonradan yazıldı. Codespaces doğrulamasında 2 sorun
+>    çıktı, ikisi de düzeltildi: (a) `SandwichCustomizer.test.tsx`'te `act()` sarmalayıcısı
+>    eksikti (senkron `setState` sonrası assertion'ın render'ı yakalamaması) — düzeltildi;
+>    (b) `StepSauceToastExtras.test.tsx` ilk pushta unutulmuş — tekrar verildi, eklendi.
+>    **SONUÇ: 7/7 test dosyası, 27/27 test PASS (Codespaces, 2026-08-23 18:28).**
+> 8. Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test
+>    başarısız çıktığı görüldü (`Header.test.tsx` dahil) — bu turun kapsamı dışında,
+>    bilinçli dokunulmadı (bkz. Açık Sorun #98).
+>
+> **KALAN:** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor (bkz. #97);
+> `Hero.test.tsx`'in "Kâseni Yarat" beklentisi hâlâ stale, bu turda da dokunulmadı.
 
