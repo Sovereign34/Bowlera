@@ -82,6 +82,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Ana Sayfa (hero, değer önerisi, öne çıkanlar) | `MASTER_PLAN.md §3.1` + `DESIGN_SYSTEM.md` | `ARCHITECTURE.md` |
 | Menü sayfası / filtreleme / MenuCard | `MASTER_PLAN.md §3.2` + `ARCHITECTURE.md` | `DESIGN_SYSTEM.md` |
 | "Kâseni Yarat" özelleştirme akışı | `CUSTOMIZER_SPEC.md` + `ARCHITECTURE.md` | `DESIGN_SYSTEM.md` |
+| "Sandviçini Oluştur" özelleştirme akışı | `SANDWICH_SPEC.md` + `ARCHITECTURE.md` | `DESIGN_SYSTEM.md` |
 | Sepet (cart) / Zustand store | `ARCHITECTURE.md §Veri Modeli` + `CUSTOMIZER_SPEC.md` | `FAILURE_PATTERNS.md` |
 | Renk / tipografi / animasyon kararı | `DESIGN_SYSTEM.md` | — |
 | Fotoğraf / görsel direktifi / adlandırma | `DESIGN_SYSTEM.md` | — |
@@ -153,6 +154,16 @@ DEPENDENCIES.md            ← Dosya ve modül bağımlılık haritası
 CUSTOMIZER_SPEC.md         ← "Kâseni Yarat" akışının tam kontratı:
                              4 adım state makinesi, canlı fiyat/kalori hesabı,
                              VisualPreview katman mantığı, mobil UX
+
+SANDWICH_SPEC.md           ← "Sandviçini Oluştur" akışının tam kontratı (v1.0,
+                             2026-08-23) — CUSTOMIZER_SPEC.md desenlerini
+                             kullanan AYRI/İZOLE store (useSandwichStore.ts,
+                             Seçenek A), 6 adım state makinesi (Size→Bread→
+                             Protein→Cheese→Veggies→Sauce&Toast&Extras),
+                             UX sırasından bağımsız getPrepOrder() (mutfak
+                             hazırlık sırası). ⚠️ Yapısal iskelet ONAYLANDI,
+                             6 açık soru (S1-S6, malzeme verisi dahil) kod
+                             aşamasından önce netleşmeli.
 
 DESIGN_SYSTEM.md           ← Renk kullanım tablosu (WCAG), logo degrade kuralı,
                              tipografi, ikonografi, fotoğraf direktifi, animasyon sistemi
@@ -513,6 +524,13 @@ Claude hemen paketi hazırlar.
 
 *BOWLERA — Bu dosya yaşayan bir referanstır. Her mimari/tasarım kararı SESSION_INDEX.md'ye,
 her büyük değişiklik DEPENDENCIES.md'ye yansıtılmalıdır.*
+*v1.5 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
+`SANDWICH_SPEC.md` (v1.0) referansı eklendi — "Sandviçini Oluştur" akışının izole kontratı
+(Seçenek A, bowl akışına dokunmaz). Gerekçe: yeni bir çekirdek referans dosyası eklenince
+CORE.md'nin aynı turda güncellenmesi kuralı (arşiv parçalama dersinden genellenen prensip,
+bkz. v1.4 notu) — kullanıcı talebiyle uygulandı (2026-08-23). SANDWICH_SPEC.md'nin 6 açık
+sorusu (S1-S6) netleşmeden kod üretimine geçilemeyeceği not edildi. AGENT.md'ye HENÜZ
+işlenmedi — sadece CORE.md tarafı bu turda güncellendi.*
 *v1.1 — §7.1 Adım 1'e SESSION_INDEX arşiv koruma netleştirmesi eklendi (Session 4 — 2026-07-19,
 AGENT.md v1.1 ile eşleştirildi).*
 *v1.2 — §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi: SESSION_INDEX.md 400 satırı geçince

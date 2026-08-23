@@ -128,6 +128,29 @@
 > sadece analiz + öneri. **Sıradaki adım kullanıcı kararıyla netleşti: önce #91'in canlı
 > doğrulaması yapılacak, #92/#93/#94 SONRA ele alınacak.**
 
+> **[YENİ, bu turda (20. sohbet, 2026-08-23) — SANDWICH_SPEC.md v1.0 ÜRETİLDİ, KOD YOK]**
+> Kullanıcı "Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole bir
+> kopyasının çıkarılmasını istedi (Seçenek A — paralel/bağımsız motor, bowl akışına
+> dokunmaz, kullanıcı onayladı). Subway + Jersey Mike's global sandviç zinciri UX'i
+> web'den araştırıldı, sentezlendi: Subway'in gerçek sırasına sadık 6 adım (Size→Bread→
+> Protein→Cheese→Veggies→Sauce&Toast&Extras — ilk önerilen "Bread-first" sıra kullanıcı
+> tarafından REDDEDİLDİ, Subway'in protein/size-first gerçeğine düzeltildi). Kullanıcının
+> "operasyonu da düşün" uyarısı üzerine **UX seçim sırası ile fiziksel hazırlık sırasının
+> AYRI tutulması** kararlaştırıldı — yeni `getPrepOrder()` fonksiyonu (Personel Sipariş
+> Paneli #62 ticket render'ı için, `selections` state'ini DEĞİŞTİRMEDEN mutfak sırasına
+> göre yeniden düzenler: Bread→Protein+Cheese→Toast→Veggies→Sauce). Toast, şube-config'e
+> bağlı opsiyonel özellik olarak tasarlandı (çok şubeli mimariyle #92/#93/#94 bağlantılı,
+> henüz kararlaştırılmadı). `SANDWICH_SPEC.md` dosyası kullanıcıya artifact olarak verildi,
+> CORE.md Bölüm 3 (Tetikleyici Tablosu) + Bölüm 4 (Dosya Haritası) AYNI TURDA güncellendi
+> (v1.5) — yeni referans dosyası eklenince CORE.md senkron kalmalı kuralı uygulandı.
+> **Durum: SADECE yapısal iskelet onaylandı, kod ÜRETİLMEDİ.** 6 açık soru (S1: gerçek
+> `sandwich-data.json` verisi, S2: Veggies ücretsiz kota sayısı, S3: `extras.doubleProtein`
+> vs `proteinPortion:'double'` çakışması, S4: Toast sabit mi/config'e mi bağlı, S5: "Mike's
+> Way" preset içeriği, S6: `useCartStore.customization` union tipi genişletmesi — AYRI onay
+> gerektiren TEK bowl-dokunuşu) kod aşamasından ÖNCE netleşmeli (Kural #2 — eksik veriyle
+> çözüm üretilmez). AGENT.md'ye bu turda HENÜZ işlenmedi (sadece CORE.md güncellendi,
+> kullanıcı talebi bu kapsamdaydı).
+
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
 | Tarih | Taşınan | Hedef | Durum |
@@ -319,6 +342,7 @@
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
+| 1g | **[YENİ, bu turda]** SANDWICH_SPEC.md §8'deki 6 açık soru (S1-S6) netleştirilmeli — özellikle S1 (gerçek `sandwich-data.json` — ekmek/protein/peynir/sebze/sos + fiyat/kalori) BLOKLAYICI, kod üretimi bu veri olmadan başlayamaz | 🟡 |
 | 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
 | 3 | **[YENİ]** #73 kök neden araştırması: `tailwind.config.ts extend.colors` custom token'ları neden `bg-*` sınıfı olarak derlenmiyor — sistematik tarama (`RegistrationForm.tsx` dahil diğer `bg-{custom}` kullanımları #38'de işaretli) | 🟠 |
 | 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
@@ -352,13 +376,12 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v65 (v64'ten: **[19. sohbet, 2026-08-15]** 3 yeni Açık Sorun eklendi —
-#92 (çok şubeli mimari, `branches` tablosu yok), #93 (şubeye göre menü farklılığı, DB'de menü
-tablosu hiç yok), #94 (CRM/attribution katmanı eksik, `channel` alanı isim çakışması riski).
-Üçü de SADECE analiz+öneri — kod/migration ÜRETİLMEDİ, kullanıcı onayı bekliyor. Kaynak: ayrı bir
-`BOWLERA_COK_SUBELI_CRM_VIZYON.md` taslak belgesi (bu turda üretildi, ARCHITECTURE.md'nin YERİNE
-geçmiyor). Neon'un GERÇEK güncel şeması bir SQL sorgusuyla doğrulandı (5 tablo, `branches`/menü
-tablosu YOK). CURRENT FOCUS'a yeni bir blok eklendi (mevcut #91 bloğu KORUNDU, silinmedi).
-SIRADAKİ GÖREVLER'e -4 sırası eklendi (#91'in HEMEN ardında, kullanıcı kararıyla). Kullanıcı
-kararı: önce #91'in canlı doğrulaması yapılacak, #92/#93/#94 SONRA ele alınacak. Güncellenme:
-2026-08-15.*
+*BOWLERA SESSION_INDEX.md — v66 (v65'ten: **[20. sohbet, 2026-08-23]** Yeni CURRENT FOCUS bloğu
+eklendi (mevcut #91/#92/#93/#94 blokları KORUNDU, silinmedi) — SANDWICH_SPEC.md v1.0 üretildi:
+"Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole kopyası (Seçenek A),
+Subway+Jersey Mike's UX araştırmasıyla sentezlenmiş 6 adım (Size→Bread→Protein→Cheese→Veggies→
+Sauce&Toast&Extras), UX sırasından bağımsız yeni `getPrepOrder()` fonksiyonu (mutfak hazırlık
+sırası, Personel Sipariş Paneli #62 ile bağlantılı). SADECE yapısal iskelet onaylandı, kod
+ÜRETİLMEDİ — 6 açık soru (S1-S6) netleşmeden başlanamaz. CORE.md Bölüm 3+4 AYNI TURDA
+güncellendi (v1.5), AGENT.md'ye HENÜZ işlenmedi. SIRADAKİ GÖREVLER'e 1g sırası eklendi (S1-S6
+netleştirme, S1 bloklayıcı). Güncellenme: 2026-08-23.*
