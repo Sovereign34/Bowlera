@@ -239,4 +239,84 @@ Kendi elinizle mevcut session_arşiv_2.md dosyanızın SONUNA ekleyin.
 > düştüğü VE Onayla→Hazırlanıyor geçişinin uçtan uca (DB dahil) çalıştığı henüz canlıda
 > TIKLANARAK doğrulanmadı.
 
+======
+# EKLENTİ — session_arşiv_2.md sonuna eklenecek (2026-08-23, 21. sohbet taşıması)
+# SESSION_INDEX.md 441 satıra ulaştı (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1).
+# Aşağıdaki 2 blok TAM METİNLERİYLE taşınıyor — özetlenmedi, silinmedi.
+# Kapanış gerekçesi: her iki blok da kendi Açık Sorun satırında (#91, #90) zaten
+# tam özetlenmiş durumda; CURRENT FOCUS'taki bu anlatı metinleri artık sadece
+# turn-by-turn geçmiş, aktif takip için gerekli değil.
+
+---
+
+> **[YENİ SOHBET (devamı, 18.), 2026-08-13 — #91 YENİ: Güvenlik Denetimi SEC-01+SEC-02, kod+test+
+> build+tsc TAMAM, SADECE canlı manuel doğrulama BEKLİYOR]**
+> **(1) Kapsam:** Ayrı bir "Güvenlik Denetim Raporu" checklist'inden auth/JWT/role-revocation
+> grubu (auth.ts, middleware.ts, schema.ts, types/next-auth.d.ts+index.ts) checkpoint'li (Kural
+> #5) incelendi, 2 HIGH bulgu koda döküldü.
+> **(2) SEC-01 (rol revocation gecikmesi):** `jwt()` callback'i role'ü SADECE ilk girişte set
+> ediyordu — DB'de "staff"→"customer" düşse bile eski JWT (maxAge 30gün) `/personel/*`'e
+> erişmeye devam ediyordu. Fix: `middleware.ts` artık staff route'a her girişte role'ü
+> `db.select()` ile TAZE okuyor (Edge-uyumlu Neon HTTP driver doğrulandı), fail-closed.
+> **(3) SEC-02 (login rate-limit yokluğu):** `authorize()`'da hiçbir deneme sınırı yoktu,
+> middleware matcher'ı `/api/auth/*`'i kapsamıyordu. Fix: `rate-limit.ts`'e mevcut desenle
+> birebir aynı `checkLoginRateLimit(phone)` eklendi (10dk/5 deneme), `authorize()` DB
+> sorgusundan ÖNCE bunu çağırıyor.
+> **(4) Test süreci (dürüst kayıt — 2 gerçek hata bulunup düzeltildi, tahmin değil):**
+> `auth.test.ts` ilk yazımda TÜM testler `ReferenceError` ile çöktü (`vi.mock` hoisting/TDZ —
+> `let capturedConfig` → `vi.hoisted()` ile düzeltildi). İkinci koşuda 7/13 test hâlâ FAIL —
+> kök neden 3 adımlı izole debug turuyla KANITLANDI (`.toString()` çıktısı gözle incelendi):
+> `next-auth/providers/credentials` paketi `authorize()`'ı `provider.authorize`'a DEĞİL
+> `provider.options.authorize`'a koyuyor. Düzeltme sonrası **33/33 test PASS** (rate-limit 11 +
+> middleware 10 + auth 13→13, kullanıcı ekran görüntüsüyle doğruladı), `npx tsc --noEmit` ve
+> `npm run build` TEMİZ (middleware bundle 145 kB'a çıktı — Edge limiti içinde, DB client
+> import'unun beklenen etkisi).
+> **(5) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Mock'lu testler + statik build/tsc yeterli
+> değil. Canlı ortamda: (a) bir staff hesabının role'ünü DB'de elle customer'a çekip eski JWT
+> ile `/personel`'e girmeyi deneyip 403 almak, (b) aynı telefonla 6 kez yanlış şifre deneyip
+> 6.'nın reddedildiğini görmek — İKİSİ DE HENÜZ YAPILMADI.
+
+---
+
+> **[Önceki tur, 17. sohbet, #90 — KOD ÜRETİLDİ, KALAN AYNEN AÇIK]** Customizer masaüstü
+> layout (`/menu/customize/[id]`) tek-ekrana-sığma düzeltmesi kodlandı (4 satır, `page.tsx`),
+> kullanıcıya verildi. Detay Açık Sorunlar #90'da korunuyor — build/push/canlı doğrulama HÂLÂ
+> BEKLİYOR, bu turda dokunulmadı.
+
+---
+
+# İKİNCİ TAŞIMA BLOĞU (aynı gün, aynı eklenti dosyası — SESSION_INDEX 400 satırı hâlâ
+# aşıyordu, 8 adet zaten-kapanmış "KAPANDI (BU TURDA)" anlatı bloğu da taşındı)
+
+> **KAPANDI (BU TURDA ✅):** #82 + #83 + #84 — üçü de canlıda TAM doğrulandı. #82: orijinal
+> kayıt şifresiyle (Neon'a elle dokunmadan) çıkış→giriş döngüsü BAŞARILI. #83: "Sıfırla" →
+> üretilen geçici kod (460244) → o kodla giriş BAŞARILI. #84: Header'da isim ("bari")
+> canlıda görünür durumda (ekran görüntüsüyle doğrulandı) — ⚠️ kök neden FORMEL olarak
+> izole edilmedi (istenen SQL sorgusu hiç koşulmadı), muhtemelen #82'nin auth.ts/JWT-session
+> değişikliklerinin yan etkisi, ama bu kanıtlanmadı; regresyon riski düşük görülüyor.
+>
+> **KAPANDI (BU TURDA ✅):** #74 — `AccountMenu.tsx`'e çıkış (sign-out) butonu eklendi,
+> `AccountMenu.test.tsx` (7/7 PASS, 0 error) yazıldı, test süreci `signOut()`'un yakalanmamış
+> reject durumunu ortaya çıkardı ve `.catch(() => {})` ile düzeltildi. Kod+build+canlı
+> doğrulama+test kapsamı hepsi tamamlandı.
+>
+> **KAPANDI (kullanıcı kararıyla, bu turda):** #79 + #75 — mobil canlıda doğrulandı
+> ("Sepete Ekle sorunu çözüldü"), kullanıcı kararıyla kapatıldı. **Not olarak açık
+> bırakıldı — bkz. #80:** masaüstü (`SummaryPanel.tsx`) aynı fix AYRICA canlıda
+> doğrulanmadı; #75'in orijinal çift-tık/duplicate senaryosu da bu turda test edilmedi.
+> Gerekçesiz düşürülmedi — CORE.md §7.1 Adım 1 uyarınca #80 açık sorun olarak devam ediyor.
+>
+> **KAPANDI (BU TURDA):** #50 — `AddToCartButton.tsx` artık görüldü, BSC-6 doğrudan ele
+> alındı (bkz. #75). Not: #75'in KENDİSİ henüz kapanmadı (test/build/push/canlı doğrulama
+> bekliyor) — sadece #50'nin "dosya hiç görülmedi" durumu sona erdi.
+>
+> **KAPANDI (YENİ SOHBET, bu turda ✅):** #76 + #77 — kod+test geçen turda tamamlanmıştı,
+> BU turda kullanıcı canlı ortamda TAM DOĞRULADI (CORE.md Üçüncü Ders'in gerektirdiği ikinci
+> kontrol noktası): sepet → "Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76 KAPANDI),
+> `/siparis`'te SADECE "Gel Al" görünüyor, "Masada" seçeneği tamamen kayboldu (#77 KAPANDI).
+> Not: "Gel Al" butonuna tıklayınca görünürde değişiklik olmaması BEKLENEN davranış — buton
+> zaten seçili/idempotent (`aria-pressed=true`), tek seçenek kaldığı için tıklama aynı değeri
+> tekrar set ediyor. WhatsApp butonunun pasif/gri olması da AYRI ve bilinen bir durum — şube
+> telefon numaraları henüz tanımlanmadı (#58'in henüz kapanmamasının doğrudan sonucu, YENİ
+> bug değil).
 
