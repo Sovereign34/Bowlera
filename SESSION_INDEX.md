@@ -23,6 +23,11 @@
 > metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir eklenti dosyası
 > (`session_arsiv_2_EKLENTI_2026-08-23.md`) olarak verildi, kendi elinizle mevcut
 > `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada mevcut.
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 22. sohbet):** SESSION_INDEX.md yeniden 400 satır eşiğini
+> aşınca, SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu TAM metniyle `session_arşiv_2.md`'ye
+> taşındı — kullanıcıya ayrı bir eklenti dosyası (`session_arsiv_2_EKLENTI_2026-08-23-devam2.md`)
+> olarak verildi, kendi elinizle mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor.
+> Kapanış gerekçesi o dosyada ve Arşiv Taşıma Kaydı tablosunda mevcut.
 > ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
 > kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
 > belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
@@ -135,46 +140,38 @@
 > Kullanıcı onayıyla **Bread-first**'e düzeltildi: **Bread→Size→Protein→Cheese→Veggies→
 > Sauce&Toast&Extras** (SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon
 > referansı v1.0→v1.1'e güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
-> ⚠️ **SEKİZİNCİ DERS (2026-08-23, 21. sohbet — YEDİNCİ DERS'in TEKRARI, farklı telafi
-> şekli):** Kullanıcı bir Vercel build hatası paylaştığında, o hatanın kaynağı olan kod
-> turunun (S3/S6 çözümü, `SandwichCustomizer.tsx`/`SandwichSummaryPanel.tsx`/`StepDots.tsx`/
-> tam `useSandwichStore.ts` üretimi) BU SESSION_INDEX'e HİÇ işlenmediği ortaya çıktı — yukarıdaki
-> "S1-S6 hâlâ bekliyor" notu YANLIŞTI, S3/S6 aslında kapanmıştı. Kullanıcı bu kez tam sohbeti
-> taşımadı, dosya dosya paylaşarak (GitHub ekran görüntüleri + tek tek dosya yüklemeleri)
-> parça parça telafi ettirdi. Kural aynı, beşinci kez doğrulandı: bir kod turu üretildiğinde,
-> sohbet kapanmadan SESSION_INDEX güncellenmezse iz kaybolur — sonraki sohbet dosyanın
-> kendisine değil, KULLANICININ HAFIZASINA bağımlı kalır.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
+> bloğu (build hatası düzeltmesi, `sandwich-data.json` TEST VERİSİ üretimi, `Hero.tsx` CTA
+> değişikliği, 6 adım bileşeni + eksik `page.tsx` kodlanması, 7 test dosyası/27 test PASS)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`).
+> Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
+> için gerekli değil, sadece turn-by-turn anlatı taşındı.
+
+> ⚠️ **GERİYE DÖNÜK İŞLENDİ (2026-08-23, 22. sohbet — DÖRDÜNCÜ-SEKİZİNCİ DERS'in TEKRARI):**
+> Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
+> checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi
+> "kod var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
 >
-> **Bu turda fiilen yapılanlar (21. sohbet, 2026-08-23):**
-> 1. Build hatası düzeltildi — `sandwich-data.json` yanlış konumda (`public/data/`) aranıyordu,
->    proje konvansiyonuna (`lib/menu-data.json` emsali) uyularak `lib/sandwich-data.json`'a
->    taşındı, `useSandwichStore.ts` import satırı düzeltildi.
-> 2. `sandwich-data.json` hiç yoktu (S1'in ta kendisi) — TEST VERİSİ iskeleti üretildi (`_META`
->    alanıyla açıkça işaretli, tüm fiyat/kalori placeholder). **S1/S2/S5 gerçek veri gelene
->    kadar açık kalmaya devam ediyor (bkz. Açık Sorun #95).**
-> 3. `useCartStore.ts` gerçek dosyası görüldü — `SandwichCustomizer.tsx`'in "confidence: MEDIUM,
->    doğrulanmadı" notu KAPANDI: import yolu + `addToCart(item: CartItem)` imzası birebir eşleşti.
-> 4. Anasayfa CTA düzeni değişti (`Hero.tsx`) — "Menüyü Keşfet" üstte tek, "Kaseni Oluştur" +
->    "Sandviçini Oluştur" altta yan yana. Yeni CTA `/sandwich/customize/build-your-own-sandwich`'e
->    gidiyor (Bowl'un `build-your-own-kasem` konvansiyonuna uygun).
-> 5. 6 adım bileşeni sıfırdan kodlandı (`StepBread/StepSize/StepProtein/StepCheese/StepVeggies/
->    StepSauceToastExtras.tsx`) — Bowl'un `StepBase.tsx` deseni birebir kopyalandı.
->    `SandwichCustomizer.tsx` bu 6 bileşeni `currentStep`'e göre render edecek şekilde
->    güncellendi (`handleAddToCart` mantığına DOKUNULMADI).
-> 6. Eksik `app/sandwich/customize/[id]/page.tsx` üretildi — kullanıcının "buton/sayfa yok"
->    şikayetinin KÖK NEDENİ buydu. `[id]` şu an kullanılmıyor.
-> 7. AGENT.md §6 ihlali kullanıcı tarafından yakalandı: 7 dosya testsiz teslim edilmişti.
->    7 test dosyası (happy/edge/failure) sonradan yazıldı. Codespaces doğrulamasında 2 sorun
->    çıktı, ikisi de düzeltildi: (a) `SandwichCustomizer.test.tsx`'te `act()` sarmalayıcısı
->    eksikti (senkron `setState` sonrası assertion'ın render'ı yakalamaması) — düzeltildi;
->    (b) `StepSauceToastExtras.test.tsx` ilk pushta unutulmuş — tekrar verildi, eklendi.
->    **SONUÇ: 7/7 test dosyası, 27/27 test PASS (Codespaces, 2026-08-23 18:28).**
-> 8. Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test
->    başarısız çıktığı görüldü (`Header.test.tsx` dahil) — bu turun kapsamı dışında,
->    bilinçli dokunulmadı (bkz. Açık Sorun #98).
+> **Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana
+> durmuyordu; (2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu
+> (sepete/checkout'a gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
 >
-> **KALAN:** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor (bkz. #97);
-> `Hero.test.tsx`'in "Kâseni Yarat" beklentisi hâlâ stale, bu turda da dokunulmadı.
+> **İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
+> `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil
+> taşma düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e
+> yönlendiriyor; **paylaşılan** `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u
+> "Özel Sandviç" gösterecek şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi,
+> DOĞRULANMADI — risk MEDIUM); `OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
+>
+> **ÇÖZÜLEMEDEN KALAN, KRİTİK:** Sandviçte fiyat ne olursa olsun "Siparişi Onayla"da kırmızı
+> "fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR. Şüphe (doğrulanmadı):
+> `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un `bowlItem`/
+> `customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan
+> `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi, YANIT
+> GELMEDEN kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
+>
+> **Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
+> değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -191,10 +188,12 @@
 | 2026-08-12 (3. kez) | #38 bloğu (RegistrationForm kod+push) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam3.md`) | ✅ Açık Sorun #38'de özetli |
 | 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
+| 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
-> `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`
+> `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
+> `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md` (bu turda üretildi)
 > — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
@@ -274,6 +273,12 @@
 | 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
 | 97 | 🟠 | **[YENİ, bu turda (21. sohbet)]** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor: `StepBread/StepSize/StepProtein/StepCheese/StepVeggies/StepSauceToastExtras.tsx`, `app/sandwich/customize/[id]/page.tsx`, 7 test dosyası, `Hero.tsx` CTA değişikliği. Ayrı bir turda CORE.md güncellenmeli. | `CORE.md` |
 | 98 | 🟢 | **[YENİ, bu turda (21. sohbet) — kapsam dışı bırakıldı]** Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test başarısız çıktı, `Header.test.tsx` dahil (kritik: "Çıkış Yap"a tıklayınca signOut callbackUrl="/" ile çağrılır" testi). Bu turda kasıtlı dokunulmadı — Kural #5 izolasyon. Ayrı bir turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya (henüz listelenmedi) |
+| 99 | 🔴 | **[YENİ, 22. sohbet — GERİYE DÖNÜK loglandı, sohbet kesildi]** Sandviç checkout'u BLOKLU: "Siparişi Onayla" adımında fiyat ne olursa olsun kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor. Kök neden ŞÜPHESİ (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'teki fiyatlandırma kontrolü sadece Bowl'un `bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı istendi, YANIT GELMEDEN sohbet kesildi. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya DOĞRULANMADI) |
+| 100 | 🟡 | **[YENİ, 22. sohbet — kod üretildiği İDDİA EDİLDİ, push/test TEYİT EDİLMEDİ]** 4 UI düzeltmesi: (a) `Hero.tsx` buton düzeni `flex-wrap`→`grid grid-cols-2`, mobilde yan yana kalıcı; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` `aspect-square`→`aspect-[4/3]`+`max-h-72`, mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` sepete ekleme sonrası artık `/siparis`'e yönlendiriyor (`useRouter`, önceden `store.reset()`+aynı sayfa). | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
+| 101 | 🟡 | **[YENİ, 22. sohbet — PAYLAŞILAN dosya, risk MEDIUM, push/test TEYİT EDİLMEDİ]** `CartDrawer.tsx` satır 84 bug'u: `item.bowlItem?.name ?? "Özel Kase"` sandviç ürünlerinde HER ZAMAN "Özel Kase" yazdırıyordu. "Özel Sandviç" gösterecek şekilde genişletildi — Bowl'un eski davranışının KORUNDUĞU iddia edildi ama canlıda Bowl'un hâlâ doğru çalıştığı doğrulanmadı. | `components/cart/CartDrawer.tsx` |
+| 102 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx` satır 20 — CartDrawer'daki (#101) BİREBİR AYNI "Özel Kase" fallback bug'u burada da bulundu, aynı desenle genişletildi ("Özel Sandviç"). | `components/order/OrderSummary.tsx` |
+| 103 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx`'e CartDrawer'daki gibi "Kaldır" butonu eklendi — eski fiyat düzeltmesinden ÖNCE sepete girmiş 0₺'lik test ürünlerini temizlemek için. | `components/order/OrderSummary.tsx` |
+| 104 | 🟡 | **[YENİ, 22. sohbet — çözülmeden kaldı]** #100(d) fix'i sonrası `SandwichCustomizer.test.tsx`'in sepete-ekleme testleri artık `router.push` çağıracak — `next/navigation`'ın `useRouter`'ı test ortamında mock'lanmadıysa testler kırılabilir. Kullanıcıya "şimdi düzelteyim mi yoksa `npx vitest run components/sandwich` çalıştırıp kırmızı çıkanı mı paylaşırsın" soruldu, YANIT GELMEDEN sohbet kesildi. | `components/sandwich/SandwichCustomizer.test.tsx` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -321,7 +326,7 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Önceki tur]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). **[BU TURDA]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) kod+test (33/33)+build+tsc TAMAM — canlı manuel doğrulama BEKLİYOR (#91). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). **[Bu turda]** `consentRegistrations.ipAddress` (nullable) + yeni `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI — diğer tablolar etkilenmedi. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). **[Bu turda, 19. sohbet]** Neon'un TAM güncel şeması sorguyla doğrulandı: 5 tablo (`users`, `consent_registrations`, `order_history`, `password_reset_requests`, `registration_blocked_attempts`) — `branches` veya herhangi bir menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[BU TURDA]** Gel Al onay kuyruğu — canlı bulgu üzerine 3-durumlu revizyon (KARAR A): `confirmed` artık terminal değil ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri) kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[önceki tur]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). ⚠️ **[Bu turda]** Çok şubeli mimari + CRM/attribution önerisi `BOWLERA_COK_SUBELI_CRM_VIZYON.md`'de taslak — ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ, önce kullanıcı onayı gerekiyor (bkz. #92/#93/#94). |
@@ -332,6 +337,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| -5 | **[YENİ, 22. sohbet]** #99 — Sandviç checkout'u BLOKLU, "fiyatlandırılamadı" hatası her zaman çıkıyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı isteniyor, kök neden bulunup düzeltilmeli. **AYRICA:** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | 🔴 |
 | -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri yapıldı (`BOWLERA_COK_SUBELI_CRM_VIZYON.md`), kod YOK. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
 | -3 | **[YENİ, bu turda]** #91 — Güvenlik denetimi SEC-01/SEC-02 kod+test+build+tsc TAMAM. **KALAN:** canlıda (a) role-revocation 403 testi, (b) 6. yanlış şifre denemesinin reddi — ikisi de GÖZLE doğrulanmalı, sonra 5 dosya GitHub'a push edilmeli. | 🔴 |
 | -2 | **[YENİ, bu turda]** #90 — `/menu/customize/[id]` masaüstü tek-ekrana-sığma düzeltmesi kodlandı, kullanıcıya verildi. **KALAN:** kendi `page.tsx`'ine uygulanmalı, Codespaces'te build koşulmalı, GitHub'a push edilmeli, masaüstünde GÖZLE doğrulanmalı. | 🟠 |
@@ -380,15 +386,15 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v68 (v67'den: **[21. sohbet, 2026-08-23]** SEKİZİNCİ DERS —
-önceki bir sohbette S3/S6 zaten çözülmüş, `SandwichCustomizer.tsx`/`SandwichSummaryPanel.tsx`/
-`StepDots.tsx`/tam `useSandwichStore.ts` zaten pushlanmıştı ama SESSION_INDEX'e hiç işlenmemişti
-— bu turda kullanıcının paylaştığı Vercel build hatası üzerinden ortaya çıktı ve dosya dosya
-telafi edildi. Bu turda: `sandwich-data.json` import path hatası düzeltildi + TEST VERİSİ olarak
-üretildi (S1 hâlâ açık), `useCartStore.ts` doğrulandı (SandwichCustomizer'daki MEDIUM confidence
-riski kapandı), `Hero.tsx` CTA düzeni değişti (3 buton, 2 satır), 6 adım bileşeni + eksik
-`page.tsx` sıfırdan kodlandı (kullanıcının "buton/sayfa yok" şikayetinin kök nedeni), 7 test
-dosyası yazıldı ve Codespaces'te 7/7 dosya-27/27 test PASS doğrulandı (yol boyunca `act()`
-eksikliği ve unutulan bir dosya pushu düzeltildi). Yeni Açık Sorunlar: #95 (S1/S2/S5 gerçek veri),
-#96 (KAPANDI — test doğrulaması), #97 (CORE.md dosya haritası güncel değil), #98 (proje geneli
-7 test dosyası başarısız, kapsam dışı bırakıldı). Güncellenme: 2026-08-23.*
+*BOWLERA SESSION_INDEX.md — v69 (v68'den: **[22. sohbet, 2026-08-23]** Kullanıcı ham sohbet
+metnini yapıştırarak paylaştı — sohbet, Claude'un bir `grep` çıktısı beklediği noktada
+checkpoint/onay alınmadan kesilmişti (DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ/SEKİZİNCİ DERS'in
+TEKRARI). Geriye dönük işlendi: kullanıcının 4 UI şikâyeti + Claude'un "ürettiğini iddia
+ettiği" 7 dosya değişikliği (Hero.tsx, SandwichSummaryPanel.tsx, HeroImagePlaceholder.tsx,
+SandwichCustomizer.tsx, CartDrawer.tsx, OrderSummary.tsx×2) HİÇBİRİ "tamamlandı" sayılmadan
+Açık Sorun olarak loglandı (#99-#104). En kritik bulgu: sandviç checkout'u "fiyatlandırılamadı"
+hatasıyla TAMAMEN BLOKLU (#99, 🔴) — kök neden kullanıcıdan istenen bir grep çıktısıyla
+netleşecekti, yanıt gelmeden sohbet kesildi. SIRADAKİ GÖREVLER'e -5 sırasıyla en üste eklendi.
+400 satır eşiği yeniden aşılınca SEKİZİNCİ DERS (21. sohbet) anlatı bloğu `session_arşiv_2.md`'ye
+taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`), içerik Açık Sorunlar
+#95/#96/#97/#98'de özetli olarak korundu. Güncellenme: 2026-08-23.*
