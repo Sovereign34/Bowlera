@@ -17,6 +17,12 @@
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
 > tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 21. sohbet):** SESSION_INDEX.md 441 satıra ulaşınca (400 satır
+> eşiği aşıldı), 7 kapanmış/güncelliğini yitirmiş blok (18. sohbet #91 detayı, 17. sohbet #90
+> detayı, + 5 "KAPANDI (BU TURDA)" anlatı bloğu: #82/83/84, #74, #79/75/80, #50, #76/77) TAM
+> metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir eklenti dosyası
+> (`session_arsiv_2_EKLENTI_2026-08-23.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada mevcut.
 > ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
 > kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
 > belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
@@ -82,37 +88,10 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[YENİ SOHBET (devamı, 18.), 2026-08-13 — #91 YENİ: Güvenlik Denetimi SEC-01+SEC-02, kod+test+
-> build+tsc TAMAM, SADECE canlı manuel doğrulama BEKLİYOR]**
-> **(1) Kapsam:** Ayrı bir "Güvenlik Denetim Raporu" checklist'inden auth/JWT/role-revocation
-> grubu (auth.ts, middleware.ts, schema.ts, types/next-auth.d.ts+index.ts) checkpoint'li (Kural
-> #5) incelendi, 2 HIGH bulgu koda döküldü.
-> **(2) SEC-01 (rol revocation gecikmesi):** `jwt()` callback'i role'ü SADECE ilk girişte set
-> ediyordu — DB'de "staff"→"customer" düşse bile eski JWT (maxAge 30gün) `/personel/*`'e
-> erişmeye devam ediyordu. Fix: `middleware.ts` artık staff route'a her girişte role'ü
-> `db.select()` ile TAZE okuyor (Edge-uyumlu Neon HTTP driver doğrulandı), fail-closed.
-> **(3) SEC-02 (login rate-limit yokluğu):** `authorize()`'da hiçbir deneme sınırı yoktu,
-> middleware matcher'ı `/api/auth/*`'i kapsamıyordu. Fix: `rate-limit.ts`'e mevcut desenle
-> birebir aynı `checkLoginRateLimit(phone)` eklendi (10dk/5 deneme), `authorize()` DB
-> sorgusundan ÖNCE bunu çağırıyor.
-> **(4) Test süreci (dürüst kayıt — 2 gerçek hata bulunup düzeltildi, tahmin değil):**
-> `auth.test.ts` ilk yazımda TÜM testler `ReferenceError` ile çöktü (`vi.mock` hoisting/TDZ —
-> `let capturedConfig` → `vi.hoisted()` ile düzeltildi). İkinci koşuda 7/13 test hâlâ FAIL —
-> kök neden 3 adımlı izole debug turuyla KANITLANDI (`.toString()` çıktısı gözle incelendi):
-> `next-auth/providers/credentials` paketi `authorize()`'ı `provider.authorize`'a DEĞİL
-> `provider.options.authorize`'a koyuyor. Düzeltme sonrası **33/33 test PASS** (rate-limit 11 +
-> middleware 10 + auth 13→13, kullanıcı ekran görüntüsüyle doğruladı), `npx tsc --noEmit` ve
-> `npm run build` TEMİZ (middleware bundle 145 kB'a çıktı — Edge limiti içinde, DB client
-> import'unun beklenen etkisi).
-> **(5) KALAN — ÜÇÜNCÜ DERS gereği TAM kapanmadı:** Mock'lu testler + statik build/tsc yeterli
-> değil. Canlı ortamda: (a) bir staff hesabının role'ünü DB'de elle customer'a çekip eski JWT
-> ile `/personel`'e girmeyi deneyip 403 almak, (b) aynı telefonla 6 kez yanlış şifre deneyip
-> 6.'nın reddedildiğini görmek — İKİSİ DE HENÜZ YAPILMADI.
->
-> **[Önceki tur, 17. sohbet, #90 — KOD ÜRETİLDİ, KALAN AYNEN AÇIK]** Customizer masaüstü
-> layout (`/menu/customize/[id]`) tek-ekrana-sığma düzeltmesi kodlandı (4 satır, `page.tsx`),
-> kullanıcıya verildi. Detay Açık Sorunlar #90'da korunuyor — build/push/canlı doğrulama HÂLÂ
-> BEKLİYOR, bu turda dokunulmadı.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
+> 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
+> Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
+> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
 >
 > **[YENİ, bu turda (19. sohbet, 2026-08-15) — YAN KEŞİF, #91'İN ÖNÜNE GEÇMEDİ]** Kullanıcı
 > paylaştığı bir dijital pazarlama/CRM strateji belgesini (3 markalı bir başka işletme için
@@ -156,6 +135,46 @@
 > Kullanıcı onayıyla **Bread-first**'e düzeltildi: **Bread→Size→Protein→Cheese→Veggies→
 > Sauce&Toast&Extras** (SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon
 > referansı v1.0→v1.1'e güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
+> ⚠️ **SEKİZİNCİ DERS (2026-08-23, 21. sohbet — YEDİNCİ DERS'in TEKRARI, farklı telafi
+> şekli):** Kullanıcı bir Vercel build hatası paylaştığında, o hatanın kaynağı olan kod
+> turunun (S3/S6 çözümü, `SandwichCustomizer.tsx`/`SandwichSummaryPanel.tsx`/`StepDots.tsx`/
+> tam `useSandwichStore.ts` üretimi) BU SESSION_INDEX'e HİÇ işlenmediği ortaya çıktı — yukarıdaki
+> "S1-S6 hâlâ bekliyor" notu YANLIŞTI, S3/S6 aslında kapanmıştı. Kullanıcı bu kez tam sohbeti
+> taşımadı, dosya dosya paylaşarak (GitHub ekran görüntüleri + tek tek dosya yüklemeleri)
+> parça parça telafi ettirdi. Kural aynı, beşinci kez doğrulandı: bir kod turu üretildiğinde,
+> sohbet kapanmadan SESSION_INDEX güncellenmezse iz kaybolur — sonraki sohbet dosyanın
+> kendisine değil, KULLANICININ HAFIZASINA bağımlı kalır.
+>
+> **Bu turda fiilen yapılanlar (21. sohbet, 2026-08-23):**
+> 1. Build hatası düzeltildi — `sandwich-data.json` yanlış konumda (`public/data/`) aranıyordu,
+>    proje konvansiyonuna (`lib/menu-data.json` emsali) uyularak `lib/sandwich-data.json`'a
+>    taşındı, `useSandwichStore.ts` import satırı düzeltildi.
+> 2. `sandwich-data.json` hiç yoktu (S1'in ta kendisi) — TEST VERİSİ iskeleti üretildi (`_META`
+>    alanıyla açıkça işaretli, tüm fiyat/kalori placeholder). **S1/S2/S5 gerçek veri gelene
+>    kadar açık kalmaya devam ediyor (bkz. Açık Sorun #95).**
+> 3. `useCartStore.ts` gerçek dosyası görüldü — `SandwichCustomizer.tsx`'in "confidence: MEDIUM,
+>    doğrulanmadı" notu KAPANDI: import yolu + `addToCart(item: CartItem)` imzası birebir eşleşti.
+> 4. Anasayfa CTA düzeni değişti (`Hero.tsx`) — "Menüyü Keşfet" üstte tek, "Kaseni Oluştur" +
+>    "Sandviçini Oluştur" altta yan yana. Yeni CTA `/sandwich/customize/build-your-own-sandwich`'e
+>    gidiyor (Bowl'un `build-your-own-kasem` konvansiyonuna uygun).
+> 5. 6 adım bileşeni sıfırdan kodlandı (`StepBread/StepSize/StepProtein/StepCheese/StepVeggies/
+>    StepSauceToastExtras.tsx`) — Bowl'un `StepBase.tsx` deseni birebir kopyalandı.
+>    `SandwichCustomizer.tsx` bu 6 bileşeni `currentStep`'e göre render edecek şekilde
+>    güncellendi (`handleAddToCart` mantığına DOKUNULMADI).
+> 6. Eksik `app/sandwich/customize/[id]/page.tsx` üretildi — kullanıcının "buton/sayfa yok"
+>    şikayetinin KÖK NEDENİ buydu. `[id]` şu an kullanılmıyor.
+> 7. AGENT.md §6 ihlali kullanıcı tarafından yakalandı: 7 dosya testsiz teslim edilmişti.
+>    7 test dosyası (happy/edge/failure) sonradan yazıldı. Codespaces doğrulamasında 2 sorun
+>    çıktı, ikisi de düzeltildi: (a) `SandwichCustomizer.test.tsx`'te `act()` sarmalayıcısı
+>    eksikti (senkron `setState` sonrası assertion'ın render'ı yakalamaması) — düzeltildi;
+>    (b) `StepSauceToastExtras.test.tsx` ilk pushta unutulmuş — tekrar verildi, eklendi.
+>    **SONUÇ: 7/7 test dosyası, 27/27 test PASS (Codespaces, 2026-08-23 18:28).**
+> 8. Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test
+>    başarısız çıktığı görüldü (`Header.test.tsx` dahil) — bu turun kapsamı dışında,
+>    bilinçli dokunulmadı (bkz. Açık Sorun #98).
+>
+> **KALAN:** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor (bkz. #97);
+> `Hero.test.tsx`'in "Kâseni Yarat" beklentisi hâlâ stale, bu turda da dokunulmadı.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -171,6 +190,7 @@
 | 2026-08-12 | #89 bloğu (IP delili + engellenen deneme logu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12.md`) | ✅ Kritik Kararlar/#89'da özetli |
 | 2026-08-12 (3. kez) | #38 bloğu (RegistrationForm kod+push) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam3.md`) | ✅ Açık Sorun #38'de özetli |
 | 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
+| 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -250,37 +270,15 @@
 | 93 | 🟡 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** Şubeye göre menü farklılığı: DB'de HİÇ menü/ürün tablosu yok — menü `menu-data.json`/`customizerCatalog.ts` gibi statik bir dosyada yaşıyor görünüyor (#24 ile bağlantılı, kesin dosya adı DOĞRULANMADI). Bu, #92'den daha KÖK bir mesele: "şubeye göre menü" kavramının DB tarafında hiç karşılığı yok, ölçeklenmeden statik dosya çoğaltmaya döner. **Önerilen yön (ONAYLANMADI):** global ürün kataloğu (marka kimliği — tüm şubelerde aynı tanım/kalori/alerjen) + `branch_menu_items` eşleme tablosu (`branch_id`+`product_id`+`is_available`+`price_override`, nullable). **KALAN:** menünün fiilen yaşadığı dosya (muhtemelen `menu-data.json` veya `customizerCatalog.ts`) GÖRÜLMEDEN kesin şema önerilemez (Kural #2). | `menu-data.json` veya `lib/customizer/customizerCatalog.ts` (dosya henüz istenmedi) |
 | 94 | 🟢 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** CRM/attribution katmanı eksik: `consent_registrations`/`order_history`'de pazarlama kaynağı (Instagram/TikTok/Marketplace/Google/UTM) hiç tutulmuyor. **İsim çakışması riski:** mevcut `channel` alanları (her iki tabloda da var) FULFILLMENT kanalı (gel-al/masaya) anlamında — pazarlama kanalı DEĞİL. Yeni alanlar eklenirse `channel` yeniden kullanılmamalı, `acquisition_source`/`utm_campaign`/`utm_medium` gibi AYRI isimler kullanılmalı. Ayrıca `order_count`/`total_spend`/`days_to_repeat` gibi CRM metrikleri `users`'a KOLON olarak eklenmemeli — `order_history` üzerinden SQL VIEW olarak hesaplanmalı (senkron kayma riski). Kullanıcının "bu yapı ileride birçok modül/uygulamanın temel iskeleti olacak" vizyonuyla bağlantılı — PUSULA OS değerlendirmesindeki "event log yok, policy engine yok" bulgusuyla örtüşüyor (tam çözüm bu turun kapsamı dışı, sadece isim/yön kararı). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §5-6-7. | `lib/db/schema.ts` (henüz dokunulmadı) |
 
-> **KAPANDI (BU TURDA ✅):** #82 + #83 + #84 — üçü de canlıda TAM doğrulandı. #82: orijinal
-> kayıt şifresiyle (Neon'a elle dokunmadan) çıkış→giriş döngüsü BAŞARILI. #83: "Sıfırla" →
-> üretilen geçici kod (460244) → o kodla giriş BAŞARILI. #84: Header'da isim ("bari")
-> canlıda görünür durumda (ekran görüntüsüyle doğrulandı) — ⚠️ kök neden FORMEL olarak
-> izole edilmedi (istenen SQL sorgusu hiç koşulmadı), muhtemelen #82'nin auth.ts/JWT-session
-> değişikliklerinin yan etkisi, ama bu kanıtlanmadı; regresyon riski düşük görülüyor.
->
-> **KAPANDI (BU TURDA ✅):** #74 — `AccountMenu.tsx`'e çıkış (sign-out) butonu eklendi,
-> `AccountMenu.test.tsx` (7/7 PASS, 0 error) yazıldı, test süreci `signOut()`'un yakalanmamış
-> reject durumunu ortaya çıkardı ve `.catch(() => {})` ile düzeltildi. Kod+build+canlı
-> doğrulama+test kapsamı hepsi tamamlandı.
->
-> **KAPANDI (kullanıcı kararıyla, bu turda):** #79 + #75 — mobil canlıda doğrulandı
-> ("Sepete Ekle sorunu çözüldü"), kullanıcı kararıyla kapatıldı. **Not olarak açık
-> bırakıldı — bkz. #80:** masaüstü (`SummaryPanel.tsx`) aynı fix AYRICA canlıda
-> doğrulanmadı; #75'in orijinal çift-tık/duplicate senaryosu da bu turda test edilmedi.
-> Gerekçesiz düşürülmedi — CORE.md §7.1 Adım 1 uyarınca #80 açık sorun olarak devam ediyor.
->
-> **KAPANDI (BU TURDA):** #50 — `AddToCartButton.tsx` artık görüldü, BSC-6 doğrudan ele
-> alındı (bkz. #75). Not: #75'in KENDİSİ henüz kapanmadı (test/build/push/canlı doğrulama
-> bekliyor) — sadece #50'nin "dosya hiç görülmedi" durumu sona erdi.
->
-> **KAPANDI (YENİ SOHBET, bu turda ✅):** #76 + #77 — kod+test geçen turda tamamlanmıştı,
-> BU turda kullanıcı canlı ortamda TAM DOĞRULADI (CORE.md Üçüncü Ders'in gerektirdiği ikinci
-> kontrol noktası): sepet → "Siparişi Onayla" → `/siparis`'e doğru yönlendi (#76 KAPANDI),
-> `/siparis`'te SADECE "Gel Al" görünüyor, "Masada" seçeneği tamamen kayboldu (#77 KAPANDI).
-> Not: "Gel Al" butonuna tıklayınca görünürde değişiklik olmaması BEKLENEN davranış — buton
-> zaten seçili/idempotent (`aria-pressed=true`), tek seçenek kaldığı için tıklama aynı değeri
-> tekrar set ediyor. WhatsApp butonunun pasif/gri olması da AYRI ve bilinen bir durum — şube
-> telefon numaraları henüz tanımlanmadı (#58'in henüz kapanmamasının doğrudan sonucu, YENİ
-> bug değil).
+| 95 | 🟡 | **[YENİ, bu turda (21. sohbet)]** Sandviç akışı `lib/sandwich-data.json` TEST VERİSİ ile çalışıyor — S1 (gerçek fiyat/kalori/ürün isimleri), S2 (ücretsiz sebze kotası — şu an placeholder 4), S5 ("Mike's Way" preset içeriği — şu an placeholder sebze+sos) hâlâ gerçek veri bekliyor. Launch öncesi MUTLAKA değiştirilmeli, aksi halde sahte fiyat/kalori canlıya çıkar. | `lib/sandwich-data.json` |
+| 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
+| 97 | 🟠 | **[YENİ, bu turda (21. sohbet)]** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor: `StepBread/StepSize/StepProtein/StepCheese/StepVeggies/StepSauceToastExtras.tsx`, `app/sandwich/customize/[id]/page.tsx`, 7 test dosyası, `Hero.tsx` CTA değişikliği. Ayrı bir turda CORE.md güncellenmeli. | `CORE.md` |
+| 98 | 🟢 | **[YENİ, bu turda (21. sohbet) — kapsam dışı bırakıldı]** Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test başarısız çıktı, `Header.test.tsx` dahil (kritik: "Çıkış Yap"a tıklayınca signOut callbackUrl="/" ile çağrılır" testi). Bu turda kasıtlı dokunulmadı — Kural #5 izolasyon. Ayrı bir turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya (henüz listelenmedi) |
+
+> **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
+> #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
+> tablosunda ve/veya GENEL DURUM'da hâlâ özet olarak duruyor; turn-by-turn kapanış anlatısı
+> arşive taşındı (400 satır eşiği).
 
 > **KAPANDI (önceki turlar, ayrıntı `session_arşiv_1.md`'de):** #59, #72, `users.role`
 > migration, 1d (Vercel build), #4, #7, #15, #16, #20, #22/Karar #11, #35, #43, #44, #49,
@@ -382,11 +380,15 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v67 (v66'dan: **[20. sohbet devamı, 2026-08-23]** SANDWICH_SPEC.md
-adım sırası düzeltmesi (v1.0→v1.1): kullanıcı "Ekmek en başta olmalı değil mi?" diye sorgulayınca,
-önceki turdaki "Subway'e sadık Size→Bread" iddiasının YANLIŞ olduğu (gerçek Subway sırası
-protein-first) fark edildi ve düzeltildi. Yeni sıra: Bread→Size→Protein→Cheese→Veggies→
-Sauce&Toast&Extras. CURRENT FOCUS'a düzeltme notu eklendi, CORE.md Dosya Haritası'ndaki versiyon
-referansı senkronlandı (v1.6). Ayrıca CORE.md'nin kendi footer'ında bir önceki turda yanlışlıkla
-kronoloji dışı eklenen v1.5 notu doğru sıraya taşındı (içerik kaybı yok). Durum DEĞİŞMEDİ — S1-S6
-açık soruları hâlâ kod aşamasını bloklamaya devam ediyor. Güncellenme: 2026-08-23.*
+*BOWLERA SESSION_INDEX.md — v68 (v67'den: **[21. sohbet, 2026-08-23]** SEKİZİNCİ DERS —
+önceki bir sohbette S3/S6 zaten çözülmüş, `SandwichCustomizer.tsx`/`SandwichSummaryPanel.tsx`/
+`StepDots.tsx`/tam `useSandwichStore.ts` zaten pushlanmıştı ama SESSION_INDEX'e hiç işlenmemişti
+— bu turda kullanıcının paylaştığı Vercel build hatası üzerinden ortaya çıktı ve dosya dosya
+telafi edildi. Bu turda: `sandwich-data.json` import path hatası düzeltildi + TEST VERİSİ olarak
+üretildi (S1 hâlâ açık), `useCartStore.ts` doğrulandı (SandwichCustomizer'daki MEDIUM confidence
+riski kapandı), `Hero.tsx` CTA düzeni değişti (3 buton, 2 satır), 6 adım bileşeni + eksik
+`page.tsx` sıfırdan kodlandı (kullanıcının "buton/sayfa yok" şikayetinin kök nedeni), 7 test
+dosyası yazıldı ve Codespaces'te 7/7 dosya-27/27 test PASS doğrulandı (yol boyunca `act()`
+eksikliği ve unutulan bir dosya pushu düzeltildi). Yeni Açık Sorunlar: #95 (S1/S2/S5 gerçek veri),
+#96 (KAPANDI — test doğrulaması), #97 (CORE.md dosya haritası güncel değil), #98 (proje geneli
+7 test dosyası başarısız, kapsam dışı bırakıldı). Güncellenme: 2026-08-23.*
