@@ -49,9 +49,14 @@ Subway ve Jersey Mike's araştırmasından çıkan iki farklı model sentezlendi
   (tek tıkla klasik sebze+sos kombinasyonu doldurur, adımı ATLAMAZ, sadece
   varsayılan değer doldurur).
 
-Bowlera'ya uyarlanan sıra **Subway'in gerçek sırasına sadık** kalacak şekilde
-düzeltildi (önceki "Bread-first" önerisi kullanıcı tarafından reddedildi):
-**Size → Bread → Protein → Cheese → Veggies → Sauce&Toast&Extras**.
+Bowlera'ya uyarlanan sıra **ne Subway'in birebir sırası ne de ilk önerilen
+Size-first karışımı** — kullanıcı onayıyla **Bread-first**'e düzeltildi
+(v1.1, 2026-08-23): **Bread → Size → Protein → Cheese → Veggies →
+Sauce&Toast&Extras**. Gerekçe: Bowl akışında da Base (kase tabanı) ilk
+adımdı — kullanıcı önce "neyin üstüne inşa ediyorum"u seçiyor, sandviçte bu
+Ekmek'e karşılık gelir. İki üründe AYNI zihinsel model tekrar eder
+(tutarlılık, ⚠️ önceki v1.0'daki "Subway'e sadık" iddiası YANLIŞTI — gerçek
+Subway sırası protein-first'tür, düzeltme burada not edilmiştir).
 
 Ayrıca **UX sırası ile operasyon/hazırlık sırası AYRI tutulur** (bkz. §9) —
 bu, Bowlera'nın dijital-sipariş + arkada-personel-hazırlar modelinde
@@ -66,8 +71,8 @@ modelinden temel bir sapmadır ve BİLİNÇLİ bir tasarım kararıdır.
 
 | Adım | İçerik (örnek/yer tutucu) | Seçim Tipi | Zorunlu mu |
 |---|---|---|---|
-| 1. Size | 15cm / 30cm | Tekli | ✅ Zorunlu |
-| 2. Bread | [X çeşit ekmek — TBD] | Tekli | ✅ Zorunlu |
+| 1. Bread | [X çeşit ekmek — TBD] | Tekli | ✅ Zorunlu |
+| 2. Size | 15cm / 30cm | Tekli | ✅ Zorunlu |
 | 3. Protein | [X çeşit protein + **Bitkisel Protein** alt-varyant, bkz. §2.1] | Tekli + porsiyon | ✅ Zorunlu |
 | 4. Cheese | [X çeşit peynir + "Peynirsiz" seçeneği] | Tekli/Yok | ⬜ Opsiyonel |
 | 5. Veggies | [X çeşit sebze — ilk N ücretsiz, avokado her zaman ücretli] | Çoklu | ⬜ Opsiyonel |
@@ -120,8 +125,8 @@ başlanabilir, migration'a gerek yok.
 // store/useSandwichStore.ts — İZOLE store, useCustomizerStore.ts'e bağımlı DEĞİL
 
 interface SandwichSelection {
-  size: '15cm' | '30cm' | null
   bread: string | null
+  size: '15cm' | '30cm' | null
   protein: string | null
   proteinVariant: string | null   // SADECE protein='plant-based-protein' iken anlamlı
   proteinPortion: 'single' | 'double'
@@ -143,8 +148,8 @@ interface SandwichState {
   maxReachedStep: 1 | 2 | 3 | 4 | 5 | 6
 
   // Actions
-  selectSize: (size: '15cm' | '30cm') => void
   selectBread: (id: string) => void
+  selectSize: (size: '15cm' | '30cm') => void
   selectProtein: (id: string, portion: 'single' | 'double') => void
   selectProteinVariant: (variantId: string) => void
   selectCheese: (id: string | null) => void
@@ -185,8 +190,8 @@ URL'den doğrudan adım değişikliği (`?step=6`) engellenir — sayfa yükleni
 ### 3.3 isStepValid — Adım Bazlı Validasyon
 
 ```
-isStepValid(1): selections.size !== null
-isStepValid(2): selections.bread !== null
+isStepValid(1): selections.bread !== null
+isStepValid(2): selections.size !== null
 isStepValid(3): selections.protein !== null
 isStepValid(4): true (Cheese her zaman "valid" — opsiyonel, null geçerli bir seçim)
 isStepValid(5): true (Veggies opsiyonel)
@@ -209,8 +214,8 @@ ise → nextStep() ilk varyantı SESSİZCE atar, kullanıcı bloklanmaz.
 
 ```ts
 function getTotals(selections: SandwichSelection): Totals {
-  const size = sandwichData.sizes.find(s => s.id === selections.size)
   const bread = sandwichData.breads.find(b => b.id === selections.bread)
+  const size = sandwichData.sizes.find(s => s.id === selections.size)
   const proteinDef = sandwichData.proteins.find(p => p.id === selections.protein)
   const protein = proteinDef?.variants
     ? proteinDef.variants.find(v => v.id === selections.proteinVariant) ?? proteinDef.variants[0]
@@ -258,7 +263,8 @@ Bowl §5 ile AYNI yaklaşım: **katmanlı CSS/SVG**, 3D/Canvas kullanılmaz.
 
 ```
 z-index sırası (alttan üste):
-1. Ekmek (sabit taban, selections.bread'e göre görsel değişir)
+1. Ekmek (sabit taban, selections.bread'e göre görsel değişir — Bread artık
+   1. adım olduğu için kullanıcı bu katmanı en erken görür)
 2. Protein katmanı        ← proteinVariant'a göre 2 ayrı katman (plant-based ise)
 3. Cheese katmanı          ← null ise katman gösterilmez
 4. Veggie katmanları        ← her biri ayrı katman (opacity toggle)
@@ -283,7 +289,7 @@ geçmeden hızlı sipariş verebilsin — Jersey Mike's'ten alınan esin).
 
 ```
 Kural: "Sepete Ekle" butonu YALNIZCA isStepValid(6) true olduğunda aktif
-       (size + bread + protein + sauce seçilmiş olmalı).
+       (bread + size + protein + sauce seçilmiş olmalı).
        BSC-6 (race condition) koruması — Bowl §7 ile AYNI isAdding.current kilidi.
 ```
 
@@ -389,10 +395,18 @@ function getPrepOrder(selections: SandwichSelection): PrepStep[] {
 
 ---
 
-*BOWLERA SANDWICH_SPEC.md — v1.0 — 2026-08-23*
+*BOWLERA SANDWICH_SPEC.md — v1.1 — 2026-08-23*
 *Kaynak: CUSTOMIZER_SPEC.md v1.2 (desen referansı) · Subway/Jersey Mike's
 global UX araştırması (web search, 2026-08-23) · Kullanıcı onayı: İzolasyon
-ilkesi (Seçenek A), Subway-sadık adım sırası (Size→Bread→Protein→Cheese→
-Veggies→Sauce&Toast&Extras), UX/operasyon sırası ayrımı (getPrepOrder()).*
-*Durum: Yapısal iskelet ONAYLANDI. §8'deki 6 açık soru (S1-S6) cevaplanmadan
-kod üretimine geçilemez (AGENT.md Kural #2 — eksik veriyle çözüm üretme).*
+ilkesi (Seçenek A), UX/operasyon sırası ayrımı (getPrepOrder()).*
+*v1.1 — Adım sırası düzeltildi: **Bread → Size → Protein → Cheese → Veggies →
+Sauce&Toast&Extras** (önceki v1.0'daki Size→Bread sırası, "Subway'e sadık"
+iddiasıyla sunulmuştu ama bu YANLIŞTI — gerçek Subway sırası protein-first,
+kullanıcı tarafından fark edildi/sorgulandı 2026-08-23). Gerekçe: Bowl
+akışındaki Base-ilk-adım deseniyle tutarlılık — kullanıcı önce "neyin
+üstüne inşa ediyorum"u seçer. §1, §2, §3.1, §3.3, §5, §7'deki tüm sıra
+referansları senkronlandı. Durum DEĞİŞMEDİ: yapısal iskelet onaylı, §8'deki
+6 açık soru (S1-S6) kod aşamasından önce hâlâ cevaplanmalı.*
+*v1.0 — İlk üretim. Durum: Yapısal iskelet ONAYLANDI. §8'deki 6 açık soru
+(S1-S6) cevaplanmadan kod üretimine geçilemez (AGENT.md Kural #2 — eksik
+veriyle çözüm üretme).*
