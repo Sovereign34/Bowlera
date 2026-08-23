@@ -150,6 +150,12 @@
 > gerektiren TEK bowl-dokunuşu) kod aşamasından ÖNCE netleşmeli (Kural #2 — eksik veriyle
 > çözüm üretilmez). AGENT.md'ye bu turda HENÜZ işlenmedi (sadece CORE.md güncellendi,
 > kullanıcı talebi bu kapsamdaydı).
+> **[DÜZELTME, aynı sohbet devamı]** Kullanıcı adım sırasını sorguladı — "Ekmek seçimi en
+> başta olacak değil mi?" SANDWICH_SPEC.md v1.0'daki "Subway'e sadık Size→Bread" iddiası
+> YANLIŞ çıktı (gerçek Subway sırası protein-first'tür, ilk araştırmada bu netleştirilmemişti).
+> Kullanıcı onayıyla **Bread-first**'e düzeltildi: **Bread→Size→Protein→Cheese→Veggies→
+> Sauce&Toast&Extras** (SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon
+> referansı v1.0→v1.1'e güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -376,12 +382,11 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v66 (v65'ten: **[20. sohbet, 2026-08-23]** Yeni CURRENT FOCUS bloğu
-eklendi (mevcut #91/#92/#93/#94 blokları KORUNDU, silinmedi) — SANDWICH_SPEC.md v1.0 üretildi:
-"Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole kopyası (Seçenek A),
-Subway+Jersey Mike's UX araştırmasıyla sentezlenmiş 6 adım (Size→Bread→Protein→Cheese→Veggies→
-Sauce&Toast&Extras), UX sırasından bağımsız yeni `getPrepOrder()` fonksiyonu (mutfak hazırlık
-sırası, Personel Sipariş Paneli #62 ile bağlantılı). SADECE yapısal iskelet onaylandı, kod
-ÜRETİLMEDİ — 6 açık soru (S1-S6) netleşmeden başlanamaz. CORE.md Bölüm 3+4 AYNI TURDA
-güncellendi (v1.5), AGENT.md'ye HENÜZ işlenmedi. SIRADAKİ GÖREVLER'e 1g sırası eklendi (S1-S6
-netleştirme, S1 bloklayıcı). Güncellenme: 2026-08-23.*
+*BOWLERA SESSION_INDEX.md — v67 (v66'dan: **[20. sohbet devamı, 2026-08-23]** SANDWICH_SPEC.md
+adım sırası düzeltmesi (v1.0→v1.1): kullanıcı "Ekmek en başta olmalı değil mi?" diye sorgulayınca,
+önceki turdaki "Subway'e sadık Size→Bread" iddiasının YANLIŞ olduğu (gerçek Subway sırası
+protein-first) fark edildi ve düzeltildi. Yeni sıra: Bread→Size→Protein→Cheese→Veggies→
+Sauce&Toast&Extras. CURRENT FOCUS'a düzeltme notu eklendi, CORE.md Dosya Haritası'ndaki versiyon
+referansı senkronlandı (v1.6). Ayrıca CORE.md'nin kendi footer'ında bir önceki turda yanlışlıkla
+kronoloji dışı eklenen v1.5 notu doğru sıraya taşındı (içerik kaybı yok). Durum DEĞİŞMEDİ — S1-S6
+açık soruları hâlâ kod aşamasını bloklamaya devam ediyor. Güncellenme: 2026-08-23.*

@@ -155,7 +155,7 @@ CUSTOMIZER_SPEC.md         ← "Kâseni Yarat" akışının tam kontratı:
                              4 adım state makinesi, canlı fiyat/kalori hesabı,
                              VisualPreview katman mantığı, mobil UX
 
-SANDWICH_SPEC.md           ← "Sandviçini Oluştur" akışının tam kontratı (v1.0,
+SANDWICH_SPEC.md           ← "Sandviçini Oluştur" akışının tam kontratı (v1.1,
                              2026-08-23) — CUSTOMIZER_SPEC.md desenlerini
                              kullanan AYRI/İZOLE store (useSandwichStore.ts,
                              Seçenek A), 6 adım state makinesi (Size→Bread→
@@ -524,13 +524,6 @@ Claude hemen paketi hazırlar.
 
 *BOWLERA — Bu dosya yaşayan bir referanstır. Her mimari/tasarım kararı SESSION_INDEX.md'ye,
 her büyük değişiklik DEPENDENCIES.md'ye yansıtılmalıdır.*
-*v1.5 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
-`SANDWICH_SPEC.md` (v1.0) referansı eklendi — "Sandviçini Oluştur" akışının izole kontratı
-(Seçenek A, bowl akışına dokunmaz). Gerekçe: yeni bir çekirdek referans dosyası eklenince
-CORE.md'nin aynı turda güncellenmesi kuralı (arşiv parçalama dersinden genellenen prensip,
-bkz. v1.4 notu) — kullanıcı talebiyle uygulandı (2026-08-23). SANDWICH_SPEC.md'nin 6 açık
-sorusu (S1-S6) netleşmeden kod üretimine geçilemeyeceği not edildi. AGENT.md'ye HENÜZ
-işlenmedi — sadece CORE.md tarafı bu turda güncellendi.*
 *v1.1 — §7.1 Adım 1'e SESSION_INDEX arşiv koruma netleştirmesi eklendi (Session 4 — 2026-07-19,
 AGENT.md v1.1 ile eşleştirildi).*
 *v1.2 — §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi: SESSION_INDEX.md 400 satırı geçince
@@ -555,3 +548,16 @@ oluşmuştu (kullanıcı tarafından fark edildi, 2026-08-12). Kural artık aç�
 açıldığı ANDA, aynı turda CORE.md güncellenir — aksi halde Self-Correction tetiklenir (bkz.
 AGENT.md SELF-CORRECTION, "Arşiv parçalandı ama CORE.md güncellenmedi" satırı). AGENT.md v1.5
 ile eşleştirildi.*
+*v1.5 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
+`SANDWICH_SPEC.md` referansı eklendi — "Sandviçini Oluştur" akışının izole kontratı
+(Seçenek A, bowl akışına dokunmaz). Gerekçe: yeni bir çekirdek referans dosyası eklenince
+CORE.md'nin aynı turda güncellenmesi kuralı (arşiv parçalama dersinden genellenen prensip,
+bkz. v1.4 notu) — kullanıcı talebiyle uygulandı (2026-08-23). SANDWICH_SPEC.md'nin 6 açık
+sorusu (S1-S6) netleşmeden kod üretimine geçilemeyeceği not edildi. AGENT.md'ye HENÜZ
+işlenmedi — sadece CORE.md tarafı bu turda güncellendi.*
+*v1.6 — Bölüm 4'teki SANDWICH_SPEC.md referansı v1.0→v1.1'e güncellendi (adım sırası
+düzeltmesi: Bread→Size→Protein→Cheese→Veggies→Sauce&Toast&Extras, kullanıcı onayı
+2026-08-23). Küçük senkron güncellemesi — Bölüm 3 (Tetikleyici Tablosu) değişmedi.
+⚠️ SELF-CORRECTION notu: v1.5 girdisi bu footer'a kronolojik sıranın DIŞINDA (v1.1'den
+ÖNCE) eklenmişti — bu turda düzeltildi, doğru sıraya (v1.4'ten SONRA) taşındı. İçerik
+kaybı yok, sadece sıralama hatası giderildi.*
