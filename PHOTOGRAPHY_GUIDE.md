@@ -276,5 +276,75 @@ Kısacası: bütçe kısıtlıysa lensten kısılır, ışık/renk disiplininden
 
 ---
 
-*BOWLERA PHOTOGRAPHY_GUIDE.md — v1.0 — 2026-07-17*
+## 11. ARAÇ ZİNCİRİ VE İŞ AKIŞI (Session 23, 2026-08-23 kararı)
+
+> Bu bölüm, çekimden `public/images/`'e kadar olan tüm zincirde HANGİ aracın
+> HANGİ adımda kullanılacağını netleştirir. Kullanıcı sorusu üzerine
+> araştırılıp karara bağlandı — ayrı bir "tool guide" belgesi açmak yerine
+> bu rehberin doğal uzantısı olduğu için buraya işlendi.
+
+### 11.1 Zincirin 3 Katmanı
+
+| Katman | Araç | Kim yapar |
+|---|---|---|
+| 1. Çekim | Profesyonel fotoğrafçı (bütçe uygunsa) VEYA iPhone 13 Pro+/Samsung S22 Ultra+ makro modu (§2.1, §10) | Kullanıcı / fotoğrafçı |
+| 2. Renk kalibrasyonu + kırpma (RAW düzenleme) | **Darktable** (ücretsiz, açık kaynak — karar bu turda verildi) | Kullanıcı |
+| 3. WebP dönüşümü + sRGB gömme + boyut/isim standardı | Claude (Python/Pillow ile otomatik) | Claude |
+
+### 11.2 Darktable — Neden Seçildi
+
+- **Tamamen ücretsiz**, GPL 3.0 lisanslı — Adobe Lightroom'un aksine
+  (Lightroom ~$10-22/ay, hiçbir zaman ücretsiz kalıcı plan yok, sadece 7
+  günlük deneme).
+- X-Rite ColorChecker Passport ile **AYNI renk kalibrasyonu iş akışını**
+  destekler (§5.1'deki günlük referans kare protokolü Darktable'da da
+  uygulanabilir).
+- Non-destructive RAW işleme, GPU hızlandırma — toplu (50+ ürün) işlemde
+  yeterli hız.
+- **Dezavantaj (bilinçli kabul edildi):** Lightroom'a göre öğrenme eğrisi
+  daha dik, arayüz başlangıçta kafa karıştırıcı. Bowlera'nın ölçeği (tek
+  şube, sınırlı ürün, düşük güncelleme sıklığı) için bu maliyet
+  Lightroom'un aylık ücretinden daha makul görüldü.
+- Resmi site: https://www.darktable.org/
+- **Karar gerekçesi:** Sonuç kalitesi araçtan değil, §3 (ışık) ve §5 (renk
+  kartı disiplini) protokollerine uyulup uyulmamasından çıkıyor — o
+  disiplin uygulanırsa Darktable ile de global/premium standarda ulaşılır.
+
+### 11.3 Claude'un Otomatik WebP Dönüşüm Adımı
+
+Darktable'da düzenlenip export edilen yüksek çözünürlüklü dosyalar
+(henüz WebP'ye çevrilmemiş, JPEG/TIFF olabilir) Claude'a verilir. Claude
+şu adımları otomatik uygular (Python/Pillow):
+
+1. Gerekirse kırpma/kare orana tamamlama
+2. WebP'ye dönüştürme, kalite 80-85 (§6)
+3. **sRGB ICC profilini dosyaya gömme** (`ImageCms` ile) — bu adım
+   sonradan eklendi, ilk demo denemesinde ATLANMIŞTI, düzeltildi
+   (bkz. §11.4 ders notu)
+4. Dosya boyutu kontrolü (300KB ana ürün / 150KB destekleyici sınırı, §6)
+5. `[kategori]-[ürün-adı-kebab-case]-[açı].webp` isimlendirmesi (§7)
+
+### 11.4 Ders — Üçüncü Parti AI Analiz Tutarsızlığı (2026-08-23)
+
+Bir demo sırasında, Claude'un ürettiği WebP dosyası (720×710, sRGB gömülü,
+~100.5KB) iki farklı AI aracına (biri ChatGPT dahil) "analiz ettirildi" ve
+FARKLI sonuçlar (1536×1515, JPEG, 430KB) geldi. Kök neden ARAÇ HATASI
+DEĞİLDİ — ChatGPT'nin görsel yükleme boru hattı, dosyayı analiz etmeden
+ÖNCE kendi içinde yeniden boyutlandırıp/yeniden encode ediyor (oran
+~2.133× — tesadüf değil, sabit bir yeniden-örnekleme katsayısı). Yani
+iki AI da kendi eline geçen dosyayı doğru okudu, ama ikinci AI'ya orijinal
+byte'lar değil, ara katmanın ürettiği YENİDEN İŞLENMİŞ bir kopya ulaştı.
+**Ders:** Bir görsel-analiz aracının sonucunu "dosyanın gerçek özellikleri"
+diye almadan önce, o aracın yükleme sırasında dosyayı yeniden encode edip
+etmediği bilinmeli — SHA256 hash karşılaştırması bunu kesin doğrular.
+
+---
+
+*BOWLERA PHOTOGRAPHY_GUIDE.md — v1.1 — 2026-08-23*
 *Kaynak: MASTER_PLAN.md §4.4, §4.8 · ROADMAP.md §1 (Oturum 1-5)*
+*v1.1 — §11 (Araç Zinciri ve İş Akışı) eklendi: Darktable (ücretsiz RAW/renk
+kalibrasyonu) + Claude'un otomatik WebP/sRGB/isimlendirme adımı üçlü zincir
+olarak netleştirildi. Session 23'te kullanıcı sorusu üzerine araştırılıp
+karara bağlandı — CORE.md'ye HENÜZ işlenmedi (bu dosya tek başına
+güncellendi, Dosya Haritası'ndaki referans değişmedi, sadece içerik
+genişledi).*
