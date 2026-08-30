@@ -368,3 +368,52 @@ Kendi elinizle mevcut session_arşiv_2.md dosyanızın SONUNA ekleyin.
 > **KALAN:** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor (bkz. #97);
 > `Hero.test.tsx`'in "Kâseni Yarat" beklentisi hâlâ stale, bu turda da dokunulmadı.
 
+------
+<!--
+BOWLERA session_arşiv_2.md EKLENTİSİ — 2026-08-30 (23. sohbet taşıması)
+Bu dosyanın içeriğini mevcut session_arşiv_2.md dosyanızın SONUNA elle ekleyin.
+Taşıma gerekçesi: #99 bu turda (23. sohbet) canlıda uçtan uca doğrulanıp KAPANDI.
+Aşağıdaki anlatı, #99'un İLK loglanma anını (22. sohbet) belgeler — artık aktif takip
+için gerekli değil, ama tarihsel iz olarak korunuyor.
+-->
+
+## 22. Sohbet — #99-#104'ün GERİYE DÖNÜK İşlenmesi (2026-08-23)
+
+⚠️ **GERİYE DÖNÜK İŞLENDİ (2026-08-23, 22. sohbet — DÖRDÜNCÜ-SEKİZİNCİ DERS'in TEKRARI):**
+Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
+checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi
+"kod var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
+
+**Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana
+durmuyordu; (2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu
+(sepete/checkout'a gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
+
+**İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
+`SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil
+taşma düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e
+yönlendiriyor; **paylaşılan** `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u
+"Özel Sandviç" gösterecek şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi,
+DOĞRULANMADI — risk MEDIUM); `OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
+
+**ÇÖZÜLEMEDEN KALAN, KRİTİK (2026-08-23 itibarıyla):** Sandviçte fiyat ne olursa olsun
+"Siparişi Onayla"da kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR.
+Şüphe (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un
+`bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor.
+Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi,
+YANIT GELMEDEN kesildi — bkz. #99 (o dönem 🔴), sandviç checkout'unu tamamen bloklu.
+
+**Sonraki sohbette önce (2026-08-23 notu):** (a) grep çıktısını al, kök nedeni doğrula/düzelt;
+(b) 7 dosya değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al
+(ÜÇÜNCÜ DERS).
+
+---
+
+### SONUÇ (23. sohbet, 2026-08-30 — bu blok bu yüzden arşive taşındı)
+
+Kullanıcı 23. sohbette 3 ekran görüntüsüyle sandviç checkout akışını uçtan uca doğruladı:
+sepet → özet (105₺/820kcal) → "Siparişi Onayla" → admin panelinde (Gel Al→Onay Bekleyen,
+saat 12:46) "bari akyıldız — 1× sandwich" siparişinin gerçekten düştüğü görüldü. #99 KAPANDI
+✅. Kök nedenin fiilen ne zaman/nasıl düzeldiği (yukarıdaki grep sorgusu hiç çalıştırılmadı)
+doğrulanmadı — muhtemelen 22. sohbette iddia edilen `lib/sandwich-pricing.ts`/ilgili fix
+devreye girmiş olabilir, ama bu teyit edilmemiş bir varsayımdır. #100-#104 bu sonuçtan
+BAĞIMSIZ olarak hâlâ açık kalmaya devam ediyor (push/test teyidi ayrıca gerekiyor).
