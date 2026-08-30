@@ -417,3 +417,32 @@ saat 12:46) "bari akyıldız — 1× sandwich" siparişinin gerçekten düştü�
 doğrulanmadı — muhtemelen 22. sohbette iddia edilen `lib/sandwich-pricing.ts`/ilgili fix
 devreye girmiş olabilir, ama bu teyit edilmemiş bir varsayımdır. #100-#104 bu sonuçtan
 BAĞIMSIZ olarak hâlâ açık kalmaya devam ediyor (push/test teyidi ayrıca gerekiyor).
+------
+<!--
+BOWLERA session_arşiv_2.md EKLENTİSİ — 2026-08-30 (23. sohbet devamı, 2. taşıma)
+Bu dosyanın içeriğini mevcut session_arşiv_2.md dosyanızın SONUNA elle ekleyin.
+Taşıma gerekçesi: SESSION_INDEX.md 400 satır eşiğini aştı. Aşağıdaki 3 blok, Açık
+Sorunlar tablosunda (#99, #105, #91) ve Kritik Kararlar'da zaten tam özetli — aktif
+takip için gerekli değil, sadece turn-by-turn anlatı arşive taşınıyor.
+-->
+
+## 23. Sohbet Devamı — #99 Kapanışı, PayTR İlk Karar Bloğu, SEC-02 Doğrulaması (2026-08-30)
+
+**[#99 KAPANDI ✅]** Kullanıcı canlı ortamda 3 ekran görüntüsüyle sandviç checkout akışını
+UÇTAN UCA doğruladı: sepet→özet→"Siparişi Onayla"→admin panelinde (Gel Al→Onay Bekleyen,
+12:46) siparişin gerçekten düştüğü görüldü. Kapanış kriteri: kullanıcı deneyimi seviyesinde
+doğrulandı (ÜÇÜNCÜ DERS).
+
+**[Ödeme Altyapısı, İLK KARARLAR + İLK KOD]** PayTR seçildi (iyzico'ya karşı), nakit+online
+hibrit ödeme kararlaştırıldı, kart verisi Bowlera sunucusunda ASLA saklanmayacak (PayTR
+iFrame API, PCI-DSS SAQ A-EP). `lib/paytr.ts` üretildi, ilk aşamada REPO'YA PUSH EDİLMEDİ.
+PayTR merchant başvurusu o an henüz yapılmamıştı — BLOKLAYICI olarak işaretlendi. Kod
+tarafında o an KALAN: init/callback route'ları + `order_history` şema genişletmesi (bu
+kalemlerin hepsi SONRAKİ turlarda tamamlandı, bkz. Açık Sorun #105'in güncel hali).
+
+**[SEC-02 CANLIDA DOĞRULANDI ✅]** Kullanıcı gerçek giriş denemesiyle rate-limit'i tetikledi,
+ekran görüntüsüyle "Çok fazla giriş denemesi. Lütfen biraz sonra tekrar dene." mesajını
+kanıtladı — #91'in SEC-02 (login rate-limit) ayağı canlıda TAM doğrulandı. SEC-01
+(role-revocation) testi kullanıcı kararıyla SONRAYA ERTELENDİ — #91 bu yüzden o an TAM
+KAPANMAMIŞTI, push da yapılmamıştı (durum SONRAKİ turlarda değişmedi, hâlâ aynı — bkz.
+Açık Sorun #91'in güncel hali).
