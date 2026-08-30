@@ -147,31 +147,42 @@
 > Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
 > için gerekli değil, sadece turn-by-turn anlatı taşındı.
 
-> ⚠️ **GERİYE DÖNÜK İŞLENDİ (2026-08-23, 22. sohbet — DÖRDÜNCÜ-SEKİZİNCİ DERS'in TEKRARI):**
-> Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
-> checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi
-> "kod var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
+> **[TAŞINDI — 2026-08-30, 23. sohbet]** 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu
+> (#99-#104'ün ilk loglanma anlatısı) `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-08-30.md`). Kapanış gerekçesi: #99 bu turda canlıda uçtan
+> uca DOĞRULANDI ve KAPANDI (aşağıya bakınız), anlatının aktif takip değeri kalmadı.
 >
-> **Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana
-> durmuyordu; (2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu
-> (sepete/checkout'a gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
+> **[YENİ, bu turda (23. sohbet, 2026-08-30) — #99 KAPANDI ✅]** Kullanıcı canlı ortamda 3
+> ekran görüntüsüyle sandviç checkout akışını UÇTAN UCA doğruladı: (1) sepette "Özel Sandviç
+> 1×₺105.00" doğru fiyatlandı; (2) "/siparis" özet ekranında 105₺/820kcal doğru göründü; (3)
+> "Siparişi Onayla" tıklandıktan sonra sepet BOŞALDI ve admin panelinde (Gel Al→Onay Bekleyen)
+> saat 12:46'da "bari akyıldız — 1× sandwich" siparişi GERÇEKTEN düştü. Kök neden fiilen ne
+> zaman/nasıl düzeldiği bu turda teyit edilmedi (muhtemelen 22. sohbetin iddia edilen
+> `lib/sandwich-pricing.ts` fix'i devreye girmiş) — ama sonuç GÖZLE doğrulandı, bu yeterli
+> kapanış kriteri (ÜÇÜNCÜ DERS: kullanıcı deneyimi seviyesinde kapanış). #100-#104 HÂLÂ AÇIK,
+> #99'dan BAĞIMSIZ ayrıca teyit edilmeli (7 dosya değişikliğinin push/test durumu).
 >
-> **İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
-> `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil
-> taşma düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e
-> yönlendiriyor; **paylaşılan** `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u
-> "Özel Sandviç" gösterecek şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi,
-> DOĞRULANMADI — risk MEDIUM); `OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
->
-> **ÇÖZÜLEMEDEN KALAN, KRİTİK:** Sandviçte fiyat ne olursa olsun "Siparişi Onayla"da kırmızı
-> "fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR. Şüphe (doğrulanmadı):
-> `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un `bowlItem`/
-> `customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan
-> `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi, YANIT
-> GELMEDEN kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
->
-> **Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
-> değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
+> **[YENİ, bu turda (23. sohbet) — Ödeme Altyapısı, KARARLAR + İLK KOD]** Kullanıcı online
+> ödeme altyapısı kurulmasını istedi (Gel Al + Kurye akışları için). Kararlar netleşti:
+> (a) **Sağlayıcı: PayTR** — restoran/KOBİ segmentinde rekabetçi komisyon + "ertesi gün
+> ödeme" nakit akışı avantajı nedeniyle iyzico yerine tercih edildi (kullanıcı "sen karar
+> ver" dedi); (b) **Ödeme seçenekleri: Hem nakit hem online**, kullanıcı checkout'ta seçecek;
+> (c) **Kart verisi Bowlera sunucusunda ASLA saklanmayacak/işlenmeyecek** — PayTR iFrame
+> API kullanılacak (kart formu görsel olarak gömülü ama veri doğrudan PayTR'a gider), PCI-DSS
+> SAQ D yükü yerine SAQ A-EP kapsamında kalınacak. Bowlera tarafı sadece `payment_method`/
+> `payment_status`/`payment_provider_ref` (işlem referansı, HAM KART VERİSİ DEĞİL) saklayacak.
+> **Üretilen kod:** `lib/paytr.ts` — `paytrInitPayment()` (checkout'tan token isteği,
+> 3D Secure açık, taksit varsayılan kapalı) + `verifyPaytrCallback()` (HMAC-SHA256 imza
+> doğrulama — bu doğrulanmadan sipariş "ödendi" işaretlenmemeli) — kullanıcıya dosya olarak
+> verildi, REPO'YA HENÜZ EKLENMEDİ/PUSH EDİLMEDİ. **AÇIK:** PayTR merchant başvurusu henüz
+> yapılmadı (kullanıcıya başvuru süreci/evrak listesi anlatıldı), gerçek
+> `PAYTR_MERCHANT_ID`/`KEY`/`SALT` değerleri YOK — sandbox/test mağaza bilgileri de net
+> netleştirilmedi (araştırma sonuçsuz kaldı, resmi güncel test kimlik bilgisi bulunamadı).
+> **Sonraki adım kullanıcı kararıyla netleşecek:** ya PayTR ön başvuru formu doldurulup gerçek
+> bilgiler beklenecek, ya da güncel sandbox erişimi ayrıca araştırılacak. Kod tarafında KALAN:
+> `app/api/payment/paytr/init/route.ts`, `app/api/payment/paytr/callback/route.ts`,
+> `order_history` şema genişletmesi (`payment_method`/`payment_status`/
+> `payment_provider_ref`) — HİÇBİRİ ÜRETİLMEDİ, bkz. Açık Sorun #105.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -189,11 +200,13 @@
 | 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
+| 2026-08-30 (23. sohbet) | 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu (#99-#104 ilk loglanma anlatısı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30.md`) | ✅ #99 kapanış notunda + #100-#104'te özetli, TAM metinle taşınacak (eklenti dosyası aşağıda üretildi, kullanıcı elle eklemeli) |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
 > `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
-> `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md` (bu turda üretildi)
+> `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`,
+> `..._EKLENTI_2026-08-30.md` (bu turda üretildi)
 > — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
@@ -273,7 +286,8 @@
 | 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
 | 97 | 🟠 | **[YENİ, bu turda (21. sohbet)]** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor: `StepBread/StepSize/StepProtein/StepCheese/StepVeggies/StepSauceToastExtras.tsx`, `app/sandwich/customize/[id]/page.tsx`, 7 test dosyası, `Hero.tsx` CTA değişikliği. Ayrı bir turda CORE.md güncellenmeli. | `CORE.md` |
 | 98 | 🟢 | **[YENİ, bu turda (21. sohbet) — kapsam dışı bırakıldı]** Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test başarısız çıktı, `Header.test.tsx` dahil (kritik: "Çıkış Yap"a tıklayınca signOut callbackUrl="/" ile çağrılır" testi). Bu turda kasıtlı dokunulmadı — Kural #5 izolasyon. Ayrı bir turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya (henüz listelenmedi) |
-| 99 | 🔴 | **[YENİ, 22. sohbet — GERİYE DÖNÜK loglandı, sohbet kesildi]** Sandviç checkout'u BLOKLU: "Siparişi Onayla" adımında fiyat ne olursa olsun kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor. Kök neden ŞÜPHESİ (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'teki fiyatlandırma kontrolü sadece Bowl'un `bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı istendi, YANIT GELMEDEN sohbet kesildi. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya DOĞRULANMADI) |
+| 99 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — CANLIDA UÇTAN UCA DOĞRULANDI]** Sandviç checkout'u artık BLOKLU DEĞİL: kullanıcı 3 ekran görüntüsüyle sepet→özet→"Siparişi Onayla"→admin onay kuyruğu (Gel Al, 12:46, "bari akyıldız — 1× sandwich") zincirini kanıtladı. Kök neden fiilen ne zaman/nasıl düzeldiği doğrulanmadı, ama kullanıcı deneyimi seviyesinde kapanış kriteri karşılandı (ÜÇÜNCÜ DERS). | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya HÂLÂ DOĞRULANMADI) |
+| 105 | 🔴 | **[YENİ, bu turda (23. sohbet)]** Ödeme altyapısı kurulumu (Gel Al + Kurye, nakit+online hibrit). Kararlar netleşti (sağlayıcı: PayTR, kart verisi asla Bowlera'da saklanmaz — iFrame API). `lib/paytr.ts` (`paytrInitPayment`+`verifyPaytrCallback`) üretildi, REPO'YA PUSH EDİLMEDİ. **BLOKLAYICI:** PayTR merchant başvurusu yapılmadı, gerçek `PAYTR_MERCHANT_ID`/`KEY`/`SALT` yok; sandbox/test kimlik bilgileri de netleşmedi. **KALAN:** `app/api/payment/paytr/init/route.ts`, `.../callback/route.ts`, `order_history` şema genişletmesi (`payment_method`/`payment_status`/`payment_provider_ref`) — hiçbiri üretilmedi. Kurye/teslimat uygulaması konusu ayrıca AÇIK, bu turda hiç ele alınmadı. | `lib/paytr.ts` (yeni, repo dışı), `lib/db/schema.ts`, `app/api/payment/paytr/*` (henüz yok) |
 | 100 | 🟡 | **[YENİ, 22. sohbet — kod üretildiği İDDİA EDİLDİ, push/test TEYİT EDİLMEDİ]** 4 UI düzeltmesi: (a) `Hero.tsx` buton düzeni `flex-wrap`→`grid grid-cols-2`, mobilde yan yana kalıcı; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` `aspect-square`→`aspect-[4/3]`+`max-h-72`, mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` sepete ekleme sonrası artık `/siparis`'e yönlendiriyor (`useRouter`, önceden `store.reset()`+aynı sayfa). | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
 | 101 | 🟡 | **[YENİ, 22. sohbet — PAYLAŞILAN dosya, risk MEDIUM, push/test TEYİT EDİLMEDİ]** `CartDrawer.tsx` satır 84 bug'u: `item.bowlItem?.name ?? "Özel Kase"` sandviç ürünlerinde HER ZAMAN "Özel Kase" yazdırıyordu. "Özel Sandviç" gösterecek şekilde genişletildi — Bowl'un eski davranışının KORUNDUĞU iddia edildi ama canlıda Bowl'un hâlâ doğru çalıştığı doğrulanmadı. | `components/cart/CartDrawer.tsx` |
 | 102 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx` satır 20 — CartDrawer'daki (#101) BİREBİR AYNI "Özel Kase" fallback bug'u burada da bulundu, aynı desenle genişletildi ("Özel Sandviç"). | `components/order/OrderSummary.tsx` |
@@ -326,7 +340,7 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Önceki tur]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). **[BU TURDA]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) kod+test (33/33)+build+tsc TAMAM — canlı manuel doğrulama BEKLİYOR (#91). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🟢 **[BU TURDA (23. sohbet) KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı (sepet→özet→onay→admin kuyruğu) — bkz. #99. Kök neden fiilen doğrulanmadı, kullanıcı deneyimi seviyesinde kapanış. **[YENİ]** Ödeme altyapısı (PayTR, nakit+online hibrit) kararlaştırıldı, `lib/paytr.ts` üretildi, merchant başvurusu BEKLİYOR — bkz. #105. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). **[Bu turda]** `consentRegistrations.ipAddress` (nullable) + yeni `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI — diğer tablolar etkilenmedi. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). **[Bu turda, 19. sohbet]** Neon'un TAM güncel şeması sorguyla doğrulandı: 5 tablo (`users`, `consent_registrations`, `order_history`, `password_reset_requests`, `registration_blocked_attempts`) — `branches` veya herhangi bir menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[BU TURDA]** Gel Al onay kuyruğu — canlı bulgu üzerine 3-durumlu revizyon (KARAR A): `confirmed` artık terminal değil ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri) kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[önceki tur]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). ⚠️ **[Bu turda]** Çok şubeli mimari + CRM/attribution önerisi `BOWLERA_COK_SUBELI_CRM_VIZYON.md`'de taslak — ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ, önce kullanıcı onayı gerekiyor (bkz. #92/#93/#94). |
@@ -337,7 +351,8 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -5 | **[YENİ, 22. sohbet]** #99 — Sandviç checkout'u BLOKLU, "fiyatlandırılamadı" hatası her zaman çıkıyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı isteniyor, kök neden bulunup düzeltilmeli. **AYRICA:** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | 🔴 |
+| -6 | **[YENİ, 23. sohbet]** #105 — Ödeme altyapısı (PayTR). PayTR ön başvuru formu doldurulmalı (veya sandbox erişimi araştırılmalı), gerçek/test `MERCHANT_ID`+`KEY`+`SALT` alınmalı. Ardından `lib/paytr.ts` repoya eklenmeli, `app/api/payment/paytr/init` + `.../callback` route'ları kodlanmalı, `order_history` şeması genişletilmeli. | 🔴 |
+| -5 | **[TAMAMLANDI, bu turda ✅]** #99 — Sandviç checkout'u canlıda uçtan uca doğrulandı (sepet→özet→onay→admin kuyruğu). **AYRICA (hâlâ açık):** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | ✅ (#99) / 🟡 (#100-104 açık) |
 | -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri yapıldı (`BOWLERA_COK_SUBELI_CRM_VIZYON.md`), kod YOK. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
 | -3 | **[YENİ, bu turda]** #91 — Güvenlik denetimi SEC-01/SEC-02 kod+test+build+tsc TAMAM. **KALAN:** canlıda (a) role-revocation 403 testi, (b) 6. yanlış şifre denemesinin reddi — ikisi de GÖZLE doğrulanmalı, sonra 5 dosya GitHub'a push edilmeli. | 🔴 |
 | -2 | **[YENİ, bu turda]** #90 — `/menu/customize/[id]` masaüstü tek-ekrana-sığma düzeltmesi kodlandı, kullanıcıya verildi. **KALAN:** kendi `page.tsx`'ine uygulanmalı, Codespaces'te build koşulmalı, GitHub'a push edilmeli, masaüstünde GÖZLE doğrulanmalı. | 🟠 |
@@ -386,15 +401,19 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v69 (v68'den: **[22. sohbet, 2026-08-23]** Kullanıcı ham sohbet
-metnini yapıştırarak paylaştı — sohbet, Claude'un bir `grep` çıktısı beklediği noktada
-checkpoint/onay alınmadan kesilmişti (DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ/SEKİZİNCİ DERS'in
-TEKRARI). Geriye dönük işlendi: kullanıcının 4 UI şikâyeti + Claude'un "ürettiğini iddia
-ettiği" 7 dosya değişikliği (Hero.tsx, SandwichSummaryPanel.tsx, HeroImagePlaceholder.tsx,
-SandwichCustomizer.tsx, CartDrawer.tsx, OrderSummary.tsx×2) HİÇBİRİ "tamamlandı" sayılmadan
-Açık Sorun olarak loglandı (#99-#104). En kritik bulgu: sandviç checkout'u "fiyatlandırılamadı"
-hatasıyla TAMAMEN BLOKLU (#99, 🔴) — kök neden kullanıcıdan istenen bir grep çıktısıyla
-netleşecekti, yanıt gelmeden sohbet kesildi. SIRADAKİ GÖREVLER'e -5 sırasıyla en üste eklendi.
-400 satır eşiği yeniden aşılınca SEKİZİNCİ DERS (21. sohbet) anlatı bloğu `session_arşiv_2.md`'ye
-taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`), içerik Açık Sorunlar
-#95/#96/#97/#98'de özetli olarak korundu. Güncellenme: 2026-08-23.*
+*BOWLERA SESSION_INDEX.md — v70 (v69'dan: **[23. sohbet, 2026-08-30]** Kullanıcı 3 ekran
+görüntüsüyle sandviç checkout akışını (sepet→özet→"Siparişi Onayla"→admin onay kuyruğu)
+canlıda uçtan uca doğruladı — #99 KAPANDI (🔴→✅), SIRADAKİ GÖREVLER'deki -5 sırası
+tamamlandı olarak işaretlendi. #100-#104 #99'dan BAĞIMSIZ hâlâ açık (push/test teyidi
+bekliyor). Kullanıcı yeni bir görev başlattı: online ödeme altyapısı (Gel Al + Kurye için).
+Araştırma + karar turu: sağlayıcı olarak **PayTR** seçildi (iyzico'ya karşı, ertesi-gün-ödeme
+avantajı), ödeme şekli **nakit+online hibrit** kararlaştırıldı, kart verisinin Bowlera
+sunucusunda ASLA saklanmayacağı (PayTR iFrame API, PCI-DSS SAQ A-EP kapsamı) karara bağlandı.
+`lib/paytr.ts` (token isteği + HMAC-SHA256 callback doğrulama) kullanıcıya dosya olarak
+verildi, REPO'YA HENÜZ PUSH EDİLMEDİ. Adisyo'nun bu ihtiyacı karşılamadığı (restoran içi
+POS/adisyon sistemi, online ödeme gateway'i değil) araştırılıp netleştirildi. PayTR merchant
+başvuru süreci kullanıcıya anlatıldı — henüz başvurulmadı, gerçek/sandbox
+`MERCHANT_ID`/`KEY`/`SALT` YOK, bu BLOKLAYICI (#105, 🔴, SIRADAKİ GÖREVLER -6). 22. sohbetin
+eski "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-08-30.md`), içerik #99 kapanış notunda ve #100-#104'te özetli
+olarak korundu. Güncellenme: 2026-08-30.*
