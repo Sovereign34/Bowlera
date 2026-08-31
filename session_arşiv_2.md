@@ -446,3 +446,44 @@ kanıtladı — #91'in SEC-02 (login rate-limit) ayağı canlıda TAM doğruland
 (role-revocation) testi kullanıcı kararıyla SONRAYA ERTELENDİ — #91 bu yüzden o an TAM
 KAPANMAMIŞTI, push da yapılmamıştı (durum SONRAKİ turlarda değişmedi, hâlâ aynı — bkz.
 Açık Sorun #91'in güncel hali).
+<!--
+BOWLERA session_arşiv_2.md EKLENTİSİ — 2026-08-31 (24. sohbet taşıması)
+Bu dosyanın içeriğini mevcut session_arşiv_2.md dosyanızın SONUNA elle ekleyin.
+Taşıma gerekçesi: SESSION_INDEX.md 400 satır eşiğini aştı. Aşağıdaki blok, Açık Sorunlar
+#105/#106'da ve DOKUZUNCU DERS'te zaten tam özetli — aktif takip için gerekli değil,
+sadece turn-by-turn anlatı arşive taşınıyor.
+-->
+
+## 23. Sohbet Devamı — #105 İlerleme, Üretim Regresyonu, #106 İlk Keşif (2026-08-30)
+
+**[#105 KOD TARAFI BÜYÜK ÖLÇÜDE İLERLEDİ]** `lib/db/schema.ts`'e `orderHistory.paymentMethod`/
+`paymentStatus`/`paymentProviderRef` eklendi, push edildi, Vercel build YEŞİL doğrulandı.
+Neon'da migration KOŞULDU ve kullanıcı 3 sütunu Tables görünümünde DOĞRULADI — DB tarafı
+TAMAM. `app/api/orders/gel-al/route.ts` güncellendi: `paymentMethod` artık zorunlu,
+`paymentStatus` client'tan ASLA alınmıyor (sadece PayTR callback'i imza doğrulamasından
+sonra değiştirebilir). `lib/personel/gel-al-queries.ts` güncellendi: online-ödenmemiş
+siparişler "Onay Bekleyen" sekmesinde gizleniyor.
+
+**[ÜRETİM REGRESYONU + DÜZELTME — bkz. DOKUZUNCU DERS]** `gel-al/route.ts`'e eklenen zorunlu
+`paymentMethod`, o route'u çağıran `ConfirmPickupOrderButton.tsx` GÜNCELLENMEDEN push edildi
+— CANLIDA TÜM Gel Al siparişleri "Geçersiz veya eksik ödeme yöntemi" hatasıyla bloke oldu.
+Kullanıcı ekran görüntüsüyle bildirdi. Aynı turda `ConfirmPickupOrderButton.tsx`'e ödeme
+yöntemi seçim UI'ı eklendi ("Nakit" seçilebilir/varsayılan, "Online" PayTR merchant onayı
+gelene kadar "Yakında" etiketiyle DEVRE DIŞI). Kullanıcı push edip canlıda tekrar denedi,
+sipariş başarıyla oluştu (sözlü beyan).
+
+**[Personel Şifre Sıfırlama Kilitlenmesi, tek seferlik operasyonel müdahale]** Kullanıcı
+(hem müşteri hem admin/staff rolünde) kendi Bowlera şifresini unuttu — ama normal "Şifremi
+Unuttum" akışı personel panelinden geçtiği (personel "Sıfırla"ya basıp kod üretir) ve
+kullanıcı ZATEN personel paneline giremediği için akış çalışmadı (tavuk-yumurta sorunu).
+Neon SQL Editor'de `pgcrypto` ile doğrudan `crypt('yeni_şifre', gen_salt('bf', 10))`
+kullanılarak `users.password_hash` elle güncellendi, kullanıcı yeni şifreyle giriş yaptığını
+doğruladı. Bu, sistemin bir tasarım boşluğunu ortaya çıkardı (bkz. Açık Sorun #106).
+
+---
+
+### SONUÇ (24. sohbet, 2026-08-31 — bu blok bu yüzden arşive taşındı)
+
+#105'in kalan kısmı (online iFrame UI, `ONLINE_PAYMENT_ENABLED=false` ile kilitli) sonraki
+turda tamamlandı — bkz. Açık Sorun #105 güncel hali. #106'nın kalıcı çözümü kullanıcı
+kararı bekliyor — bkz. Açık Sorun #106 güncel hali.
