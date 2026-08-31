@@ -112,24 +112,9 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
-> 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
-> Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
-> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
->
-> **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
-> bloğu `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`).
-> Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli.
->
-> **[TAŞINDI — 2026-08-30, 23. sohbet]** 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu
-> (#99-#104'ün ilk loglanma anlatısı) `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-08-30.md`). Kapanış gerekçesi: #99 bu turda canlıda uçtan
-> uca DOĞRULANDI ve KAPANDI, anlatının aktif takip değeri kalmadı.
->
-> **[TAŞINDI — 2026-08-30, 23. sohbet devamı]** #99 kapanış anlatısı, #105'in ilk PayTR karar
-> bloğu ve SEC-02 canlı doğrulama anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-08-30-devam2.md`). Kapanış gerekçesi: içerik Açık Sorunlar
-> #99/#105/#91 satırlarında ve Kritik Kararlar'da zaten tam özetli.
+> **[TAŞINDI — çeşitli tarihler, bkz. Arşiv Taşıma Kaydı tablosu]** 17-23. sohbetlere ait
+> turn-by-turn anlatı blokları (toplam 4 taşıma) `session_arşiv_2.md`'ye taşındı — hepsi
+> Açık Sorunlar #90/#91/#95-#99/#105'te ve Kritik Kararlar'da zaten tam özetli.
 >
 > **[YENİ, bu turda (23. sohbet devamı) — #101/#102/#103/#104 KAPANDI ✅, KULLANICI BEYANI]**
 > Kullanıcı #100-#104'ün ne olduğunu sorduktan sonra, son 4 maddenin (#101 CartDrawer "Özel
@@ -143,36 +128,38 @@
 > arasındaki fark ayırt edilmeli. **#100 (a/b/c/d) bu kapsamda DEĞİL, hâlâ açık** — kullanıcı
 > sadece "son 4 madde" (#101-#104) dedi, #100 ayrı bırakıldı.
 
-> **[YENİ, bu turda (23. sohbet devamı, 2026-08-30) — #105 KOD TARAFI BÜYÜK ÖLÇÜDE İLERLEDİ]**
-> `lib/db/schema.ts`'e `orderHistory.paymentMethod`/`paymentStatus`/`paymentProviderRef`
-> eklendi, push edildi, Vercel build YEŞİL doğrulandı. **Neon'da migration KOŞULDU ve
-> kullanıcı 3 sütunu Tables görünümünde DOĞRULADI** ✅ — DB tarafı TAMAM. `app/api/orders/
-> gel-al/route.ts` güncellendi: `paymentMethod` artık zorunlu, `paymentStatus` client'tan
-> ASLA alınmıyor (sadece PayTR callback'i imza doğrulamasından sonra değiştirebilir).
-> `lib/personel/gel-al-queries.ts` güncellendi: online-ödenmemiş siparişler "Onay Bekleyen"
-> sekmesinde gizleniyor (kullanıcı kararı: personel parası yatmamış siparişi görmemeli).
->
-> **[ÜRETİM REGRESYONU + DÜZELTME, aynı turda — bkz. DOKUZUNCU DERS]** `gel-al/route.ts`'e
-> eklenen zorunlu `paymentMethod`, o route'u çağıran `ConfirmPickupOrderButton.tsx`
-> GÜNCELLENMEDEN push edildi — CANLIDA TÜM Gel Al siparişleri "Geçersiz veya eksik ödeme
-> yöntemi" hatasıyla bloke oldu. Kullanıcı ekran görüntüsüyle bildirdi. Aynı turda
-> `ConfirmPickupOrderButton.tsx`'e ödeme yöntemi seçim UI'ı eklendi ("Nakit" seçilebilir/
-> varsayılan, "Online" PayTR merchant onayı gelene kadar "Yakında" etiketiyle DEVRE DIŞI).
-> Kullanıcı push edip canlıda tekrar denedi, sipariş başarıyla oluştu (sözlü beyan).
-> **Kod tarafında hâlâ kalan (bkz. #105):** PayTR merchant başvurusu yapılmadı, gerçek
-> anahtarlar yok — "Online" seçeneği bu yüzden bilinçli olarak kapalı. Kurye/teslimat
-> uygulaması konusu bu turda da hiç ele alınmadı.
->
-> **[YENİ, bu turda — Personel Şifre Sıfırlama Kilitlenmesi, tek seferlik operasyonel
-> müdahale + YENİ Açık Sorun]** Kullanıcı (hem müşteri hem admin/staff rolünde) kendi
-> Bowlera şifresini unuttu — ama normal "Şifremi Unuttum" akışı personel panelinden geçtiği
-// (personel "Sıfırla"ya basıp kod üretir) ve kullanıcı ZATEN personel paneline giremediği
-> için akış çalışmadı (tavuk-yumurta sorunu). Neon SQL Editor'de `pgcrypto` ile doğrudan
-> `crypt('yeni_şifre', gen_salt('bf', 10))` kullanılarak `users.password_hash` elle
-> güncellendi (kullanıcının kendi seçtiği şifreyle), kullanıcı yeni şifreyle giriş
-> yaptığını doğruladı. **Bu, sistemin bir tasarım boşluğunu ortaya çıkardı** — bkz. YENİ
-> Açık Sorun #106: personel/admin kendi şifresini unutursa VE personel paneline erişimi
-> yoksa, normal akışla KENDİ KENDİNİ kurtaramıyor, DB'ye elle müdahale ZORUNLU hale geliyor.
+
+> **[TAŞINDI — 2026-08-31, 24. sohbet]** #105'in ilerleme anlatısı (şema/migration/route
+> güncellemeleri), üretim regresyonu anlatısı (DOKUZUNCU DERS'te özetli) ve #106'nın (personel
+> şifre sıfırlama kilitlenmesi) ilk keşif anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-08-31.md`). Kapanış gerekçesi: içerik Açık Sorunlar #105/#106'da
+> ve DOKUZUNCU DERS'te zaten tam özetli.
+
+> **[YENİ, bu turda (24. sohbet, 2026-08-31) — #107/#108 KAPANDI ✅, CANLI ÖNCESİ BLOKLAYICI
+> BULGU + DÜZELTME]** Kullanıcı canlıya çıkmadan önce kritik bir eksik buldu: personel
+> paneli hem kase hem sandviç siparişlerinde SADECE `"1× menuNumber"` gösteriyordu, müşterinin
+> GERÇEK seçimleri (Base/Main/Garden/Flavor/Finish ya da Ekmek/Boy/Protein/Peynir/Sebzeler/
+> Sos) hiç kaydedilmiyor/görünmüyordu (Sorun A — HER İKİ ürün türü). Ayrıca sandviçte "Sepete
+> Ekle" öncesi özet panelinde de seçimler hiç gösterilmiyordu, kase'nin kendi panelinden farklı
+> olarak (Sorun B — SADECE sandviç). Kök nedenler dosya dosya izlenerek (types/index.ts,
+> GelAlOrderCard.tsx, SandwichSummaryPanel.tsx, types/sandwich.ts, sandwich-pricing.ts)
+> doğrulandı, DB migration GEREKMEDEN (order_history.items zaten jsonb) 8 dosya güncellendi:
+> `types/index.ts` (yeni `OrderItemSelectionLine` tipi + `OrderItemSummary.selectionSummary`),
+> `lib/customizer-description.ts` (YENİ, kase seçimlerini satırlara çevirir), `lib/
+> sandwich-description.ts` (YENİ, sandviç seçimlerini satırlara çevirir), `app/api/orders/
+> gel-al/route.ts` (priceItem() artık selectionSummary de üretiyor), `components/personel/
+> GelAlOrderCard.tsx` (seçim satırlarını render ediyor), `components/sandwich/
+> SandwichSummaryPanel.tsx` (seçim özeti eklendi, Sorun B), `components/sandwich/
+> SandwichCustomizer.tsx` (selections prop'u geçiriliyor). Kullanıcı canlıda HER İKİ ürün
+> türü için de (4+4 ekran görüntüsüyle) uçtan uca doğruladı: hem "Sepete Ekle" öncesi özet
+> hem personel paneli artık tam seçim detayını gösteriyor — kase ve sandviç için AYRI AYRI
+> kanıtlandı. **Yol boyunca 1 build hatası + düzeltme:** `SandwichCatalog.veggies` alanı
+> ilk yazımda `SandwichCatalogItem[]` (price+calories zorunlu) olarak tanımlanmıştı ama
+> gerçek `sandwich-data.json`'daki veggies sadece `{id,name}` taşıyor (`StepVeggies.tsx`
+> görülerek doğrulandı) — TypeScript derleme hatası verdi, `SandwichVeggieCatalogItem`
+> (sadece id+name) adında daha dar bir tip eklenerek düzeltildi, deploy YEŞİL doğrulandı.
+> **Kalan bilinen eksik (bloklayıcı değil):** yok — sebze isimleri de artık kataloğa göre
+> doğru çözümleniyor (önceden ham ID gösteriliyordu, bu da bu turda düzeltildi).
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -192,12 +179,13 @@
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
 | 2026-08-30 (23. sohbet) | 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu (#99-#104 ilk loglanma anlatısı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30.md`) | ✅ #99 kapanış notunda + #100-#104'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
 | 2026-08-30 (23. sohbet devamı, 2. taşıma) | #99 kapanış anlatısı, PayTR ilk karar bloğu, SEC-02 doğrulama anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30-devam2.md`) | ✅ Açık Sorunlar #99/#105/#91'de ve Kritik Kararlar'da özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
+| 2026-08-31 (24. sohbet) | #105 ilerleme anlatısı, üretim regresyonu anlatısı, #106 ilk keşif anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-31.md`) | ✅ Açık Sorunlar #105/#106'da ve DOKUZUNCU DERS'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
 > `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
 > `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`,
-> `..._EKLENTI_2026-08-30.md`, `..._EKLENTI_2026-08-30-devam2.md` (bu turda üretildi)
+> `..._EKLENTI_2026-08-30-devam2.md`, `..._EKLENTI_2026-08-31.md` (bu turda üretildi)
 > — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
@@ -282,7 +270,9 @@
 | 102 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `OrderSummary.tsx` satır 20 — CartDrawer'daki aynı "Özel Kase" fallback bug'ı. Kullanıcı beyanıyla kapandı, ekran görüntüsü YOK. | `components/order/OrderSummary.tsx` |
 | 103 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `OrderSummary.tsx`'e "Kaldır" butonu eklendi. Kullanıcı beyanıyla kapandı, ekran görüntüsü YOK. | `components/order/OrderSummary.tsx` |
 | 104 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `SandwichCustomizer.test.tsx`'in `router.push` mock riski. Kullanıcı beyanıyla kapandı — testlerin fiilen koşulup PASS verdiği ekran görüntüsüyle görülmedi. | `components/sandwich/SandwichCustomizer.test.tsx` |
-| 105 | 🟠 | **[BU TURDA BÜYÜK İLERLEME]** Ödeme altyapısı (PayTR). Kod tarafı büyük ölçüde TAMAM: `lib/db/schema.ts` (3 alan), `order_history` migration Neon'da KOŞULDU+DOĞRULANDI, `app/api/orders/gel-al/route.ts` (paymentMethod zorunlu, paymentStatus client'tan alınmaz), `lib/personel/gel-al-queries.ts` (online-ödenmemiş gizleme filtresi), `app/api/payment/paytr/{init,callback}/route.ts`, `ConfirmPickupOrderButton.tsx` (ödeme yöntemi UI — Nakit aktif, Online "Yakında" devre dışı) — hepsi push edildi, canlıda nakit akışı DOĞRULANDI (kullanıcı beyanı). **KALAN, BLOKLAYICI:** PayTR merchant başvurusu hâlâ yapılmadı, gerçek `MERCHANT_ID`/`KEY`/`SALT` yok — bu yüzden "Online" seçeneği canlıda kapalı. Merchant onaylanınca: (a) env değişkenleri eklenmeli, (b) "Online" butonu aktif edilmeli, (c) iFrame gömme UI'ı inşa edilmeli (henüz hiç yapılmadı). Kurye/teslimat uygulaması konusu HİÇ ele alınmadı. | `lib/db/schema.ts`, `app/api/orders/gel-al/route.ts`, `lib/personel/gel-al-queries.ts`, `app/api/payment/paytr/*`, `components/order/ConfirmPickupOrderButton.tsx` |
+| 107 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun A: personel paneli (Gel Al kuyruğu) hem kase hem sandviç siparişlerinde SADECE `menuNumber` gösteriyordu, müşteri seçimleri (Base/Main/Garden/Flavor/Finish/Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç görünmüyordu — canlı öncesi bloklayıcı bulundu. `types/index.ts` (`OrderItemSelectionLine`+`OrderItemSummary.selectionSummary`), `lib/customizer-description.ts` (YENİ), `lib/sandwich-description.ts` (YENİ), `gel-al/route.ts`, `GelAlOrderCard.tsx` güncellendi. DB migration GEREKMEDİ (jsonb). Kullanıcı hem kase hem sandviç için ekran görüntüsüyle doğruladı. | `types/index.ts`, `lib/customizer-description.ts`, `lib/sandwich-description.ts`, `app/api/orders/gel-al/route.ts`, `components/personel/GelAlOrderCard.tsx` |
+| 108 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun B: `SandwichSummaryPanel.tsx` "Sepete Ekle" öncesi seçimleri (Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç göstermiyordu (kase'nin kendi paneliyle tutarsızlık). `selections` prop'u eklendi (`SandwichCustomizer.tsx`'ten geçiriliyor), `getSandwichSelectionLines` çağrılıyor. **Ek bulgu, aynı turda çözüldü:** sebze isimleri ilk düzeltmede ham ID gösteriyordu (`SandwichCatalog`'da veggies kataloğu tanımlı değildi) — `StepVeggies.tsx` görülüp `sandwich-pricing.ts`'e `veggies: SandwichVeggieCatalogItem[]` eklendi (fiyatlandırma mantığına DOKUNULMADI). Yol boyunca 1 build hatası (veggies tipi ilk seferde price/calories zorunlu tutmuştu, gerçek veriyle uyuşmadı) → düzeltildi → deploy YEŞİL. Kullanıcı ekran görüntüsüyle doğruladı. | `components/sandwich/SandwichSummaryPanel.tsx`, `components/sandwich/SandwichCustomizer.tsx`, `lib/sandwich-pricing.ts`, `lib/sandwich-description.ts` |
+| 105 | 🟠 | **[BU TURDA — iFrame UI kodlandı, HÂLÂ DEVRE DIŞI]** Ödeme altyapısı (PayTR). Kod tarafı: şema+migration+route'lar+nakit akışı TAMAM (canlıda doğrulandı). **[YENİ]** Online akışının TAMAMI (sipariş oluştur→payment/paytr/init çağır→dönen iframeUrl'i modal'da göster) `ConfirmPickupOrderButton.tsx`'e kodlandı VE push edildi, build YEŞİL — ama `ONLINE_PAYMENT_ENABLED=false` sabitiyle BİLİNÇLİ OLARAK kilitli (üretim davranışı DEĞİŞMEDİ, regresyon riski yok). `payment/paytr/init/route.ts` artık eksik env değişkenlerinde çökmüyor, düzgün 503 dönüyor. **AÇIK VARSAYIMLAR (kod içinde işaretli, doğrulanmadı):** `useSession()`'ın `next-auth/react`'ten geldiği ve `session.user.name`/`phone` alanlarını taşıdığı (`auth.ts` bu turda görülmedi); PayTR'ın zorunlu e-posta alanı için teknik placeholder (`{telefon}@bowlera.local`, kullanıcı kararıyla) kullanılıyor. **KALAN, BLOKLAYICI:** PayTR merchant başvurusu hâlâ yapılmadı, gerçek `MERCHANT_ID`/`KEY`/`SALT` yok. Onaylanınca: (a) env değişkenleri eklenmeli, (b) sandbox'ta uçtan uca test edilmeli, (c) SADECE `ONLINE_PAYMENT_ENABLED` sabiti `true` yapılmalı. Kurye/teslimat uygulaması konusu HİÇ ele alınmadı. | `app/api/payment/paytr/init/route.ts`, `components/order/ConfirmPickupOrderButton.tsx` |
 | 106 | 🟡 | **[YENİ, bu turda — sistem tasarım boşluğu]** Personel/admin kendi şifresini unutup AYNI ZAMANDA personel paneline erişimi yoksa, normal "Şifremi Unuttum" akışı çalışmıyor (o akış personel panelinden geçiyor, ama kilitlenen kişi ZATEN personel — tavuk-yumurta). Bu turda Neon'a `pgcrypto` ile elle müdahale edilerek tek seferlik çözüldü. **Kalıcı çözüm ONAYLANMADI** — olası yönler: (a) süper-admin için ayrı kurtarma mekanizması, (b) "DB'ye elle müdahale" resmi acil-durum prosedürü olarak dokümante edilmesi. Kullanıcı kararı bekliyor. | `users.password_hash` (elle güncellendi), personel şifre sıfırlama akışı |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
@@ -344,7 +334,7 @@
 |---|---|---|
 | -7 | **[YENİ, 23. sohbet]** #100 — 4 UI düzeltmesi (Hero grid, SandwichSummaryPanel test-verisi rozeti, HeroImagePlaceholder mobil taşma, SandwichCustomizer yönlendirme) — push/canlı test HÂLÂ TEYİT EDİLMEDİ. #101-104'ten AYRI, bu turda ele alınmadı. | 🟡 |
 | -8 | **[YENİ, bu turda]** #106 — Personel şifre sıfırlama kilitlenmesi (tasarım boşluğu). Tek seferlik Neon müdahalesiyle çözüldü, kalıcı prosedür/mekanizma kararı kullanıcıdan bekleniyor. | 🟡 |
-| -6 | **[BU TURDA BÜYÜK İLERLEME]** #105 — Ödeme altyapısı (PayTR). Şema+migration+route'lar+UI push edildi, nakit akışı canlıda doğrulandı. **KALAN:** PayTR merchant başvurusu (hâlâ yapılmadı), gerçek anahtarlar, "Online" butonunun aktif edilmesi + iFrame gömme UI'ı (henüz hiç inşa edilmedi). | 🟠 |
+| -6 | **[BU TURDA]** #105 — Ödeme altyapısı (PayTR). Online akışının TÜM kodu (iFrame UI dahil) hazır ve push edildi, `ONLINE_PAYMENT_ENABLED=false` ile kilitli. **KALAN:** PayTR merchant başvurusu, gerçek anahtarlar, sandbox testi, sonra tek satır bayrak değişimi. | 🟠 |
 | -5 | **[TAMAMLANDI, 23. sohbet ✅]** #99 — Sandviç checkout'u canlıda uçtan uca doğrulandı. **[TAMAMLANDI, 23. sohbet devamı ✅ — kullanıcı beyanıyla]** #101/#102/#103/#104 kapandı (ekran görüntülü kanıt YOK, sadece sözlü beyan). | ✅ |
 | -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
 | -3 | **[23. sohbette KISMEN İLERLEDİ]** #91 — SEC-02 (rate-limit) canlıda ✅ DOĞRULANDI. **KALAN:** SEC-01 (role-revocation 403 testi) — kullanıcı kararıyla SONRAYA ERTELENDİ. İkisi tamamlanmadan 5 dosya push edilmemeli. | 🔴 |
@@ -381,18 +371,14 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v72 (v71'den: **[23. sohbet devamı, 2026-08-30]** Ödeme
-altyapısında (#105) büyük ilerleme: `lib/db/schema.ts`'e 3 alan eklendi, Neon'da migration
-KOŞULDU+DOĞRULANDI (kullanıcı Tables görünümünü teyit etti), `gel-al/route.ts` +
-`gel-al-queries.ts` + `payment/paytr/{init,callback}` route'ları push edildi. **ÜRETİM
-REGRESYONU YAŞANDI VE DÜZELTİLDİ (bkz. YENİ DOKUZUNCU DERS):** zorunlu `paymentMethod`
-alanı eklenirken onu çağıran `ConfirmPickupOrderButton.tsx` güncellenmeden push edildi,
-canlıda TÜM Gel Al siparişleri kısa süreliğine bloke oldu — kullanıcı ekran görüntüsüyle
-bildirdi, aynı turda ödeme yöntemi seçim UI'ı eklenerek (Nakit aktif, Online "Yakında")
-düzeltildi, kullanıcı canlıda tekrar deneyip başarılı olduğunu bildirdi (sözlü beyan).
-#105 hâlâ tam kapanmadı — PayTR merchant başvurusu yapılmadı, "Online" seçeneği + iFrame
-UI'ı bekliyor. Ayrıca kullanıcı kendi Bowlera şifresini unutup AYNI ZAMANDA personel
-paneline erişimi olmadığı için normal şifre sıfırlama akışını kullanamadı (tavuk-yumurta
-sorunu) — Neon'a `pgcrypto` ile elle müdahale edilerek tek seferlik çözüldü, bu bir sistem
-tasarım boşluğu olarak YENİ Açık Sorun #106'ya işlendi (kalıcı çözüm kullanıcı kararı
-bekliyor). Güncellenme: 2026-08-30.*
+*BOWLERA SESSION_INDEX.md — v74 (v73'den: **[24. sohbet, 2026-08-31]** Canlı öncesi kritik
+bir bulgu (#107/#108) tam çözüldü: personel paneli hem kase hem sandviç siparişlerinde
+müşteri seçimlerini (Base/Main/Garden/Flavor/Finish/Ekmek/Boy/Protein/Peynir/Sebzeler/Sos)
+hiç göstermiyordu, sandviç ayrıca "Sepete Ekle" öncesinde de bu seçimleri göstermiyordu.
+8 dosya (types/index.ts, 2 yeni description dosyası, gel-al/route.ts, GelAlOrderCard.tsx,
+SandwichSummaryPanel.tsx, SandwichCustomizer.tsx, sandwich-pricing.ts) güncellendi, DB
+migration GEREKMEDİ. Kullanıcı hem kase hem sandviç için ayrı ayrı, ekran görüntüleriyle
+canlıda doğruladı — sebze isimlerinin ham ID gösterme sorunu da (SandwichCatalog'da eksik
+alan) aynı turda çözüldü. Yol boyunca 1 build hatası (veggies tipi gerçek veriyle uyuşmadı)
+yaşandı ve hızlıca düzeltildi, deploy YEŞİL. 400 satır eşiği aşıldığı için bir arşiv
+taşıması yapıldı. Güncellenme: 2026-08-31.*
