@@ -487,3 +487,109 @@ doğruladı. Bu, sistemin bir tasarım boşluğunu ortaya çıkardı (bkz. Açı
 #105'in kalan kısmı (online iFrame UI, `ONLINE_PAYMENT_ENABLED=false` ile kilitli) sonraki
 turda tamamlandı — bkz. Açık Sorun #105 güncel hali. #106'nın kalıcı çözümü kullanıcı
 kararı bekliyor — bkz. Açık Sorun #106 güncel hali.
+----
+---
+
+## 📦 TAŞIMA (2026-09-01, 27. sohbet) — SESSION_INDEX.md 400 satır eşiği
+
+> Bu blok, SESSION_INDEX.md'nin 400 satır eşiğini aşması nedeniyle CORE.md §7.1 Adım 1
+> gereği taşınmıştır. Kullanıcı bu içeriği kendi elle mevcut `session_arşiv_2.md`
+> dosyasının SONUNA eklemelidir. 3 alt-blok taşındı: (1) CURRENT FOCUS #105 (PayTR) tam
+> anlatısı, (2) CURRENT FOCUS #91 ara-durum notu, (3) SESSION_INDEX.md sürüm geçmişi
+> footer'ındaki v74/v75/v76 kayıtları. Her biri için kapanış gerekçesi aşağıda.
+
+### 1) CURRENT FOCUS — #105 (PayTR) tam anlatı [25. sohbet, 2026-08-31 devamı]
+
+**Kapanış gerekçesi:** #105 "UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅" olarak kapanmış bir
+konu; bu turn-by-turn anlatı artık Açık Sorun #105 satırında, Kritik Kararlar tablosunda,
+GENEL DURUM'da ve SESSION_INDEX.md'nin v77 üst notunda özetli durumda — CURRENT FOCUS'ta
+ayrıca tam metinle tutulmasına gerek kalmadı.
+
+> **[YENİ, bu turda (25. sohbet, 2026-08-31 devamı) — #105 UÇTAN UCA CANLI SANDBOX
+> DOĞRULANDI ✅, 2 YENİ BUG BULUNDU VE AYNI TURDA ÇÖZÜLDÜ]** PayTR merchant başvurusu
+> onaylandı (Mağaza: 742712). Sırasıyla: (1) PayTR panelinde Bildirim URL'i
+> (`https://bowlera-site.vercel.app/api/payment/paytr/callback`) girildi ve kaydedildi;
+> (2) Vercel'e 5 env değişkeni eklendi (`PAYTR_MERCHANT_ID/KEY/SALT`, `PAYTR_TEST_MODE=1`,
+> `NEXT_PUBLIC_BASE_URL`) ve redeploy edildi; (3) kullanıcı onayıyla `ConfirmPickupOrderButton.tsx`
+> içindeki `ONLINE_PAYMENT_ENABLED` bayrağı `false`→`true` çevrildi (SADECE sandbox testi
+> için, `PAYTR_TEST_MODE=1` hâlâ aktif). İlk sandbox denemesinde PayTR şu hatayı verdi:
+> **"merchant_oid alfanumerik olmalıdır, özel karakter içeremez"** — kök neden: sipariş
+> ID'si (`order_history.id`) bir UUID (tire içeriyor), PayTR tire kabul etmiyor (#110, YENİ).
+> Kullanıcı başka bir Claude oturumunda üç dosyayı (`lib/paytr.ts`: `stripUuidHyphens()`/
+> `restoreUuidHyphens()` eklendi; `init/route.ts`: gönderirken tire çıkarılıyor;
+> `callback/route.ts`: DB eşleştirmeden önce tire geri ekleniyor) düzeltip push etti — bu
+> oturumda üçü de görülüp senkron/doğru olduğu teyit edildi. **İKİNCİ sandbox denemesi TAM
+> BAŞARILI:** iFrame açıldı, PayTR test kartı otomatik doldu, 3D Secure geçti, "Ödeme
+> Başarılı" ekranı görüldü, sipariş personel panelinde (Gel Al kuyruğu) göründü — callback'in
+> çalıştığının kanıtı. **Ardından 2. bug bulundu:** `merchant_ok_url` (`/odeme/basarili`) ve
+> `merchant_fail_url` (`/odeme/basarisiz`) hiç oluşturulmamış sayfalara işaret ediyordu →
+> kullanıcı gerçek ödeme sonrası 404 gördü, sepet de temizlenmedi (`ConfirmPickupOrderButton.tsx`
+> satır ~144'teki kendi notunda zaten "ayrı iş, henüz yok" diye işaretliydi — YENİ Açık Sorun
+> DEĞİL, bilinen eksiğin gerçekleşmesi, bkz. #111). Onay alınarak iki YENİ sayfa üretildi:
+> `app/odeme/basarili/page.tsx` (mesaj + `useCartStore().clearCart()` çağrısı) ve
+> `app/odeme/basarisiz/page.tsx` (mesaj, sepet BİLEREK korunuyor). Kullanıcı push edip
+> ÜÇÜNCÜ sandbox denemesini yaptı: `/odeme/basarili` artık 404 vermiyor, sepet ikonu
+> boşaldı (ekran görüntüsüyle doğrulandı) — #111 KAPANDI. **Kalan (bloklayıcı DEĞİL, ayrı
+> karar):** mağaza hâlâ PayTR'da "Test Modu"nda; gerçek ödeme almak için PayTR panelinde
+> "Canlı Mod" talebi gönderilmeli, onaylanınca `PAYTR_TEST_MODE=0` yapılıp redeploy
+> edilmeli — bu turda BAŞLANMADI, ayrı bir KARAR BİLDİRİMİ gerektirecek. **Küçük belge
+> senkron notu (fonksiyonel değil):** `ConfirmPickupOrderButton.tsx` satır ~144'teki
+> "PayTR ok/fail redirect sayfalarında yapılmalı (ayrı iş, henüz yok)" yorumu artık ESKİMİŞ
+> (sayfalar oluşturuldu) — düzeltilmedi, açık madde olarak not edildi.
+
+### 2) CURRENT FOCUS — #91 ara-durum notu [aynı oturum, önce]
+
+**Kapanış gerekçesi:** Bu turn-by-turn anlatının içeriği (middleware.ts push doğrulaması,
+auth.ts/rate-limit.ts push'unun ZİP'ten bağımsız doğrulanamaması, SEC-01'in PayTR'a
+öncelik verilerek ertelenmesi) Açık Sorun #91 satırında zaten TAM olarak özetli — #91'in
+kendisi hâlâ 🔴 AÇIK bir Açık Sorun olarak SESSION_INDEX.md'de duruyor, sadece bu
+turn-by-turn anlatı arşivleniyor.
+
+> **[Aynı oturum, önce] #91 — İLERLEME YOK, BEKLEMEDE:** Kullanıcı `middleware.ts`'i
+> doğrudan GitHub'dan kopyalayıp yapıştırdı (push doğrulandı). `auth.ts` ve
+> `lib/auth/rate-limit.ts` için ise yalnızca ZİP dosyası paylaşıldı — zip'te `.git`
+> klasörü YOK, yani bu iki dosyanın GERÇEKTEN push edilip edilmediği BAĞIMSIZ OLARAK
+> DOĞRULANAMADI (sadece kullanıcı beyanı var). Ayrıca Codespaces ekran görüntüsünde
+> `middleware.test.ts`'in artık ÇALIŞTIRILDIĞI ve **10/10 PASS** verdiği görüldü (önceki
+> "yazıldı ama hiç koşulmadı" uyarısı bu kısımda KAPANDI). Kullanıcı "PayTR onaylandı,
+> ona geçelim" diyerek SEC-01 canlı testini ve `git status`/push doğrulamasını yarım
+> bıraktı — #91 hâlâ 🔴 AÇIK, bir sonraki sohbette KALDIĞI YERDEN devam edilmeli.
+
+### 3) SESSION_INDEX.md sürüm geçmişi footer — v74/v75/v76
+
+**Kapanış gerekçesi:** Bu sürüm kayıtları artık v77 (2026-09-01) ile geride kalmış eski
+değişiklik notlarıdır; içerdikleri bulgular/kararlar (personel panelinde seçim gösterimi
+düzeltmesi #107/#108, sandviç fiyatlandırma notu #109, PayTR canlı sandbox doğrulaması
+#105/#110/#111) Açık Sorunlar tablosunda, Kritik Kararlar'da ve GENEL DURUM'da hâlâ güncel
+olarak duruyor — footer'da ayrıca tam metinle tutulmasına gerek kalmadı.
+
+*BOWLERA SESSION_INDEX.md — v74 (v73'den: **[24. sohbet, 2026-08-31]** Canlı öncesi kritik
+bir bulgu (#107/#108) tam çözüldü: personel paneli hem kase hem sandviç siparişlerinde
+müşteri seçimlerini (Base/Main/Garden/Flavor/Finish/Ekmek/Boy/Protein/Peynir/Sebzeler/Sos)
+hiç göstermiyordu, sandviç ayrıca "Sepete Ekle" öncesinde de bu seçimleri göstermiyordu.
+8 dosya (types/index.ts, 2 yeni description dosyası, gel-al/route.ts, GelAlOrderCard.tsx,
+SandwichSummaryPanel.tsx, SandwichCustomizer.tsx, sandwich-pricing.ts) güncellendi, DB
+migration GEREKMEDİ. Kullanıcı hem kase hem sandviç için ayrı ayrı, ekran görüntüleriyle
+canlıda doğruladı — sebze isimlerinin ham ID gösterme sorunu da (SandwichCatalog'da eksik
+alan) aynı turda çözüldü. Yol boyunca 1 build hatası (veggies tipi gerçek veriyle uyuşmadı)
+yaşandı ve hızlıca düzeltildi, deploy YEŞİL. 400 satır eşiği aşıldığı için bir arşiv
+taşıması yapıldı. Güncellenme: 2026-08-31.*
+*v75 — Açık Sorun #109 eklendi: sandviç fiyatlandırma tartışması (proteinPortion boşluğu
+S1'e bağlı; proteinVariant/toasted için kullanıcı kararı — `hasToastEquipment: false`, push
+bekliyor). Chipotle sos kartına deneme görseli eklendi (`sos-chipotle.webp`), canlıda
+doğrulandı — kalan sos görselleri + zemin standardı SONRAYA bırakıldı. Güncellenme: 2026-08-31.*
+*v76 — **[25. sohbet]** #105 (PayTR) UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅: merchant onayı
+(Mağaza 742712), Bildirim URL, 5 env değişkeni + redeploy, `ONLINE_PAYMENT_ENABLED=true`
+(sandbox), iFrame+3D Secure+"Ödeme Başarılı"+personel paneli+sepet temizleme — hepsi ekran
+görüntüleriyle kanıtlandı. Yol boyunca 2 yeni bug bulunup AYNI turda çözüldü: #110
+(`merchant_oid` UUID-tire format sorunu, 3 dosya: lib/paytr.ts + init/route.ts +
+callback/route.ts) ve #111 (`/odeme/basarili`+`/odeme/basarisiz` sayfaları hiç yoktu,
+404 + sepet temizlenmiyordu — 2 yeni sayfa oluşturuldu). Kalan: PayTR Canlı Mod geçişi
+(ayrı karar, başlanmadı). **#91 paralelde İLERLEMEDEN kaldı:** `middleware.ts` push'u
+GitHub'dan doğrudan teyit edildi, `middleware.test.ts` artık FİİLEN koşuldu (10/10 PASS,
+ekran görüntüsü) — ama `auth.ts`/`lib/auth/rate-limit.ts` push'u ZİP'ten bağımsız olarak
+DOĞRULANAMADI (.git yok), SEC-01 canlı testi kullanıcı kararıyla yine PayTR'a öncelik
+verilerek ERTELENDİ. 400 satır eşiği aşıldığı için 3 eski CURRENT FOCUS bloğu
+(#101-104/#107/#108/#109 anlatıları) arşive taşındı, eklenti dosyası HENÜZ üretilmedi
+(kullanıcı isterse ayrıca istemeli). Güncellenme: 2026-08-31.*
+
