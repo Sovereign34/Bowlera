@@ -673,3 +673,129 @@ DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint
 kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
 ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
 
+> ⚠️ KULLANICI TALİMATI: Bu eklentiyi kendi elinizle mevcut `session_arşiv_2.md`
+> dosyanızın SONUNA ekleyin. Bu, o dosyanın (yeni bir sonraki taşıma bloğu olarak)
+> mevcut içeriğini KORUYARAK genişletilmesidir — dosyanın kendisi hiçbir zaman TAM DOSYA
+> olarak yeniden üretilmez (CORE.md §7.1 Adım 1.4 / AGENT.md Mutlak Yasaklar).
+
+---
+
+## TAŞIMA BLOĞU — 2026-09-01 (bu sohbet, 5. taşıma bugün)
+
+**Taşınma gerekçesi:** SESSION_INDEX.md, #118 (İade Kuyruğu — PayTR Refund API doğrulaması
++ KARAR BİLDİRİMİ + 5 adımlı uygulama planı) eklenmesiyle 412 satıra ulaştı (400 satır
+eşiği aşıldı, CORE.md §7.1 Adım 1). Aşağıdaki blok TAM içeriğiyle buraya taşındı ve
+SESSION_INDEX.md'den çıkarıldı — kapanış gerekçesi: bu tablo (Session 0-12 arası
+turn-by-turn/session bazlı kronoloji) tamamen GÜNCELLİĞİNİ YİTİRMİŞ durumda; aynı bilginin
+güncel/özet hâli SESSION_INDEX.md'nin "GENEL DURUM (özet)" tablosunda ve "📌 KRİTİK
+TEKNİK/TASARIM KARARLARI" bölümünde hâlâ eksiksiz mevcut. İçerik kaybı YOKTUR — sadece
+eski session-bazlı kronoloji anlatısı arşive taşındı.
+
+### SESSION ÖZET (tümü — 0'dan 12'ye)
+
+| Session | Tarih | Ana içerik | Durum |
+|---|---|---|---|
+| 0 | — | Ajan altyapısı (14 dosya) | ✅ Tamamlandı |
+| 1 | 2026-07-1x | Next.js+Tailwind kurulum, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
+| 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, customizer 4→5 adım kararı | ✅ Tamamlandı |
+| 3 | 2026-07-18 | Zustand store + pricing + customizer data (kesintiye uğradı) | ✅ Büyük ölçüde tamam |
+| 4 (devam) | 2026-07-18→07-22 | Sepet/kanal seçimi, auth mimarisi+kod+DB+UI, ARCHITECTURE.md v1.4, vb. | 🟡 Devam ediyor |
+| 5 | 2026-08-01→08-02 | VisualPreview denetimi (#52), Hakkımızda sayfası, 400 satır eşiği kaldırılıp geri getirildi | 🟡 Devam ediyor |
+| 6 | 2026-08-05 | WhatsApp OTP kodlandı/test edildi. Twilio/Netgsm PARKLANDI, rıza esaslı kayıt+WhatsApp yönlendirme kararlaştırıldı (#57/#58 açıldı) | 🟡 Devam ediyor |
+| 7 | 2026-08-06 | #57 uçtan uca kodlandı (17/17 PASS). `consentRegistrations`, `RegistrationChannel` tipleri eklendi. **#57 kapanmadı** — kod sayfaya bağlanmadı. | 🟡 Devam ediyor |
+| 8 | 2026-08-06/07 | Kırık Twilio akışı keşfedildi, `/kayit-ol`+`/kvkk` bağlandı, migration koşuldu, canlı test BAŞARILI. #59/#60/#61 yeni açıldı. | 🟡 Devam ediyor |
+| 9 | 2026-08-07 | Masaya Sipariş kanalı canlıda doğrulandı. Personel Sipariş Paneli ihtiyacı keşfedildi → #62 açıldı. `session_log.md` ismi/mekanizması netleştirildi. | 🟡 Devam ediyor — #62 yeni sohbette |
+| 10 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. `order_history` tablosu migrate edildi. #63 (npm audit) yeni. | 🟡 Devam ediyor |
+| 11 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. Genel giriş/kayıt akışı netleşti, #62 kapsamı genişledi, #64 kapandı. | 🔴 Devam ediyor — #62 mimarisi bekliyor |
+| 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i doğrulandı, #65/#66 açıldı. ARCHITECTURE.md v1.7'ye güncellendi, #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi. Masa numarası kararı: TUTULACAK. Build kırığı düzeltildi (`channel-options.ts`), #71 yeni açıldı. | 🟡 §2.7b kod üretimine hazır; #70/#71 netleşmeli |
+| 12 (devamı) | 2026-08-08 | 1d KAPANDI. #62'nin 3 mimari sorusu kapandı, ARCHITECTURE.md v1.12'ye işlendi. `users.role` migration'ı Neon'da koşuldu ve doğrulandı. | 🟢 DB tamam; kod tarafı bekliyor |
+| 12 (devamı, 2026-08-09) | 2026-08-09 | #70 kapandı. #62'nin Masaya sekmesi kodlandı VE canlıda doğrulandı. #74 (çıkış butonu eksikliği) önceliği yükseltilerek tekrar gündeme geldi. | 🟢 Masaya TAMAM; Gel Al + #74 + ARCHITECTURE.md güncellemesi bekliyor |
+
+*(Tam turn-by-turn detay: `session_arşiv.md` [0-10], `session_arşiv_1.md` [11+].)*
+
+---
+
+## TAŞIMA BLOĞU 2 — 2026-09-01 (bu sohbet, 6. taşıma bugün — aynı 400 satır eşiği tetiklemesinin devamı)
+
+**Taşınma gerekçesi:** İlk taşıma (yukarıdaki SESSION ÖZET tablosu) tek başına yetmedi,
+dosya hâlâ 400 satırın üzerindeydi. Aşağıdaki 7 erken (Session 1-2 dönemi) Kritik Karar
+satırı da TAM içeriğiyle taşındı — hepsi ✅ Uygulandı/Canlıda doğrulandı durumunda, aylardır
+stabil, hiçbiri aktif tartışma konusu değil. İçerik kaybı YOKTUR.
+
+### Kritik Kararlar — Session 1-2 dönemi (7 satır)
+
+| # | Karar | Durum |
+|---|---|---|
+| 1 | Customizer 5 adım: Base → Main → Garden → Signature Flavor → Finish | ✅ Uygulandı |
+| 3-4 | Garden: ilk 4 ücretsiz + avokado her zaman ücretli / Finish: ilk 1 ücretsiz | ✅ Uygulandı |
+| 5 | "Make it Yours" → Finish'e entegre, "Double Main" → `mainPortion` yeniden kullanır | ✅ Uygulandı |
+| 6 | Slogan: "Sağlıklı Beslen, Sağlıklı Yaşa, Gücünü Hisset" | ✅ |
+| 13 | `FulfillmentChannel`: `"pickup"` \| `"dine-in"` (delivery yok), sepet/oturum seviyesinde tek alan | ✅ Canlıda doğrulandı. |
+| 14-16 | `â` karakteri kaldırıldı (menu-data.json, CartDrawer). Hero.tsx/StepBase.tsx bilinçli ertelendi (#27) | ✅ |
+| 18 | CartDrawer portal fix (`createPortal` → `document.body`) | ✅ Canlıda doğrulandı |
+
+---
+
+## TAŞIMA BLOĞU 3 — 2026-09-01 (bu sohbet, 7. taşıma bugün — aynı 400 satır eşiği tetiklemesinin devamı)
+
+**Taşınma gerekçesi:** İlk iki taşıma (yukarıda) hâlâ yetmedi. Aşağıdaki #107/#108 Açık
+Sorun satırları (24. sohbette KAPANDI, CANLIDA DOĞRULANDI) TAM içeriğiyle taşındı — ikisi de
+GENEL DURUM'da "Personel Sipariş Paneli" satırında zaten özetli. İçerik kaybı YOKTUR.
+
+### Açık Sorunlar #107 / #108 (24. sohbette kapandı)
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 107 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun A: personel paneli (Gel Al kuyruğu) hem kase hem sandviç siparişlerinde SADECE `menuNumber` gösteriyordu, müşteri seçimleri (Base/Main/Garden/Flavor/Finish/Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç görünmüyordu — canlı öncesi bloklayıcı bulundu. `types/index.ts` (`OrderItemSelectionLine`+`OrderItemSummary.selectionSummary`), `lib/customizer-description.ts` (YENİ), `lib/sandwich-description.ts` (YENİ), `gel-al/route.ts`, `GelAlOrderCard.tsx` güncellendi. DB migration GEREKMEDİ (jsonb). Kullanıcı hem kase hem sandviç için ekran görüntüsüyle doğruladı. | `types/index.ts`, `lib/customizer-description.ts`, `lib/sandwich-description.ts`, `app/api/orders/gel-al/route.ts`, `components/personel/GelAlOrderCard.tsx` |
+| 108 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun B: `SandwichSummaryPanel.tsx` "Sepete Ekle" öncesi seçimleri (Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç göstermiyordu (kase'nin kendi paneliyle tutarsızlık). `selections` prop'u eklendi (`SandwichCustomizer.tsx`'ten geçiriliyor), `getSandwichSelectionLines` çağrılıyor. **Ek bulgu, aynı turda çözüldü:** sebze isimleri ilk düzeltmede ham ID gösteriyordu (`SandwichCatalog`'da veggies kataloğu tanımlı değildi) — `StepVeggies.tsx` görülüp `sandwich-pricing.ts`'e `veggies: SandwichVeggieCatalogItem[]` eklendi (fiyatlandırma mantığına DOKUNULMADI). Yol boyunca 1 build hatası (veggies tipi ilk seferde price/calories zorunlu tutmuştu, gerçek veriyle uyuşmadı) → düzeltildi → deploy YEŞİL. Kullanıcı ekran görüntüsüyle doğruladı. | `components/sandwich/SandwichSummaryPanel.tsx`, `components/sandwich/SandwichCustomizer.tsx`, `lib/sandwich-pricing.ts`, `lib/sandwich-description.ts` |
+
+---
+
+## TAŞIMA BLOĞU 4 — 2026-09-01 (bu sohbet, 8. taşıma bugün — aynı 400 satır eşiği tetiklemesinin devamı)
+
+**Taşınma gerekçesi:** Önceki 3 taşıma hâlâ yetmedi. #101-104 (23. sohbette kullanıcı
+beyanıyla kapanan 4 madde) TAM içeriğiyle taşındı — GENEL DURUM'da "Checkout" satırında
+zaten özetli. İçerik kaybı YOKTUR.
+
+### Açık Sorunlar #101-104 (23. sohbette kullanıcı beyanıyla kapandı)
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 101 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `CartDrawer.tsx` satır 84 "Özel Kase"→"Özel Sandviç" fix'i. Kullanıcı canlıda doğruladığını beyan etti ("Ben doğruladı kapat"). ⚠️ Not: ekran görüntülü kanıt YOK, sadece sözlü beyan — #99'daki kanıt standardından daha düşük. | `components/cart/CartDrawer.tsx` |
+| 102 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `OrderSummary.tsx` satır 20 — CartDrawer'daki aynı "Özel Kase" fallback bug'ı. Kullanıcı beyanıyla kapandı, ekran görüntüsü YOK. | `components/order/OrderSummary.tsx` |
+| 103 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `OrderSummary.tsx`'e "Kaldır" butonu eklendi. Kullanıcı beyanıyla kapandı, ekran görüntüsü YOK. | `components/order/OrderSummary.tsx` |
+| 104 | ✅ | **[BU TURDA (23. sohbet) KAPANDI — KULLANICI BEYANIYLA]** `SandwichCustomizer.test.tsx`'in `router.push` mock riski. Kullanıcı beyanıyla kapandı — testlerin fiilen koşulup PASS verdiği ekran görüntüsüyle görülmedi. | `components/sandwich/SandwichCustomizer.test.tsx` |
+
+---
+
+## TAŞIMA BLOĞU 5 — 2026-09-01 (bu sohbet, 9. taşıma bugün — aynı 400 satır eşiği tetiklemesinin devamı)
+
+**Taşınma gerekçesi:** Önceki 4 taşıma hâlâ yetmedi. #112-114 (26. sohbette kullanıcı
+beyanıyla kapanan Açık Sorunlar tablosu satırları — bu, daha önce `..._EKLENTI_2026-09-01-devam2.md`'ye
+taşınan CURRENT FOCUS turn-by-turn ANLATISINDAN AYRI, tablo satırlarının kendisidir) TAM
+içeriğiyle taşındı — GENEL DURUM'un "İçerik/Metin (yeni)" ve "Checkout" satırlarında zaten
+özetli. İçerik kaybı YOKTUR.
+
+### Açık Sorunlar #112-114 (26. sohbette kullanıcı beyanıyla kapandı — tablo satırları)
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 112 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, kod bu sohbette hiç görülmedi]** Madde 4 (cayma hakkı istisna bilgilendirmesi, statik metin) "Siparişi Onayla" öncesine eklendi, push edildi, canlıda sorunsuz çalıştığı kullanıcı tarafından bildirildi. **Hâlâ eksik (bilinçli bırakıldı):** Madde 4'ün ürün nitelikleri+toplam fiyat gösterimi kısmı — `useCartStore.ts`/`OrderSummary.tsx` görülmediği için atlandı, ayrı açık madde olarak kalmalı. | `app/siparis/page.tsx` (veya ilgili checkout bileşeni) |
+| 113 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, dosya içerikleri bu sohbette hiç görülmedi]** 5 dosya (İletişim, Şubeler, İptal ve İade, Satış Sözleşmesi, Footer.tsx) güncellendi (İptal-İade ve Satış Sözleşmesi'nde "hukuki düzeltmeler" olduğu belirtildi, içeriği görülmedi), push edildi, canlıda sorunsuz çalıştığı bildirildi. | `app/iletisim/page.tsx`, `app/subeler/page.tsx`, `app/iptal-ve-iade/page.tsx`, `app/satis-sozlesmesi/page.tsx`, `components/layout/Footer.tsx` |
+| 114 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, dosya içeriği bu sohbette hiç görülmedi]** `AboutStory.tsx` hikaye metni Sweetgreen/Just Salad/Cava kalıbına göre yeniden yazıldı (somut sahne + 5 adımlı customizer'ı somut kanıt olarak kullanma + ölçülü vizyon), uydurma kurucu adı/kuruluş yılı EKLENMEDİ (CONTENT_GUIDE.md kuralına uyum), push edildi, canlıda sorunsuz olduğu bildirildi. | `components/about/AboutStory.tsx` |
+
+---
+
+## TAŞIMA BLOĞU 6 — 2026-09-01 (bu sohbet, 10. taşıma bugün — 400 satır eşiğinin son adımı)
+
+**Taşınma gerekçesi:** Önceki 5 taşıma dosyayı 401'e kadar indirdi, hâlâ eşik üzerindeydi.
+#39/#50 (her ikisi de tamamen kapalı, aylardır stabil) TAM içeriğiyle taşındı. İçerik kaybı
+YOKTUR.
+
+### Açık Sorunlar #39 / #50
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
+| 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
+
