@@ -983,4 +983,31 @@ aşağıdaki metin kısaltılmadan ÖNCEKİ orijinal hâlidir.
 > aynı turda verildi (happy/edge/failure, test çerçevesi Vitest VARSAYILDI). Kalite 5/5,
 > Güvenlik 7/8 (BSC-7 rate-limit Adım 3'e ertelendi) bildirildi. **KALAN:** kod repoya
 > konulup test koşulmalı, sandbox'ta gerçek iade denenmeli, onaylanırsa Adım 2'ye geçilmeli.
+--------
+# EKLENTİ — session_arşiv_2.md'nin SONUNA eklenmeli
+# Üretim tarihi: 2026-09-01 (bu sohbet, #118 Adım 3 turu)
+# Kaynak: SESSION_INDEX.md CURRENT FOCUS — #118 Adım 2 anlatı bloğu
+# Taşınma gerekçesi: Adım 3 tamamlandığı için tamamen güncelliğini yitirdi.
+#   Özet Açık Sorun #118 satırında hâlâ duruyor — bu blok SADECE turn-by-turn
+#   tam anlatı arşivi, içerik kaybı değildir.
+
+---
+
+## [ARŞİV] #118 Adım 2 — İade Kuyruğu (2026-09-01, taşınmadan önceki CURRENT FOCUS anlatısı)
+
+**[YENİ, o turda, 2026-09-01]** #118 Adım 2: kullanıcı `gel-al-queries.ts`+`schema.ts`+
+PayTR init `route.ts`'i paylaştı — `schema.ts`'ten `paymentStatus`'un zaten `"iade_edildi"`
+değerini desteklediği (migration GEREKMİYOR) ve `totalPrice`'ın iade tutarı kaynağı
+olduğu doğrulandı; `route.ts`'ten `merchant_oid`'in `stripUuidHyphens(orderId)` ile
+üretildiği görüldü — Adım 1'deki ORTA güvenilirlik varsayımı artık init ile TUTARLI,
+HIGH'a çıktı. `refundOrder()` mevcut koda DOKUNMADAN eklendi (6 edge case: sipariş
+yok/nakit/zaten iade/ödeme yok/PayTR reddi/DB-race), 20 satır kuralı gereği 5 alt
+fonksiyona bölündü. Mevcut `gel-al-queries.test.ts` paylaşılmadığı için YENİ/izole
+`refund-order.test.ts` verildi. KALAN (o an için): repoya konulup test+sandbox
+doğrulaması, onaylanırsa Adım 3 (API route "refund" action, staff-guard).
+
+**Sonraki gelişme (bu blok arşive taşınırken zaten biliniyordu):** Adım 3 aynı sohbette
+tamamlandı — `route.ts`+`route.test.ts` verildi, kullanıcı Codespaces'te tüm testleri
+koşturdu (Adım1 7/7, Adım2 1 FAIL→düzeltme→7/7, Adım3 5/5, regresyon 13/13), build YEŞİL.
+Güncel durum SESSION_INDEX.md Açık Sorun #118'de özetlidir.
 
