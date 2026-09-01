@@ -130,3 +130,34 @@ Sıradaki: (1) Twilio kararı (#32, kullanıcı zamanı geldiğinde), (2) küç�
 
 *BOWLERA SESSION_INDEX_v2.md — sıkıştırılmış sürüm, son 5 session + açık borçlar. Eski
 SESSION_INDEX.md'nin (turn-by-turn arşiv dahil) yerini alır. Oluşturulma: 2026-07-20.*
+----
+# EKLENTİ — session_arşiv_2.md'ye eklenecek
+> Taşıma tarihi: 2026-09-01 (28. sohbet devamı)
+> Kaynak: SESSION_INDEX.md CURRENT FOCUS — 412 satıra ulaşınca (400 satır eşiği aşıldı,
+> CORE.md §7.1 Adım 1) taşındı.
+> Kapanış/süperseded gerekçesi: Bu blok, #115'in 2. versiyonunun push/deploy durumunun
+> "TEYİT EDİLMEDİ" olduğu ana anlık görüntüsünü içeriyordu. Bir sonraki turda kullanıcı
+> deploy'un yeşil olduğunu bildirdi ve DOKUZUNCU DERS uyarınca runtime-davranış doğrulaması
+> ayrıca soruldu — sonuç olarak #115, #115a (deploy ✅ KAPANDI) ve #115b (runtime 🔴 AÇIK)
+> olarak ikiye bölündü. Bu nedenle aşağıdaki blok artık güncel bir durumu yansıtmıyor,
+> sadece tarihsel kayıt olarak arşivleniyor. İçeriğin kendisinde kayıp YOK — sadece
+> SESSION_INDEX'in aktif hafızasından çıkarılıp buraya taşındı.
+
+---
+
+## Taşınan Blok (orijinal metin, TAM)
+
+> **[YENİ, bu turda (28. sohbet, 2026-09-01)]** Kullanıcı önceki sohbette callback route'u
+> incelettirmiş, 4 ek güvenlik açığı bulunup düzeltilmiş, kullanıcı beyanıyla push edilmiş
+> (bkz. Açık Sorun #115). Bu sohbette tutar-uyuşmazlığı durumu için kullanıcı A seçeneğini
+> onayladı (yeni `paymentStatus="tutarsizlik"` değeri, migration GEREKMEDİ — kolon `text`,
+> CHECK constraint yok). `lib/db/schema.ts` + `app/api/payment/paytr/callback/route.ts`
+> güncellenip artifact olarak verildi. **KALAN:** bu 2. versiyonun push'u/deploy'u TEYİT
+> EDİLMEDİ — bir sonraki turda sorulmalı. Ayrıca kod incelemesinde `types/index.ts`'te
+> ödeme alanlarının hiç tiplenmediği bulundu, bilinçli olarak kapsam dışı bırakıldı (#116).
+
+---
+
+*Bu içerik SESSION_INDEX.md'de Açık Sorunlar #115a/#115b/#116 ve GENEL DURUM (Checkout
+satırı) tarafında hâlâ özet olarak yaşıyor — burası sadece turn-by-turn anlatının tam
+metnini koruyan uzak hafıza kaydıdır.*
