@@ -951,4 +951,36 @@ değil. İçerik kaybı YOKTUR.
 | 19→20 | Auth: Twilio Verify + Auth.js JWT. DB: Neon Postgres, `users` tablosu | ✅ Kurulum tamam, build yeşil. |
 | 21-22 | Auth kod + görünür giriş UI | 🟡 **[Session 8]** Eski `/giris` KALDIRILDI, `/kayit-ol`'a redirect ediyor. |
 | 23 | Adres/profil modeli: adres SADECE profil/sadakat verisi, checkout'u bloklamaz | ✅ Kod üretildi VE repo varlığı doğrulandı |
+-----
+> ⚠️ KULLANICI TALİMATI: Bu eklentiyi kendi elinizle mevcut `session_arşiv_2.md`
+> dosyanızın SONUNA ekleyin. Bu, o dosyanın (yeni bir sonraki taşıma bloğu olarak)
+> mevcut içeriğini KORUYARAK genişletilmesidir — dosyanın kendisi hiçbir zaman TAM DOSYA
+> olarak yeniden üretilmez (CORE.md §7.1 Adım 1.4 / AGENT.md Mutlak Yasaklar).
+
+---
+
+## TAŞIMA BLOĞU — 2026-09-01 (bu sohbet, 12. taşıma bugün)
+
+**Taşınma gerekçesi:** #118 Adım 2 tamamlanınca dosya tekrar 400 satır eşiğine
+yaklaştı. Aşağıdaki CURRENT FOCUS bloğu (Adım 1'in turn-by-turn anlatısı) TAM
+içeriğiyle taşındı — Adım 2 tamamlandığı için tamamen güncelliğini yitirdi, aynı
+bilgi Açık Sorun #118 satırında ("Adım 1 TAMAMLANDI..." kısmı) hâlâ özetli. İçerik
+kaybı YOKTUR.
+
+**NOT (düzeltme, aynı gün):** Bu blok İLK ÖNCE yanlışlıkla arşive taşınmadan
+doğrudan SESSION_INDEX.md içinde KISALTILMIŞTI (sıkıştırma — protokol ihlali,
+CORE.md §7.1: "taşınır, özetlenmez"). Kullanıcı bunu fark edip düzeltme istedi;
+aşağıdaki metin kısaltılmadan ÖNCEKİ orijinal hâlidir.
+
+### CURRENT FOCUS — #118 Adım 1 (orijinal, tam metin)
+
+> **[YENİ, bu turda, 2026-09-01]** #118 Adım 1 verildi: kullanıcı `lib/paytr.ts`'in mevcut
+> hâlini paylaştı, KARAR BİLDİRİMİ üretildi (intent:WRITE_CODE, risk:MEDIUM,
+> touches_third_party:true, confidence:MEDIUM — merchant_oid formatı doğrulanmadı), 5 edge
+> case belirlendi. `paytrRefund()` mevcut koda DOKUNMADAN eklendi; ilk taslak 20 satır
+> kuralını aştığı için `validateRefundParams`/`prepareRefundRequest`/
+> `interpretRefundApiResult`/`callPaytrRefundApi` olarak bölündü. `lib/paytr.test.ts`
+> aynı turda verildi (happy/edge/failure, test çerçevesi Vitest VARSAYILDI). Kalite 5/5,
+> Güvenlik 7/8 (BSC-7 rate-limit Adım 3'e ertelendi) bildirildi. **KALAN:** kod repoya
+> konulup test koşulmalı, sandbox'ta gerçek iade denenmeli, onaylanırsa Adım 2'ye geçilmeli.
 
