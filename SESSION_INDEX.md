@@ -17,6 +17,15 @@
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
 > tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+> ⚠️ **TAŞIMA NOTU (2026-09-01, YENİ sohbet — #118 Adım 4):** #118 Adım 4 eklenmesiyle
+> CURRENT FOCUS'taki #118 Adım 3 anlatı bloğu (Adım 4 tamamlandığı için güncelliğini yitirdi)
+> TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`
+> (kullanıcı elle eklemeli). ⚠️ AYRICA bu sohbette DÖRDÜNCÜ-YEDİNCİ DERS ailesiyle AYNI desen
+> TEKRAR EDİYOR: son turda "SESSION_INDEX.md'yi güncelleyeyim mi?" checkpoint sorusu soruldu,
+> kullanıcı onayı bu sohbette KAYITLI DEĞİL — sohbet, bir SONRAKİ sohbette "session index'i
+> güncelle" talimatıyla kapandı. Kural gereği (KARAR BİLDİRİMİ/checkpoint sonrası onay
+> gelmeden sohbet kapanma riski) bu, AÇIK SORUN olarak not düşüldü — bkz. CURRENT FOCUS ve
+> Açık Sorun #118 satırındaki "push/deploy açıkça teyit edilmedi" notu.
 > ⚠️ **TAŞIMA NOTU (2026-09-01, bu sohbet — #118 Adım 3):** #118 Adım 3 (route+test) eklenmesiyle dosya yeniden 400 satırı aştı; CURRENT FOCUS'taki #118 Adım 2 anlatı bloğu (Adım 3 tamamlandığı için güncelliğini yitirdi) TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md` (kullanıcı elle eklemeli). Bu taşımaya rağmen dosya hâlâ ~8 satır 400 eşiğinin üzerinde (eklenen test-sonucu anlatısı hâlâ GÜNCEL, ikinci bir arşivleme için uygun ESKİ bir blok bu turda bulunamadı) — bir sonraki sohbette gerçek bir taşımayla kapatılmalı (v84'teki aynı durumun tekrarı).
 > ⚠️ **TAŞIMA NOTU (2026-09-01, bu sohbet):** #118 Adım 1 eklenmesiyle dosya tekrar 400 satırı aştı; SESSION ÖZET (0-12) tablosu + Kritik Kararlar #1,3-6,13,14-16,18-23 + Açık Sorunlar #39,50,70,85,96,98,99,101-104,107-108,110-111,112-114 (hepsi ✅ kapalı/stabil) `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md` (kullanıcı elle eklemeli).
 > ⚠️ **TAŞIMA NOTU (2026-09-01, 28. sohbet devamı):** 412 satırda (400 eşiği aşıldı), 1 eski
@@ -74,21 +83,15 @@
 > bir varsayımla (`?? "nakit"`) doldurulmalı, zorunluluk sonradan eklenmeli. Bu, önceki 8
 > dersten (hepsi "checkpoint/onay alınmadan sohbet kesilmesi" temalıydı) FARKLI bir hata
 > sınıfı: bu sefer sohbet kesilmedi, PLANLAMA hatası oldu.
-> ⚠️ ONUNCU DERS (2026-08-31/09-01, bu sohbet — SEKİZ DERSLE AYNI AİLE, farklı tetikleyici,
-> AYRICA bu sohbette İKİNCİ bir hata: kendi kendine tekrar): Kullanıcı bu sohbette 3 iş
-> bildirdi (Madde 4 cayma hakkı metni, 5 sayfa/Footer güncellemesi, AboutStory.tsx yeniden
-> yazımı) — bu sohbette gerçek kod/diff HİÇ paylaşılmadı (ilk paylaşımda kod bloğu boş
-> geldi), sadece anlatı/özet geldi. Kullanıcı "push edildi, sorunsuz çalışıyor" diye beyan
-> etti; ajan bunu #112/#113/#114 olarak "kullanıcı beyanıyla" notuyla KAPALI işaretledi —
-> bu kısım doğruydu (#101-104/DOKUZUNCU DERS standardıyla tutarlı). AMA SESSION_INDEX'i
-> TAM DOSYA olarak yeniden üretirken, dosyanın "asla eldeki içerik arşivlenmeden
-> silinmez" kuralına rağmen CURRENT FOCUS'taki #105 detaylı anlatı bloğu VE bu TAŞIMA NOTU
-> gerçek bir arşiv taşıması yapılmadan İÇERİKTEN ÇIKARILDI — sonuç 405 satırlık dosyadan
-> 389 satırlık bir dosya (kayıp, eklemeye rağmen). Kullanıcı satır sayısını sorana kadar
-> bu fark edilmedi. Kural pekiştirdi: "TAM DOSYA güncelleme" demek "gördüğüm anlık içeriği
-> yeniden yaz" demek değildir — mevcut TÜM içerik korunmalı, sadece 400 satır eşiği fiilen
-> aşıldığında VE gerçek bir eklenti dosyası üretilip kullanıcıya verildiğinde bir blok
-> arşive taşınabilir. Aksi hâlde en ufak "kısaltma" bile veri kaybıdır.
+> ⚠️ ONUNCU DERS (2026-08-31/09-01 — özet, SEKİZ DERSLE AYNI AİLE + AYRI bir "TAM DOSYA
+> kısaltma = veri kaybı" hatası): Kural özeti hâlâ geçerli — "TAM DOSYA güncelleme" demek
+> "gördüğüm anlık içeriği yeniden yaz" demek DEĞİLDİR; mevcut TÜM içerik korunmalı, sadece
+> 400 satır eşiği fiilen aşıldığında VE gerçek bir eklenti dosyası üretilip kullanıcıya
+> verildiğinde bir blok arşive taşınabilir. **[TAŞINDI, 2026-09-01, YENİ sohbet — 400 satır
+> eşiği]** Olayın TAM anlatısı (v77 footer'ında zaten tekrarlanan içerikle örtüşüyordu)
+> `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`
+> (kullanıcı elle eklemeli). Detay hâlâ v77 footer kaydında ve Açık Sorunlar #112/#113/#114'te
+> özetli.
 
 > ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
 > (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
@@ -151,17 +154,46 @@
 > TAM metin `session_arşiv_2.md`'ye taşındı — eklenti:
 > `session_arsiv_2_EKLENTI_2026-09-01-devam7.md` (kullanıcı elle eklemeli).
 
-> **[YENİ, bu turda, 2026-09-01]** #118 Adım 3: `app/api/personel/orders/[id]/refund/route.ts`
-> (POST, `requireStaffSession()` ile route-içi defense-in-depth + middleware'in zaten
-> koruduğu `/api/personel/*` deseni) ve `route.test.ts` (5 test: guard×2, happy×1, failure×2)
-> kod olarak verildi. Kullanıcı Codespaces'te tüm #118 testlerini + build'i koşturdu:
-> Adım 1 `paytr.test.ts` 7/7 ✅, Adım 2 `refund-order.test.ts` İLK ÖNCE 1 FAIL (KRİTİK-durum
-> mesajında "kayıt" vs gerçek koddaki "kaydı" — regex uyuşmazlığı, ÜRETİM KODU DOĞRU, sadece
-> test assertion'ı düzeltildi) → düzeltme sonrası 7/7 ✅, Adım 3 `route.test.ts` 5/5 ✅,
-> regresyon `gel-al-queries.test.ts` 13/13 ✅ (dokunulmadı, bozulmadı). `npm run build`
-> YEŞİL. **KALAN:** push+Vercel deploy, sandbox'ta staff hesabıyla gerçek "İade Et" denemesi
-> (DOKUZUNCU DERS — build/test yeşili runtime sözleşmesini kanıtlamaz), sonra Adım 4
-> (`GelAlOrderCard.tsx`'e "İade Et" butonu, henüz BAŞLANMADI).
+> **[TAŞINDI, 2026-09-01, YENİ sohbet]** #118 Adım 3'ün CURRENT FOCUS anlatısı — Adım 4
+> tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli.
+> TAM metin `session_arşiv_2.md`'ye taşındı — eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-01-devam8.md` (kullanıcı elle eklemeli).
+
+> **[YENİ, YENİ sohbet, 2026-09-01]** #118 Adım 4: `GelAlOrderCard.tsx` / `RefundConfirmDialog.tsx`
+> / `GelAlPanel.tsx` — KARAR BİLDİRİMİ ile verildi. Yeni `handleRefund(id, phone)`, mevcut
+> `handleAction`'ı DEĞİŞTİRMEDEN ayrı tutuldu (refund route'u farklı: POST, farklı URL, farklı
+> body şekli — sadece `params.id` alıyor). Hata mesajı dosyanın mevcut BSC-4 deseniyle TUTARLI
+> bırakıldı: sunucudan gelen özel hata (`result.errorMessage`, örn. "zaten iade edilmiş") sadece
+> konsola loglanıyor, kullanıcıya aynı genel `ACTION_ERROR_MESSAGE` gösteriliyor (finansal
+> aksiyonlar için özel mesaj göstermek AYRI, henüz konuşulmamış bir karar). `onRefund` prop'u
+> `GelAlOrderCard`'a koşulsuz iletildi (diğer handler'larla aynı desen). Checkpoint istendi —
+> **açık onay bu sohbette KAYITLI DEĞİL** (bkz. header TAŞIMA NOTU, DÖRDÜNCÜ-YEDİNCİ DERS
+> deseni). Test seti (Kural #6: her yeni bileşen/store için minimum test) HENÜZ YAZILMADI.
+>
+> Aynı sohbetin devamında kullanıcı CANLI ortamda fiilen test etti: (a) nakit ödenen dünkü bir
+> siparişte "İade Et" denemesi `validateRefundEligibility()`'nin (2) numaralı kontrolüyle
+> (nakit siparişler PayTR'dan iade edilemez) DOĞRU şekilde reddedildi — bug değil, tasarım
+> gereği; sadece genel UI hata mesajı ("İşlem kaydedilemedi") bu geçerli sebebi gizliyor. (b)
+> online/PayTR ile ödenmiş bir sandviç siparişinde iade denemesi BAŞARILI oldu — DB'de
+> `payment_status: "iade_edildi"` görüldü, bu alanı `finalizeRefund()` SADECE PayTR gerçekten
+> `status: "success"` döndüğünde yazıyor, yani dolaylı ama güvenilir kanıt. Sonuç: zincir
+> (modal → route → `refundOrder()` → `paytrRefund()` → DB) UÇTAN UCA ÇALIŞTIĞI pratikte
+> doğrulandı — ancak bu sohbette push/Vercel deploy'un AÇIKÇA teyit edildiği bir cümle YOK
+> (kod muhtemelen checkpoint sonrası verilip push edilmiş olmalı, ama bu adım belgelenmedi).
+>
+> **YENİ BULGU (kod incelemesinde, bu turda):** `paytrRefund()` işlem bazında test/canlı
+> ayrımı YAPMIYOR — iade isteği hiçbir `test_mode` alanı taşımıyor (PayTR'ın resmi iade
+> API'siyle uyumlu, eksiklik değil). Güvenlik isteğe eklenen bir bayraktan değil, iade edilmek
+> istenen `merchant_oid`'in HANGİ modda ödendiğinden geliyor — şu an TÜM siparişler
+> `PAYTR_TEST_MODE=1` ile ödendiği için gerçek para hareket ETMİYOR. Canlı Mod geçişi (#105'in
+> kalan adımı, `PAYTR_TEST_MODE=0`) sonrası bu buton GERÇEK para iade EDECEK (amaç bu, ama
+> geçişten ÖNCE bilinçli olunmalı) — yeni açık sorun olarak loglandı, bkz. #119.
+>
+> **KALAN:** (a) test seti yazılmalı (Kural #6), (b) nakit siparişlerde "İade Et" butonunun
+> gizlenmesi ya da "Nakit — elle iade" gibi devre dışı bir etiketle gösterilmesi — kullanıcı
+> kararı BEKLİYOR, uygulanmadı, (c) push/deploy bu sohbette açıkça teyit edilmedi — bir sonraki
+> sohbette doğrulanmalı, (d) #119 Canlı Mod geçişinden ÖNCE gözden geçirilmeli, (e) yeni
+> Sipariş Geçmişi/Arama ekranı henüz BAŞLANMADI.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -193,8 +225,14 @@
 | 2026-09-01 (bu sohbet, 13. taşıma) | SIRADAKİ GÖREVLER -9 ve -5 (ikisi de ✅ tamamlanmış) — düzeltme sonrası dosya hâlâ 400'ü aştığı için taşındı | `session_arşiv_2.md` (aynı eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`) | ✅ Açık Sorunlar #99/#101-104'te özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 | 2026-09-01 (bu sohbet, 14-15. taşıma) | Footer v78/v79 (v80-v83 tarafından süperseded) + SIRADAKİ GÖREVLER -10a (Açık Sorunlar #115a ile çakışıyordu) | `session_arşiv_2.md` (aynı eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`) | ✅ Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 | 2026-09-01 (bu sohbet, 16. taşıma) | CURRENT FOCUS #118 Adım 2 anlatısı — Adım 3 tamamlandığı için güncelliğini yitirdi | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md`) | ✅ Açık Sorun #118'de hâlâ özetli, TAM metinle taşındı, eklenti bu turda üretildi |
+| 2026-09-01 (YENİ sohbet, 17-19. taşıma) | CURRENT FOCUS #118 Adım 3 anlatısı (Adım 4 tamamlandığı için güncelliğini yitirdi) + ONUNCU DERS'in "İKİNCİ hata" anlatısı (v77 footer'ıyla örtüşüyordu) + footer v77 tam kaydı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`) | ✅ Açık Sorun #118/#112/#113/#114'te ve ONUNCU DERS özetinde hâlâ özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 
-> ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`, `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`, `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`, `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`, `..._EKLENTI_2026-08-30-devam2.md`, `..._EKLENTI_2026-08-31.md`, `session_arsiv_2_EKLENTI_2026-09-01.md`, `..._EKLENTI_2026-09-01-devam2.md`, `..._EKLENTI_2026-09-01-devam3.md`, `..._EKLENTI_2026-09-01-devam4.md`, `..._EKLENTI_2026-09-01-devam5.md`, `..._EKLENTI_2026-09-01-devam6.md`, `..._EKLENTI_2026-09-01-devam7.md` (bu turda üretildi) — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
+> ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`, `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`, `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`, `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`, `..._EKLENTI_2026-08-30-devam2.md`, `..._EKLENTI_2026-08-31.md`, `session_arsiv_2_EKLENTI_2026-09-01.md`, `..._EKLENTI_2026-09-01-devam2.md`, `..._EKLENTI_2026-09-01-devam3.md`, `..._EKLENTI_2026-09-01-devam4.md`, `..._EKLENTI_2026-09-01-devam5.md`, `..._EKLENTI_2026-09-01-devam6.md`, `..._EKLENTI_2026-09-01-devam7.md`, `..._EKLENTI_2026-09-01-devam8.md` (bu turda üretildi) — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
+
+> ⚠️ **TAŞIMA NOTU EK (2026-09-01, YENİ sohbet):** Yukarıdaki 3 taşımaya rağmen dosya hâlâ
+> ~37 satır 400 eşiğinin üzerinde (bu turun kendi içeriği — Adım 4 anlatısı + yeni #119 satırı —
+> hacimce büyük ve GÜNCEL, ikinci bir arşivleme için uygun ESKİ bir blok bu turda bulunamadı).
+> Bir sonraki sohbette gerçek bir taşımayla kapatılmalı (v82/v85'teki aynı durumun tekrarı).
 
 ---
 
@@ -234,7 +272,8 @@
 | 115b | 🔴 | **[28. sohbet devamı, 2026-09-01 — YENİ, #115a'dan ayrıldı, DOKUZUNCU DERS uyarınca]** Deploy yeşil olması SADECE tip güvenliğini kanıtlar, çalışma-zamanı sözleşmesini KANITLAMAZ. Yeni `paymentStatus="tutarsizlik"` durumunun gerçek/sandbox bir PayTR callback isteğiyle fiilen tetiklenip DB'ye doğru yazıldığı kullanıcı tarafından teyit edilmedi (soruldu, kullanıcı "hayır, sadece deploy" dedi). #115 bu doğrulama yapılmadan TAM KAPANMAZ. | `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts` |
 | 116 | 🟢 | **[YENİ, 28. sohbet — kod incelemesinde bulundu, kapsam dışı bırakıldı]** `types/index.ts`'te `paymentMethod`/`paymentStatus`/`paymentProviderRef` hiç tiplenmemiş — `OrderHistoryEntry` tipinde bile yok. Şu an bu alanlar sadece `schema.ts` yorumunda ve callback route'ta ham string olarak yaşıyor, hiçbir yerde union ile sıkı kontrol edilmiyor. Personel panelinde de (`GelAlOrderCard.tsx` → `PickupApprovalEntry`) paymentStatus hiç render edilmiyor, bu yüzden "tutarsizlik" için görsel bir karşılık da yok. | `types/index.ts`, `components/personel/GelAlOrderCard.tsx` |
 | 117 | 🟠 | **[YENİ, 28. sohbet devamı, 2026-09-01]** Guest-gate parite: sandviç akışı (`/sandwich/customize`) kâse akışının aksine guest-gate middleware'i tarafından YAKALANMIYORDU. `lib/auth/guest-gate.ts` (`GATED_PATH_PREFIXES`) + `middleware.ts` (`config.matcher`) aynı turda güncellendi (birbirine bağımlı tek birim), `guest-gate.test.ts`'e 2 yeni test eklendi (guest→redirect, girişli→redirect yok). Kod artifact olarak verildi, ağ erişimi olmadığı için test suite bu ortamda koşulamadı. **KALAN:** 3 dosya repoya konulup Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği gözle doğrulanmalı. | `lib/auth/guest-gate.ts`, `middleware.ts`, `lib/auth/guest-gate.test.ts` |
-| 118 | 🟠 | **[GÜNCELLENDİ, bu turda, 2026-09-01]** İade Kuyruğu — **Adım 1+2+3 kod+test+build TAMAMLANDI (yerelde doğrulandı, push/canlı doğrulama HENÜZ YOK):** Adım 1: `lib/paytr.ts`→`paytrRefund()` (7/7 test). Adım 2: `lib/personel/gel-al-queries.ts`→`refundOrder()` — `fetchOrderForRefund()`/`validateRefundEligibility()`/`markOrderAsRefunded()`/`finalizeRefund()`/`callRefundAndFinalize()` olarak 20 satır kuralına uyacak şekilde bölündü, `merchant_oid` init ile BİREBİR tutarlı (HIGH güvenilirlik), 6 edge case ele alındı (sipariş yok/nakit/zaten iade/ödeme yok/PayTR reddi/DB-race KRİTİK loglama) — testler (7/7) İLK ÖNCE 1 FAIL verdi (KRİTİK mesajında "kayıt" vs "kaydı" regex uyuşmazlığı, üretim kodu DOĞRU, sadece test assertion'ı düzeltildi), düzeltme sonrası 7/7 ✅. Adım 3: `app/api/personel/orders/[id]/refund/route.ts` (POST, `requireStaffSession()` + middleware `/api/personel/*` guard'ı, tüm iş-kuralı hataları bilinçli olarak TEK TİP 400 ile dönüyor — `refundOrder()`'da ayrı hata kodu yok) + `route.test.ts` (5/5 test: guard×2/happy×1/failure×2). Regresyon `gel-al-queries.test.ts` 13/13 ✅ (dokunulmadı, bozulmadı). `npm run build` YEŞİL. **Bilinen, MVP kapsamı dışı bırakılan race:** iki personel eşzamanlı "İade Et" derse PayTR'a çift istek gitme riski KALIR (route seviyesinde çözülemez, #81 optimistic-lock ertelemesiyle aynı desen). **KALAN:** (a) push+Vercel deploy, (b) sandbox'ta staff hesabıyla gerçek iade denemesi (DOKUZUNCU DERS), (c) Adım 4 (`GelAlOrderCard.tsx`'e "İade Et" butonu, henüz BAŞLANMADI), (d) yeni Sipariş Geçmişi/Arama ekranı (henüz BAŞLANMADI). | `lib/paytr.ts`, `lib/paytr.test.ts`, `lib/personel/gel-al-queries.ts`, `lib/personel/refund-order.test.ts`, `app/api/personel/orders/[id]/refund/route.ts`, `app/api/personel/orders/[id]/refund/route.test.ts`, `GelAlOrderCard.tsx` (Adım 4, henüz dokunulmadı), yeni Sipariş Geçmişi ekranı (henüz oluşturulmadı) |
+| 118 | 🟠 | **[GÜNCELLENDİ, YENİ sohbet, 2026-09-01]** İade Kuyruğu — Adım 1+2+3 (kod+test+build, yerelde doğrulanmıştı) daha önce tamamlandı. **Adım 4 (bu sohbette):** `GelAlOrderCard.tsx`/`RefundConfirmDialog.tsx`/`GelAlPanel.tsx` — `handleRefund(id, phone)` ayrı fonksiyon (mevcut `handleAction` dokunulmadı), hata mesajı dosyanın BSC-4 deseniyle tutarlı (sunucu detayı SADECE konsola, kullanıcıya genel `ACTION_ERROR_MESSAGE`), `onRefund` koşulsuz iletildi. Checkpoint istendi, **açık onay bu sohbette KAYITLI DEĞİL** (bkz. CURRENT FOCUS, DÖRDÜNCÜ-YEDİNCİ DERS deseni). Aynı sohbette kullanıcı CANLI test etti: nakit sipariş DOĞRU reddedildi (tasarım gereği, `validateRefundEligibility()` kontrol 2 — bug değil), online sipariş iadesi BAŞARILI — DB `payment_status: "iade_edildi"` ile doğrulandı (`finalizeRefund()` sadece gerçek PayTR success'inde yazıyor, dolaylı ama güvenilir kanıt). Zincir (modal→route→`refundOrder()`→`paytrRefund()`→DB) UÇTAN UCA ÇALIŞTIĞI pratikte kanıtlandı. **KALAN:** (a) test seti HENÜZ yazılmadı (Kural #6), (b) nakit siparişlerde "İade Et" butonunun gizlenmesi/"Nakit — elle iade" etiketiyle gösterilmesi kararı BEKLİYOR, (c) push/Vercel deploy bu sohbette açıkça teyit EDİLMEDİ — bir sonraki sohbette doğrulanmalı, (d) yeni Sipariş Geçmişi/Arama ekranı henüz BAŞLANMADI. Bilinen, MVP kapsamı dışı bırakılan race korunuyor: iki personel eşzamanlı "İade Et" derse PayTR'a çift istek gitme riski (#81 ile aynı desen). Ayrıca bkz. YENİ #119 (test/canlı ayrımı bulgusu, Canlı Mod geçişinden ÖNCE gözden geçirilmeli). | `lib/paytr.ts`, `lib/paytr.test.ts`, `lib/personel/gel-al-queries.ts`, `lib/personel/refund-order.test.ts`, `app/api/personel/orders/[id]/refund/route.ts`, `app/api/personel/orders/[id]/refund/route.test.ts`, `components/personel/GelAlOrderCard.tsx`, `components/personel/RefundConfirmDialog.tsx`, `components/personel/GelAlPanel.tsx`, yeni Sipariş Geçmişi ekranı (henüz oluşturulmadı) |
+| 119 | 🟡 | **[YENİ, bu turda — kod incelemesinde bulundu]** `paytrRefund()` işlem bazında test/canlı ayrımı yapmıyor: iade isteği hiçbir `test_mode` alanı taşımıyor (`buildRefundRequestBody`'de yok) — bu bir eksiklik değil, PayTR'ın resmi iade API'sinde böyle bir alan yok, dokümantasyonla eşleşiyor. Güvenlik isteğe eklenen bir bayraktan değil, iade edilmek istenen `merchant_oid`'in HANGİ modda ödendiğinden geliyor: şu an `PAYTR_TEST_MODE=1` olduğu için mevcut TÜM siparişler sandbox'ta ödendi, bu yüzden gerçek para hareket ETMİYOR. Canlı Mod geçişi (#105'in kalan adımı, `PAYTR_TEST_MODE=0` + redeploy) sonrası bu buton GERÇEK para iade EDECEK — amaç bu, ama geçiş ÖNCESİ bilinçli olunmalı. DOKUZUNCU DERS ailesiyle aynı desen: fonksiyon işlem-bazlı kontrol yerine ortam-bazlı bir varsayıma dayanıyor. | `lib/paytr.ts` (`paytrRefund`, `buildRefundRequestBody`) |
 | 39,50 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** İkisi de KAPANDI — `/hesap` akışı (Twilio kısıtı artık engellemiyor) ve `AddToCartButton.tsx` BSC-6 çift-ekleme koruması (bkz. #75). TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
 | 52 | 🟡 | VisualPreview.tsx görsel katman klasörü boş | `components/customizer/VisualPreview.tsx` |
@@ -310,7 +349,7 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Guest gate middleware KODLANDI. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI. SEC-02 (rate-limit) canlıda GERÇEK DENEMEYLE doğrulandı ✅. SEC-01 (role-revocation) canlı testi kullanıcı kararıyla ERTELENDİ — #91 hâlâ TAM kapanmadı, push bekliyor. **[28. sohbet devamı]** Guest-gate'e sandviç akışı için parite eklendi (kâse ile aynı korumayı alıyor) — kod verildi, push/canlı doğrulama BEKLİYOR (bkz. #117). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu workaround'lu — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **[26. sohbette, kullanıcı beyanıyla]** Madde 4'ün cayma hakkı istisna metni ödeme onayı öncesine eklendi (#112) — ürün+fiyat gösterimi kısmı hâlâ açık. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. **[28. sohbette]** Callback route güvenlik sertleştirmesi — 4 açık bulunup düzeltildi (sipariş okuma/doğrulama, tutar doğrulaması zorunlu, paymentProviderRef persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri eklendi (migration YOK). İlk versiyon push edildi (kullanıcı beyanı). 2. versiyon (tutarsizlik) **deploy'u ✅ TEYİT EDİLDİ** (#115a KAPANDI) ama runtime davranışı (gerçek callback ile "tutarsizlik" durumunun tetiklenip DB'ye yazıldığı) HENÜZ doğrulanmadı (#115b 🔴 AÇIK). Bkz. #115a/#115b/#116. |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **[26. sohbette, kullanıcı beyanıyla]** Madde 4'ün cayma hakkı istisna metni ödeme onayı öncesine eklendi (#112) — ürün+fiyat gösterimi kısmı hâlâ açık. **[YENİ sohbet]** İade Kuyruğu (#118) Adım 4 (buton+modal) verildi ve CANLIDA uçtan uca test edildi (nakit reddi doğru, online iade başarılı) — ama push/deploy bu sohbette açıkça teyit edilmedi, test seti yazılmadı. Yeni bulgu: `paytrRefund()` test/canlı ayrımını ortam değişkenine bırakıyor (#119) — Canlı Mod geçişinden ÖNCE gözden geçirilmeli. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. **[28. sohbette]** Callback route güvenlik sertleştirmesi — 4 açık bulunup düzeltildi (sipariş okuma/doğrulama, tutar doğrulaması zorunlu, paymentProviderRef persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri eklendi (migration YOK). İlk versiyon push edildi (kullanıcı beyanı). 2. versiyon (tutarsizlik) **deploy'u ✅ TEYİT EDİLDİ** (#115a KAPANDI) ama runtime davranışı (gerçek callback ile "tutarsizlik" durumunun tetiklenip DB'ye yazıldığı) HENÜZ doğrulanmadı (#115b 🔴 AÇIK). Bkz. #115a/#115b/#116. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations`, `order_history`, `users.role`, `registrationBlockedAttempts` migrate edildi ve DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). 5 tablo doğrulandı — `branches` veya menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı canlı build yeşil. 🟡 Gel Al onay kuyruğu 3-durumlu revizyon (KARAR A) kodlandı, 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (#86) build tarafı KAPANDI, test+canlı doğrulama BEKLİYOR. |
 | İçerik/Metin (yeni) | 🟢 **[26. sohbette, kullanıcı beyanıyla]** İletişim/Şubeler/İptal-İade/Satış Sözleşmesi/Footer güncellendi (#113), `AboutStory.tsx` yeniden yazıldı (#114). Kod bu sohbette görülmedi, sadece sözlü beyan. |
@@ -322,7 +361,8 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -11 | **[GÜNCELLENDİ, bu turda]** #118 — İade Kuyruğu: Adım 1+2+3 kod+test+build TAMAMLANDI (yerelde — `npm test` tüm ilgili dosyalarda + regresyonda PASS, `npm run build` YEŞİL). **KALAN:** (a) push+Vercel deploy, (b) sandbox'ta gerçek iade denemesi, (c) onaylanırsa Adım 4 (`GelAlOrderCard.tsx`'e "İade Et" butonu). | 🟠 |
+| -11 | **[GÜNCELLENDİ, YENİ sohbet]** #118 — İade Kuyruğu: Adım 1+2+3+4 kod verildi, Adım 4 (buton+modal) CANLIDA fiilen test edildi ve zincir uçtan uca ÇALIŞTIĞI doğrulandı (nakit reddi doğru, online iade başarılı, DB `iade_edildi`). **KALAN:** (a) test seti yazılmalı (Kural #6), (b) nakit sipariş buton kararı, (c) push/deploy bu sohbette açıkça teyit edilmeli, (d) Sipariş Geçmişi/Arama ekranı. | 🟠 |
+| -11b | **[YENİ, YENİ sohbet]** #119 — `paytrRefund()` test/canlı ayrımı yapmıyor; güvenlik sadece `PAYTR_TEST_MODE=1` olmasına dayanıyor. Canlı Mod geçişi (#105'in kalan adımı) öncesi MUTLAKA gözden geçirilmeli. | 🟡 |
 | -10b | **[YENİ, 28. sohbet devamı]** #115b — "tutarsizlik" durumunun sandbox/gerçek bir PayTR callback isteğiyle fiilen tetiklenip DB'ye doğru yazıldığı henüz doğrulanmadı. Runtime davranış testi bekleniyor. | 🔴 |
 | -10c | **[YENİ, 28. sohbet devamı]** #117 — guest-gate parity (sandviç) 3 dosyası (`lib/auth/guest-gate.ts`, `middleware.ts`, `guest-gate.test.ts`) repoya konulmalı, Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği doğrulanmalı. | 🟠 |
 | -8b | **[YENİ, 26. sohbet]** #112'nin bilinçli atlanan kısmı: Madde 4'ün ürün nitelikleri+toplam fiyat gösterimi — `useCartStore.ts`/`OrderSummary.tsx` paylaşılmalı. | 🟡 |
@@ -366,17 +406,12 @@
 
 ---
 
+*v86 (v85'den: **[YENİ sohbet, 2026-09-01]** #118 Adım 4 verildi — `GelAlOrderCard.tsx`/`RefundConfirmDialog.tsx`/`GelAlPanel.tsx` (`handleRefund` ayrı fonksiyon, BSC-4 hata deseni korundu). Checkpoint istendi ama açık onay bu sohbette KAYITLI DEĞİL (DÖRDÜNCÜ-YEDİNCİ DERS deseni tekrarı — AÇIK SORUN olarak not düşüldü). Kullanıcı CANLI ortamda modal→route→refundOrder()→paytrRefund()→DB zincirini test etti: nakit sipariş doğru reddedildi (tasarım gereği), online sipariş iadesi başarılı oldu (DB `iade_edildi`). YENİ BULGU: `paytrRefund()` işlem bazında test/canlı ayrımı yapmıyor, güvenlik `PAYTR_TEST_MODE=1` ortam varsayımına dayanıyor — Canlı Mod geçişi öncesi (#105'in kalan adımı) gözden geçirilmeli, yeni Açık Sorun #119 olarak loglandı. CURRENT FOCUS'taki #118 Adım 3 anlatısı güncelliğini yitirince `session_arşiv_2.md`'ye taşındı (eklenti: `..._EKLENTI_2026-09-01-devam8.md`, kullanıcı elle eklemeli). KALAN: test seti (Kural #6), nakit-sipariş buton kararı, push/deploy açık teyidi. Güncellenme: 2026-09-01.*
 *v85 (v84'den: **[bu sohbet, 2026-09-01]** #118 Adım 3 verildi — `app/api/personel/orders/[id]/refund/route.ts` (POST, staff-guard) + `route.test.ts` (5 test). Kullanıcı Codespaces'te #118'in tüm test dosyalarını + build'i koşturdu: Adım 1 `paytr.test.ts` 7/7, Adım 2 `refund-order.test.ts` İLK ÖNCE 1 FAIL (test-only regex düzeltmesi sonrası 7/7), Adım 3 `route.test.ts` 5/5, regresyon `gel-al-queries.test.ts` 13/13, `npm run build` YEŞİL. Açık Sorun #118/SIRADAKİ GÖREVLER -11/Kritik Kararlar güncellendi. CURRENT FOCUS'taki #118 Adım 2 anlatısı güncelliğini yitirince dosya 400 satırı aşınca `session_arşiv_2.md`'ye taşındı (eklenti: `..._EKLENTI_2026-09-01-devam7.md`, kullanıcı elle eklemeli). KALAN: push+Vercel deploy, sandbox'ta gerçek iade denemesi, Adım 4. Güncellenme: 2026-09-01.*
-*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[26. sohbet, 2026-09-01]** Kullanıcı bu sohbette
-3 iş bildirdi (Madde 4 cayma hakkı statik metni, 5 sayfa+Footer güncellemesi, AboutStory.tsx
-yeniden yazımı) — bu sohbette gerçek kod/diff HİÇ görülmedi, kullanıcı "push edildi, canlıda
-sorunsuz" diye beyan etti. #112/#113/#114 olarak "kullanıcı beyanıyla, ekran görüntüsü YOK"
-notuyla KAPALI işaretlendi (#101-104/DOKUZUNCU DERS standardıyla tutarlı). ⚠️ AYRI VE CİDDİ
-HATA (ONUNCU DERS): dosya TAM DOSYA olarak yeniden üretilirken CURRENT FOCUS'taki #105 detaylı
-anlatısı ve bir TAŞIMA NOTU gerçek arşivleme yapılmadan içerikten düştü (405→389 satır) —
-kullanıcı satır sayısını sorunca fark edildi, bu turda TAM olarak geri yüklendi. Şimdi dosya
-gerçekten 400 satır eşiğini aşıyor, bir sonraki sohbette GERÇEK bir arşiv eklentisiyle
-taşıma yapılmalı (bkz. SIRADAKİ GÖREVLER -9). Güncellenme: 2026-09-01.*
+*v77 — TAŞINDI (2026-09-01, YENİ sohbet — 400 satır eşiği): TAM kayıt (26. sohbet #112/#113/
+#114 kapanışı + ONUNCU DERS'in "içerik düşmesi" olayının footer anlatısı) `session_arşiv_2.md`'ye
+taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md` (kullanıcı elle eklemeli).
+İçerik özet olarak ONUNCU DERS (header) ve Açık Sorunlar #112/#113/#114'te hâlâ duruyor.*
 *v78/v79 — TAŞINDI (2026-09-01, bu sohbet, 14. taşıma): v80-v83 tarafından süperseded
 edilen 2 eski sürüm kaydı `session_arşiv_2.md`'ye taşındı (eklenti:
 `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`, kullanıcı elle eklemeli). İçerdikleri
