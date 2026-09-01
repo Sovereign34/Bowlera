@@ -112,64 +112,51 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[TAŞINDI — çeşitli tarihler, bkz. Arşiv Taşıma Kaydı tablosu]** 17-23. sohbetlere ait
-> turn-by-turn anlatı blokları (toplam 4 taşıma) `session_arşiv_2.md`'ye taşındı — hepsi
-> Açık Sorunlar #90/#91/#95-#99/#105'te ve Kritik Kararlar'da zaten tam özetli.
+> **[TAŞINDI — çeşitli tarihler, bkz. Arşiv Taşıma Kaydı tablosu]** 17-24. sohbetlere ait
+> turn-by-turn anlatı blokları (toplam 5 taşıma) `session_arşiv_2.md`'ye taşındı — hepsi
+> Açık Sorunlar #90/#91/#95-#109'da ve Kritik Kararlar'da zaten tam özetli.
+
+> **[YENİ, bu turda (25. sohbet, 2026-08-31 devamı) — #105 UÇTAN UCA CANLI SANDBOX
+> DOĞRULANDI ✅, 2 YENİ BUG BULUNDU VE AYNI TURDA ÇÖZÜLDÜ]** PayTR merchant başvurusu
+> onaylandı (Mağaza: 742712). Sırasıyla: (1) PayTR panelinde Bildirim URL'i
+> (`https://bowlera-site.vercel.app/api/payment/paytr/callback`) girildi ve kaydedildi;
+> (2) Vercel'e 5 env değişkeni eklendi (`PAYTR_MERCHANT_ID/KEY/SALT`, `PAYTR_TEST_MODE=1`,
+> `NEXT_PUBLIC_BASE_URL`) ve redeploy edildi; (3) kullanıcı onayıyla `ConfirmPickupOrderButton.tsx`
+> içindeki `ONLINE_PAYMENT_ENABLED` bayrağı `false`→`true` çevrildi (SADECE sandbox testi
+> için, `PAYTR_TEST_MODE=1` hâlâ aktif). İlk sandbox denemesinde PayTR şu hatayı verdi:
+> **"merchant_oid alfanumerik olmalıdır, özel karakter içeremez"** — kök neden: sipariş
+> ID'si (`order_history.id`) bir UUID (tire içeriyor), PayTR tire kabul etmiyor (#110, YENİ).
+> Kullanıcı başka bir Claude oturumunda üç dosyayı (`lib/paytr.ts`: `stripUuidHyphens()`/
+> `restoreUuidHyphens()` eklendi; `init/route.ts`: gönderirken tire çıkarılıyor;
+> `callback/route.ts`: DB eşleştirmeden önce tire geri ekleniyor) düzeltip push etti — bu
+> oturumda üçü de görülüp senkron/doğru olduğu teyit edildi. **İKİNCİ sandbox denemesi TAM
+> BAŞARILI:** iFrame açıldı, PayTR test kartı otomatik doldu, 3D Secure geçti, "Ödeme
+> Başarılı" ekranı görüldü, sipariş personel panelinde (Gel Al kuyruğu) göründü — callback'in
+> çalıştığının kanıtı. **Ardından 2. bug bulundu:** `merchant_ok_url` (`/odeme/basarili`) ve
+> `merchant_fail_url` (`/odeme/basarisiz`) hiç oluşturulmamış sayfalara işaret ediyordu →
+> kullanıcı gerçek ödeme sonrası 404 gördü, sepet de temizlenmedi (`ConfirmPickupOrderButton.tsx`
+> satır ~144'teki kendi notunda zaten "ayrı iş, henüz yok" diye işaretliydi — YENİ Açık Sorun
+> DEĞİL, bilinen eksiğin gerçekleşmesi, bkz. #111). Onay alınarak iki YENİ sayfa üretildi:
+> `app/odeme/basarili/page.tsx` (mesaj + `useCartStore().clearCart()` çağrısı) ve
+> `app/odeme/basarisiz/page.tsx` (mesaj, sepet BİLEREK korunuyor). Kullanıcı push edip
+> ÜÇÜNCÜ sandbox denemesini yaptı: `/odeme/basarili` artık 404 vermiyor, sepet ikonu
+> boşaldı (ekran görüntüsüyle doğrulandı) — #111 KAPANDI. **Kalan (bloklayıcı DEĞİL, ayrı
+> karar):** mağaza hâlâ PayTR'da "Test Modu"nda; gerçek ödeme almak için PayTR panelinde
+> "Canlı Mod" talebi gönderilmeli, onaylanınca `PAYTR_TEST_MODE=0` yapılıp redeploy
+> edilmeli — bu turda BAŞLANMADI, ayrı bir KARAR BİLDİRİMİ gerektirecek. **Küçük belge
+> senkron notu (fonksiyonel değil):** `ConfirmPickupOrderButton.tsx` satır ~144'teki
+> "PayTR ok/fail redirect sayfalarında yapılmalı (ayrı iş, henüz yok)" yorumu artık ESKİMİŞ
+> (sayfalar oluşturuldu) — düzeltilmedi, açık madde olarak not edildi.
 >
-> **[YENİ, bu turda (23. sohbet devamı) — #101/#102/#103/#104 KAPANDI ✅, KULLANICI BEYANI]**
-> Kullanıcı #100-#104'ün ne olduğunu sorduktan sonra, son 4 maddenin (#101 CartDrawer "Özel
-> Kase"→"Özel Sandviç" fix'i, #102 aynı bug'ın OrderSummary'deki karşılığı, #103 OrderSummary
-> "Kaldır" butonu, #104 SandwichCustomizer.test.tsx router mock riski) canlıda kendisi
-> tarafından doğrulandığını beyan etti ("Ben doğruladı kapat") ve kapatılmasını istedi.
-> **Not — ayrıca kayıtlı olsun:** bu kapanış, ekran görüntüsü/adım adım kanıt olmadan, SADECE
-> kullanıcının sözlü beyanına dayanıyor — SESSION_INDEX'in kendi standart pratiğinden
-> (ekran görüntülü kanıt, bkz. #99) daha düşük kanıt seviyesi. Kullanıcı açıkça onayladığı
-> için kapatıldı, ama gelecekte bu tür "beyan bazlı" kapanışlar ile "kanıt bazlı" kapanışlar
-> arasındaki fark ayırt edilmeli. **#100 (a/b/c/d) bu kapsamda DEĞİL, hâlâ açık** — kullanıcı
-> sadece "son 4 madde" (#101-#104) dedi, #100 ayrı bırakıldı.
-
-
-> **[TAŞINDI — 2026-08-31, 24. sohbet]** #105'in ilerleme anlatısı (şema/migration/route
-> güncellemeleri), üretim regresyonu anlatısı (DOKUZUNCU DERS'te özetli) ve #106'nın (personel
-> şifre sıfırlama kilitlenmesi) ilk keşif anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-08-31.md`). Kapanış gerekçesi: içerik Açık Sorunlar #105/#106'da
-> ve DOKUZUNCU DERS'te zaten tam özetli.
-
-> **[YENİ, bu turda (24. sohbet, 2026-08-31) — #107/#108 KAPANDI ✅, CANLI ÖNCESİ BLOKLAYICI
-> BULGU + DÜZELTME]** Kullanıcı canlıya çıkmadan önce kritik bir eksik buldu: personel
-> paneli hem kase hem sandviç siparişlerinde SADECE `"1× menuNumber"` gösteriyordu, müşterinin
-> GERÇEK seçimleri (Base/Main/Garden/Flavor/Finish ya da Ekmek/Boy/Protein/Peynir/Sebzeler/
-> Sos) hiç kaydedilmiyor/görünmüyordu (Sorun A — HER İKİ ürün türü). Ayrıca sandviçte "Sepete
-> Ekle" öncesi özet panelinde de seçimler hiç gösterilmiyordu, kase'nin kendi panelinden farklı
-> olarak (Sorun B — SADECE sandviç). Kök nedenler dosya dosya izlenerek (types/index.ts,
-> GelAlOrderCard.tsx, SandwichSummaryPanel.tsx, types/sandwich.ts, sandwich-pricing.ts)
-> doğrulandı, DB migration GEREKMEDEN (order_history.items zaten jsonb) 8 dosya güncellendi:
-> `types/index.ts` (yeni `OrderItemSelectionLine` tipi + `OrderItemSummary.selectionSummary`),
-> `lib/customizer-description.ts` (YENİ, kase seçimlerini satırlara çevirir), `lib/
-> sandwich-description.ts` (YENİ, sandviç seçimlerini satırlara çevirir), `app/api/orders/
-> gel-al/route.ts` (priceItem() artık selectionSummary de üretiyor), `components/personel/
-> GelAlOrderCard.tsx` (seçim satırlarını render ediyor), `components/sandwich/
-> SandwichSummaryPanel.tsx` (seçim özeti eklendi, Sorun B), `components/sandwich/
-> SandwichCustomizer.tsx` (selections prop'u geçiriliyor). Kullanıcı canlıda HER İKİ ürün
-> türü için de (4+4 ekran görüntüsüyle) uçtan uca doğruladı: hem "Sepete Ekle" öncesi özet
-> hem personel paneli artık tam seçim detayını gösteriyor — kase ve sandviç için AYRI AYRI
-> kanıtlandı. **Yol boyunca 1 build hatası + düzeltme:** `SandwichCatalog.veggies` alanı
-> ilk yazımda `SandwichCatalogItem[]` (price+calories zorunlu) olarak tanımlanmıştı ama
-> gerçek `sandwich-data.json`'daki veggies sadece `{id,name}` taşıyor (`StepVeggies.tsx`
-> görülerek doğrulandı) — TypeScript derleme hatası verdi, `SandwichVeggieCatalogItem`
-> (sadece id+name) adında daha dar bir tip eklenerek düzeltildi, deploy YEŞİL doğrulandı.
-> **Kalan bilinen eksik (bloklayıcı değil):** yok — sebze isimleri de artık kataloğa göre
-> doğru çözümleniyor (önceden ham ID gösteriliyordu, bu da bu turda düzeltildi).
-
-> **[YENİ, bu turda]** Kullanıcı sandviç fiyatlandırma mantığını sorguladı (`getSandwichTotals()`
-> incelendi, global sandviç zincirleriyle karşılaştırıldı). Üç bulgu: (a) `proteinPortion`
-> (single/double) fiyata HİÇ girmiyor — gerçek boşluk, S1 gerçek veri gelince çözülmeli. (b)
-> `proteinVariant` (bitkisel A/B) kullanıcı kararıyla ŞİMDİLİK aynı fiyatta kalacak. (c)
-> `toasted` kullanıcı kararıyla KAPATILDI — `sandwich-data.json`'da `hasToastEquipment: false`
-> yapıldı, push BEKLİYOR. Ayrıca Chipotle sos kartına DENEME amaçlı görsel eklendi
-> (`sos-chipotle.webp` + `sandwich-data.json`'a `image` alanı) — canlıda görüldü, DESIGN_SYSTEM.md
-> §5 zemin standardına henüz uymuyor (düz beyaz fon), kalan 5-6 sos görseli + zemin düzeltmesi
-> SONRAYA bırakıldı. Bkz. Açık Sorun #109.
+> **[Aynı oturum, önce] #91 — İLERLEME YOK, BEKLEMEDE:** Kullanıcı `middleware.ts`'i
+> doğrudan GitHub'dan kopyalayıp yapıştırdı (push doğrulandı). `auth.ts` ve
+> `lib/auth/rate-limit.ts` için ise yalnızca ZİP dosyası paylaşıldı — zip'te `.git`
+> klasörü YOK, yani bu iki dosyanın GERÇEKTEN push edilip edilmediği BAĞIMSIZ OLARAK
+> DOĞRULANAMADI (sadece kullanıcı beyanı var). Ayrıca Codespaces ekran görüntüsünde
+> `middleware.test.ts`'in artık ÇALIŞTIRILDIĞI ve **10/10 PASS** verdiği görüldü (önceki
+> "yazıldı ama hiç koşulmadı" uyarısı bu kısımda KAPANDI). Kullanıcı "PayTR onaylandı,
+> ona geçelim" diyerek SEC-01 canlı testini ve `git status`/push doğrulamasını yarım
+> bıraktı — #91 hâlâ 🔴 AÇIK, bir sonraki sohbette KALDIĞI YERDEN devam edilmeli.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -190,6 +177,7 @@
 | 2026-08-30 (23. sohbet) | 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu (#99-#104 ilk loglanma anlatısı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30.md`) | ✅ #99 kapanış notunda + #100-#104'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
 | 2026-08-30 (23. sohbet devamı, 2. taşıma) | #99 kapanış anlatısı, PayTR ilk karar bloğu, SEC-02 doğrulama anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30-devam2.md`) | ✅ Açık Sorunlar #99/#105/#91'de ve Kritik Kararlar'da özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
 | 2026-08-31 (24. sohbet) | #105 ilerleme anlatısı, üretim regresyonu anlatısı, #106 ilk keşif anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-31.md`) | ✅ Açık Sorunlar #105/#106'da ve DOKUZUNCU DERS'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
+| 2026-08-31 (25. sohbet, 2. taşıma) | #101-104 kullanıcı beyanı bloğu, #107/108 tam anlatı bloğu (personel paneli seçim gösterimi), #109 sandviç fiyatlandırma anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-31-devam3.md`) | ✅ Açık Sorunlar #100-#109'da özetli, TAM metinle taşınacak (eklenti üretilmedi — kullanıcı isterse ayrıca istemeli) |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -251,7 +239,7 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 91 | 🟠 | **[CURRENT FOCUS]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. **[BU TURDA]** SEC-02 canlıda GERÇEK DENEMEYLE doğrulandı ✅ (kullanıcı ekran görüntüsü paylaştı: "Çok fazla giriş denemesi" mesajı tetiklendi). **KALAN — kullanıcı kararıyla SONRAYA ERTELENDİ:** SEC-01 (role-revocation, 403 testi) hâlâ canlıda hiç denenmedi. #91 SEC-01 doğrulanmadan TAM KAPANMAZ, 5 dosya push edilmemeli. | `middleware.ts`, `auth.ts`, `lib/auth/rate-limit.ts` |
+| 91 | 🔴 | **[CURRENT FOCUS]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. SEC-02 canlıda GERÇEK DENEMEYLE doğrulandı ✅. **[25. sohbette]** `middleware.test.ts` artık FİİLEN ÇALIŞTIRILDI, 10/10 PASS (ekran görüntüsüyle doğrulandı). `middleware.ts` push'u GitHub'dan doğrudan kopyala-yapıştır ile TEYİT EDİLDİ ✅. **KALAN — DOĞRULANAMADI:** `auth.ts` ve `lib/auth/rate-limit.ts` için sadece ZİP paylaşıldı (`.git` yok, push durumu BAĞIMSIZ TEYİT EDİLEMEDİ — sadece kullanıcı beyanı var). SEC-01 (role-revocation, 403 canlı testi) kullanıcı kararıyla PayTR'a öncelik verilerek YİNE ERTELENDİ. #91 SEC-01 doğrulanmadan VE 2 dosyanın push'u `git status`/`git log` ile teyit edilmeden TAM KAPANMAZ. | `middleware.ts` (push ✅), `auth.ts` (push ❓), `lib/auth/rate-limit.ts` (push ❓) |
 | 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
 | 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin doğrulanması. | ARCHITECTURE.md §2.9a |
 | 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı — bkz. Kritik Kararlar. 3 test dosyası, Codespaces'te 15/15 PASS, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
@@ -283,8 +271,10 @@
 | 107 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun A: personel paneli (Gel Al kuyruğu) hem kase hem sandviç siparişlerinde SADECE `menuNumber` gösteriyordu, müşteri seçimleri (Base/Main/Garden/Flavor/Finish/Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç görünmüyordu — canlı öncesi bloklayıcı bulundu. `types/index.ts` (`OrderItemSelectionLine`+`OrderItemSummary.selectionSummary`), `lib/customizer-description.ts` (YENİ), `lib/sandwich-description.ts` (YENİ), `gel-al/route.ts`, `GelAlOrderCard.tsx` güncellendi. DB migration GEREKMEDİ (jsonb). Kullanıcı hem kase hem sandviç için ekran görüntüsüyle doğruladı. | `types/index.ts`, `lib/customizer-description.ts`, `lib/sandwich-description.ts`, `app/api/orders/gel-al/route.ts`, `components/personel/GelAlOrderCard.tsx` |
 | 108 | ✅ | **[24. sohbette KAPANDI — CANLIDA DOĞRULANDI]** Sorun B: `SandwichSummaryPanel.tsx` "Sepete Ekle" öncesi seçimleri (Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) hiç göstermiyordu (kase'nin kendi paneliyle tutarsızlık). `selections` prop'u eklendi (`SandwichCustomizer.tsx`'ten geçiriliyor), `getSandwichSelectionLines` çağrılıyor. **Ek bulgu, aynı turda çözüldü:** sebze isimleri ilk düzeltmede ham ID gösteriyordu (`SandwichCatalog`'da veggies kataloğu tanımlı değildi) — `StepVeggies.tsx` görülüp `sandwich-pricing.ts`'e `veggies: SandwichVeggieCatalogItem[]` eklendi (fiyatlandırma mantığına DOKUNULMADI). Yol boyunca 1 build hatası (veggies tipi ilk seferde price/calories zorunlu tutmuştu, gerçek veriyle uyuşmadı) → düzeltildi → deploy YEŞİL. Kullanıcı ekran görüntüsüyle doğruladı. | `components/sandwich/SandwichSummaryPanel.tsx`, `components/sandwich/SandwichCustomizer.tsx`, `lib/sandwich-pricing.ts`, `lib/sandwich-description.ts` |
 | 109 | 🟡 | **[YENİ, bu turda]** Sandviç fiyatlandırma tartışması (kullanıcı başlattı): (a) `proteinPortion` (single/double) `getSandwichTotals()`'da HİÇ kullanılmıyor — gerçek boşluk, S1 gerçek veri gelince çözülmeli (double'ın fiyatı boy çarpanına mı tabi olacak, ayrıca karar gerekiyor). (b) `proteinVariant` (bitkisel A/B) fiyata girmiyor — kullanıcı kararıyla ŞİMDİLİK aynı fiyatta kalacak (varyantlar arası maliyet farkı yoksa doğru, S1'de teyit edilmeli). (c) `toasted` — kullanıcı kararıyla KAPATILDI, `sandwich-data.json`'da `hasToastEquipment: false` yapıldı, push BEKLİYOR. Ayrıca Chipotle sos kartına DENEME görseli eklendi (`sos-chipotle.webp`), canlıda görüldü — kalan 5-6 sos + zemin standardı düzeltmesi SONRAYA bırakıldı. | `lib/sandwich-pricing.ts`, `lib/sandwich-data.json` |
-| 105 | 🟠 | **[BU TURDA — iFrame UI kodlandı, HÂLÂ DEVRE DIŞI]** Ödeme altyapısı (PayTR). Kod tarafı: şema+migration+route'lar+nakit akışı TAMAM (canlıda doğrulandı). **[YENİ]** Online akışının TAMAMI (sipariş oluştur→payment/paytr/init çağır→dönen iframeUrl'i modal'da göster) `ConfirmPickupOrderButton.tsx`'e kodlandı VE push edildi, build YEŞİL — ama `ONLINE_PAYMENT_ENABLED=false` sabitiyle BİLİNÇLİ OLARAK kilitli (üretim davranışı DEĞİŞMEDİ, regresyon riski yok). `payment/paytr/init/route.ts` artık eksik env değişkenlerinde çökmüyor, düzgün 503 dönüyor. **AÇIK VARSAYIMLAR (kod içinde işaretli, doğrulanmadı):** `useSession()`'ın `next-auth/react`'ten geldiği ve `session.user.name`/`phone` alanlarını taşıdığı (`auth.ts` bu turda görülmedi); PayTR'ın zorunlu e-posta alanı için teknik placeholder (`{telefon}@bowlera.local`, kullanıcı kararıyla) kullanılıyor. **KALAN, BLOKLAYICI:** PayTR merchant başvurusu hâlâ yapılmadı, gerçek `MERCHANT_ID`/`KEY`/`SALT` yok. Onaylanınca: (a) env değişkenleri eklenmeli, (b) sandbox'ta uçtan uca test edilmeli, (c) SADECE `ONLINE_PAYMENT_ENABLED` sabiti `true` yapılmalı. Kurye/teslimat uygulaması konusu HİÇ ele alınmadı. | `app/api/payment/paytr/init/route.ts`, `components/order/ConfirmPickupOrderButton.tsx` |
+| 105 | 🟢 | **[25. sohbette — UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅]** Ödeme altyapısı (PayTR). Merchant başvurusu ONAYLANDI (Mağaza: 742712). Bildirim URL'i PayTR paneline girildi. 5 env değişkeni (`PAYTR_MERCHANT_ID/KEY/SALT`, `PAYTR_TEST_MODE=1`, `NEXT_PUBLIC_BASE_URL`) Vercel'e eklendi + redeploy edildi. Kullanıcı onayıyla `ONLINE_PAYMENT_ENABLED=true` yapıldı (SANDBOX testi için). İki YENİ bug bulunup AYNI turda çözüldü (#110, #111 — aşağıda). Üçüncü denemede tam akış (iFrame→3D Secure→"Ödeme Başarılı"→personel paneline düşme→sepet temizlenmesi) ekran görüntüleriyle DOĞRULANDI. **KALAN, BLOKLAYICI DEĞİL — ayrı karar gerektirir:** mağaza hâlâ PayTR "Test Modu"nda; gerçek ödeme almak için PayTR panelinde "Canlı Mod" talebi + onay + `PAYTR_TEST_MODE=0` + redeploy gerekiyor, bu turda BAŞLANMADI. Kurye/teslimat uygulaması konusu HİÇ ele alınmadı. | `lib/paytr.ts`, `app/api/payment/paytr/init/route.ts`, `app/api/payment/paytr/callback/route.ts`, `components/order/ConfirmPickupOrderButton.tsx` |
 | 106 | 🟡 | **[YENİ, bu turda — sistem tasarım boşluğu]** Personel/admin kendi şifresini unutup AYNI ZAMANDA personel paneline erişimi yoksa, normal "Şifremi Unuttum" akışı çalışmıyor (o akış personel panelinden geçiyor, ama kilitlenen kişi ZATEN personel — tavuk-yumurta). Bu turda Neon'a `pgcrypto` ile elle müdahale edilerek tek seferlik çözüldü. **Kalıcı çözüm ONAYLANMADI** — olası yönler: (a) süper-admin için ayrı kurtarma mekanizması, (b) "DB'ye elle müdahale" resmi acil-durum prosedürü olarak dokümante edilmesi. Kullanıcı kararı bekliyor. | `users.password_hash` (elle güncellendi), personel şifre sıfırlama akışı |
+| 110 | ✅ | **[25. sohbette KAPANDI — CANLI SANDBOX TESTİNDE BULUNDU VE DÜZELTİLDİ]** PayTR `merchant_oid` alanı tire (-) dahil özel karakter kabul etmiyor, ama sipariş ID'si (`order_history.id`) standart bir UUID (tire içerir) — canlı sandbox denemesinde "merchant_oid alfanumerik olmalıdır" hatası ALINDI. Çözüm: `lib/paytr.ts`'e `stripUuidHyphens()`/`restoreUuidHyphens()` eklendi; init route PayTR'a giderken tireleri çıkarıyor (DB güncellemesi hâlâ orijinal tireli UUID ile yapılıyor); callback route DB'de eşleştirmeden önce tireleri standart formata (8-4-4-4-12) geri ekliyor, format bozuksa SESSİZCE yutmuyor (hata fırlatıp logluyor). Üç dosya senkron doğrulandı, canlı sandbox denemesinde iFrame açılışına kadar sorunsuz ilerlediği KANITLANDI. | `lib/paytr.ts`, `app/api/payment/paytr/init/route.ts`, `app/api/payment/paytr/callback/route.ts` |
+| 111 | ✅ | **[25. sohbette KAPANDI — CANLI SANDBOX TESTİNDE BULUNDU VE DÜZELTİLDİ]** `merchant_ok_url`/`merchant_fail_url` (`lib/paytr.ts`) sırasıyla `/odeme/basarili` ve `/odeme/basarisiz`'e yönlendiriyordu ama bu sayfalar HİÇ oluşturulmamıştı — gerçek ödeme sonrası kullanıcı 404 gördü VE sepet temizlenmedi (`ConfirmPickupOrderButton.tsx`'in kendi notunda zaten "ayrı iş, henüz yok" diye işaretliydi, YENİ bir tasarım hatası değil, bilinen eksiğin gerçekleşmesiydi). İki yeni sayfa oluşturuldu: `app/odeme/basarili/page.tsx` (onay mesajı + `useCartStore().clearCart()`) ve `app/odeme/basarisiz/page.tsx` (mesaj, sepet BİLEREK korunuyor). Kullanıcı canlıda 404'ün kalktığını VE sepet ikonunun boşaldığını ekran görüntüsüyle doğruladı. **Açık küçük madde (fonksiyonel değil):** `ConfirmPickupOrderButton.tsx` satır ~144'teki eski yorum ("ayrı iş, henüz yok") artık GÜNCEL DEĞİL, düzeltilmedi. | `app/odeme/basarili/page.tsx` (YENİ), `app/odeme/basarisiz/page.tsx` (YENİ) |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -332,7 +322,7 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Guest gate middleware KODLANDI. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI. **[BU TURDA]** SEC-02 (rate-limit) canlıda GERÇEK DENEMEYLE doğrulandı ✅. SEC-01 (role-revocation) canlı testi kullanıcı kararıyla ERTELENDİ — #91 hâlâ TAM kapanmadı, push bekliyor. |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu workaround'lu — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[BU TURDA]** Ödeme altyapısı (PayTR) kod tarafı büyük ölçüde TAMAM — nakit akışı canlıda doğrulandı, online seçeneği merchant onayına kadar devre dışı (bkz. #105). Aynı turda bir üretim regresyonu yaşandı ve düzeltildi (zorunlu `paymentMethod` alanı eklenirken çağıran component güncellenmemişti — bkz. DOKUZUNCU DERS). ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations`, `order_history`, `users.role`, `registrationBlockedAttempts` migrate edildi ve DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). 5 tablo doğrulandı — `branches` veya menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı canlı build yeşil. 🟡 Gel Al onay kuyruğu 3-durumlu revizyon (KARAR A) kodlandı, 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (#86) build tarafı KAPANDI, test+canlı doğrulama BEKLİYOR. |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ güncel değil (bkz. SIRADAKİ GÖREVLER 1d). ⚠️ DEPENDENCIES.md v1.1 — ESKİ (#71). ⚠️ Çok şubeli mimari + CRM/attribution önerisi ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ (bkz. #92/#93/#94). |
@@ -345,7 +335,8 @@
 |---|---|---|
 | -7 | **[YENİ, 23. sohbet]** #100 — 4 UI düzeltmesi (Hero grid, SandwichSummaryPanel test-verisi rozeti, HeroImagePlaceholder mobil taşma, SandwichCustomizer yönlendirme) — push/canlı test HÂLÂ TEYİT EDİLMEDİ. #101-104'ten AYRI, bu turda ele alınmadı. | 🟡 |
 | -8 | **[YENİ, bu turda]** #106 — Personel şifre sıfırlama kilitlenmesi (tasarım boşluğu). Tek seferlik Neon müdahalesiyle çözüldü, kalıcı prosedür/mekanizma kararı kullanıcıdan bekleniyor. | 🟡 |
-| -6 | **[BU TURDA]** #105 — Ödeme altyapısı (PayTR). Online akışının TÜM kodu (iFrame UI dahil) hazır ve push edildi, `ONLINE_PAYMENT_ENABLED=false` ile kilitli. **KALAN:** PayTR merchant başvurusu, gerçek anahtarlar, sandbox testi, sonra tek satır bayrak değişimi. | 🟠 |
+| -6 | **[25. sohbette TAMAMLANDI ✅]** #105 — Ödeme altyapısı (PayTR) uçtan uca canlı sandbox'ta doğrulandı. **YENİ, kalan:** PayTR "Canlı Mod" talebi gönderilmeli, onaylanınca `PAYTR_TEST_MODE=0` + redeploy — ayrı KARAR BİLDİRİMİ gerektirir, henüz BAŞLANMADI. | 🟢 |
+| -6b | **[YENİ, bu turda — küçük, fonksiyonel değil]** `ConfirmPickupOrderButton.tsx` satır ~144'teki eski yorum ("PayTR sayfaları henüz yok") güncel değil, #111 sonrası düzeltilmeli. | 🟢 |
 | -5 | **[TAMAMLANDI, 23. sohbet ✅]** #99 — Sandviç checkout'u canlıda uçtan uca doğrulandı. **[TAMAMLANDI, 23. sohbet devamı ✅ — kullanıcı beyanıyla]** #101/#102/#103/#104 kapandı (ekran görüntülü kanıt YOK, sadece sözlü beyan). | ✅ |
 | -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
 | -3 | **[23. sohbette KISMEN İLERLEDİ]** #91 — SEC-02 (rate-limit) canlıda ✅ DOĞRULANDI. **KALAN:** SEC-01 (role-revocation 403 testi) — kullanıcı kararıyla SONRAYA ERTELENDİ. İkisi tamamlanmadan 5 dosya push edilmemeli. | 🔴 |
@@ -397,3 +388,17 @@ taşıması yapıldı. Güncellenme: 2026-08-31.*
 S1'e bağlı; proteinVariant/toasted için kullanıcı kararı — `hasToastEquipment: false`, push
 bekliyor). Chipotle sos kartına deneme görseli eklendi (`sos-chipotle.webp`), canlıda
 doğrulandı — kalan sos görselleri + zemin standardı SONRAYA bırakıldı. Güncellenme: 2026-08-31.*
+*v76 — **[25. sohbet]** #105 (PayTR) UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅: merchant onayı
+(Mağaza 742712), Bildirim URL, 5 env değişkeni + redeploy, `ONLINE_PAYMENT_ENABLED=true`
+(sandbox), iFrame+3D Secure+"Ödeme Başarılı"+personel paneli+sepet temizleme — hepsi ekran
+görüntüleriyle kanıtlandı. Yol boyunca 2 yeni bug bulunup AYNI turda çözüldü: #110
+(`merchant_oid` UUID-tire format sorunu, 3 dosya: lib/paytr.ts + init/route.ts +
+callback/route.ts) ve #111 (`/odeme/basarili`+`/odeme/basarisiz` sayfaları hiç yoktu,
+404 + sepet temizlenmiyordu — 2 yeni sayfa oluşturuldu). Kalan: PayTR Canlı Mod geçişi
+(ayrı karar, başlanmadı). **#91 paralelde İLERLEMEDEN kaldı:** `middleware.ts` push'u
+GitHub'dan doğrudan teyit edildi, `middleware.test.ts` artık FİİLEN koşuldu (10/10 PASS,
+ekran görüntüsü) — ama `auth.ts`/`lib/auth/rate-limit.ts` push'u ZİP'ten bağımsız olarak
+DOĞRULANAMADI (.git yok), SEC-01 canlı testi kullanıcı kararıyla yine PayTR'a öncelik
+verilerek ERTELENDİ. 400 satır eşiği aşıldığı için 3 eski CURRENT FOCUS bloğu
+(#101-104/#107/#108/#109 anlatıları) arşive taşındı, eklenti dosyası HENÜZ üretilmedi
+(kullanıcı isterse ayrıca istemeli). Güncellenme: 2026-08-31.*
