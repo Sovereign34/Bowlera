@@ -592,4 +592,84 @@ DOĞRULANAMADI (.git yok), SEC-01 canlı testi kullanıcı kararıyla yine PayTR
 verilerek ERTELENDİ. 400 satır eşiği aşıldığı için 3 eski CURRENT FOCUS bloğu
 (#101-104/#107/#108/#109 anlatıları) arşive taşındı, eklenti dosyası HENÜZ üretilmedi
 (kullanıcı isterse ayrıca istemeli). Güncellenme: 2026-08-31.*
+----
+> ⚠️ Bu eklenti, kullanıcı tarafından mevcut `session_arşiv_2.md` dosyasının SONUNA elle
+> eklenmelidir. Taşıma tarihi: 2026-09-01 (28. sohbet, tek turda yapılan 2 taşımanın
+> birleştirilmiş hâli). Kapanış gerekçesi: SESSION_INDEX.md 415 satıra ulaştı (400 satır
+> eşiği aşıldı, CORE.md §7.1 Adım 1) — aşağıdaki 2 blok taşındı: (1) 26. sohbetin
+> "kullanıcı beyanıyla kapanan 3 iş" anlatısı (Açık Sorunlar #112/#113/#114'te zaten tam
+> özetli), (2) DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS (aynı "checkpoint onayı alınmadan
+> sohbet kesilmesi" temasının 4 art arda tekrarı — DOKUZUNCU/ONUNCU DERS bunlara zaten
+> "önceki 8 ders" diye atıfta bulunuyor). İkisi de bilgi kaybı olmadan taşındı.
+
+---
+
+## [26. sohbet, 2026-09-01] — Kullanıcı beyanıyla kapatılan 3 iş (kod bu sohbette görülmedi)
+
+> **[YENİ, bu turda (26. sohbet, 2026-09-01) — kullanıcı beyanıyla, KOD BU SOHBETTE
+> GÖRÜLMEDİ]** 3 iş kullanıcı tarafından "push edildi, canlıda sorunsuz" olarak bildirildi:
+> (1) Madde 4'ün statik kısmı (cayma hakkı istisna bilgilendirmesi, ödeme onayından önce) —
+> bkz. #112. Madde 4'ün ürün nitelikleri+toplam fiyat kısmı BİLİNÇLİ atlandı (`useCartStore.ts`/
+> `OrderSummary.tsx` görülmediği için) — hâlâ açık. (2) 5 dosya (İletişim, Şubeler, İptal ve
+> İade, Satış Sözleşmesi, Footer.tsx) güncellendi — bkz. #113. (3) `AboutStory.tsx` hikaye
+> metni yeniden yazıldı (somut sahne + 5 adımlı customizer'ı kanıt olarak kullanma + ölçülü
+> vizyon, uydurma kurucu/tarih bilgisi YOK) — bkz. #114. Kanıt seviyesi: ekran görüntüsü
+> YOK, sadece sözlü beyan — #101-104 ile aynı standart, bu nedenle üçü de ✅ ama "kullanıcı
+> beyanıyla" notuyla kapatıldı.
+
+---
+
+## DÖRDÜNCÜ DERS (2026-08-07, Session 11)
+
+⚠️ DÖRDÜNCÜ DERS (2026-08-07, Session 11): Session 10'un kapanış notunda "konuşma
+giriş/kayıt akışlarına geçti, içeriği sağlanmadı, bir sonraki güncellemede eklenecek"
+denmişti — ama o sohbet kapandığında SESSION_INDEX GÜNCELLENMEDEN kaldı. Kullanıcı,
+kapanan sohbetin tam metnini yeni bir sohbete taşıyarak bu güncellemeyi GERİYE DÖNÜK
+yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
+güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
+kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
+
+## BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI)
+
+⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
+`middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
+varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
+gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
+AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
+yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
+senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
+etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
+set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
+senkron, ama açıklayıcı yorum bloklarından biri geride kalmış — bkz. Açık Sorun #72).
+Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
+gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
+yapılıyor.
+
+## ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI)
+
+⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
+derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
+süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
+yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
+koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
+yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
+taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
+istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu (Bölüm 7.2) her büyük görev
+ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
+KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
+düşülmeli, sohbetin kesilme anını beklemeden.
+
+## YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI)
+
+⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
+masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası (`SummaryPanel.test.tsx`,
+`MobileSummaryDrawer.test.tsx`) düzeltildi, `npm run build` yerelde temiz koştu, kullanıcı
+3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi TAM DOSYA olarak
+üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT FOCUS bloğunun
+`session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem TAMAMLANMADAN sohbet
+kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak güncellemeyi GERİYE
+DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/dosya-üretimi
+"başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
+kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
+ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
 
