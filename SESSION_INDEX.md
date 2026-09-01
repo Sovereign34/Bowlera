@@ -17,6 +17,9 @@
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
 > tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+> ⚠️ **TAŞIMA NOTU (2026-09-01, 28. sohbet devamı):** 412 satırda (400 eşiği aşıldı), 1 eski
+> blok ("A seçeneği..." anlatısı, süperseded) `session_arşiv_2.md`'ye taşındı — eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-01-devam4.md` (kullanıcı elle eklemeli).
 > ⚠️ **TAŞIMA NOTU (2026-09-01, 27. sohbet):** 447 satıra ulaşınca (bkz. ONUNCU DERS/
 > SIRADAKİ GÖREVLER -9), 3 blok (CURRENT FOCUS #105+#91 anlatıları, footer v74/v75/v76)
 > TAM metinleriyle `session_arşiv_2.md`'ye taşındı — eklenti (`session_arsiv_2_EKLENTI_2026-09-01.md`)
@@ -115,14 +118,17 @@
 > (role-revocation canlı testi) + `auth.ts`/`lib/auth/rate-limit.ts` push doğrulaması
 > bekliyor, bkz. Açık Sorun #91.
 
-> **[YENİ, bu turda (28. sohbet, 2026-09-01)]** Kullanıcı önceki sohbette callback route'u
-> incelettirmiş, 4 ek güvenlik açığı bulunup düzeltilmiş, kullanıcı beyanıyla push edilmiş
-> (bkz. Açık Sorun #115). Bu sohbette tutar-uyuşmazlığı durumu için kullanıcı A seçeneğini
-> onayladı (yeni `paymentStatus="tutarsizlik"` değeri, migration GEREKMEDİ — kolon `text`,
-> CHECK constraint yok). `lib/db/schema.ts` + `app/api/payment/paytr/callback/route.ts`
-> güncellenip artifact olarak verildi. **KALAN:** bu 2. versiyonun push'u/deploy'u TEYİT
-> EDİLMEDİ — bir sonraki turda sorulmalı. Ayrıca kod incelemesinde `types/index.ts`'te
-> ödeme alanlarının hiç tiplenmediği bulundu, bilinçli olarak kapsam dışı bırakıldı (#116).
+> **[TAŞINDI, 2026-09-01, 28. sohbet devamı — 400 satır eşiği]** "A seçeneği onaylandı..." anlatı
+> bloğu `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam4.md`
+> (kullanıcı elle eklemeli). Süperseded — Açık Sorunlar #115a/#115b/#116'da hâlâ özetli.
+
+> **[YENİ, 28. sohbet devamı, 2026-09-01]** Kullanıcı #115'in deploy'unun yeşil olduğunu
+> bildirdi. DOKUZUNCU DERS uyarınca sorgulandı: deploy yeşili tip güvenliğini kanıtlar,
+> runtime davranışını (gerçek callback ile "tutarsizlik" tetiklenip DB'ye yazılması)
+> KANITLAMAZ — kullanıcı bunun HENÜZ test edilmediğini teyit etti. #115, #115a (deploy,
+> ✅) ve #115b (runtime, 🔴) olarak bölündü. Ayrıca guest-gate'e sandviç parity eklendi:
+> `guest-gate.ts`+`middleware.ts` (bağımlı tek birim) + 2 yeni test. Ağ erişimi yok, test
+> suite koşulamadı. **KALAN:** #115b doğrulaması + #117 (3 dosya push+build+canlı test).
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -147,6 +153,7 @@
 | 2026-09-01 (27. sohbet) | CURRENT FOCUS #105 (PayTR) tam anlatısı, CURRENT FOCUS #91 ara-durum notu, footer sürüm geçmişi v74/v75/v76 | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01.md`) | ✅ Açık Sorunlar #91/#105/#110/#111'de ve GENEL DURUM'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 | 2026-09-01 (28. sohbet) | 26. sohbetin "kullanıcı beyanıyla kapanan 3 iş" anlatı bloğu (#112/#113/#114) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam2.md`) | ✅ Açık Sorunlar #112/#113/#114'te özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 | 2026-09-01 (28. sohbet, 2. taşıma) | DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS (4 tekrar eden checkpoint-teması bloğu) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam3.md`) | ✅ Kural özeti SESSION_INDEX'te pointer olarak kaldı, TAM metinle taşındı, eklenti bu turda üretildi |
+| 2026-09-01 (28. sohbet devamı, 3. taşıma) | "A seçeneği onaylandı, kod verildi, push/deploy TEYİT EDİLMEDİ" anlatı bloğu (deploy o sırada teyit edilmemişti) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam4.md`) | ✅ Açık Sorunlar #115a/#115b/#116'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -202,8 +209,10 @@
 | 112 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, kod bu sohbette hiç görülmedi]** Madde 4 (cayma hakkı istisna bilgilendirmesi, statik metin) "Siparişi Onayla" öncesine eklendi, push edildi, canlıda sorunsuz çalıştığı kullanıcı tarafından bildirildi. **Hâlâ eksik (bilinçli bırakıldı):** Madde 4'ün ürün nitelikleri+toplam fiyat gösterimi kısmı — `useCartStore.ts`/`OrderSummary.tsx` görülmediği için atlandı, ayrı açık madde olarak kalmalı. | `app/siparis/page.tsx` (veya ilgili checkout bileşeni) |
 | 113 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, dosya içerikleri bu sohbette hiç görülmedi]** 5 dosya (İletişim, Şubeler, İptal ve İade, Satış Sözleşmesi, Footer.tsx) güncellendi (İptal-İade ve Satış Sözleşmesi'nde "hukuki düzeltmeler" olduğu belirtildi, içeriği görülmedi), push edildi, canlıda sorunsuz çalıştığı bildirildi. | `app/iletisim/page.tsx`, `app/subeler/page.tsx`, `app/iptal-ve-iade/page.tsx`, `app/satis-sozlesmesi/page.tsx`, `components/layout/Footer.tsx` |
 | 114 | ✅ | **[26. sohbette (2026-09-01), kullanıcı beyanıyla KAPANDI — ekran görüntülü kanıt YOK, dosya içeriği bu sohbette hiç görülmedi]** `AboutStory.tsx` hikaye metni Sweetgreen/Just Salad/Cava kalıbına göre yeniden yazıldı (somut sahne + 5 adımlı customizer'ı somut kanıt olarak kullanma + ölçülü vizyon), uydurma kurucu adı/kuruluş yılı EKLENMEDİ (CONTENT_GUIDE.md kuralına uyum), push edildi, canlıda sorunsuz olduğu bildirildi. | `components/about/AboutStory.tsx` |
-| 115 | 🟡 | **[YENİ, 28. sohbet, 2026-09-01 — #105'in kapsamını genişleten güvenlik bulgusu]** PayTR callback route'unda kod incelemesinde 4 ek açık bulundu: (1) sipariş DB'den hiç okunmuyordu/doğrulanmıyordu, (2) tutar doğrulaması SADECE loglanıyordu, zorunlu değildi, (3) `paymentProviderRef` şemada vardı ama callback hiç yazmıyordu, (4) idempotency/state machine yoktu — zaten "odendi" olan sipariş geç gelen bir callback'le "basarisiz"a düşebilirdi (init tarafındaki DOKUZUNCU DERS regresyonunun callback eşi). **İlk versiyon (bu 4 madde çözülmüş hâli) kullanıcı beyanıyla push edildi/deploy yeşil** (ekran görüntüsü YOK, #101-104 kanıt standardı). **BU TURDA (28. sohbet, kullanıcı onaylı A seçeneği):** tutar uyuşmazlığında sipariş artık "bekliyor"da asılı bırakılmıyor, yeni `paymentStatus="tutarsizlik"` değerine atomik olarak yazılıyor (migration GEREKMEDİ — kolon `text`, CHECK constraint yok). **KALAN:** bu 2. versiyonun (schema.ts yorum güncellemesi + callback'in tutarsizlik yazması) push'u/deploy'u HENÜZ TEYİT EDİLMEDİ. | `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts` |
+| 115a | ✅ | **[28. sohbet devamı, 2026-09-01 — KAPANDI]** PayTR callback route'unda kod incelemesinde bulunan 4 açık (sipariş okuma/doğrulama, zorunlu tutar doğrulaması, `paymentProviderRef` persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri (migration GEREKMEDİ) içeren 2. versiyon kullanıcı tarafından push edilip **deploy'un yeşil olduğu bildirildi**. Build/tip güvenliği kanıtlandı. | `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts` |
+| 115b | 🔴 | **[28. sohbet devamı, 2026-09-01 — YENİ, #115a'dan ayrıldı, DOKUZUNCU DERS uyarınca]** Deploy yeşil olması SADECE tip güvenliğini kanıtlar, çalışma-zamanı sözleşmesini KANITLAMAZ. Yeni `paymentStatus="tutarsizlik"` durumunun gerçek/sandbox bir PayTR callback isteğiyle fiilen tetiklenip DB'ye doğru yazıldığı kullanıcı tarafından teyit edilmedi (soruldu, kullanıcı "hayır, sadece deploy" dedi). #115 bu doğrulama yapılmadan TAM KAPANMAZ. | `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts` |
 | 116 | 🟢 | **[YENİ, 28. sohbet — kod incelemesinde bulundu, kapsam dışı bırakıldı]** `types/index.ts`'te `paymentMethod`/`paymentStatus`/`paymentProviderRef` hiç tiplenmemiş — `OrderHistoryEntry` tipinde bile yok. Şu an bu alanlar sadece `schema.ts` yorumunda ve callback route'ta ham string olarak yaşıyor, hiçbir yerde union ile sıkı kontrol edilmiyor. Personel panelinde de (`GelAlOrderCard.tsx` → `PickupApprovalEntry`) paymentStatus hiç render edilmiyor, bu yüzden "tutarsizlik" için görsel bir karşılık da yok. | `types/index.ts`, `components/personel/GelAlOrderCard.tsx` |
+| 117 | 🟠 | **[YENİ, 28. sohbet devamı, 2026-09-01]** Guest-gate parite: sandviç akışı (`/sandwich/customize`) kâse akışının aksine guest-gate middleware'i tarafından YAKALANMIYORDU. `lib/auth/guest-gate.ts` (`GATED_PATH_PREFIXES`) + `middleware.ts` (`config.matcher`) aynı turda güncellendi (birbirine bağımlı tek birim), `guest-gate.test.ts`'e 2 yeni test eklendi (guest→redirect, girişli→redirect yok). Kod artifact olarak verildi, ağ erişimi olmadığı için test suite bu ortamda koşulamadı. **KALAN:** 3 dosya repoya konulup Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği gözle doğrulanmalı. | `lib/auth/guest-gate.ts`, `middleware.ts`, `lib/auth/guest-gate.test.ts` |
 | 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
 | 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
@@ -296,10 +305,10 @@
 | Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. ✅ Vercel deploy YEŞİL. |
 | Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 hiç işlenmemiş. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı. ⚠️ `BOWLERA_COK_SUBELI_CRM_VIZYON.md` taslak, ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ. |
 | Test Suite | 🟢 33/33 PASS (SEC-01/SEC-02 kapsamı, Codespaces'te doğrulandı). Genel `npm test` (TÜM proje) hâlâ hiç çalıştırılmadı. |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Guest gate middleware KODLANDI. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI. **[BU TURDA]** SEC-02 (rate-limit) canlıda GERÇEK DENEMEYLE doğrulandı ✅. SEC-01 (role-revocation) canlı testi kullanıcı kararıyla ERTELENDİ — #91 hâlâ TAM kapanmadı, push bekliyor. |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Guest gate middleware KODLANDI. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI. SEC-02 (rate-limit) canlıda GERÇEK DENEMEYLE doğrulandı ✅. SEC-01 (role-revocation) canlı testi kullanıcı kararıyla ERTELENDİ — #91 hâlâ TAM kapanmadı, push bekliyor. **[28. sohbet devamı]** Guest-gate'e sandviç akışı için parite eklendi (kâse ile aynı korumayı alıyor) — kod verildi, push/canlı doğrulama BEKLİYOR (bkz. #117). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu workaround'lu — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **[26. sohbette, kullanıcı beyanıyla]** Madde 4'ün cayma hakkı istisna metni ödeme onayı öncesine eklendi (#112) — ürün+fiyat gösterimi kısmı hâlâ açık. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. **[28. sohbette]** Callback route güvenlik sertleştirmesi — 4 açık bulunup düzeltildi (sipariş okuma/doğrulama, tutar doğrulaması zorunlu, paymentProviderRef persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri eklendi (migration YOK). İlk versiyon push edildi (kullanıcı beyanı), 2. versiyon (tutarsizlik) push'u TEYİT EDİLMEDİ. Bkz. #115/#116. |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **[26. sohbette, kullanıcı beyanıyla]** Madde 4'ün cayma hakkı istisna metni ödeme onayı öncesine eklendi (#112) — ürün+fiyat gösterimi kısmı hâlâ açık. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. **[28. sohbette]** Callback route güvenlik sertleştirmesi — 4 açık bulunup düzeltildi (sipariş okuma/doğrulama, tutar doğrulaması zorunlu, paymentProviderRef persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri eklendi (migration YOK). İlk versiyon push edildi (kullanıcı beyanı). 2. versiyon (tutarsizlik) **deploy'u ✅ TEYİT EDİLDİ** (#115a KAPANDI) ama runtime davranışı (gerçek callback ile "tutarsizlik" durumunun tetiklenip DB'ye yazıldığı) HENÜZ doğrulanmadı (#115b 🔴 AÇIK). Bkz. #115a/#115b/#116. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations`, `order_history`, `users.role`, `registrationBlockedAttempts` migrate edildi ve DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). 5 tablo doğrulandı — `branches` veya menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı canlı build yeşil. 🟡 Gel Al onay kuyruğu 3-durumlu revizyon (KARAR A) kodlandı, 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (#86) build tarafı KAPANDI, test+canlı doğrulama BEKLİYOR. |
 | İçerik/Metin (yeni) | 🟢 **[26. sohbette, kullanıcı beyanıyla]** İletişim/Şubeler/İptal-İade/Satış Sözleşmesi/Footer güncellendi (#113), `AboutStory.tsx` yeniden yazıldı (#114). Kod bu sohbette görülmedi, sadece sözlü beyan. |
@@ -311,7 +320,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -10 | **[YENİ, 28. sohbet]** #115 — callback route'un tutarsizlik-yazan 2. versiyonu (`lib/db/schema.ts` + `app/api/payment/paytr/callback/route.ts`) repoya kopyalanıp push edilmeli, deploy yeşil teyit edilmeli. | 🔴 |
+| -10a | **[KAPANDI, 28. sohbet devamı]** #115a — callback route'un tutarsizlik-yazan 2. versiyonu (`lib/db/schema.ts` + `app/api/payment/paytr/callback/route.ts`) push edildi, deploy yeşil teyit edildi. | ✅ |
+| -10b | **[YENİ, 28. sohbet devamı]** #115b — "tutarsizlik" durumunun sandbox/gerçek bir PayTR callback isteğiyle fiilen tetiklenip DB'ye doğru yazıldığı henüz doğrulanmadı. Runtime davranış testi bekleniyor. | 🔴 |
+| -10c | **[YENİ, 28. sohbet devamı]** #117 — guest-gate parity (sandviç) 3 dosyası (`lib/auth/guest-gate.ts`, `middleware.ts`, `guest-gate.test.ts`) repoya konulmalı, Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği doğrulanmalı. | 🟠 |
 | -9 | **[TAMAMLANDI, 27. sohbet, 2026-09-01]** SESSION_INDEX.md 400 satır eşiğini aşmıştı (bkz. ONUNCU DERS) — 3 kapanmış/eski blok gerçek bir eklenti dosyası (`session_arsiv_2_EKLENTI_2026-09-01.md`) üretilerek `session_arşiv_2.md`'ye taşındı. **KALAN:** kullanıcı eklentiyi elle `session_arşiv_2.md`'nin sonuna eklemeli. | ✅ |
 | -8b | **[YENİ, 26. sohbet]** #112'nin bilinçli atlanan kısmı: Madde 4'ün ürün nitelikleri+toplam fiyat gösterimi — `useCartStore.ts`/`OrderSummary.tsx` paylaşılmalı. | 🟡 |
 | -7 | **[YENİ, 23. sohbet]** #100 — 4 UI düzeltmesi (Hero grid, SandwichSummaryPanel test-verisi rozeti, HeroImagePlaceholder mobil taşma, SandwichCustomizer yönlendirme) — push/canlı test HÂLÂ TEYİT EDİLMEDİ. #101-104'ten AYRI, bu turda ele alınmadı. | 🟡 |
@@ -383,3 +394,7 @@ eklemeli). 415→381 satır. Güncellenme: 2026-09-01.*
 *v74/v75/v76 — TAŞINDI (2026-09-01): eski sürüm kayıtları `session_arşiv_2.md`'ye taşındı
 (eklenti: `session_arsiv_2_EKLENTI_2026-09-01.md`, kullanıcı elle eklemeli). İçerdikleri
 kararlar/bulgular Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da hâlâ güncel duruyor.*
+*v80 (v79'dan: **[28. sohbet devamı]** #115 deploy'u yeşil, ama DOKUZUNCU DERS uyarınca runtime
+doğrulanmadan kapanmadı — #115a (✅)/#115b (🔴) bölündü. Yeni #117 (guest-gate parity) açıldı.
+412 satırda 1 eski blok arşive taşındı (eklenti: `..._EKLENTI_2026-09-01-devam4.md`). GENEL
+DURUM güncellendi. Güncellenme: 2026-09-01.*
