@@ -1010,4 +1010,65 @@ doğrulaması, onaylanırsa Adım 3 (API route "refund" action, staff-guard).
 tamamlandı — `route.ts`+`route.test.ts` verildi, kullanıcı Codespaces'te tüm testleri
 koşturdu (Adım1 7/7, Adım2 1 FAIL→düzeltme→7/7, Adım3 5/5, regresyon 13/13), build YEŞİL.
 Güncel durum SESSION_INDEX.md Açık Sorun #118'de özetlidir.
+-------
+# EKLENTİ — 2026-09-01 (YENİ sohbet, #118 Adım 4 turu)
+> Bu dosya `session_arşiv_2.md`'nin SONUNA kullanıcı tarafından elle eklenmelidir.
+> Kaynak: SESSION_INDEX.md'nin 17-19. taşımaları (400 satır eşiği aşıldığı için).
+
+---
+
+## BLOK 1 — CURRENT FOCUS: #118 Adım 3 anlatısı (Adım 4 tamamlandığı için arşivlendi)
+
+**[YENİ, bu turda, 2026-09-01]** #118 Adım 3: `app/api/personel/orders/[id]/refund/route.ts`
+(POST, `requireStaffSession()` ile route-içi defense-in-depth + middleware'in zaten
+koruduğu `/api/personel/*` deseni) ve `route.test.ts` (5 test: guard×2, happy×1, failure×2)
+kod olarak verildi. Kullanıcı Codespaces'te tüm #118 testlerini + build'i koşturdu:
+Adım 1 `paytr.test.ts` 7/7 ✅, Adım 2 `refund-order.test.ts` İLK ÖNCE 1 FAIL (KRİTİK-durum
+mesajında "kayıt" vs gerçek koddaki "kaydı" — regex uyuşmazlığı, ÜRETİM KODU DOĞRU, sadece
+test assertion'ı düzeltildi) → düzeltme sonrası 7/7 ✅, Adım 3 `route.test.ts` 5/5 ✅,
+regresyon `gel-al-queries.test.ts` 13/13 ✅ (dokunulmadı, bozulmadı). `npm run build`
+YEŞİL. **KALAN:** push+Vercel deploy, sandbox'ta staff hesabıyla gerçek "İade Et" denemesi
+(DOKUZUNCU DERS — build/test yeşili runtime sözleşmesini kanıtlamaz), sonra Adım 4
+(`GelAlOrderCard.tsx`'e "İade Et" butonu, henüz BAŞLANMADI).
+
+---
+
+## BLOK 2 — ONUNCU DERS'in "İKİNCİ hata" anlatısı (v77 footer'ıyla örtüşüyordu)
+
+⚠️ ONUNCU DERS (2026-08-31/09-01, bu sohbet — SEKİZ DERSLE AYNI AİLE, farklı tetikleyici,
+AYRICA bu sohbette İKİNCİ bir hata: kendi kendine tekrar): Kullanıcı bu sohbette 3 iş
+bildirdi (Madde 4 cayma hakkı metni, 5 sayfa/Footer güncellemesi, AboutStory.tsx yeniden
+yazımı) — bu sohbette gerçek kod/diff HİÇ paylaşılmadı (ilk paylaşımda kod bloğu boş
+geldi), sadece anlatı/özet geldi. Kullanıcı "push edildi, sorunsuz çalışıyor" diye beyan
+etti; ajan bunu #112/#113/#114 olarak "kullanıcı beyanıyla" notuyla KAPALI işaretledi —
+bu kısım doğruydu (#101-104/DOKUZUNCU DERS standardıyla tutarlı). AMA SESSION_INDEX'i
+TAM DOSYA olarak yeniden üretirken, dosyanın "asla eldeki içerik arşivlenmeden
+silinmez" kuralına rağmen CURRENT FOCUS'taki #105 detaylı anlatı bloğu VE bir TAŞIMA NOTU
+gerçek bir arşiv taşıması yapılmadan İÇERİKTEN ÇIKARILDI — sonuç 405 satırlık dosyadan
+389 satırlık bir dosya (kayıp, eklemeye rağmen). Kullanıcı satır sayısını sorana kadar
+bu fark edilmedi. Kural pekiştirdi: "TAM DOSYA güncelleme" demek "gördüğüm anlık içeriği
+yeniden yaz" demek değildir — mevcut TÜM içerik korunmalı, sadece 400 satır eşiği fiilen
+aşıldığında VE gerçek bir eklenti dosyası üretilip kullanıcıya verildiğinde bir blok
+arşive taşınabilir. Aksi hâlde en ufak "kısaltma" bile veri kaybıdır.
+
+---
+
+## BLOK 3 — Footer: v77 sürüm kaydı (TAM metin)
+
+*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[26. sohbet, 2026-09-01]** Kullanıcı bu sohbette
+3 iş bildirdi (Madde 4 cayma hakkı statik metni, 5 sayfa+Footer güncellemesi, AboutStory.tsx
+yeniden yazımı) — bu sohbette gerçek kod/diff HİÇ görülmedi, kullanıcı "push edildi, canlıda
+sorunsuz" diye beyan etti. #112/#113/#114 olarak "kullanıcı beyanıyla, ekran görüntüsü YOK"
+notuyla KAPALI işaretlendi (#101-104/DOKUZUNCU DERS standardıyla tutarlı). ⚠️ AYRI VE CİDDİ
+HATA (ONUNCU DERS): dosya TAM DOSYA olarak yeniden üretilirken CURRENT FOCUS'taki #105 detaylı
+anlatısı ve bir TAŞIMA NOTU gerçek arşivleme yapılmadan içerikten düştü (405→389 satır) —
+kullanıcı satır sayısını sorunca fark edildi, bu turda TAM olarak geri yüklendi. Şimdi dosya
+gerçekten 400 satır eşiğini aşıyor, bir sonraki sohbette GERÇEK bir arşiv eklentisiyle
+taşıma yapılmalı (bkz. SIRADAKİ GÖREVLER -9). Güncellenme: 2026-09-01.*
+
+---
+*Kapanış gerekçesi: Bloklar 1 ve 3, Adım 4 (bu sohbet) tamamlanması / süperseded olmasıyla
+güncelliğini yitirdi; Blok 2, dosyada zaten Blok 3 ile içerik olarak örtüşüyordu (dedup).
+Üçünün özeti sırasıyla Açık Sorun #118, Açık Sorunlar #112/#113/#114, ve ONUNCU DERS başlığı
+altında SESSION_INDEX.md'de hâlâ duruyor.*
 
