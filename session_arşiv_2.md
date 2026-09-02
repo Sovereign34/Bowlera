@@ -1072,3 +1072,53 @@ güncelliğini yitirdi; Blok 2, dosyada zaten Blok 3 ile içerik olarak örtüş
 Üçünün özeti sırasıyla Açık Sorun #118, Açık Sorunlar #112/#113/#114, ve ONUNCU DERS başlığı
 altında SESSION_INDEX.md'de hâlâ duruyor.*
 
+-----
+## EKLENTİ — 2026-09-01 (YENİ sohbet, 9. devam)
+> `session_arşiv_2.md` dosyasının SONUNA elle eklenmelidir. Bu, SESSION_INDEX.md'nin
+> 400 satır eşiğini aşması üzerine taşınan içeriktir (Açık Sorun #116 kapanışı sonrası).
+
+### Kritik Kararlar — Session 7/11/12 dönemine ait 6 stabil karar (TAM metin)
+
+- **[Session 7]** Alerjen gösterimi: kalori/protein ile aynı zorunluluk statüsü — ✅ (#7 ve #44 kapandı)
+- **[Session 7]** `consentRegistrations` tablosu, `users`'tan AYRI — ✅ Kod+şema+test tamam, migration canlıda ÇALIŞTIRILDI.
+- **[Session 7]** `RegistrationChannel` tipi (`masaya-siparis`|`gel-al`|`online-platform`), `FulfillmentChannel`'DAN AYRI — ✅ Kod+şema+test tamam.
+- **[Session 12 devamı, #68 KAPANDI — ARCHITECTURE.md v1.9]** `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI (`FulfillmentChannel`'a taşınmadı). `20260808000000_registration_channel_masaya_siparis_cikarildi.md` — ✅ `types/index.ts` düzenlendi, migration gerekmedi (DB sütunu enum değil).
+- **[önceki tur — `users.role` MIGRATION KOŞULDU]** `lib/db/schema.ts`'e `role` sütunu eklendi (`text`, `NOT NULL`, `DEFAULT 'customer'`), kullanıcı GitHub'a manuel kaydetti. `ALTER TABLE` Neon SQL Editor'de koşuldu, `role text` sütunu Tables görünümünde DOĞRULANDI. `users` tablosu 0 satır (Twilio #32 kısıtı) — regresyon test edilemedi ama risk de fiilen yok. — ✅ DB tarafı TAMAM.
+- **[önceki tur — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. — ✅ Kod TAMAM, canlı build YEŞİL.
+
+Kapanış gerekçesi: hepsi ✅ uygulanmış/karara bağlanmış, aylardır stabil, aktif tartışma konusu değil.
+
+---
+
+### Açık Sorunlar — #112-114, #115a, #116 (TAM anlatı)
+
+**#112-114** — **[26. sohbette KULLANICI BEYANIYLA kapandı]** Madde 4 cayma hakkı metni (ürün+fiyat kısmı hâlâ açık, ayrı bırakıldı), 5 sayfa+Footer güncellemesi, `AboutStory.tsx` yeniden yazımı — ekran görüntüsü YOK, kod bu sohbette hiç görülmedi. Etkilenen dosyalar: `app/siparis/page.tsx`, `app/iletisim/page.tsx`, `app/subeler/page.tsx`, `app/iptal-ve-iade/page.tsx`, `app/satis-sozlesmesi/page.tsx`, `components/layout/Footer.tsx`, `components/about/AboutStory.tsx`.
+
+**#115a** — **[28. sohbet devamı, 2026-09-01 — KAPANDI]** PayTR callback route'unda kod incelemesinde bulunan 4 açık (sipariş okuma/doğrulama, zorunlu tutar doğrulaması, `paymentProviderRef` persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri (migration GEREKMEDİ) içeren 2. versiyon kullanıcı tarafından push edilip deploy'un yeşil olduğu bildirildi. Build/tip güvenliği kanıtlandı. Etkilenen dosyalar: `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts`.
+
+**#116** — **[YENİ sohbet, 2026-09-01 — KAPANDI, CANLIDA DOĞRULANDI]** `types/index.ts`'e literal union `PickupOrderPaymentMethod`/`PickupOrderPaymentStatus` + `PickupApprovalEntry.paymentMethod`/`paymentStatus` eklendi (varsayım: `schema.ts` görülmeden `gel-al-queries.ts`/paytr callback yorumlarındaki string'lerden çıkarıldı — teyit edilmedi). `gel-al-queries.ts`'in `fetchPickupOrdersByStatus` select'ine iki alan eklendi (önceden SADECE `WHERE`'de kullanılıyordu, `SELECT`'e hiç alınmamıştı). `GelAlOrderCard.tsx`'e saf `getPaymentBadge()` + rozet eklendi ("tutarsizlik" uyarı kırmızısı, diğerleri nötr olive — bronz `#816E44` küçük metinde kullanılmadı, CORE.md §9 uyumlu). Kullanıcı 4 ekran görüntüsüyle CANLIDA uçtan uca doğruladı: online sipariş "Onay Bekleyen"de "Online — Ödendi" ✅, aynı sipariş "Hazırlanıyor"a geçince rozet doğru kaldı ✅, yeni nakit sipariş "Nakit" rozetiyle doğru ✅, #118 İade Et sonrası rozet CANLIDA otomatik "Online — İade Edildi"ye güncellendi ✅ (bu #118 Adım 4'ün iade zincirini de bir kez daha doğruladı). Build hatası (cast + eksik `"basarisiz"` union üyesi) bu turda düzeltildi. KALAN (bilinçli kapsam dışı, ayrı konu): (a) union değerleri `schema.ts` ile teyit edilmedi, (b) nakit siparişlerde "İade Et" butonunun gizlenmesi/etiketlenmesi kararı AYRI ve HÂLÂ bekliyor (Açık Sorun #118), (c) test seti yazılmadı. Etkilenen dosyalar: `types/index.ts`, `lib/personel/gel-al-queries.ts`, `components/personel/GelAlOrderCard.tsx`.
+
+---
+
+### DOKUZUNCU DERS (TAM anlatı)
+
+⚠️ DOKUZUNCU DERS (2026-08-30, 23. sohbet devamı — YENİ TÜR HATA, ÖNCEKİ 8 DERSTEN FARKLI):
+`app/api/orders/gel-al/route.ts`'e `paymentMethod` ZORUNLU alanı eklendi (#105 kapsamında), ama aynı turda bu route'u çağıran TEK client (`ConfirmPickupOrderButton.tsx`) GÜNCELLENMEDİ — o dosya görülmeden, sadece route.ts'in header yorumundaki "Bağlı" listesinden ismi biliniyordu. Kullanıcı push edip build'in yeşil olduğunu doğruladı (TypeScript/derleme HATASIZ, çünkü sorun çalışma-zamanı validasyonundaydı, tip hatası değildi) — ama CANLIDA TÜM Gel Al siparişleri "Geçersiz veya eksik ödeme yöntemi" hatasıyla BLOKE OLDU. Kullanıcı ekran görüntüsüyle bildirdi, aynı turda `ConfirmPickupOrderButton.tsx` düzeltilip (ödeme yöntemi seçimi eklendi, "nakit" varsayılan) push edildi, kullanıcı canlıda tekrar sipariş deneyip başarılı olduğunu bildirdi (sözlü beyan, ekran görüntüsü YOK — #101-104 ile aynı kanıt seviyesi). **Kural:** bir API route'a ZORUNLU yeni bir alan eklenirken, o route'u çağıran TÜM client kod(lar)ı GÖRÜLMEDEN/GÜNCELLENMEDEN aynı turda push edilmemeli — "build yeşil" SADECE tip güvenliğini kanıtlar, çalışma-zamanı sözleşme (contract) uyumunu KANITLAMAZ. Zorunlu alan eklerken ya (a) tüm çağıran dosyalar önceden istenip aynı pakette güncellenmeli, ya da (b) geçici bir süre alan OPSİYONEL bırakılıp sunucu tarafında güvenli bir varsayımla (`?? "nakit"`) doldurulmalı, zorunluluk sonradan eklenmeli. Bu, önceki 8 dersten (hepsi "checkpoint/onay alınmadan sohbet kesilmesi" temalıydı) FARKLI bir hata sınıfı: bu sefer sohbet kesilmedi, PLANLAMA hatası oldu.
+
+---
+
+### CURRENT FOCUS — eski turn-by-turn pointer paragrafları (TAM metin, Arşiv Taşıma Kaydı tablosuyla çakışıyordu)
+
+> **[TAŞINDI — çeşitli tarihler, bkz. Arşiv Taşıma Kaydı tablosu]** 17-24. sohbetlere ait turn-by-turn anlatı blokları (toplam 5 taşıma) `session_arşiv_2.md`'ye taşındı — hepsi Açık Sorunlar #90/#91/#95-#109'da ve Kritik Kararlar'da zaten tam özetli.
+
+> **[TAŞINDI, 2026-09-01, 28. sohbet]** 26. sohbetin "kullanıcı beyanıyla kapanan 3 iş" anlatı bloğu (#112/#113/#114) `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam2.md` (kullanıcı elle eklemeli). Özet: Madde 4 statik metni + 5 sayfa/Footer güncellemesi + AboutStory.tsx yeniden yazımı, üçü de kullanıcı beyanıyla ✅ kapalı (ekran görüntüsü YOK) — Açık Sorunlar #112/#113/#114'te hâlâ özetli.
+
+> **[TAŞINDI, 2026-09-01, 27. sohbet]** #105 (PayTR) tam anlatısı ve #91 ara-durum notu (25. sohbet) `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01.md` (kullanıcı elle eklemeli). Özet: #105 UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅ (Açık Sorun #105/#110/#111, Kritik Kararlar, GENEL DURUM'da özetli). #91 hâlâ 🔴 AÇIK — SEC-01 (role-revocation canlı testi) + `auth.ts`/`lib/auth/rate-limit.ts` push doğrulaması bekliyor, bkz. Açık Sorun #91.
+
+> **[TAŞINDI, 2026-09-01, 28. sohbet devamı — 400 satır eşiği]** "A seçeneği onaylandı..." anlatı bloğu `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam4.md` (kullanıcı elle eklemeli). Süperseded — Açık Sorunlar #115a/#115b/#116'da hâlâ özetli.
+
+> **[TAŞINDI, 2026-09-01, bu sohbet]** #118 Adım 1'in CURRENT FOCUS anlatısı — Adım 2 tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md` (kullanıcı elle eklemeli).
+
+> **[TAŞINDI, 2026-09-01, bu sohbet]** #118 Adım 2'nin CURRENT FOCUS anlatısı — Adım 3 tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md` (kullanıcı elle eklemeli).
+
+> **[TAŞINDI, 2026-09-01, YENİ sohbet]** #118 Adım 3'ün CURRENT FOCUS anlatısı — Adım 4 tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md` (kullanıcı elle eklemeli).
