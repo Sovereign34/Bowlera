@@ -52,7 +52,8 @@ entegre edilir, ayrı bir adım açılmaz:
 "Double Main" ayrı bir mekanizma değildir — 2. adımdaki mevcut çift
 porsiyon seçeneği (`mainPortion: 'double'`) bu işlevi zaten karşılar,
 aynı davranış iki yerde tanımlanmaz (AGENT.md Kural #5 Bağımlılık
-Disiplini).
+Disiplini). Fiyat/kalori/protein/karbon/yağ üzerindeki etkisi (TAM 2x)
+§4'te tanımlıdır (🆕 v1.3, önceden bu kural hiç yazılmamıştı).
 
 > Garden ve Finish adımları opsiyonel olabilir ama **adımların kendisi
 > atlanamaz** — kullanıcı "hiçbir şey istemiyorum" diyerek sonraki adıma
@@ -255,6 +256,15 @@ içindeki portion değişikliği varyantı etkilemez.
 
 > Kaynak: MASTER_PLAN §5.5 — kalori bilgisi zorunlu, opsiyonel değil.
 
+> 🆕 **KARAR (BU TURDA — kök neden düzeltmesi, canlı ekran görüntüsüyle bildirildi):**
+> Bu bölüm ÖNCEDEN `mainPortion`'ın fiyat/kaloriye nasıl yansıyacağını HİÇ tanımlamıyordu
+> — §2'de "Main: Tekli/çift porsiyon" yazıyordu ama Double seçilince ne olacağı boştu,
+> kod da (`lib/customizer-pricing.ts`) bu yüzden `mainPortion`'ı hiç okumuyordu. Karar:
+> **Double seçiliyken Main'in price/calories/protein/carbs/fat'ı TAM 2x hesaplanır.**
+> Gerekçe: fiziksel olarak 2 katı porsiyon, gerçek maliyet/besin değerine orantılı
+> yansımalı. Diğer bileşenler (base/flavor/garden/finish/extras) `mainPortion`'dan
+> ETKİLENMEZ.
+
 ```ts
 // getTotals() — her seçim değişikliğinde SummaryPanel tarafından okunur
 
@@ -266,9 +276,21 @@ function getTotals(selections: CustomizerSelection): Totals {
   // seçili mainVariant'tan okunur; tanımsızsa (diğer 6 Main) eski davranış
   // aynen sürer (main objesinin kendi price/calories/protein alanları).
   const mainDef = menuData.mains.find(m => m.id === selections.main)
-  const main = mainDef?.variants
+  const resolvedMain = mainDef?.variants
     ? mainDef.variants.find(v => v.id === selections.mainVariant) ?? mainDef.variants[0]
     : mainDef
+
+  // 🆕 BU TURDA — Double porsiyon çarpanı. "single" → 1 (davranış değişmez),
+  // "double" → main'in price/calories/protein/carbs/fat'ının TAMAMI 2x.
+  const portionMultiplier = selections.mainPortion === 'double' ? 2 : 1
+  const main = resolvedMain && {
+    ...resolvedMain,
+    price: resolvedMain.price * portionMultiplier,
+    calories: resolvedMain.calories * portionMultiplier,
+    protein: resolvedMain.protein * portionMultiplier,
+    carbs: resolvedMain.carbs * portionMultiplier,
+    fat: resolvedMain.fat * portionMultiplier,
+  }
 
   const gardenItems = selections.garden.map(id => menuData.gardenItems.find(g => g.id === id))
 
@@ -439,12 +461,17 @@ const handleAddToCart = () => {
 [ ] Sepete ekleme race condition korumalı mı? → BSC-6 uygulandı mı? (§7)
 [ ] mainVariant null kalabiliyor mu?          → 🆕 v1.2: nextStep() otomatik atama yapıyor mu? (§3.4)
 [ ] Signature Flavor filtresi diğer Main'leri bozuyor mu? → 🆕 v1.2: compatibleFlavorIds sadece plant-based-protein'de mi devrede? (§2.1)
+[ ] Double porsiyon fiyata/kaloriye yansıyor mu? → 🆕 v1.3: mainPortion==='double' iken main'in TÜM alanları 2x mi hesaplanıyor? (§4)
 ```
 
 ---
 
-*BOWLERA CUSTOMIZER_SPEC.md — v1.2 — Oturum 4 — 2026-07-21*
+*BOWLERA CUSTOMIZER_SPEC.md — v1.3 — 2026-09-02*
 *Kaynak: MASTER_PLAN.md v2.1 §3.3, §5.2, §5.4, §5.5 · ARCHITECTURE.md §2.4 · AGENT.md (BSC-6)*
 *Değişiklik geçmişi: v1.0 (Session 1) → v1.1 (Oturum 2, 4 adımdan 5 adıma geçiş) →
 v1.2 (Oturum 4, Bitkisel Protein alt-varyant mekanizması + Signature Flavor filtreleme,
-Karar #11 / Açık Sorun #22 kapanışı, bkz. SESSION_INDEX.md)*
+Karar #11 / Açık Sorun #22 kapanışı, bkz. SESSION_INDEX.md) →
+v1.3 (bu turda, kök neden düzeltmesi — §4'e Double porsiyon fiyat/kalori çarpanı kuralı
+eklendi: bu bölüm ÖNCEDEN mainPortion'ın etkisini hiç tanımlamıyordu, kod da bu yüzden
+onu okumuyordu; KARAR: Double iken main'in price/calories/protein/carbs/fat'ı TAM 2x,
+canlı ekran görüntüsüyle bildirilip kullanıcı onayıyla netleştirildi)*
