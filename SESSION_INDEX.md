@@ -98,48 +98,13 @@
 > Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
 > tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
 >
-> **[YENİ, bu turda (19. sohbet, 2026-08-15) — YAN KEŞİF, #91'İN ÖNÜNE GEÇMEDİ]** Kullanıcı
-> paylaştığı bir dijital pazarlama/CRM strateji belgesini (3 markalı bir başka işletme için
-> yazılmış) Bowlera'nın gerçek Neon şemasıyla (5 tablo doğrulandı: `users`,
-> `consent_registrations`, `order_history`, `password_reset_requests`,
-> `registration_blocked_attempts`) karşılaştırdı. Kullanıcı vizyonu netleşti: (a) Bowlera
-> "herhangi an" 2./3. şubeye açılabilir — şema bunun için ŞİMDİDEN geriye dönüşsüz olmayacak
-> şekilde kurulmalı; (b) farklı şubelerde menü farklılığı olabilir; (c) bu CRM/veri yapısı
-> Bowlera'ya özel değil, ileride birçok modül/uygulamanın oturacağı TEMEL İSKELET (PUSULA OS
-> vizyonuyla örtüşüyor). Bulgular + önerilen yön `BOWLERA_COK_SUBELI_CRM_VIZYON.md` adlı ayrı
-> bir taslak belgede toplandı (ARCHITECTURE.md'nin YERİNE geçmiyor, henüz ona işlenmedi) ve
-> KULLANICI TALEBİYLE 3 yeni Açık Sorun (#92/#93/#94) olarak aşağıya loglandı — kod ÜRETİLMEDİ,
-> sadece analiz + öneri. **Sıradaki adım kullanıcı kararıyla netleşti: önce #91'in canlı
-> doğrulaması yapılacak, #92/#93/#94 SONRA ele alınacak.**
-
-> **[YENİ, bu turda (20. sohbet, 2026-08-23) — SANDWICH_SPEC.md v1.0 ÜRETİLDİ, KOD YOK]**
-> Kullanıcı "Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole bir
-> kopyasının çıkarılmasını istedi (Seçenek A — paralel/bağımsız motor, bowl akışına
-> dokunmaz, kullanıcı onayladı). Subway + Jersey Mike's global sandviç zinciri UX'i
-> web'den araştırıldı, sentezlendi: Subway'in gerçek sırasına sadık 6 adım (Size→Bread→
-> Protein→Cheese→Veggies→Sauce&Toast&Extras — ilk önerilen "Bread-first" sıra kullanıcı
-> tarafından REDDEDİLDİ, Subway'in protein/size-first gerçeğine düzeltildi). Kullanıcının
-> "operasyonu da düşün" uyarısı üzerine **UX seçim sırası ile fiziksel hazırlık sırasının
-> AYRI tutulması** kararlaştırıldı — yeni `getPrepOrder()` fonksiyonu (Personel Sipariş
-> Paneli #62 ticket render'ı için, `selections` state'ini DEĞİŞTİRMEDEN mutfak sırasına
-> göre yeniden düzenler: Bread→Protein+Cheese→Toast→Veggies→Sauce). Toast, şube-config'e
-> bağlı opsiyonel özellik olarak tasarlandı (çok şubeli mimariyle #92/#93/#94 bağlantılı,
-> henüz kararlaştırılmadı). `SANDWICH_SPEC.md` dosyası kullanıcıya artifact olarak verildi,
-> CORE.md Bölüm 3 (Tetikleyici Tablosu) + Bölüm 4 (Dosya Haritası) AYNI TURDA güncellendi
-> (v1.5) — yeni referans dosyası eklenince CORE.md senkron kalmalı kuralı uygulandı.
-> **Durum: SADECE yapısal iskelet onaylandı, kod ÜRETİLMEDİ.** 6 açık soru (S1: gerçek
-> `sandwich-data.json` verisi, S2: Veggies ücretsiz kota sayısı, S3: `extras.doubleProtein`
-> vs `proteinPortion:'double'` çakışması, S4: Toast sabit mi/config'e mi bağlı, S5: "Mike's
-> Way" preset içeriği, S6: `useCartStore.customization` union tipi genişletmesi — AYRI onay
-> gerektiren TEK bowl-dokunuşu) kod aşamasından ÖNCE netleşmeli (Kural #2 — eksik veriyle
-> çözüm üretilmez). AGENT.md'ye bu turda HENÜZ işlenmedi (sadece CORE.md güncellendi,
-> kullanıcı talebi bu kapsamdaydı).
-> **[DÜZELTME, aynı sohbet devamı]** Kullanıcı adım sırasını sorguladı — "Ekmek seçimi en
-> başta olacak değil mi?" SANDWICH_SPEC.md v1.0'daki "Subway'e sadık Size→Bread" iddiası
-> YANLIŞ çıktı (gerçek Subway sırası protein-first'tür, ilk araştırmada bu netleştirilmemişti).
-> Kullanıcı onayıyla **Bread-first**'e düzeltildi: **Bread→Size→Protein→Cheese→Veggies→
-> Sauce&Toast&Extras** (SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon
-> referansı v1.0→v1.1'e güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
+> **[TAŞINDI — 2026-09-03, 400 satır eşiği üçüncü kez aşıldı]** 19. sohbet (CRM/çok-şubeli
+> vizyon keşfi), 20. sohbet (SANDWICH_SPEC.md v1.0/v1.1 üretimi) ve 22. sohbet (sandviç UI
+> düzeltmeleri + checkout blokajı keşfi, geriye dönük işlendi) blokları `session_arşiv_2.md`'ye
+> taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`). Kapanış gerekçesi: üçü de Açık
+> Sorunlar #92/#93/#94 (19. sohbet), #95 (20. sohbet, S1/S2/S5 hâlâ bekliyor), #99-#104 (22.
+> sohbet) ve Kritik Kararlar tablosunda zaten tam özetli — aktif takip için gerekli değil,
+> sadece turn-by-turn anlatı taşındı.
 > **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
 > bloğu (build hatası düzeltmesi, `sandwich-data.json` TEST VERİSİ üretimi, `Hero.tsx` CTA
 > değişikliği, 6 adım bileşeni + eksik `page.tsx` kodlanması, 7 test dosyası/27 test PASS)
@@ -147,51 +112,42 @@
 > Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
 > için gerekli değil, sadece turn-by-turn anlatı taşındı.
 
-> ⚠️ **GERİYE DÖNÜK İŞLENDİ (2026-08-23, 22. sohbet — DÖRDÜNCÜ-SEKİZİNCİ DERS'in TEKRARI):**
-> Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
-> checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi
-> "kod var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
->
-> **Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana
-> durmuyordu; (2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu
-> (sepete/checkout'a gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
->
-> **İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
-> `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil
-> taşma düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e
-> yönlendiriyor; **paylaşılan** `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u
-> "Özel Sandviç" gösterecek şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi,
-> DOĞRULANMADI — risk MEDIUM); `OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
->
-> **ÇÖZÜLEMEDEN KALAN, KRİTİK:** Sandviçte fiyat ne olursa olsun "Siparişi Onayla"da kırmızı
-> "fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR. Şüphe (doğrulanmadı):
-> `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un `bowlItem`/
-> `customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan
-> `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi, YANIT
-> GELMEDEN kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
->
-> **Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
-> değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
-
-> **[YENİ, 2026-09-03, 23. sohbet — MOTION SYSTEM başladı, #99/#91'DEN AYRI, kullanıcı
-> kararıyla]** Kullanıcı "BOWLERA — PREMIUM MOTION SYSTEM" raporunu (Framer Motion mimari
-> yükseltmesi, 11 adımlık P0-P3 sırası) verdi. Kullanıcıya #99 (🔴 sandviç checkout blokajı)
-> ve #91 (🔴 güvenlik canlı doğrulaması) önerildi, kullanıcı BİLİNÇLİ olarak motion işini
-> paralel yürütmeyi seçti — bu iki blokaj ERTELENMEDİ, sadece bu turun kapsamı dışında.
-> **Bu turda yapılan:** (1) `lib/motion/tokens.ts` (YENİ dosya) — DESIGN_SYSTEM.md §6.1'deki
-> 7 mevcut süre + `easeOut`/`easeInOut`/`linear` isimlendirildi; `springs.tactile`/
-> `springs.badge`/`springs.drawer` ve `drawerContentStagger` DESIGN_SYSTEM.md'de karşılığı
-> OLMAYAN varsayımlar olarak açıkça işaretlendi. (2) `CartDrawer.tsx` motion yükseltmesi —
-> `if (!isOpen) return null` kaldırıldı, `AnimatePresence`+backdrop fade+panel spring slide+
-> içerik stagger eklendi, `useReducedMotion` ile DESIGN_SYSTEM.md §6.2 kuralına uyuldu. Bu
-> dosya AYRICA #101'i (22. sohbet, "Özel Sandviç" fallback, DOĞRULANMAMIŞ risk MEDIUM) İÇERİYOR
-> ve bu turda YENİDEN yazıldı. (3) `CartDrawer.test.tsx` (YENİ, 8 test — happy/edge/failure)
-> yazıldı, kullanıcı Codespaces'te ÇALIŞTIRDI: **8/8 PASS** (2026-09-03 06:16, ekran görüntüsü
-> ile doğrulandı). **KALAN:** GitHub'a push edilmedi, canlı/production'da GÖZLE doğrulanmadı
-> (ÜÇÜNCÜ DERS); DESIGN_SYSTEM.md §6.1'e CartDrawer satırı ve yeni spring/stagger değerleri
-> HENÜZ İŞLENMEDİ (onay bekliyor); CORE.md Dosya Haritası'na `lib/motion/tokens.ts` ve
-> `CartDrawer.test.tsx` HENÜZ EKLENMEDİ — bkz. Açık Sorun #105. Sıradaki adım (rapor P0-2):
-> MenuCard (lift + image zoom).
+> **[YENİ, 2026-09-03, 23. sohbet devamı — MOTION SYSTEM, MOBİL TACTILE DÜZELTMESİ]**
+> Rapor P0-1 (CartDrawer) önceki turda TAMAMLANDI (bkz. #105). Bu turda P0-2 (MenuCard)
+> başladı ve canlı doğrulamada kritik bir bulgu çıktı: **rapor (v1.0) baştan sona
+> `whileHover` üzerine kurulu, ama Bowlera trafiği neredeyse tamamen dokunmatik** — kod+test
+> PASS olmasına rağmen kullanıcı canlıda MenuCard efektlerinin mobilde HİÇ görünmediğini
+> doğruladı (ÜÇÜNCÜ DERS'in tekrarı). Üç çözüm seçeneği sunuldu (A: `whileTap` — dokunma anı
+> çok kısa; B: mobilde efekti tamamen kaldır — trafiğin çoğu hiç görmez; C: mobile özel ayrı
+> tetikleyici), kullanıcı **A'yı** onayladı: `whileTap="hover"` eklendi — dokunma artık
+> masaüstü hover ile AYNI hedef variant'a gidiyor. Fiziksellik için giriş/çıkış ayrıştırıldı:
+> giriş (rest→hover) mevcut ease korunuyor, çıkış (hover→rest, hem mouse-leave hem
+> tap-release) spring'e çevrildi. `MenuCard.tsx` + `MenuCardImage.tsx` (variant propagation
+> ile CTA/image otomatik kapsanıyor) kodlandı.
+> **Sertlik düzeltmesi (aynı sohbet devamı):** Kullanıcı canlıda "dokunuş çok sert, süre
+> uzatılmalı" bildirdi. Release spring, elle tahmin edilen `stiffness/damping` (300/24)
+> yerine `duration/bounce` (0.45s / 0.15) tabanlı tanıma çevrildi — süre/sertlik hissini
+> doğrudan ayarlamayı sağlıyor.
+> **Merkezileştirme (aynı sohbet devamı):** Kullanıcının paylaştığı güncel `MenuCard.tsx`,
+> spring'i artık LOKAL değil `lib/motion/tokens.ts`'teki `springs.cardRelease`'ten import
+> ediyor. `MenuCardImage.tsx` da aynı kaynağa geçirildi, iki dosya arasındaki LOKAL
+> DUPLİKASYON kapandı. **AÇIK MADDE:** `tokens.ts` bu turda hiç görülmedi — `springs
+> .cardRelease`'in orada gerçekten var olduğu ve değerinin (0.45/0.15) `MenuCard.tsx`'in son
+> paylaşılan importuyla eşleştiği VARSAYILDI (Kural #2 ihlali riski — kaynak: kullanıcının
+> paylaştığı dosyanın import satırı). `tokens.ts` paylaşılınca kesin teyit edilmeli.
+> **Rapor güncellendi (v1.0→v1.1):** `BOWLERA_MOTION_SYSTEM_RAPORU.md`'ye yeni §1a (Dokunmatik
+> Öncelik — zorunlu ön koşul) eklendi, §2/§3/§6/§7 dokunma-tetikleyici ile senkronlandı,
+> `springs.cardRelease` token'ı işlendi. Dosya sonuna P1+ katmanların (AccountMenu, Header,
+> Hero, Page transitions, Add to Cart, Cart badge) AYNI denetimden HENÜZ geçmediğini belirten
+> not eklendi — bunlar kod olarak henüz uygulanmadı.
+> **KALAN (MenuCard/#105'e ek):** (a) `tokens.ts`'in gerçek içeriği hiç görülmedi, varsayım
+> teyit edilmeli; (b) MenuCard mobil-tactile kararı + `springs.cardRelease` DESIGN_SYSTEM.md
+> §6.1'e HENÜZ işlenmedi; (c) CORE.md Dosya Haritası'na rapor v1.1 + değişen dosyalar
+> yansımadı; (d) push + canlı doğrulama yapılmadı; (e) mevcut testler (`MenuCard.test.tsx`,
+> `MenuCardImage.test.tsx`) yapısal — dokunma davranışını gerçek anlamda test etmiyor, tek
+> güvenilir doğrulama telefonda canlı deneme; (f) CategoryNav (P0-3) A/B/C netleşmesine bağlı
+> olarak beklemeye devam ediyor — MenuCard'daki whileTap kararının CategoryNav'a nasıl
+> yansıyacağı henüz konuşulmadı.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -207,6 +163,7 @@
 | 2026-08-12 | #89 bloğu (IP delili + engellenen deneme logu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12.md`) | ✅ Kritik Kararlar/#89'da özetli |
 | 2026-08-12 (3. kez) | #38 bloğu (RegistrationForm kod+push) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam3.md`) | ✅ Açık Sorun #38'de özetli |
 | 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
+| 2026-09-03 | 3 blok (19. sohbet CRM keşfi, 20. sohbet SANDWICH_SPEC üretimi, 22. sohbet geriye-dönük sandviç UI/checkout bulgusu) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Açık Sorunlar #92/#93/#94/#95/#99-104'te özetli |
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
 
@@ -296,7 +253,7 @@
 | 99 | 🔴 | **[YENİ, 22. sohbet — GERİYE DÖNÜK loglandı, sohbet kesildi]** Sandviç checkout'u BLOKLU: "Siparişi Onayla" adımında fiyat ne olursa olsun kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor. Kök neden ŞÜPHESİ (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'teki fiyatlandırma kontrolü sadece Bowl'un `bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı istendi, YANIT GELMEDEN sohbet kesildi. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya DOĞRULANMADI) |
 | 100 | 🟡 | **[YENİ, 22. sohbet — kod üretildiği İDDİA EDİLDİ, push/test TEYİT EDİLMEDİ]** 4 UI düzeltmesi: (a) `Hero.tsx` buton düzeni `flex-wrap`→`grid grid-cols-2`, mobilde yan yana kalıcı; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` `aspect-square`→`aspect-[4/3]`+`max-h-72`, mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` sepete ekleme sonrası artık `/siparis`'e yönlendiriyor (`useRouter`, önceden `store.reset()`+aynı sayfa). | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
 | 101 | ✅ | **[BU TURDA KAPANDI, 2026-09-03, 23. sohbet]** 22. sohbetteki "Özel Kase" fallback bug'u (`item.bowlItem?.name ?? "Özel Kase"` sandviçlerde hep "Özel Kase" yazdırıyordu) `CartDrawer.tsx`'in bu turdaki motion yükseltmesiyle YENİDEN yazıldı VE test edildi — `CartDrawer.test.tsx`'teki "bowlItem null + sandwichCustomization dolu → Özel Sandviç; ikisi de null → Özel Kase" testi Codespaces'te PASS (8/8, 2026-09-03 06:16, ekran görüntüsü). Bowl davranışı da (`bowlItem?.name` önceliği) happy-path testinde doğrulandı. **KALAN:** push + canlı/production doğrulaması — bkz. #105. | `components/cart/CartDrawer.tsx` |
-| 105 | 🟡 | **[YENİ, 2026-09-03, 23. sohbet — Motion System, kullanıcı kararıyla #99/#91'in PARALELİNDE]** Rapor P0-1 (CartDrawer): `lib/motion/tokens.ts` (YENİ) + `AnimatePresence`/spring slide/backdrop fade/içerik stagger/`useReducedMotion` eklendi, `CartDrawer.test.tsx` (YENİ, 8 test) Codespaces'te 8/8 PASS (ekran görüntüsüyle doğrulandı). **KALAN:** (a) GitHub push edilmedi; (b) canlı/production'da GÖZLE doğrulanmadı; (c) DESIGN_SYSTEM.md §6.1'e CartDrawer satırı + `springs.drawer`/`springs.tactile`/`springs.badge`/`drawerContentStagger` değerleri (şu an sadece VARSAYIM, onay bekliyor) işlenmedi; (d) CORE.md Dosya Haritası'na `lib/motion/tokens.ts` + `CartDrawer.test.tsx` eklenmedi. Sıradaki: MenuCard (P0-2), CategoryNav (P0-3). | `lib/motion/tokens.ts`, `components/cart/CartDrawer.tsx`, `CartDrawer.test.tsx`, `DESIGN_SYSTEM.md`, `CORE.md` |
+| 105 | 🟡 | **[2026-09-03, 23. sohbet — Motion System, kullanıcı kararıyla #99/#91'in PARALELİNDE]** Rapor P0-1 (CartDrawer): `lib/motion/tokens.ts` (YENİ) + `AnimatePresence`/spring slide/backdrop fade/içerik stagger/`useReducedMotion` eklendi, `CartDrawer.test.tsx` (YENİ, 8 test) Codespaces'te 8/8 PASS (ekran görüntüsüyle doğrulandı). **[BU TURDA — P0-2 MenuCard]** Canlı bulgu: rapor v1.0 tamamen hover-merkezliydi, mobilde efekt hiç görünmüyordu. Kullanıcı onayıyla `whileTap="hover"` (dokunma=hover ile aynı hedef) + ayrı giriş/çıkış transition'ı (çıkış: spring) eklendi; kullanıcı canlı geri bildirimiyle ("çok sert") spring `stiffness/damping`'den `duration/bounce` (0.45/0.15) tanımına çevrildi; `MenuCard.tsx`+`MenuCardImage.tsx` `springs.cardRelease` (tokens.ts) üzerinden merkezileştirildi (lokal duplikasyon kapandı — AÇIK MADDE: tokens.ts'in gerçek içeriği hiç görülmedi, varsayım). Rapor `BOWLERA_MOTION_SYSTEM_RAPORU.md` v1.0→v1.1'e güncellendi (§1a Dokunmatik Öncelik + §2/§3/§6/§7 senkronu). **KALAN:** (a) GitHub push edilmedi (CartDrawer + MenuCard + MenuCardImage); (b) canlı/production'da GÖZLE doğrulanmadı; (c) DESIGN_SYSTEM.md §6.1'e CartDrawer VE MenuCard satırları + `springs.drawer`/`springs.tactile`/`springs.badge`/`drawerContentStagger`/`springs.cardRelease` değerleri (VARSAYIM, onay bekliyor) işlenmedi; (d) CORE.md Dosya Haritası'na `lib/motion/tokens.ts`+`CartDrawer.test.tsx`+rapor v1.1 eklenmedi; (e) `tokens.ts` dosyasının kendisi hiç paylaşılmadı — `springs.cardRelease` varsayımı teyit edilmeli; (f) MenuCard testleri (`MenuCard.test.tsx`/`MenuCardImage.test.tsx`) yapısal, dokunma davranışını GERÇEK test etmiyor — tek güvenilir doğrulama telefonda canlı deneme. Sıradaki: CategoryNav (P0-3) — MenuCard'daki whileTap kararının buraya yansıması henüz konuşulmadı. | `lib/motion/tokens.ts`, `components/cart/CartDrawer.tsx`, `CartDrawer.test.tsx`, `components/menu/MenuCard.tsx`, `components/menu/MenuCardImage.tsx`, `DESIGN_SYSTEM.md`, `CORE.md`, `BOWLERA_MOTION_SYSTEM_RAPORU.md` |
 | 102 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx` satır 20 — CartDrawer'daki (#101) BİREBİR AYNI "Özel Kase" fallback bug'u burada da bulundu, aynı desenle genişletildi ("Özel Sandviç"). | `components/order/OrderSummary.tsx` |
 | 103 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx`'e CartDrawer'daki gibi "Kaldır" butonu eklendi — eski fiyat düzeltmesinden ÖNCE sepete girmiş 0₺'lik test ürünlerini temizlemek için. | `components/order/OrderSummary.tsx` |
 | 104 | 🟡 | **[YENİ, 22. sohbet — çözülmeden kaldı]** #100(d) fix'i sonrası `SandwichCustomizer.test.tsx`'in sepete-ekleme testleri artık `router.push` çağıracak — `next/navigation`'ın `useRouter`'ı test ortamında mock'lanmadıysa testler kırılabilir. Kullanıcıya "şimdi düzelteyim mi yoksa `npx vitest run components/sandwich` çalıştırıp kırmızı çıkanı mı paylaşırsın" soruldu, YANIT GELMEDEN sohbet kesildi. | `components/sandwich/SandwichCustomizer.test.tsx` |
@@ -350,7 +307,7 @@
 | Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). **[Bu turda]** `consentRegistrations.ipAddress` (nullable) + yeni `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI — diğer tablolar etkilenmedi. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). **[Bu turda, 19. sohbet]** Neon'un TAM güncel şeması sorguyla doğrulandı: 5 tablo (`users`, `consent_registrations`, `order_history`, `password_reset_requests`, `registration_blocked_attempts`) — `branches` veya herhangi bir menü/ürün tablosu YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[BU TURDA]** Gel Al onay kuyruğu — canlı bulgu üzerine 3-durumlu revizyon (KARAR A): `confirmed` artık terminal değil ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri) kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[önceki tur]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
-| Motion System (Bowlera Premium Motion Raporu) | 🟡 **[YENİ, 2026-09-03]** 11 adımlık rapor sırası: P0-1 CartDrawer TAMAMLANDI (`lib/motion/tokens.ts` YENİ + AnimatePresence/spring/stagger/reduced-motion), Codespaces'te 8/8 test PASS. Push/canlı doğrulama BEKLİYOR (bkz. #105). Kalan 10 adım: MenuCard/CategoryNav (P0), AccountMenu/Header/Hero/Page transitions (P1), Cart badge/Customizer/VisualPreview (P2), Instagram marquee (P3). |
+| Motion System (Bowlera Premium Motion Raporu, v1.1) | 🟡 **[BU TURDA]** Rapor v1.0→v1.1 (§1a Dokunmatik Öncelik eklendi — mobil trafik gerçeğiyle senkron). P0-1 CartDrawer kod+test TAMAM (8/8 PASS). P0-2 MenuCard kod TAMAM — `whileTap="hover"` + `springs.cardRelease` (duration/bounce, merkezi tokens.ts) — canlı iki tur geri bildirimle kalibre edildi ("mobilde görünmüyor" → "çok sert"). Hepsi PUSH/CANLI DOĞRULAMA BEKLİYOR (bkz. #105). Kalan: CategoryNav (P0-3, MenuCard kararının yansıması netleşmedi), AccountMenu/Header/Hero/Page transitions (P1), Cart badge/Customizer/VisualPreview (P2), Instagram marquee (P3). |
 | Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). ⚠️ **[Bu turda]** Çok şubeli mimari + CRM/attribution önerisi `BOWLERA_COK_SUBELI_CRM_VIZYON.md`'de taslak — ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ, önce kullanıcı onayı gerekiyor (bkz. #92/#93/#94). |
 
 ---
@@ -409,15 +366,16 @@
 
 ---
 
-*BOWLERA SESSION_INDEX.md — v70 (v69'dan: **[23. sohbet, 2026-09-03]** Kullanıcı "BOWLERA —
-PREMIUM MOTION SYSTEM" raporunu verdi (Framer Motion mimari yükseltmesi, 11 adım P0-P3).
-Kullanıcıya #99/#91 (🔴🔴) hatırlatıldı, kullanıcı BİLİNÇLİ olarak motion işini paralel
-yürütmeyi seçti — blokajlar ERTELENMEDİ, sadece bu turun kapsamı dışı. P0-1 (CartDrawer)
-TAMAMLANDI: `lib/motion/tokens.ts` (YENİ dosya, DESIGN_SYSTEM.md §6.1 süreleri isimlendirildi +
-`springs.drawer`/`drawerContentStagger` VARSAYIM olarak işaretlendi), `CartDrawer.tsx`
-`AnimatePresence`+spring slide+backdrop fade+içerik stagger+`useReducedMotion` ile yeniden
-yazıldı (22. sohbetteki DOĞRULANMAMIŞ #101 "Özel Sandviç" fix'ini de İÇERİYOR ve KAPATIYOR),
-`CartDrawer.test.tsx` (YENİ, 8 test) yazıldı. Kullanıcı Codespaces'te koşturdu: **8/8 PASS**
-(2026-09-03 06:16, ekran görüntüsüyle doğrulandı) — yeni Açık Sorun #105 olarak loglandı.
-**KALAN (105):** push + canlı doğrulama, DESIGN_SYSTEM.md §6.1'e CartDrawer satırı ekleme,
-CORE.md Dosya Haritası senkronu. Sıradaki: MenuCard (P0-2). Güncellenme: 2026-09-03.*
+*BOWLERA SESSION_INDEX.md — v71 (v70'ten: **[23. sohbet devamı, 2026-09-03]** 400 satır eşiği
+üçüncü kez aşıldı — 3 eski CURRENT FOCUS bloğu (19./20./22. sohbet) `session_arşiv_2.md`'ye
+taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`, kullanıcı elle eklemeli). Motion
+System P0-2 (MenuCard) kodlandı: canlı bulgu üzerine `whileTap="hover"` (dokunma=hover ile aynı
+hedef, rapor v1.0'ın tamamen hover-merkezli olması ÜÇÜNCÜ DERS'in tekrarına yol açmıştı) +
+`springs.cardRelease` (canlı geri bildirimle `stiffness/damping`'den `duration/bounce`'a, 0.45/
+0.15'e kalibre edildi) + `MenuCard.tsx`/`MenuCardImage.tsx` merkezi tokens.ts importuna taşındı
+(AÇIK MADDE: tokens.ts hiç görülmedi, varsayım). `BOWLERA_MOTION_SYSTEM_RAPORU.md` v1.0→v1.1'e
+güncellendi (§1a Dokunmatik Öncelik + §2/§3/§6/§7 senkronu). **KALAN (105, genişledi):** push +
+canlı doğrulama (CartDrawer+MenuCard+MenuCardImage), DESIGN_SYSTEM.md §6.1 senkronu (CartDrawer
++ MenuCard + springs.cardRelease), CORE.md Dosya Haritası senkronu (tokens.ts + rapor v1.1),
+tokens.ts varsayımının teyidi. Sıradaki: CategoryNav (P0-3) — whileTap kararının yansıması
+henüz konuşulmadı. Güncellenme: 2026-09-03.*
