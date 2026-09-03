@@ -255,6 +255,7 @@ Tüm checkları geç → sonra [KARAR BİLDİRİMİ] üret.
 - [ ] Bronze rengi küçük gövde metninde mi? → EVET: yasak — DUR
 - [ ] Animasyon `prefers-reduced-motion` kontrolü yapıyor mu? → HAYIR: ekle
 - [ ] Animasyon `width`/`height`/`top` gibi layout tetikleyen özellik mi kullanıyor? → EVET: `transform`/`opacity`'e çevir
+- [ ] Tactile animasyon (kart/CTA lift, zoom vb.) SADECE `whileHover` ile mi tanımlanıyor, dokunma (`whileTap`) karşılığı yok mu? → EVET: mobil trafiğin büyük çoğunluğu bu efekti hiç görmez — `whileTap="hover"` (veya eşdeğer aynı-hedef tetikleyici) ekle (BOWLERA_MOTION_SYSTEM_RAPORU.md §1a)
 
 ### Sepet & Customizer Katmanı
 - [ ] Sepet state race condition'a açık mı? (çift tıklama, eşzamanlı güncelleme) → EVET: koruma ekle
@@ -602,6 +603,7 @@ ayrıca CORE.md'nin güncellenmiş hâli de eklenir — atlanamaz.]
 | Gerekçesiz madde düşürüldü | Açık Sorun/Karar, arşiv parçasına eklenen blokta kapanış gerekçesi bırakılmadan tablodan kayboldu | Dur — maddeyi "teyit edilmeli" olarak geri ekle, gerekçe ara |
 | Arşiv parçalandı ama CORE.md güncellenmedi | Yeni `session_arşiv_N.md` açıldı (arşivin kendisi şiştiği için, CORE.md §7.1 Adım 1.7) ama CORE.md'nin Dosya Haritası/Versiyon Geçmişi aynı turda güncellenmedi | Dur — CORE.md'yi hemen aynı turda güncelle; geriye dönük eksik parçalamalar varsa tek seferde hepsini belgele |
 | SESSION_INDEX "taşındı" dediği içerik arşivde yok | SESSION_INDEX bir bloğun arşiv parçasına taşındığını iddia ediyor ama o parça dosyasında/eklentisinde bu blok fiilen bulunmuyor | Dur — kullanıcıya eksik eklenti dosyasını sor, teyit gelmeden "taşındı" notunu doğru kabul etme |
+| Tactile animasyon sadece `whileHover` ile tanımlandı | Kart/CTA/görsel lift-zoom gibi bir etkileşim SADECE fare hover'ına bağlı, dokunma (`whileTap`) karşılığı yok | Dur — `whileTap="hover"` (aynı hedef variant) ekle, giriş/çıkış transition'ını ayrıştır (BOWLERA_MOTION_SYSTEM_RAPORU.md §1a) |
 
 **Sapma fark edilince Claude şunu söyler:**
 > "⚠️ Kural sapması tespit ettim — [ne yaptım]. Düzeltiyorum: [doğru adım]."
@@ -645,6 +647,7 @@ ayrıca CORE.md'nin güncellenmiş hâli de eklenir — atlanamaz.]
 | Açık Sorun/Karar'ı arşiv parçasına eklenen blokta kapanış gerekçesi bırakmadan tablodan düşür |
 | Checkpoint sorusu sormadan ("Checkpoint alayım mı?") SESSION_INDEX/TEST_MATRIX güncellemesi üret |
 | Arşiv dosyasının kendisi parçalara ayrılırken (session_arşiv_N.md açılırken) CORE.md Dosya Haritası/Versiyon Geçmişini aynı turda güncellemeden geç (CORE.md §7.1 Adım 1.7) |
+| Tactile animasyon (lift/zoom/CTA micro-interaction) ekle ama sadece `whileHover`'a bağlı bırak, dokunma karşılığı sağlamadan geç — Bowlera trafiği neredeyse tamamen dokunmatik |
 
 ---
 
@@ -677,12 +680,13 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 4 | 2026-07-21 | CORE.md §7.1 Adım 1'e "400 satır eşiği" kuralı eklendi (SESSION_INDEX.md 400 satırı geçince gerekçeli olarak session_log.md'ye taşınır, sıkıştırılamaz); SELF-CORRECTION ve YASAK LİSTE'ye karşılık gelen 2 satır eklendi. Gerekçe: 2026-07-20'de bir "sıkıştırılmış" SESSION_INDEX sürümünün 7 açık sorunu + 2 kararı gerekçesiz düşürmesi (kullanıcı tarafından fark edildi, sonraki sohbette düzeltildi). |
 | Session 4 | 2026-07-22 | SELF-CHECK (Marka & Tasarım Katmanı) ve YASAK LİSTE'ye alerjen bilgisi satırı eklendi — DESIGN_SYSTEM.md §7.0'daki "alerjen, kalori/protein ile aynı zorunluluk statüsünde, gizlenemez/opsiyonel yapılamaz" kararının AGENT.md tarafındaki karşılığı. Açık Sorun #44 kapandı. |
 | Session 8 | 2026-08-07 | **`session_log.md` ismi ve mekanizması TAMAMEN KALDIRILDI** — "her session kapanışında ayrı anlatı bloğu yaz" (eski ÇALIŞMA AKIŞI madde 12, KARAR BİLDİRİMİ FORMATI "Session Log" bölümü, CORE.md eski §7.1 Adım 2 + §7.2 session_log referansı) kullanıcı tarafından kafa karıştırıcı bulundu — iki ayrı, örtüşen mekanizma (her-session-anlatısı + 400-satır-taşıması) tek isim altında karışıyordu. Yerine `session_arşiv.md` getirildi: TEK işlevi SESSION_INDEX.md 400 satırı geçtiğinde kapanmış içeriği taşımak (CORE.md §7.1 Adım 1). Amaç: SESSION_INDEX'in (aktif hafızanın) boyutunu küçük tutup sistemin hafif çalışmasını sağlamak. "Asla tam dosya olarak yeniden üretilmez, sadece yeni taşıma bloğu verilir" güvenlik kuralı DEĞİŞMEDİ. Ayrıca SELF-CORRECTION'a "Checkpoint sorulmadan dosya üretildi" satırı eklendi — aynı sohbette Claude'un checkpoint onayı almadan session_arşiv bloğu ürettiği gerçek bir ihlal sonrası. CORE.md v1.3 ile eşleştirildi. |
+| 23. sohbet | 2026-09-03 | SELF-CHECK (Marka & Tasarım Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye "tactile animasyon sadece `whileHover` ile tanımlanamaz, dokunma karşılığı zorunlu" maddesi eklendi. Gerekçe: MenuCard P0-2'de "BOWLERA — PREMIUM MOTION SYSTEM" raporunun (v1.0) tamamen hover-merkezli yazılmış olması, Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen canlıda kritik bir eksiklik olarak tespit edildi — ÜÇÜNCÜ DERS'in (kod+build başarı ≠ gerçek kullanıcı deneyimi) bir tekrarı. `whileTap="hover"` + ayrıştırılmış giriş/çıkış transition (spring) ile düzeltildi, rapor v1.1'e işlendi (§1a Dokunmatik Öncelik). CORE.md v1.7 ile eşleştirildi. |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.5*
+*BOWLERA AGENT.md — v1.6*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
@@ -702,3 +706,9 @@ eklendi. Gerekçe: 2026-08-08/2026-08-11'de fiilen iki yeni arşiv parçası aç
 zaman AGENT.md/CORE.md'ye işlenmemişti — governance dosyaları ile fiili uygulama arasında
 senkron kopukluğu oluşmuştu (kullanıcı tarafından fark edildi, 2026-08-12). CORE.md v1.4 ile
 eşleştirildi.*
+*v1.6: SELF-CHECK (Marka & Tasarım Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye "tactile
+animasyon sadece `whileHover` ile tanımlanamaz, dokunma (`whileTap`) karşılığı zorunlu" maddesi
+eklendi. Gerekçe: MenuCard P0-2'de Motion System raporunun (v1.0) tamamen hover-merkezli
+yazılmış olması, Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen canlıda kritik
+bir eksiklik olarak tespit edildi (ÜÇÜNCÜ DERS'in tekrarı) — `whileTap="hover"` ile düzeltildi.
+CORE.md v1.7 ile eşleştirildi (23. sohbet, 2026-09-03).*

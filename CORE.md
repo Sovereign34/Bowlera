@@ -85,6 +85,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | "Sandviçini Oluştur" özelleştirme akışı | `SANDWICH_SPEC.md` + `ARCHITECTURE.md` | `DESIGN_SYSTEM.md` |
 | Sepet (cart) / Zustand store | `ARCHITECTURE.md §Veri Modeli` + `CUSTOMIZER_SPEC.md` | `FAILURE_PATTERNS.md` |
 | Renk / tipografi / animasyon kararı | `DESIGN_SYSTEM.md` | — |
+| Motion sistemi (Framer Motion mimarisi, spring/stagger/tactile) | `BOWLERA_MOTION_SYSTEM_RAPORU.md` + `DESIGN_SYSTEM.md §6` | `lib/motion/tokens.ts` |
 | Fotoğraf / görsel direktifi / adlandırma | `DESIGN_SYSTEM.md` | — |
 | Marka sesi / metin yazımı / CTA | `CONTENT_GUIDE.md` | — |
 | SEO / JSON-LD / yerel görünürlük | `CONTENT_GUIDE.md` | `ARCHITECTURE.md` |
@@ -174,6 +175,14 @@ CONTENT_GUIDE.md           ← Marka sesi, örnek metinler, SEO anahtar kelimele
 INTEGRATIONS.md            ← Adisyo/SepetTakip, WhatsApp köprüsü, QR menü,
                              SMS/e-posta bildirimi kontratları
 
+BOWLERA_MOTION_SYSTEM_RAPORU.md ← Framer Motion mimari yükseltme raporu (v1.1,
+                             2026-09-03) — 11 adımlık P0-P3 sırası (CartDrawer→
+                             MenuCard→CategoryNav→...). §1a Dokunmatik Öncelik:
+                             tüm tactile katman hover VE tap'e (aynı hedef)
+                             gitmeli — Bowlera trafiği neredeyse tamamen
+                             dokunmatik. ⚠️ Sadece P0-1 (CartDrawer) ve P0-2
+                             (MenuCard) kodlandı, push/canlı doğrulama BEKLİYOR.
+
 ── TAKİP ─────────────────────────────────────────────────
 FAILURE_PATTERNS.md        ← Projeye özgü hata kalıpları: sepet state kaybı,
                              checkout race condition, üçüncü parti entegrasyon
@@ -208,9 +217,11 @@ components/
 │   ├── FeaturedItems.tsx
 │   └── InstagramFeed.tsx
 ├── menu/
-│   ├── MenuCard.tsx          ← kalori ZORUNLU alan olarak render edilir
+│   ├── MenuCard.tsx          ← kalori ZORUNLU alan olarak render edilir; whileHover+
+│   │                            whileTap="hover" (aynı hedef, §1a) — springs.cardRelease
+│   ├── MenuCardImage.tsx     ← image zoom, variant propagation ile MenuCard'a bağlı
 │   ├── FilterPanel.tsx
-│   └── CategoryNav.tsx       ← sticky
+│   └── CategoryNav.tsx       ← sticky — motion yükseltmesi HENÜZ yapılmadı (P0-3)
 ├── customizer/
 │   ├── StepBase.tsx / StepProtein.tsx / StepToppings.tsx / StepSauce.tsx
 │   ├── SummaryPanel.tsx      ← sabit özet panel — kalori/fiyat her zaman görünür
@@ -226,6 +237,11 @@ store/
 
 lib/
 ├── menu-data.json            ← MVP statik veri kaynağı
+├── motion/
+│   └── tokens.ts             ← YENİ (2026-09-03) — durations/easings/springs
+│                                merkezi kaynağı (springs.cardRelease dahil).
+│                                DESIGN_SYSTEM.md §6.1 ile senkron olmalı,
+│                                bazı değerler VARSAYIM (onay bekliyor)
 ├── integrations/
 │   ├── whatsapp.ts
 │   └── marketplace.ts        ← Adisyo/SepetTakip köprüsü
@@ -461,6 +477,7 @@ YYYYMMDDHHMMSS_aciklama.md
 | Herhangi bir arşiv parçasını (session_arşiv.md, _1, _2, ...) TAM DOSYA olarak ver — SADECE 400 satır eşiğinde taşınan yeni blok verilir, dosyanın kendisi asla yeniden üretilmez |
 | Arşiv parçalaması yapıp CORE.md'nin Dosya Haritası/Versiyon Geçmişini aynı turda güncellemeden geç |
 | Üçüncü parti entegrasyonu (WhatsApp/Adisyo/QR) gerçek anahtar/test olmadan "tamamlandı" say |
+| Tactile animasyon (kart/CTA lift, zoom vb.) SADECE `whileHover` ile tanımla, dokunma (`whileTap`) karşılığı bırakma — Bowlera trafiği neredeyse tamamen dokunmatik (BOWLERA_MOTION_SYSTEM_RAPORU.md §1a) |
 
 ---
 
@@ -561,3 +578,11 @@ düzeltmesi: Bread→Size→Protein→Cheese→Veggies→Sauce&Toast&Extras, kul
 ⚠️ SELF-CORRECTION notu: v1.5 girdisi bu footer'a kronolojik sıranın DIŞINDA (v1.1'den
 ÖNCE) eklenmişti — bu turda düzeltildi, doğru sıraya (v1.4'ten SONRA) taşındı. İçerik
 kaybı yok, sadece sıralama hatası giderildi.*
+*v1.7 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
+`BOWLERA_MOTION_SYSTEM_RAPORU.md` referansı (v1.1) + `lib/motion/tokens.ts` + `MenuCardImage.tsx`
+eklendi. Bölüm 9 (Mutlak Yasaklar)'a "tactile animasyon sadece whileHover, dokunma karşılığı yok"
+maddesi eklendi — gerekçe: MenuCard P0-2'de rapor v1.0'ın tamamen hover-merkezli yazılmış olması,
+Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen, canlıda kritik bir eksiklik
+olarak tespit edildi (whileTap="hover" + springs.cardRelease ile düzeltildi, rapor v1.1'e işlendi).
+Bu, yeni bir çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının
+(bkz. v1.4/v1.5 notları) bir tekrarı. AGENT.md v1.6 ile eşleştirildi (2026-09-03).*
