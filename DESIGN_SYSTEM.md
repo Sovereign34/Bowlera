@@ -132,8 +132,13 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 şekilde **yumuşak, organik easing** kullanılmalı.
 
 **Kütüphane seçimi:**
-- **Framer Motion** → yalnızca orkestrasyon gerektiren yerlerde: sayfa geçişi, scroll-reveal, özelleştirici adım geçişleri
+- **Framer Motion** → yalnızca orkestrasyon gerektiren yerlerde: sayfa geçişi, scroll-reveal, özelleştirici adım geçişleri, sepet çekmecesi, ürün kartı tactile katmanı
 - **Sade CSS `transition`** → basit hover geçişleri (kütüphane yükü gereksiz)
+
+> **[2026-09-03 — bkz. BOWLERA_MOTION_SYSTEM_RAPORU.md v1.1]** Framer Motion mimari
+> yükseltmesi (11 adımlık P0-P3 sırası) sürüyor. Merkezi token kaynağı `lib/motion/tokens.ts`
+> — bu bölümdeki süre/easing/spring değerleri o dosyayla senkron TUTULMALI, biri değişirse
+> diğeri aynı turda güncellenir.
 
 ### 6.1 Animasyon Tablosu
 
@@ -142,14 +147,31 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 | Hero başlık | Alttan yukarı fade+slide (staggered, kelime/satır bazlı) | 600ms, `ease-out`, 80ms stagger | Sayfa yüklenince |
 | Hero arka plan görseli | Hafif Ken Burns efekti (yavaş zoom) | 8-12s, `linear`, sonsuz döngü | Sayfa yüklenince |
 | Bölüm başlıkları/kartlar (scroll reveal) | Alttan fade+slide, %10 viewport'a girince | 500ms, `ease-out` | Scroll (Intersection Observer) |
-| MenuCard hover | Hafif yükselme (`translateY(-4px)`) + gölge derinleşmesi | 200ms, `ease-in-out` | Hover |
+| MenuCard hover/dokunma (kart+CTA+görsel) | Kart `y: 0→-4` + gölge derinleşmesi; CTA `y: 0→-1` (sadece özelleştirilebilir); görsel `scale: 1→1.045` — **üçü de tek variant state'inden (variant propagation) besleniyor.** **[2026-09-03 güncellendi]** Giriş (rest→hover) ve çıkış (hover→rest) AYRI: giriş süre/easing aynı kaldı, çıkış `springs.cardRelease`'e (bkz. 6.1a) çevrildi — hem `mouse-leave` hem `tap-release` bu spring'i kullanır. | Giriş: 200ms, `ease-in-out` · Çıkış: `springs.cardRelease` (spring, `duration:0.45/bounce:0.15`) | **[2026-09-03 güncellendi]** Hover VE dokunma (`whileHover` + `whileTap="hover"`, AYNI hedef — bkz. §6.3) |
 | Sepete Ekle butonu | Tıklamada kısa "scale bounce" (0.95→1.05→1) | 300ms, `spring` | Click |
-| Sepet rozeti (badge) | Sayı değiştiğinde logo-degrade renkli "pulse" | 400ms, `spring` | Sepete ürün eklenince |
+| Sepet rozeti (badge) | Sayı değiştiğinde logo-degrade renkli "pulse" | 400ms, `springs.badge` (VARSAYIM — bkz. 6.1a, onay bekliyor) | Sepete ürün eklenince |
+| Sepet çekmecesi (CartDrawer) | **[YENİ, 2026-09-03]** Backdrop fade + panel `springs.drawer` slide + içerik `drawerContentStagger` ile sıralı giriş | Backdrop: fade · Panel: `springs.drawer` (spring, VARSAYIM) · İçerik: `drawerContentStagger` (VARSAYIM) — bkz. 6.1a | Açılış/kapanış (`isOpen` state, `AnimatePresence`) |
 | Özelleştirici adım geçişi | Yatay slide (mevcut adım sola çıkar, yeni adım sağdan girer) | 350ms, `ease-in-out` | "Sonraki Adım" tıklanınca |
 | VisualPreview katmanı | Yeni malzeme seçilince ilgili katman fade-in + hafif scale (0.9→1) | 250ms, `ease-out` | Malzeme seçimi |
 | Özet panel (sticky) fiyat/kalori güncelleme | Sayı değişiminde kısa vurgu rengi flaşı (logo-degrade) | 300ms | Değer değişince |
-| Sayfa geçişleri | Hafif fade (crossfade) | 500ms, `ease-in-out` **[2026-09-03 güncellendi — önceki: 250ms, kullanıcı isteğiyle yavaşlatıldı]** | Route değişimi (Next.js) |
+| Sayfa geçişleri | Hafif fade (crossfade) | 500ms, `ease-in-out` **[2026-09-03 güncellendi — önceki: 250ms, kullanıcı isteğiyle yavaşlatıldı]** ⚠️ **[BU TURDA TESPİT EDİLDİ]** Bu değişiklik hiçbir sohbette/SESSION_INDEX'te loglanmamış — bkz. dosya sonu not | Route değişimi (Next.js) |
 | Instagram galeri / sosyal kanıt | Yatay kayan (marquee) şerit, hover'da durur | 30-40s tam döngü, `linear` | Sayfa görünür olunca |
+| CategoryNav aktif sekme göstergesi | **[HENÜZ KODLANMADI — P0-3]** `layoutId` tabanlı kayan pill | Netleşmedi | Seçim (tıklama/dokunma) — `layoutId` zaten state-bazlı, §6.3'ten ETKİLENMEZ |
+
+### 6.1a Spring/Stagger Token Sözlüğü
+
+> `lib/motion/tokens.ts`'teki `springs` objesiyle bire bir eşleşmesi gerekir. Bu tablo
+> DESIGN_SYSTEM tarafındaki resmi kayıt — ⚠️ işaretli olanlar `tokens.ts` dosyasının
+> kendisi bu turda da görülmeden, kod tarafındaki import'lardan çıkarılan VARSAYIMDIR;
+> `tokens.ts` paylaşılınca kesin teyit edilmeli.
+
+| Token | Değer | Kullanıldığı Yer | Durum |
+|---|---|---|---|
+| `springs.cardRelease` | `{ type: "spring", duration: 0.45, bounce: 0.15 }` | MenuCard/MenuCardImage çıkış (hover→rest, tap-release) | ⚠️ VARSAYIM — canlı kullanıcı testiyle 2 turda kalibre edildi (önce stiffness/damping 300/24 "çok sert" bulundu, duration/bounce'a çevrildi), `tokens.ts` görülmeden teyit edilemedi |
+| `springs.drawer` | Netleşmedi | CartDrawer panel slide | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
+| `springs.tactile` | Netleşmedi | Genel dokunsal tepki (tanım net değil, muhtemelen genel spring preseti) | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
+| `springs.badge` | Netleşmedi | Sepet rozeti pulse | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
+| `drawerContentStagger` | Netleşmedi | CartDrawer içerik sıralı giriş | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
 
 ### 6.2 Performans ve Erişilebilirlik Kuralları
 
@@ -160,9 +182,31 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
    → width/height/top gibi layout tetikleyen özellikler ASLA animasyonlu bırakılmaz (CLS riski)
 3. Scroll-reveal animasyonları tek seferlik olmalı
    → Her scroll'da tekrar tetiklenmemeli (performans + "rahatsız edici" his riski)
+4. [YENİ, 2026-09-03] Tactile (kart/CTA/görsel lift-zoom benzeri) etkileşimler SADECE
+   whileHover ile tanımlanamaz — dokunma (whileTap) AYNI hedef variant'a gitmeli
+   → Bowlera trafiği neredeyse tamamen dokunmatik; hover-only bir katman mobil
+     kullanıcının büyük çoğunluğu için hiç var olmaz (bkz. §6.3, kaynak:
+     BOWLERA_MOTION_SYSTEM_RAPORU.md §1a — MenuCard P0-2'de canlıda tespit edildi)
 ```
 
-> Bu 3 kural AGENT.md Self-Check'te otomatik denetlenir.
+> Bu 4 kural AGENT.md Self-Check'te otomatik denetlenir.
+
+### 6.3 Dokunmatik Öncelik (Touch-First)
+
+> **[YENİ, 2026-09-03]** Kaynak: BOWLERA_MOTION_SYSTEM_RAPORU.md §1a — MenuCard P0-2
+> uygulamasında canlıda tespit edilen bulgu üzerine eklendi.
+
+```
+Kural:      Fare (whileHover) ve dokunma (whileTap) AYNI hedef state'e gitmeli.
+            İki ayrı görsel dil icat edilmez.
+Giriş:      rest → aktif — mevcut ease/duration tabanlı kararlar (§6.1) korunur.
+Çıkış:      aktif → rest (hem mouse-leave hem tap-release) — fiziksel "geri sekme"
+            hissi için duration/bounce tabanlı spring önerilir (elle stiffness/
+            damping tahmini yerine, süre/sertlik hissini doğrudan ayarlar).
+İstisna:    layoutId tabanlı geçişler (örn. CategoryNav aktif sekme) zaten bir
+            state değişikliğine (tıklama/dokunma ile seçim) bağlı — bu kuraldan
+            ETKİLENMEZ.
+```
 
 ---
 
@@ -245,14 +289,15 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 [ ] Animasyon width/height/top mu tetikliyor? → transform/opacity'e çevrildi mi?
 [ ] Yeni görsel ekleniyor mu?            → Adlandırma standardına uygun mu? (Bölüm 5.1)
 [ ] Alerjen gösterimi eklendi/değişti mi? → Bölüm 7 Self-Check'i geçti mi?
+[ ] [YENİ] Tactile animasyon (kart/CTA/görsel) sadece whileHover mi? → EVET: whileTap="hover" (aynı hedef) eksik — DUR (6.3)
 ```
 
-**Format:** `"Tasarım skoru: 6/7 — [eksik kriter] nedeniyle 1 puan düştü."`
+**Format:** `"Tasarım skoru: 7/8 — [eksik kriter] nedeniyle 1 puan düştü."`
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.2 — Session 1 (2026-07-17), Session 4 (2026-07-21),
-Session 14 (2026-08-11)*
+*BOWLERA DESIGN_SYSTEM.md — v1.3 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11), 23. sohbet (2026-09-03)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
@@ -261,3 +306,16 @@ maddesi eklendi.*
 /personel/* rotaları, müşteri yüzü sayfalarda yasak aynen sürüyor). Bölüm 8
 Self-Check'e personel-rotası kontrolü eklendi. GelAlOrderCard.tsx'teki önceden
 var olan kırmızı kullanımını geriye dönük resmileştiriyor.*
+*v1.3: §6.1'e CartDrawer (P0-1) ve MenuCard hover/dokunma (P0-2) satırları işlendi,
+yeni §6.1a "Spring/Stagger Token Sözlüğü" eklendi (springs.cardRelease/drawer/tactile/badge
++ drawerContentStagger — çoğu ⚠️ VARSAYIM, `tokens.ts` görülmeden teyit edilemedi). §6.2'ye
+4. kural + yeni §6.3 "Dokunmatik Öncelik" eklendi: tactile animasyonlar SADECE whileHover
+ile tanımlanamaz, dokunma (whileTap) aynı hedefe gitmeli — MenuCard P0-2'de canlıda tespit
+edilen bulgu (rapor v1.0 tamamen hover-merkezliydi, Bowlera trafiği neredeyse tamamen
+dokunmatik). Bölüm 8 Self-Check'e karşılık gelen madde eklendi. Kaynak: BOWLERA_MOTION_
+SYSTEM_RAPORU.md v1.1 §1a, CORE.md v1.7, AGENT.md v1.6 ile eşleştirildi.
+⚠️ **TUTARSIZLIK TESPİTİ (bu turda, geriye dönük):** "Sayfa geçişleri" satırındaki
+250ms→500ms değişikliği (etiketli "2026-09-03 güncellendi") bu sohbette hiç konuşulmadı ve
+SESSION_INDEX.md'de hiçbir yerde loglanmamış — muhtemelen başka bir sohbette yapılıp
+SESSION_INDEX'e hiç işlenmedi (ÇALIŞMA AKIŞI ihlali). İçeriğe dokunulmadı, sadece SESSION_INDEX'e
+yeni bir Açık Sorun olarak eklendi, kullanıcıya bu turda ayrıca bildirildi.*
