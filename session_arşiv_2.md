@@ -1122,3 +1122,89 @@ Kapanış gerekçesi: hepsi ✅ uygulanmış/karara bağlanmış, aylardır stab
 > **[TAŞINDI, 2026-09-01, bu sohbet]** #118 Adım 2'nin CURRENT FOCUS anlatısı — Adım 3 tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md` (kullanıcı elle eklemeli).
 
 > **[TAŞINDI, 2026-09-01, YENİ sohbet]** #118 Adım 3'ün CURRENT FOCUS anlatısı — Adım 4 tamamlandığı için tamamen güncelliğini yitirdi, Açık Sorun #118 satırında hâlâ özetli. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md` (kullanıcı elle eklemeli).
+
+----
+## TAŞIMA — 2026-09-03 (23. sohbet devamı, 400 satır eşiği üçüncü kez aşıldı)
+
+> Bu blok SESSION_INDEX.md'nin CURRENT FOCUS bölümünden taşındı. Taşınma gerekçesi: üç blok
+> de (19. sohbet CRM keşfi, 20. sohbet SANDWICH_SPEC üretimi, 22. sohbet geriye-dönük işlenen
+> sandviç UI/checkout bulgusu) aşağıdaki Açık Sorunlar'da zaten tam özetli — aktif takip için
+> gerekli değil, sadece turn-by-turn anlatı taşınıyor:
+> - 19. sohbet → Açık Sorunlar #92/#93/#94 + Kritik Kararlar tablosundaki ilgili 2 satır
+> - 20. sohbet → Açık Sorun #95 (S1/S2/S5 hâlâ bekliyor) + SESSION_INDEX Dosya Haritası/CORE.md v1.5-1.6
+> - 22. sohbet → Açık Sorunlar #99, #100, #101 (KAPANDI), #102, #103, #104
+
+---
+
+### 19. sohbet (2026-08-15) — Çok Şubeli/CRM Vizyon Keşfi
+
+Kullanıcı paylaştığı bir dijital pazarlama/CRM strateji belgesini (3 markalı bir başka işletme
+için yazılmış) Bowlera'nın gerçek Neon şemasıyla (5 tablo doğrulandı: `users`,
+`consent_registrations`, `order_history`, `password_reset_requests`,
+`registration_blocked_attempts`) karşılaştırdı. Kullanıcı vizyonu netleşti: (a) Bowlera
+"herhangi an" 2./3. şubeye açılabilir — şema bunun için ŞİMDİDEN geriye dönüşsüz olmayacak
+şekilde kurulmalı; (b) farklı şubelerde menü farklılığı olabilir; (c) bu CRM/veri yapısı
+Bowlera'ya özel değil, ileride birçok modül/uygulamanın oturacağı TEMEL İSKELET (PUSULA OS
+vizyonuyla örtüşüyor). Bulgular + önerilen yön `BOWLERA_COK_SUBELI_CRM_VIZYON.md` adlı ayrı
+bir taslak belgede toplandı (ARCHITECTURE.md'nin YERİNE geçmiyor, henüz ona işlenmedi) ve
+KULLANICI TALEBİYLE 3 yeni Açık Sorun (#92/#93/#94) olarak loglandı — kod ÜRETİLMEDİ, sadece
+analiz + öneri. Sıradaki adım kullanıcı kararıyla netleşti: önce #91'in canlı doğrulaması
+yapılacak, #92/#93/#94 SONRA ele alınacak.
+
+---
+
+### 20. sohbet (2026-08-23) — SANDWICH_SPEC.md v1.0/v1.1 Üretimi, Kod Yok
+
+Kullanıcı "Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole bir kopyasının
+çıkarılmasını istedi (Seçenek A — paralel/bağımsız motor, bowl akışına dokunmaz, kullanıcı
+onayladı). Subway + Jersey Mike's global sandviç zinciri UX'i web'den araştırıldı, sentezlendi:
+Subway'in gerçek sırasına sadık 6 adım (Size→Bread→Protein→Cheese→Veggies→Sauce&Toast&Extras —
+ilk önerilen "Bread-first" sıra kullanıcı tarafından REDDEDİLDİ, Subway'in protein/size-first
+gerçeğine düzeltildi). Kullanıcının "operasyonu da düşün" uyarısı üzerine UX seçim sırası ile
+fiziksel hazırlık sırasının AYRI tutulması kararlaştırıldı — yeni `getPrepOrder()` fonksiyonu
+(Personel Sipariş Paneli #62 ticket render'ı için, `selections` state'ini DEĞİŞTİRMEDEN mutfak
+sırasına göre yeniden düzenler: Bread→Protein+Cheese→Toast→Veggies→Sauce). Toast, şube-config'e
+bağlı opsiyonel özellik olarak tasarlandı (çok şubeli mimariyle #92/#93/#94 bağlantılı, henüz
+kararlaştırılmadı). `SANDWICH_SPEC.md` dosyası kullanıcıya artifact olarak verildi, CORE.md
+Bölüm 3 (Tetikleyici Tablosu) + Bölüm 4 (Dosya Haritası) AYNI TURDA güncellendi (v1.5) — yeni
+referans dosyası eklenince CORE.md senkron kalmalı kuralı uygulandı. Durum: SADECE yapısal
+iskelet onaylandı, kod ÜRETİLMEDİ. 6 açık soru (S1: gerçek `sandwich-data.json` verisi, S2:
+Veggies ücretsiz kota sayısı, S3: `extras.doubleProtein` vs `proteinPortion:'double'` çakışması,
+S4: Toast sabit mi/config'e mi bağlı, S5: "Mike's Way" preset içeriği, S6: `useCartStore
+.customization` union tipi genişletmesi) kod aşamasından ÖNCE netleşmeli.
+
+**DÜZELTME (aynı sohbet devamı):** Kullanıcı adım sırasını sorguladı — "Ekmek seçimi en başta
+olacak değil mi?" SANDWICH_SPEC.md v1.0'daki "Subway'e sadık Size→Bread" iddiası YANLIŞ çıktı
+(gerçek Subway sırası protein-first'tür, ilk araştırmada bu netleştirilmemişti). Kullanıcı
+onayıyla Bread-first'e düzeltildi: Bread→Size→Protein→Cheese→Veggies→Sauce&Toast&Extras
+(SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon referansı v1.0→v1.1'e
+güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
+
+---
+
+### 22. sohbet (2026-08-23, geriye dönük işlendi) — Sandviç UI Düzeltmeleri + Checkout Blokajı Keşfi
+
+Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
+checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi "kod
+var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
+
+**Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana durmuyordu;
+(2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu (sepete/checkout'a
+gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
+
+**İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
+`SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil taşma
+düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e yönlendiriyor;
+paylaşılan `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u "Özel Sandviç" gösterecek
+şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi, DOĞRULANMADI — risk MEDIUM);
+`OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
+
+**ÇÖZÜLEMEDEN KALAN, KRİTİK:** Sandviçte fiyat ne olursa olsun "Siparişi Onayla"da kırmızı
+"fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR. Şüphe (doğrulanmadı):
+`FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un `bowlItem`/`customization`
+alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan
+`grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi, YANIT GELMEDEN
+kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
+
+**Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
+değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
