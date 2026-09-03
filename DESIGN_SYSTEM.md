@@ -165,13 +165,18 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 > kendisi bu turda da görülmeden, kod tarafındaki import'lardan çıkarılan VARSAYIMDIR;
 > `tokens.ts` paylaşılınca kesin teyit edilmeli.
 
-| Token | Değer | Kullanıldığı Yer | Durum |
+> **[2026-09-03, bu turda]** `tokens.ts` nihayet görüldü. Yapı çelişkisi ÇÖZÜLDÜ: gerçek kod
+> düz `durations`/`easings`/`springs`/`drawerContentStagger` export'ları kullanıyor (raporun
+> önerdiği nested `motionTokens.*` yapısı DEĞİL) — bu tablo artık kod teyitli, rapor
+> spesifikasyonu değil.
+
+| Token | `tokens.ts`'teki gerçek değer | Kullanıldığı Yer | Durum |
 |---|---|---|---|
-| `springs.cardRelease` | `{ type: "spring", duration: 0.45, bounce: 0.15 }` | MenuCard/MenuCardImage çıkış (hover→rest, tap-release) | ⚠️ VARSAYIM — canlı kullanıcı testiyle 2 turda kalibre edildi (önce stiffness/damping 300/24 "çok sert" bulundu, duration/bounce'a çevrildi), `tokens.ts` görülmeden teyit edilemedi |
-| `springs.drawer` | Netleşmedi | CartDrawer panel slide | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
-| `springs.tactile` | Netleşmedi | Genel dokunsal tepki (tanım net değil, muhtemelen genel spring preseti) | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
-| `springs.badge` | Netleşmedi | Sepet rozeti pulse | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
-| `drawerContentStagger` | Netleşmedi | CartDrawer içerik sıralı giriş | ⚠️ VARSAYIM — değer hiç paylaşılmadı |
+| `springs.cardRelease` | `{ type: "spring", stiffness: 300, damping: 24 }` | MenuCard/MenuCardImage çıkış (hover→rest, tap-release) | 🔴 **ÇELİŞKİ — KOD GÜNCEL DEĞİL.** Bu satır daha önce canlı testte "çok sert" bulunup `duration:0.45/bounce:0.15`'e kalibre edildiği notuyla kayıtlıydı — ama `tokens.ts`'te hâlâ eski stiffness/damping değeri duruyor, kalibrasyon koda hiç yansımamış. **Karar (bu turda, kullanıcı adına):** canlı kullanıcı testi kod varsayılanından üstündür → `tokens.ts` satır 61 `duration: 0.45, bounce: 0.15` olarak DÜZELTİLMELİ. Aksiyon SESSION_INDEX'e işlendi. |
+| `springs.drawer` | `{ type: "spring", stiffness: 320, damping: 32 }` | CartDrawer panel slide | ✅ TEYİT EDİLDİ — rapor §4 ile birebir eşleşiyor |
+| `springs.tactile` | `{ type: "spring", stiffness: 400, damping: 30 }` | Genel dokunsal tepki | ✅ TEYİT EDİLDİ — rapor §3 ile birebir eşleşiyor |
+| `springs.badge` | `{ type: "spring", stiffness: 300, damping: 26 }` | Sepet rozeti pulse | ✅ TEYİT EDİLDİ — daha önce hiç sayısal değer yoktu, artık kesin |
+| `drawerContentStagger` | `0.05` (50ms) | CartDrawer içerik sıralı giriş | ✅ TEYİT EDİLDİ — rapor §5'teki 40-60ms aralığının ortası, `tokens.ts` yorumunda da böyle belirtilmiş |
 
 ### 6.2 Performans ve Erişilebilirlik Kuralları
 
@@ -296,8 +301,8 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.3 — Session 1 (2026-07-17), Session 4 (2026-07-21),
-Session 14 (2026-08-11), 23. sohbet (2026-09-03)*
+*BOWLERA DESIGN_SYSTEM.md — v1.5 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
@@ -318,4 +323,29 @@ SYSTEM_RAPORU.md v1.1 §1a, CORE.md v1.7, AGENT.md v1.6 ile eşleştirildi.
 250ms→500ms değişikliği (etiketli "2026-09-03 güncellendi") bu sohbette hiç konuşulmadı ve
 SESSION_INDEX.md'de hiçbir yerde loglanmamış — muhtemelen başka bir sohbette yapılıp
 SESSION_INDEX'e hiç işlenmedi (ÇALIŞMA AKIŞI ihlali). İçeriğe dokunulmadı, sadece SESSION_INDEX'e
-yeni bir Açık Sorun olarak eklendi, kullanıcıya bu turda ayrıca bildirildi.*
+yeni bir Açık Sorun olarak eklendi, kullanıcıya bu turda ayrıca bildirildi.
+⚠️ **DAHA CİDDİ TUTARSIZLIK (bu turda tespit edildi):** BOWLERA_MOTION_SYSTEM_RAPORU.md §3'ün
+önerdiği token mimarisi (tek nested `motionTokens.{duration,ease,spring}` objesi, örn.
+`motionTokens.spring.cardRelease`) ile gerçek kodun (`MenuCard.tsx`) kullandığı yapı
+(`durations`/`easings`/`springs` — üç ayrı top-level export, `durations.menuCardHover` gibi
+raporda hiç geçmeyen anahtarlarla) BİRBİRİYLE ÇELİŞİYOR. İkisi aynı `tokens.ts` dosyası olamaz.
+`tokens.ts` görülmeden hangisinin (ya da üçüncü bir yapının) gerçek olduğu belirlenemez — bu
+bölümdeki tüm §6.1a değerleri bu çelişki çözülene kadar RAPOR SPESİFİKASYONU olarak okunmalı,
+kod teyidi olarak DEĞİL.*
+*v1.4: Kullanıcı rapor v1.1'in tam metnini paylaştı. §6.1a'daki `springs.drawer`
+(`stiffness:320/damping:32`, rapor §4) ve `drawerContentStagger` (40-60ms, rapor §5) "hiç
+paylaşılmadı" durumundan "rapor spesifikasyonu var, kod teyidi yok" durumuna güncellendi.
+Kritik bulgu: rapor §3'ün önerdiği token mimarisi (`motionTokens.duration/ease/spring`) ile
+`MenuCard.tsx`'in gerçekte import ettiği yapı (`durations`/`easings`/`springs`,
+`durations.menuCardHover` dahil) BİRBİRİYLE ÇELİŞİYOR — `tokens.ts` görülmeden çözülemez, not
+olarak işlendi. Ayrıca raporun §28 sonundaki "Page transitions (token değeri 500ms'ye
+güncellendi, bileşen henüz kodlanmadı)" notu, SESSION_INDEX Açık Sorun #106'daki (250ms→500ms,
+kaynağı belirsiz değişiklik) sorunun kısmi açıklaması olarak SESSION_INDEX'e işlendi.*
+*v1.5: `tokens.ts` paylaşıldı. §6.1a TAM kod-teyitli hale getirildi — yapı çelişkisi (#107)
+ÇÖZÜLDÜ (gerçek kod düz `durations/easings/springs` export'ları kullanıyor, rapordaki nested
+`motionTokens.*` DEĞİL). 4 değer teyit edildi (`drawer`, `tactile`, `badge`, `drawerContentStagger`).
+🔴 YENİ BULGU: `springs.cardRelease` için `tokens.ts`'teki değer (`stiffness:300/damping:24`) ile
+bu tablonun önceden kayıtlı canlı-kalibrasyon sonucu (`duration:0.45/bounce:0.15`) ÇELİŞİYOR —
+kod eski değerde kalmış, kalibrasyon hiç commit edilmemiş görünüyor. Kullanıcı adına karar
+verildi (bkz. tablo): canlı test sonucu esas alınır, `tokens.ts` düzeltilmeli — SESSION_INDEX'e
+🔴 aksiyon olarak işlendi.*
