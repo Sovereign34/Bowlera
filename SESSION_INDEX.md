@@ -17,29 +17,6 @@
 > tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
 > tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
 > aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
-> ⚠️ **TAŞIMA NOTU (2026-09-01, YENİ sohbet — #116 kapanışı sonrası, 400 satır eşiği):**
-> Kritik Kararlar'dan 6 stabil eski karar (Session 7/11/12), Açık Sorunlar #112-114/#115a/#116
-> TAM anlatıları (tabloda kısa özet KALDI), DOKUZUNCU DERS tam anlatısı ve Arşiv Taşıma
-> Kaydı'yla ÇİFT KAYIT oluşturan ~7 eski CURRENT FOCUS pointer paragrafı `session_arşiv_2.md`'ye
-> taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam9.md` (kullanıcı elle eklemeli).
-> ⚠️ **TAŞIMA NOTU (2026-09-01, YENİ sohbet — #118 Adım 4):** #118 Adım 4 eklenmesiyle
-> CURRENT FOCUS'taki #118 Adım 3 anlatı bloğu (Adım 4 tamamlandığı için güncelliğini yitirdi)
-> TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`
-> (kullanıcı elle eklemeli). ⚠️ AYRICA bu sohbette DÖRDÜNCÜ-YEDİNCİ DERS ailesiyle AYNI desen
-> TEKRAR EDİYOR: son turda "SESSION_INDEX.md'yi güncelleyeyim mi?" checkpoint sorusu soruldu,
-> kullanıcı onayı bu sohbette KAYITLI DEĞİL — sohbet, bir SONRAKİ sohbette "session index'i
-> güncelle" talimatıyla kapandı. Kural gereği (KARAR BİLDİRİMİ/checkpoint sonrası onay
-> gelmeden sohbet kapanma riski) bu, AÇIK SORUN olarak not düşüldü — bkz. CURRENT FOCUS ve
-> Açık Sorun #118 satırındaki "push/deploy açıkça teyit edilmedi" notu.
-> ⚠️ **TAŞIMA NOTU (2026-09-01, bu sohbet — #118 Adım 3):** #118 Adım 3 (route+test) eklenmesiyle dosya yeniden 400 satırı aştı; CURRENT FOCUS'taki #118 Adım 2 anlatı bloğu (Adım 3 tamamlandığı için güncelliğini yitirdi) TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md` (kullanıcı elle eklemeli). Bu taşımaya rağmen dosya hâlâ ~8 satır 400 eşiğinin üzerinde (eklenen test-sonucu anlatısı hâlâ GÜNCEL, ikinci bir arşivleme için uygun ESKİ bir blok bu turda bulunamadı) — bir sonraki sohbette gerçek bir taşımayla kapatılmalı (v84'teki aynı durumun tekrarı).
-> ⚠️ **TAŞIMA NOTU (2026-09-01, bu sohbet):** #118 Adım 1 eklenmesiyle dosya tekrar 400 satırı aştı; SESSION ÖZET (0-12) tablosu + Kritik Kararlar #1,3-6,13,14-16,18-23 + Açık Sorunlar #39,50,70,85,96,98,99,101-104,107-108,110-111,112-114 (hepsi ✅ kapalı/stabil) `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md` (kullanıcı elle eklemeli).
-> ⚠️ **TAŞIMA NOTU (2026-09-01, 28. sohbet devamı):** 412 satırda (400 eşiği aşıldı), 1 eski
-> blok ("A seçeneği..." anlatısı, süperseded) `session_arşiv_2.md`'ye taşındı — eklenti:
-> `session_arsiv_2_EKLENTI_2026-09-01-devam4.md` (kullanıcı elle eklemeli).
-> ⚠️ **TAŞIMA NOTU (2026-09-01, 27. sohbet):** 447 satıra ulaşınca (bkz. ONUNCU DERS/
-> SIRADAKİ GÖREVLER -9), 3 blok (CURRENT FOCUS #105+#91 anlatıları, footer v74/v75/v76)
-> TAM metinleriyle `session_arşiv_2.md`'ye taşındı — eklenti (`session_arsiv_2_EKLENTI_2026-09-01.md`)
-> kullanıcı elinle arşivin sonuna eklenmeli. Kapanış gerekçeleri o dosyada mevcut.
 > ⚠️ **TAŞIMA NOTU (2026-08-23, 21. sohbet):** SESSION_INDEX.md 441 satıra ulaşınca (400 satır
 > eşiği aşıldı), 7 kapanmış/güncelliğini yitirmiş blok (18. sohbet #91 detayı, 17. sohbet #90
 > detayı, + 5 "KAPANDI (BU TURDA)" anlatı bloğu: #82/83/84, #74, #79/75/80, #50, #76/77) TAM
@@ -62,32 +39,48 @@
 > Kural: bir görev "tamamlandı" işaretlenmeden önce SADECE kod+test yeterli değildir —
 > kullanıcının o akışa GERÇEKTEN erişebildiği (route bağlı, buton/link çalışıyor) ayrıca
 > doğrulanmalı. "Dokümantasyon tamam" ile "kullanıcı deneyimi tamam" AYRI kontrol noktaları.
-> ⚠️ **TAŞINDI (2026-09-01, 28. sohbet):** DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS (hepsi AYNI
-> temanın — "checkpoint onayı alınmadan sohbet kesilmesi" — 4 art arda tekrarı, DOKUZUNCU/
-> ONUNCU DERS zaten bunlara "önceki 8 ders" diye atıfta bulunuyor) TAM metinleriyle
-> `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam3.md`
-> (kullanıcı elle eklemeli). **Kural özeti (hâlâ geçerli):** KARAR BİLDİRİMİ + kod üretimi
-> sonrası kullanıcı onayı/checkpoint gelmeden sohbet kapanma riski varsa, en azından AÇIK
-> SORUN olarak loglanmalı; TAM DOSYA üretimi yarım kalmışsa session kapanmadan ÖNCE
-> tamamlanmalı ya da hangi adımda kaldığı ayrıca loglanmalı.
-> ⚠️ **TAŞINDI (bu sohbet):** DOKUZUNCU DERS (2026-08-30, 23. sohbet devamı — YENİ TÜR HATA,
-> ÖNCEKİ 8 DERSTEN FARKLI) tam anlatısı (`paymentMethod` zorunlu alanı eklenip TEK çağıran
-> client güncellenmeden push edilmesi, canlıda Gel Al siparişlerinin bloke olması) TAM
-> metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam9.md`
-> (kullanıcı elle eklemeli). **Kural özeti (hâlâ geçerli, #115b/#119'da referans alınıyor):**
-> bir API route'a ZORUNLU yeni bir alan eklenirken, o route'u çağıran TÜM client kod(lar)ı
-> GÖRÜLMEDEN/GÜNCELLENMEDEN aynı turda push edilmemeli — "build yeşil" SADECE tip güvenliğini
-> kanıtlar, çalışma-zamanı sözleşme uyumunu KANITLAMAZ.
-> ⚠️ ONUNCU DERS (2026-08-31/09-01 — özet, SEKİZ DERSLE AYNI AİLE + AYRI bir "TAM DOSYA
-> kısaltma = veri kaybı" hatası): Kural özeti hâlâ geçerli — "TAM DOSYA güncelleme" demek
-> "gördüğüm anlık içeriği yeniden yaz" demek DEĞİLDİR; mevcut TÜM içerik korunmalı, sadece
-> 400 satır eşiği fiilen aşıldığında VE gerçek bir eklenti dosyası üretilip kullanıcıya
-> verildiğinde bir blok arşive taşınabilir. **[TAŞINDI, 2026-09-01, YENİ sohbet — 400 satır
-> eşiği]** Olayın TAM anlatısı (v77 footer'ında zaten tekrarlanan içerikle örtüşüyordu)
-> `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`
-> (kullanıcı elle eklemeli). Detay hâlâ v77 footer kaydında ve Açık Sorunlar #112/#113/#114'te
-> özetli.
-
+> ⚠️ DÖRDÜNCÜ DERS (2026-08-07, Session 11): Session 10'un kapanış notunda "konuşma
+> giriş/kayıt akışlarına geçti, içeriği sağlanmadı, bir sonraki güncellemede eklenecek"
+> denmişti — ama o sohbet kapandığında SESSION_INDEX GÜNCELLENMEDEN kaldı. Kullanıcı,
+> kapanan sohbetin tam metnini yeni bir sohbete taşıyarak bu güncellemeyi GERİYE DÖNÜK
+> yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
+> güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
+> kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
+> ⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
+> `middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
+> varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
+> gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
+> AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
+> yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
+> senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
+> etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
+> set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
+> senkron, ama açıklayıcı yorum bloklarından biri geride kalmış — bkz. Açık Sorun #72).
+> Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
+> gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
+> yapılıyor.
+> ⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
+> derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
+> süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
+> yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
+> koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
+> yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
+> taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
+> istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu (Bölüm 7.2) her büyük görev
+> ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
+> KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
+> düşülmeli, sohbetin kesilme anını beklemeden.
+> ⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
+> masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası (`SummaryPanel.test.tsx`,
+> `MobileSummaryDrawer.test.tsx`) düzeltildi, `npm run build` yerelde temiz koştu, kullanıcı
+> 3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi TAM DOSYA olarak
+> üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT FOCUS bloğunun
+> `session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem TAMAMLANMADAN sohbet
+> kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak güncellemeyi GERİYE
+> DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/dosya-üretimi
+> "başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
+> kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
+> ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
 > ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
 > (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
 > FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
@@ -100,81 +93,105 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[TAŞINDI]** 17. sohbetten 28. sohbete kadarki turn-by-turn CURRENT FOCUS anlatı blokları
-> (17-24. sohbetler, #112-114, #105/#91 ara-durum notu, "A seçeneği" bloğu, #118 Adım 1-3
-> anlatıları — toplam ~11 ayrı taşıma) `session_arşiv_2.md`'ye taşındı; hangi tarihte, hangi
-> eklentiyle taşındığı Arşiv Taşıma Kaydı tablosunda satır satır kayıtlı — burada tekrar
-> edilmiyor (çift kayıt önlemek için). Güncel özet: Açık Sorunlar #90/#91/#95-#116'da,
-> Kritik Kararlar'da ve GENEL DURUM'da hâlâ eksiksiz duruyor.
-
-> **[YENİ, 28. sohbet devamı, 2026-09-01]** Kullanıcı #115'in deploy'unun yeşil olduğunu
-> bildirdi. DOKUZUNCU DERS uyarınca sorgulandı: deploy yeşili tip güvenliğini kanıtlar,
-> runtime davranışını (gerçek callback ile "tutarsizlik" tetiklenip DB'ye yazılması)
-> KANITLAMAZ — kullanıcı bunun HENÜZ test edilmediğini teyit etti. #115, #115a (deploy,
-> ✅) ve #115b (runtime, 🔴) olarak bölündü. Ayrıca guest-gate'e sandviç parity eklendi:
-> `guest-gate.ts`+`middleware.ts` (bağımlı tek birim) + 2 yeni test. Ağ erişimi yok, test
-> suite koşulamadı. **KALAN:** #115b doğrulaması + #117 (3 dosya push+build+canlı test).
-
-> **[YENİ, bu turda, 2026-09-01]** İade Kuyruğu (#118) açıldı. Kod yazmadan önce PayTR'ın
-> resmi Refund API dokümantasyonu (dev.paytr.com/en/iade-api) doğrulandı — Kural #1
-> (Tahmin etme) ihlalini önlemek için. Endpoint/parametre/imza netleşti; kritik fark:
-> `return_amount` init'in aksine TL-ondalık gönderiliyor. `merchant_oid` tiresiz-UUID
-> varsayımı ORTA güvenilirlik — sandbox testi gerektiriyor. KARAR BİLDİRİMİ alındı (tam
-> iade/herhangi personel/on-demand/Sipariş Geçmişi ekranı/gerçek API). 5 adımlık sıralı
-> uygulama planı önerildi (Kural #5 — tek modül, tek tur). Adım 1-2-3 sırayla kodlandı+test
-> edildi (detay Arşiv Taşıma Kaydı'nda + Açık Sorun #118'de özetli).
-
-> **[YENİ, YENİ sohbet, 2026-09-01]** #118 Adım 4: `GelAlOrderCard.tsx` / `RefundConfirmDialog.tsx`
-> / `GelAlPanel.tsx` — KARAR BİLDİRİMİ ile verildi. Yeni `handleRefund(id, phone)`, mevcut
-> `handleAction`'ı DEĞİŞTİRMEDEN ayrı tutuldu (refund route'u farklı: POST, farklı URL, farklı
-> body şekli — sadece `params.id` alıyor). Hata mesajı dosyanın mevcut BSC-4 deseniyle TUTARLI
-> bırakıldı: sunucudan gelen özel hata (`result.errorMessage`, örn. "zaten iade edilmiş") sadece
-> konsola loglanıyor, kullanıcıya aynı genel `ACTION_ERROR_MESSAGE` gösteriliyor (finansal
-> aksiyonlar için özel mesaj göstermek AYRI, henüz konuşulmamış bir karar). `onRefund` prop'u
-> `GelAlOrderCard`'a koşulsuz iletildi (diğer handler'larla aynı desen). Checkpoint istendi —
-> **açık onay bu sohbette KAYITLI DEĞİL** (bkz. header TAŞIMA NOTU, DÖRDÜNCÜ-YEDİNCİ DERS
-> deseni). Test seti (Kural #6: her yeni bileşen/store için minimum test) HENÜZ YAZILMADI.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
+> 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
+> Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
+> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
 >
-> Aynı sohbetin devamında kullanıcı CANLI ortamda fiilen test etti: (a) nakit ödenen dünkü bir
-> siparişte "İade Et" denemesi `validateRefundEligibility()`'nin (2) numaralı kontrolüyle
-> (nakit siparişler PayTR'dan iade edilemez) DOĞRU şekilde reddedildi — bug değil, tasarım
-> gereği; sadece genel UI hata mesajı ("İşlem kaydedilemedi") bu geçerli sebebi gizliyor. (b)
-> online/PayTR ile ödenmiş bir sandviç siparişinde iade denemesi BAŞARILI oldu — DB'de
-> `payment_status: "iade_edildi"` görüldü, bu alanı `finalizeRefund()` SADECE PayTR gerçekten
-> `status: "success"` döndüğünde yazıyor, yani dolaylı ama güvenilir kanıt. Sonuç: zincir
-> (modal → route → `refundOrder()` → `paytrRefund()` → DB) UÇTAN UCA ÇALIŞTIĞI pratikte
-> doğrulandı — ancak bu sohbette push/Vercel deploy'un AÇIKÇA teyit edildiği bir cümle YOK
-> (kod muhtemelen checkpoint sonrası verilip push edilmiş olmalı, ama bu adım belgelenmedi).
->
-> **YENİ BULGU (kod incelemesinde, bu turda):** `paytrRefund()` işlem bazında test/canlı
-> ayrımı YAPMIYOR — iade isteği hiçbir `test_mode` alanı taşımıyor (PayTR'ın resmi iade
-> API'siyle uyumlu, eksiklik değil). Güvenlik isteğe eklenen bir bayraktan değil, iade edilmek
-> istenen `merchant_oid`'in HANGİ modda ödendiğinden geliyor — şu an TÜM siparişler
-> `PAYTR_TEST_MODE=1` ile ödendiği için gerçek para hareket ETMİYOR. Canlı Mod geçişi (#105'in
-> kalan adımı, `PAYTR_TEST_MODE=0`) sonrası bu buton GERÇEK para iade EDECEK (amaç bu, ama
-> geçişten ÖNCE bilinçli olunmalı) — yeni açık sorun olarak loglandı, bkz. #119.
->
-> **KALAN:** (a) test seti yazılmalı (Kural #6), (b) nakit siparişlerde "İade Et" butonunun
-> gizlenmesi ya da "Nakit — elle iade" gibi devre dışı bir etiketle gösterilmesi — kullanıcı
-> kararı BEKLİYOR, uygulanmadı, (c) push/deploy bu sohbette açıkça teyit edilmedi — bir sonraki
-> sohbette doğrulanmalı, (d) #119 Canlı Mod geçişinden ÖNCE gözden geçirilmeli, (e) yeni
-> Sipariş Geçmişi/Arama ekranı henüz BAŞLANMADI.
+> **[YENİ, bu turda (19. sohbet, 2026-08-15) — YAN KEŞİF, #91'İN ÖNÜNE GEÇMEDİ]** Kullanıcı
+> paylaştığı bir dijital pazarlama/CRM strateji belgesini (3 markalı bir başka işletme için
+> yazılmış) Bowlera'nın gerçek Neon şemasıyla (5 tablo doğrulandı: `users`,
+> `consent_registrations`, `order_history`, `password_reset_requests`,
+> `registration_blocked_attempts`) karşılaştırdı. Kullanıcı vizyonu netleşti: (a) Bowlera
+> "herhangi an" 2./3. şubeye açılabilir — şema bunun için ŞİMDİDEN geriye dönüşsüz olmayacak
+> şekilde kurulmalı; (b) farklı şubelerde menü farklılığı olabilir; (c) bu CRM/veri yapısı
+> Bowlera'ya özel değil, ileride birçok modül/uygulamanın oturacağı TEMEL İSKELET (PUSULA OS
+> vizyonuyla örtüşüyor). Bulgular + önerilen yön `BOWLERA_COK_SUBELI_CRM_VIZYON.md` adlı ayrı
+> bir taslak belgede toplandı (ARCHITECTURE.md'nin YERİNE geçmiyor, henüz ona işlenmedi) ve
+> KULLANICI TALEBİYLE 3 yeni Açık Sorun (#92/#93/#94) olarak aşağıya loglandı — kod ÜRETİLMEDİ,
+> sadece analiz + öneri. **Sıradaki adım kullanıcı kararıyla netleşti: önce #91'in canlı
+> doğrulaması yapılacak, #92/#93/#94 SONRA ele alınacak.**
 
-> **[YENİ, bu sohbet, 2026-09-02]** #118 devamı — nakit sipariş "İptal Et" özelliği eklendi
-> ve kullanıcı tarafından CANLIDA doğrulandı (bkz. Açık Sorun #120). Ayrıca, "Kâseni Yarat"
-> customizer'ında Double porsiyon seçildiğinde fiyat/kalorinin ölçeklenmediği bulundu — kök
-> neden `getTotals()`'ın `selections.mainPortion`'ı hiç okumaması (`CUSTOMIZER_SPEC.md` §4'te
-> tanımsız bir spec boşluğu). KARAR: Double = tam 2x (fiyat+tüm makrolar). `scaleMainItem()`
-> helper'ı verildi, spec v1.2→v1.3 güncellendi — **canlı doğrulama YAPILMADI** (bkz. #121).
-> Cayma hakkı checkbox'ının her siparişte tekrar işaretlenmesi (mevcut davranış) korunacağı
-> kararlaştırıldı — hukuki kesinlik için `/kvkk` maddesiyle birlikte avukata sorulmalı. #115b
-> için `test-tutarsizlik-callback.js` script'i üretildi ve Neon'da atılabilir bir test siparişi
-> oluşturuldu (UUID `1af9a0ec-719c-4927-855a-1c15b0bd0b1c`) ama **script henüz ÇALIŞTIRILMADI**
-> — hangi terminal ortamı (Codespaces/lokal) kullanılacağı soruldu, cevap gelmeden sohbet
-> kapandı (DÖRDÜNCÜ-YEDİNCİ DERS ailesiyle aynı checkpoint-cevapsız deseni — not düşüldü).
-> **KALAN:** script çalıştırılmalı → Neon'da `payment_status="tutarsizlik"` doğrulanmalı → test
-> satırı silinmeli (`DELETE FROM order_history WHERE id = '1af9a0ec-719c-4927-855a-1c15b0bd0b1c';`);
-> double porsiyon fix'inin push+canlı doğrulaması; ardından #91 (SEC-01 role-revocation testi).
+> **[YENİ, bu turda (20. sohbet, 2026-08-23) — SANDWICH_SPEC.md v1.0 ÜRETİLDİ, KOD YOK]**
+> Kullanıcı "Sandviçini Oluştur" akışı için CUSTOMIZER_SPEC.md desenlerinin izole bir
+> kopyasının çıkarılmasını istedi (Seçenek A — paralel/bağımsız motor, bowl akışına
+> dokunmaz, kullanıcı onayladı). Subway + Jersey Mike's global sandviç zinciri UX'i
+> web'den araştırıldı, sentezlendi: Subway'in gerçek sırasına sadık 6 adım (Size→Bread→
+> Protein→Cheese→Veggies→Sauce&Toast&Extras — ilk önerilen "Bread-first" sıra kullanıcı
+> tarafından REDDEDİLDİ, Subway'in protein/size-first gerçeğine düzeltildi). Kullanıcının
+> "operasyonu da düşün" uyarısı üzerine **UX seçim sırası ile fiziksel hazırlık sırasının
+> AYRI tutulması** kararlaştırıldı — yeni `getPrepOrder()` fonksiyonu (Personel Sipariş
+> Paneli #62 ticket render'ı için, `selections` state'ini DEĞİŞTİRMEDEN mutfak sırasına
+> göre yeniden düzenler: Bread→Protein+Cheese→Toast→Veggies→Sauce). Toast, şube-config'e
+> bağlı opsiyonel özellik olarak tasarlandı (çok şubeli mimariyle #92/#93/#94 bağlantılı,
+> henüz kararlaştırılmadı). `SANDWICH_SPEC.md` dosyası kullanıcıya artifact olarak verildi,
+> CORE.md Bölüm 3 (Tetikleyici Tablosu) + Bölüm 4 (Dosya Haritası) AYNI TURDA güncellendi
+> (v1.5) — yeni referans dosyası eklenince CORE.md senkron kalmalı kuralı uygulandı.
+> **Durum: SADECE yapısal iskelet onaylandı, kod ÜRETİLMEDİ.** 6 açık soru (S1: gerçek
+> `sandwich-data.json` verisi, S2: Veggies ücretsiz kota sayısı, S3: `extras.doubleProtein`
+> vs `proteinPortion:'double'` çakışması, S4: Toast sabit mi/config'e mi bağlı, S5: "Mike's
+> Way" preset içeriği, S6: `useCartStore.customization` union tipi genişletmesi — AYRI onay
+> gerektiren TEK bowl-dokunuşu) kod aşamasından ÖNCE netleşmeli (Kural #2 — eksik veriyle
+> çözüm üretilmez). AGENT.md'ye bu turda HENÜZ işlenmedi (sadece CORE.md güncellendi,
+> kullanıcı talebi bu kapsamdaydı).
+> **[DÜZELTME, aynı sohbet devamı]** Kullanıcı adım sırasını sorguladı — "Ekmek seçimi en
+> başta olacak değil mi?" SANDWICH_SPEC.md v1.0'daki "Subway'e sadık Size→Bread" iddiası
+> YANLIŞ çıktı (gerçek Subway sırası protein-first'tür, ilk araştırmada bu netleştirilmemişti).
+> Kullanıcı onayıyla **Bread-first**'e düzeltildi: **Bread→Size→Protein→Cheese→Veggies→
+> Sauce&Toast&Extras** (SANDWICH_SPEC.md v1.1). CORE.md Dosya Haritası'ndaki versiyon
+> referansı v1.0→v1.1'e güncellendi (v1.6). Durum DEĞİŞMEDİ — S1-S6 hâlâ bekliyor.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
+> bloğu (build hatası düzeltmesi, `sandwich-data.json` TEST VERİSİ üretimi, `Hero.tsx` CTA
+> değişikliği, 6 adım bileşeni + eksik `page.tsx` kodlanması, 7 test dosyası/27 test PASS)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`).
+> Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
+> için gerekli değil, sadece turn-by-turn anlatı taşındı.
+
+> ⚠️ **GERİYE DÖNÜK İŞLENDİ (2026-08-23, 22. sohbet — DÖRDÜNCÜ-SEKİZİNCİ DERS'in TEKRARI):**
+> Kullanıcı ham sohbet metnini yapıştırdı — sohbet, Claude bir `grep` çıktısı beklerken
+> checkpoint'siz kesilmiş. Hiçbir dosyanın push/canlı-test edildiği TEYİT EDİLMEDİ; hepsi
+> "kod var, doğrulama YOK" statüsüyle #99-#104'e loglandı, hiçbiri TAMAMLANDI sayılmadı.
+>
+> **Kullanıcının 4 şikâyeti:** (1) menüde "Kâseni Oluştur"/"Sandviçini Oluştur" yan yana
+> durmuyordu; (2) hero görseli tam görünmüyordu; (3) Sepete Ekle sonrası akış BAŞA dönüyordu
+> (sepete/checkout'a gitmeliydi); (4) fiyatların "geçici" olduğu belli değildi.
+>
+> **İddia edilen (PUSH/TEST TEYİT EDİLMEDİ):** `Hero.tsx` buton grid'e çevrildi;
+> `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; `HeroImagePlaceholder.tsx` mobil
+> taşma düzeltildi (`aspect-[4/3]`+`max-h-72`); `SandwichCustomizer.tsx` artık `/siparis`'e
+> yönlendiriyor; **paylaşılan** `CartDrawer.tsx` satır 84'teki "her zaman Özel Kase" bug'u
+> "Özel Sandviç" gösterecek şekilde düzeltildi (Bowl davranışı KORUNDUĞU iddia edildi,
+> DOĞRULANMADI — risk MEDIUM); `OrderSummary.tsx`'te aynı bug + "Kaldır" butonu eklendi.
+>
+> **ÇÖZÜLEMEDEN KALAN, KRİTİK:** Sandviçte fiyat ne olursa olsun "Siparişi Onayla"da kırmızı
+> "fiyatlandırılamadı" hatası çıkıyor, sipariş TAMAMLANAMIYOR. Şüphe (doğrulanmadı):
+> `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx` sadece Bowl'un `bowlItem`/
+> `customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan
+> `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` istendi, YANIT
+> GELMEDEN kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
+>
+> **Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
+> değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
+
+> **[YENİ, 2026-09-03, 23. sohbet — MOTION SYSTEM başladı, #99/#91'DEN AYRI, kullanıcı
+> kararıyla]** Kullanıcı "BOWLERA — PREMIUM MOTION SYSTEM" raporunu (Framer Motion mimari
+> yükseltmesi, 11 adımlık P0-P3 sırası) verdi. Kullanıcıya #99 (🔴 sandviç checkout blokajı)
+> ve #91 (🔴 güvenlik canlı doğrulaması) önerildi, kullanıcı BİLİNÇLİ olarak motion işini
+> paralel yürütmeyi seçti — bu iki blokaj ERTELENMEDİ, sadece bu turun kapsamı dışında.
+> **Bu turda yapılan:** (1) `lib/motion/tokens.ts` (YENİ dosya) — DESIGN_SYSTEM.md §6.1'deki
+> 7 mevcut süre + `easeOut`/`easeInOut`/`linear` isimlendirildi; `springs.tactile`/
+> `springs.badge`/`springs.drawer` ve `drawerContentStagger` DESIGN_SYSTEM.md'de karşılığı
+> OLMAYAN varsayımlar olarak açıkça işaretlendi. (2) `CartDrawer.tsx` motion yükseltmesi —
+> `if (!isOpen) return null` kaldırıldı, `AnimatePresence`+backdrop fade+panel spring slide+
+> içerik stagger eklendi, `useReducedMotion` ile DESIGN_SYSTEM.md §6.2 kuralına uyuldu. Bu
+> dosya AYRICA #101'i (22. sohbet, "Özel Sandviç" fallback, DOĞRULANMAMIŞ risk MEDIUM) İÇERİYOR
+> ve bu turda YENİDEN yazıldı. (3) `CartDrawer.test.tsx` (YENİ, 8 test — happy/edge/failure)
+> yazıldı, kullanıcı Codespaces'te ÇALIŞTIRDI: **8/8 PASS** (2026-09-03 06:16, ekran görüntüsü
+> ile doğrulandı). **KALAN:** GitHub'a push edilmedi, canlı/production'da GÖZLE doğrulanmadı
+> (ÜÇÜNCÜ DERS); DESIGN_SYSTEM.md §6.1'e CartDrawer satırı ve yeni spring/stagger değerleri
+> HENÜZ İŞLENMEDİ (onay bekliyor); CORE.md Dosya Haritası'na `lib/motion/tokens.ts` ve
+> `CartDrawer.test.tsx` HENÜZ EKLENMEDİ — bkz. Açık Sorun #105. Sıradaki adım (rapor P0-2):
+> MenuCard (lift + image zoom).
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -185,30 +202,19 @@
 | 2026-08-10 | 3 blok (#74 çıkış butonu, #62 Masaya tam kapanış, #79 masaüstü fix) | `session_arşiv_1.md` | ✅ özetli. ⚠️ Eklenti (`session_arsiv_1_EKLENTI_2026-08-10.md`, 4 blok) HÂLÂ `session_arşiv_1.md`'nin sonuna eklenmemiş |
 | 2026-08-11 | #85 bloğu (İLK taşıma, session_arşiv_2.md'yi açan blok) | `session_arşiv_2.md` | ✅ Açık Sorun #85/Kritik Kararlar'da özetli, TAM dosya olarak verildi |
 | 2026-08-11 (3. kez) | Sekme rozetleri + DESIGN_SYSTEM.md §2.2 istisnası | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-11.md`) | ✅ Açık Sorun #88'de özetli |
-| 2026-08-11 (devamı) | 1b(ii) kapsam-dışı kararı | `session_arşiv_2.md` (iddia edilen) | ⚠️ **DOĞRULANAMADI** — 2026-08-13 taramasında bu blok `session_arşiv_2.md` içinde bulunamadı. Karar Kritik Kararlar tablosunda ve Açık Sorun #66'da özetli, içerik kaybı değil, sadece turn-by-turn anlatı eksik |
+| 2026-08-11 (devamı) | 1b(ii) kapsam-dışı kararı | `session_arşiv_2.md` (iddia edilen) | ⚠️ **DOĞRULANAMADI** — 2026-08-13 taramasında bu blok `session_arşiv_2.md` içinde bulunamadı, muhtemelen eklenti hiç üretilmedi/eklenmedi. Karar Kritik Kararlar tablosunda ve Açık Sorun #66'da özetli, içerik kaybı değil, sadece turn-by-turn anlatı eksik |
 | 2026-08-11 (devamı, 4. kez) | #86 Kayıt Onayları (build doğrulandı notu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-11-devam4.md`) | ✅ Açık Sorun #86'da özetli |
 | 2026-08-12 | #89 bloğu (IP delili + engellenen deneme logu) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12.md`) | ✅ Kritik Kararlar/#89'da özetli |
 | 2026-08-12 (3. kez) | #38 bloğu (RegistrationForm kod+push) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam3.md`) | ✅ Açık Sorun #38'de özetli |
 | 2026-08-12 (devamı) | Gel Al 3-durumlu revizyon (KARAR A) | `session_arşiv_2.md` (eklenti: `..._EKLENTI_2026-08-12-devam2.md`) | ✅ Kritik Kararlar/#62/GENEL DURUM'da özetli |
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
-| 2026-08-30 (23. sohbet) | 22. sohbetin "GERİYE DÖNÜK İŞLENDİ" anlatı bloğu (#99-#104 ilk loglanma anlatısı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30.md`) | ✅ #99 kapanış notunda + #100-#104'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
-| 2026-08-30 (23. sohbet devamı, 2. taşıma) | #99 kapanış anlatısı, PayTR ilk karar bloğu, SEC-02 doğrulama anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-30-devam2.md`) | ✅ Açık Sorunlar #99/#105/#91'de ve Kritik Kararlar'da özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
-| 2026-08-31 (24. sohbet) | #105 ilerleme anlatısı, üretim regresyonu anlatısı, #106 ilk keşif anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-31.md`) | ✅ Açık Sorunlar #105/#106'da ve DOKUZUNCU DERS'te özetli, TAM metinle taşınacak (eklenti üretildi, kullanıcı elle eklemeli) |
-| 2026-08-31 (25. sohbet, 2. taşıma) | #101-104 kullanıcı beyanı bloğu, #107/108 tam anlatı bloğu (personel paneli seçim gösterimi), #109 sandviç fiyatlandırma anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-31-devam3.md`) | ✅ Açık Sorunlar #100-#109'da özetli, TAM metinle taşınacak (eklenti üretilmedi — kullanıcı isterse ayrıca istemeli) |
-| 2026-09-01 (27. sohbet) | CURRENT FOCUS #105 (PayTR) tam anlatısı, CURRENT FOCUS #91 ara-durum notu, footer sürüm geçmişi v74/v75/v76 | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01.md`) | ✅ Açık Sorunlar #91/#105/#110/#111'de ve GENEL DURUM'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (28. sohbet) | 26. sohbetin "kullanıcı beyanıyla kapanan 3 iş" anlatı bloğu (#112/#113/#114) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam2.md`) | ✅ Açık Sorunlar #112/#113/#114'te özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (28. sohbet, 2. taşıma) | DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS (4 tekrar eden checkpoint-teması bloğu) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam3.md`) | ✅ Kural özeti SESSION_INDEX'te pointer olarak kaldı, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (28. sohbet devamı, 3. taşıma) | "A seçeneği onaylandı, kod verildi, push/deploy TEYİT EDİLMEDİ" anlatı bloğu (deploy o sırada teyit edilmemişti) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam4.md`) | ✅ Açık Sorunlar #115a/#115b/#116'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 5. taşıma) | SESSION ÖZET (tümü — 0'dan 12'ye) tablosu — #118 eklenmesiyle 412 satıra ulaşınca (400 eşiği aşıldı) taşındı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`) | ✅ GENEL DURUM/Kritik Kararlar'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 6-11. taşıma) | Kritik Kararlar #1,3-6,13,14-16,18-23 + Açık Sorunlar #39,50,70,85,96,98,99,101-104,107-108,110-111,112-114 (hepsi ✅ kapalı/stabil, session 1-8+23-26 dönemi) — #118 Adım 1 detayı eklenince dosya tekrar 400 satırı aştı | `session_arşiv_2.md` (aynı eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`) | ✅ GENEL DURUM'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 12. taşıma — DÜZELTME) | CURRENT FOCUS #118 Adım 1 anlatısı — İLK ÖNCE yanlışlıkla YERİNDE KISALTILMIŞTI (protokol ihlali), kullanıcı fark edip düzeltme istedi; orijinal TAM metin arşive taşındı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`) | ✅ Açık Sorun #118'de özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 13. taşıma) | SIRADAKİ GÖREVLER -9 ve -5 (ikisi de ✅ tamamlanmış) — düzeltme sonrası dosya hâlâ 400'ü aştığı için taşındı | `session_arşiv_2.md` (aynı eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`) | ✅ Açık Sorunlar #99/#101-104'te özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 14-15. taşıma) | Footer v78/v79 (v80-v83 tarafından süperseded) + SIRADAKİ GÖREVLER -10a (Açık Sorunlar #115a ile çakışıyordu) | `session_arşiv_2.md` (aynı eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`) | ✅ Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (bu sohbet, 16. taşıma) | CURRENT FOCUS #118 Adım 2 anlatısı — Adım 3 tamamlandığı için güncelliğini yitirdi | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam7.md`) | ✅ Açık Sorun #118'de hâlâ özetli, TAM metinle taşındı, eklenti bu turda üretildi |
-| 2026-09-01 (YENİ sohbet, 17-19. taşıma) | CURRENT FOCUS #118 Adım 3 anlatısı (Adım 4 tamamlandığı için güncelliğini yitirdi) + ONUNCU DERS'in "İKİNCİ hata" anlatısı (v77 footer'ıyla örtüşüyordu) + footer v77 tam kaydı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md`) | ✅ Açık Sorun #118/#112/#113/#114'te ve ONUNCU DERS özetinde hâlâ özetli, TAM metinle taşındı, eklenti bu turda üretildi |
 
-> ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`, `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`, `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`, `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`, `..._EKLENTI_2026-08-30-devam2.md`, `..._EKLENTI_2026-08-31.md`, `session_arsiv_2_EKLENTI_2026-09-01.md`, `..._EKLENTI_2026-09-01-devam2.md`, `..._EKLENTI_2026-09-01-devam3.md`, `..._EKLENTI_2026-09-01-devam4.md`, `..._EKLENTI_2026-09-01-devam5.md`, `..._EKLENTI_2026-09-01-devam6.md`, `..._EKLENTI_2026-09-01-devam7.md`, `..._EKLENTI_2026-09-01-devam8.md`, `..._EKLENTI_2026-09-01-devam9.md` (bu turda üretildi) — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
+> ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
+> `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
+> `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
+> `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md` (bu turda üretildi)
+> — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
 
@@ -216,23 +222,34 @@
 
 | # | Karar | Durum |
 |---|---|---|
-| 1,3-6,13,14-16,18-23 | **[TAŞINDI, 2026-09-01, bu sohbet — 400 satır eşiği]** Session 1-8 dönemine ait 9 erken karar (customizer 5 adım detayları, slogan, FulfillmentChannel, `â` karakteri, CartDrawer portal fix, Auth/Neon kurulumu, `/giris` kaldırılması, adres/profil modeli) TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md` (kullanıcı elle eklemeli). Kapanış gerekçesi: hepsi ✅ Uygulandı/Canlıda doğrulandı durumunda, aylardır stabil, hiçbiri aktif tartışma konusu değil. | ✅ (arşivde tam metin) |
+| 1 | Customizer 5 adım: Base → Main → Garden → Signature Flavor → Finish | ✅ Uygulandı |
+| 3-4 | Garden: ilk 4 ücretsiz + avokado her zaman ücretli / Finish: ilk 1 ücretsiz | ✅ Uygulandı |
+| 5 | "Make it Yours" → Finish'e entegre, "Double Main" → `mainPortion` yeniden kullanır | ✅ Uygulandı |
+| 6 | Slogan: "Sağlıklı Beslen, Sağlıklı Yaşa, Gücünü Hisset" | ✅ |
+| 13 | `FulfillmentChannel`: `"pickup"` \| `"dine-in"` (delivery yok), sepet/oturum seviyesinde tek alan | ✅ Canlıda doğrulandı. |
+| 14-16 | `â` karakteri kaldırıldı (menu-data.json, CartDrawer). Hero.tsx/StepBase.tsx bilinçli ertelendi (#27) | ✅ |
+| 18 | CartDrawer portal fix (`createPortal` → `document.body`) | ✅ Canlıda doğrulandı |
+| 19→20 | Auth: Twilio Verify + Auth.js JWT. DB: Neon Postgres, `users` tablosu | ✅ Kurulum tamam, build yeşil. |
+| 21-22 | Auth kod + görünür giriş UI | 🟡 **[Session 8]** Eski `/giris` KALDIRILDI, `/kayit-ol`'a redirect ediyor. |
+| 23 | Adres/profil modeli: adres SADECE profil/sadakat verisi, checkout'u bloklamaz | ✅ Kod üretildi VE repo varlığı doğrulandı |
+| 🆕 | Alerjen gösterimi: kalori/protein ile aynı zorunluluk statüsü | ✅ (#7 ve #44 kapandı) |
+| 🆕 | **[Session 7]** `consentRegistrations` tablosu, `users`'tan AYRI | ✅ Kod+şema+test tamam, migration canlıda ÇALIŞTIRILDI. |
+| 🆕 | **[Session 7]** `RegistrationChannel` tipi (`masaya-siparis`\|`gel-al`\|`online-platform`), `FulfillmentChannel`'DAN AYRI | ✅ Kod+şema+test tamam. |
 | 🆕 | **[Session 11]** Genel giriş akışı: girişsiz gezinme → ürün SEÇİNCE giriş sayfası → giriş/kayıt seçimi | ✅ Karar netleşti, henüz KODLANMADI |
 | 🆕 | **[Session 11]** Kayıtta bilgi+KVKK sonrası, giriş sağlanmadan ÖNCE kanal seçimi ZORUNLU | ✅ Karar netleşti, henüz KODLANMADI |
 | 🆕 | **[Session 11, KRİTİK]** "Kasa paneli" = Personel Sipariş Paneli (#62), TEK panel — Masaya gerçek-zamanlı akışı + Gel Al ilk-sipariş manuel onay kuyruğu | 🟡 Kapsam + mimari kararlar netleşti, kod HENÜZ YAZILMADI |
 | 🆕 | **[Session 11 devamı, #64 KAPANDI]** Gel Al onayı SADECE ilk siparişte — doğrulama durumu alanı (`pending`/`confirmed`) tutulur | ✅ Karar netleşti, #62 tasarımına eklendi, henüz KODLANMADI |
 | 🆕 | **[Session 12 devamı, KRİTİK — ARCHITECTURE.md v1.7]** Masaya Sipariş genel giriş/kayıt akışından TAMAMEN AYRILDI, ayrı `/masaya-siparis/*` yüzeyine taşındı (auth gerektirmez, guest-istisnası mekanizması yerine mimari izolasyon). `useCartStore` PAYLAŞILIR (ayrı state kurulmadı). Middleware'e YENİ istisna GEREKMİYOR — bu nedenle #65 KAPANDI. | ✅ Karar netleşti (ARCHITECTURE.md v1.7), henüz KODLANMADI |
 | 🆕 | **[Session 12 devamı, #67 KAPANDI — ARCHITECTURE.md v1.8]** `/masaya-siparis` KENDİ BAĞIMSIZ mini-checkout'unu kullanacak — `/siparis`'in (§2.9, Gel Al'a özel) varyantı OLMAYACAK. Gerekçe: Gel Al'a özel mantığın (hesap girişi, ilk-sipariş manuel onay) Masaya'ya sızma riskini önlemek. Fiyat/özet gösterimi paylaşılabilir, checkout akışı paylaşılmayacak. | ✅ Karar netleşti (ARCHITECTURE.md v1.8), henüz KODLANMADI |
+| 🗄️ | **[Session 12 devamı, #68 KAPANDI — ARCHITECTURE.md v1.9]** `RegistrationChannel`'dan `"masaya-siparis"` ÇIKARILDI (`FulfillmentChannel`'a taşınmadı). `20260808000000_registration_channel_masaya_siparis_cikarildi.md` | ✅ `types/index.ts` düzenlendi, migration gerekmedi (DB sütunu enum değil) |
 | 🆕 | **[Session 12 devamı, #69 KAPANDI — ARCHITECTURE.md v1.10]** `order_history.channel` Masaya/Gel Al ayrımı için yeterli bulundu, ek alan eklenmedi. §2.7b'nin açık soru listesi tamamen kapandı. | ✅ Karar netleşti, kod HENÜZ YAZILMADI (1b bekliyor) |
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.11]** Masa numarası TUTULACAK — terk edilmeyecek. Route: `/masaya-siparis/[tableId]` (path segment). `useCartStore`'a `tableId`+`setTableId()` eklendi (§2.3). `order_history`'ye nullable `table_number` eklenecek (SADECE dine-in) — şema notu: `20260808010000_order_history_tablenumber_eklendi.md`. #69'un kapsamı genişletildi (KAPALI kalıyor, gerekçesiz düşürülmedi). | ✅ Karar netleşti + doküman güncellendi, kod/migration HENÜZ YAZILMADI/KOŞULMADI |
 | 🗄️ | **[2026-08-08, KRİTİK — ARCHITECTURE.md v1.12]** #62'nin 3 mimari sorusu KAPANDI: (1) Personel auth = `users.role` alanıyla mevcut Auth.js'e rol bazlı yetki (2) Real-time = basit polling (3) Onay kuyruğu UI = iki ayrı sekme/panel (Masaya / Gel Al). | ✅ Karar netleşti + doküman güncellendi |
+| 🗄️✅ | **[önceki tur — `users.role` MIGRATION KOŞULDU]** `lib/db/schema.ts`'e `role` sütunu eklendi (`text`, `NOT NULL`, `DEFAULT 'customer'`), kullanıcı GitHub'a manuel kaydetti. `ALTER TABLE` Neon SQL Editor'de koşuldu, `role text` sütunu Tables görünümünde DOĞRULANDI. `users` tablosu 0 satır (Twilio #32 kısıtı) — regresyon test edilemedi ama risk de fiilen yok. | ✅ DB tarafı TAMAM |
 | 🆕 | **[BU TURDA — #75 mimari kararı]** "Sepete Ekle" kilidi SÜRE-bazlı (500ms debounce) değil, DURUM-bazlı (`selectionKey` + `Set<string> addedKeys`) olacak — bir kombinasyon eklenince kalıcı "Eklendi ✓", SADECE seçim değişince yeniden aktif. Aynı kombinasyona geri dönülürse kilit KORUNUR (bilinçli, tekrar eklemeyi önler). | ✅ Karar netleşti, kod üretildi, TEST/BUILD/PUSH/canlı doğrulama BEKLİYOR |
+| 🗄️✅ | **[önceki tur — `/personel/*` guard'ı UÇTAN UCA TAMAMLANDI]** `types/index.ts` (`AuthenticatedUser.role`), `auth.ts` (JWT/session callback'leri, `normalizeRole()`), `middleware.ts` (`/personel/*` role guard — oturumsuz→`/kayit-ol`, `role!=='staff'`→403), `types/next-auth.d.ts` (Session/User/JWT augmentation) — 4 dosya senkron, kullanıcı 403 kararını onayladı, Vercel build YEŞİL (kullanıcı doğruladı). Açık Sorun #72 (eski yorum) da kapandı. | ✅ Kod TAMAM, canlı build YEŞİL |
 | 🆕 | **[BU TURDA, 19. sohbet — henüz ONAYLANMADI, sadece öneri]** Çok şubeli mimari yönü: `branches` tablosu açılıp `order_history`+`consent_registrations`'a nullable `branch_id` FK eklenmesi öneriliyor. `users` ASLA şubeye bağlanmayacak (CRM şubeler üstü kalmalı — çapraz-şube LTV mantığı buna dayanıyor). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §6. | 🟡 Öneri aşamasında, bkz. Açık Sorun #92 |
 | 🆕 | **[BU TURDA, 19. sohbet — henüz ONAYLANMADI, sadece öneri]** CRM metrik alanları (`order_count`/`total_spend`/`days_to_repeat`) `users` tablosuna KOLON olarak eklenmeyecek, `order_history` üzerinden SQL VIEW olarak hesaplanacak — senkron kayma riskini (iptal/düzeltme senaryoları) önlemek için. Pazarlama attribution alanları (`acquisition_source` vb.) mevcut `channel` (fulfillment) alanlarıyla İSİM ÇAKIŞMASI yaratmayacak şekilde AYRI isimlendirilecek. | 🟡 Öneri aşamasında, bkz. Açık Sorun #94 |
-| 🆕 | **[2026-09-01]** İade Kuyruğu (#118): Tam iade (MVP, kısmi iade YOK), herhangi bir personel tetikleyebilir, on-demand tetikleme (Reddet'e bağlı değil, herhangi sipariş için), Sipariş Geçmişi/Arama ekranı (telefonla, çünkü completed/rejected siparişler panelde şu an hiç görünmüyor) eklenecek, gerçek PayTR `/odeme/iade` API'si kullanılacak (tahmine dayalı değil — dokümantasyon doğrulandı). | 🟠 Karar netleşti, Adım 1+2+3 kod+test+build TAMAMLANDI (yerelde) — bkz. Açık Sorun #118 |
-| 🆕 | **[2026-09-02, bu sohbet]** #118 devamı — nakit sipariş iptalinde modal YOK (para hareketi riski yok, PayTR'a hiç gidilmiyor) — online iadede mevcut modal AYNEN kalıyor. Yeni `PickupOrderStatus` değeri `"iptal_edildi"`, bilinçli olarak `"rejected"`den ayrı (biri pending'den, biri confirmed'den dallanıyor). | ✅ Karar netleşti + kodlandı + CANLIDA doğrulandı (#120) |
-| 🆕 | **[2026-09-02, bu sohbet]** Customizer Double porsiyon = tam 2x (fiyat + tüm makrolar: kalori/protein/karbonhidrat/yağ). | ✅ Karar netleşti + kodlandı + CANLIDA doğrulandı (#121 KAPANDI) |
-| 🆕 | **[2026-09-02, bu sohbet]** Cayma hakkı checkbox'ı her siparişte tekrar işaretletme (mevcut davranış) DEĞİŞTİRİLMEYECEK — sektör normuyla tutarlı bulundu. | 🟡 Karar netleşti, hukuki teyit (`/kvkk` + avukat) BEKLİYOR |
 
 ---
 
@@ -240,15 +257,8 @@
 
 | # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
 |---|---|---|---|
-| 115a | ✅ | **[TAŞINDI, bu sohbet]** PayTR callback route 4 açık + yeni `paymentStatus="tutarsizlik"` değeri — 2. versiyon push edildi, deploy yeşil (build/tip güvenliği kanıtlandı). Detay arşivde, bkz. GENEL DURUM/#115b. | `app/api/payment/paytr/callback/route.ts` |
-| 115b | ✅ | **[KAPANDI, bu sohbet, 2026-09-02]** `test-tutarsizlik-callback.js` script'i Codespaces'te çalıştırıldı — kendi callback endpoint'ine (`https://bowlera-site.vercel.app/api/payment/paytr/callback`) geçerli imzalı ama bilerek yanlış tutarlı (4000 kuruş, DB'de doğrusu 5000) sahte bildirim gönderildi. HTTP 200/"OK" alındı. Neon SQL Editor'de doğrulandı: `payment_status = "tutarsizlik"` fiilen yazıldı — runtime davranışı KANITLANDI (sadece deploy yeşili değil). Test satırı Neon'dan silindi (`DELETE FROM order_history WHERE id = '1af9a0ec-719c-4927-855a-1c15b0bd0b1c'` — "Statement executed successfully"). #115 artık TAM KAPANDI (#115a+#115b). | `app/api/payment/paytr/callback/route.ts`, `lib/db/schema.ts`, `test-tutarsizlik-callback.js` |
-| 120 | ✅ | **[YENİ, bu sohbet, 2026-09-02]** #118 devamı — nakit sipariş "İptal Et": yeni `PickupOrderStatus` değeri `"iptal_edildi"` (`types/index.ts`, `"rejected"`den bilinçli ayrı — biri pending'den biri confirmed'den dallanıyor), `cancelPickupOrder()` (`lib/personel/gel-al-queries.ts`, SADECE `paymentMethod==="nakit"` siparişlerde çalışır, PayTR'a hiç gitmez), yeni route `app/api/personel/orders/[id]/cancel/route.ts`, `GelAlOrderCard.tsx` (Hazırlanıyor sekmesinde nakitte modalsız "İptal Et", online'da mevcut "İade Et"+modal aynen duruyor), `GelAlPanel.tsx`'e `handleCancel()` eklendi. Kullanıcı CANLIDA tıklayıp doğruladı: buton doğru görünüyor, sipariş listeden düşüyor, DB güncelleniyor. | `types/index.ts`, `lib/personel/gel-al-queries.ts`, `app/api/personel/orders/[id]/cancel/route.ts`, `components/personel/GelAlOrderCard.tsx`, `components/personel/GelAlPanel.tsx` |
-| 121 | ✅ | **[KAPANDI, bu sohbet, 2026-09-02]** Customizer Double porsiyon fiyat/kalori hatası — kök neden: `getTotals()` `selections.mainPortion`'ı hiç okumuyordu, `CUSTOMIZER_SPEC.md` §4 bu kuralı hiç tanımlamamıştı (spec boşluğu). KARAR: Double seçiliyken main'in price/calories/protein/carbs/fat'ı TAM 2x. `lib/customizer-pricing.ts`'e yeni `scaleMainItem()` helper'ı eklendi, `CUSTOMIZER_SPEC.md` v1.2→v1.3 (§4+§2 güncellendi). Push edilmiş, Vercel deploy ✅ Ready (commit `4275a3e`). **CANLIDA doğrulandı:** Somon (+45₺/280kcal) main iken Single→₺45.00/390kcal, Double→₺90.00/670kcal — fiyat tam 2x, kalori farkı (+280) main'in kendi değerine eşit, base sabit kaldı. Karar uygulanan davranışla eşleşiyor. | `lib/customizer-pricing.ts`, `CUSTOMIZER_SPEC.md` |
-| 116 | ✅ | **[TAŞINDI, bu sohbet]** Personel panelinde ödeme yöntemi/durumu rozeti eklendi — 4 ekran görüntüsüyle CANLIDA uçtan uca doğrulandı. **KALAN (kapsam dışı, ayrı konu):** `schema.ts` union teyidi, nakit "İade Et" buton kararı (#118), test seti. Detay arşivde, bkz. GENEL DURUM. | `types/index.ts`, `lib/personel/gel-al-queries.ts`, `components/personel/GelAlOrderCard.tsx` |
-| 117 | 🟠 | **[YENİ, 28. sohbet devamı, 2026-09-01]** Guest-gate parite: sandviç akışı (`/sandwich/customize`) kâse akışının aksine guest-gate middleware'i tarafından YAKALANMIYORDU. `lib/auth/guest-gate.ts` (`GATED_PATH_PREFIXES`) + `middleware.ts` (`config.matcher`) aynı turda güncellendi (birbirine bağımlı tek birim), `guest-gate.test.ts`'e 2 yeni test eklendi (guest→redirect, girişli→redirect yok). Kod artifact olarak verildi, ağ erişimi olmadığı için test suite bu ortamda koşulamadı. **KALAN:** 3 dosya repoya konulup Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği gözle doğrulanmalı. | `lib/auth/guest-gate.ts`, `middleware.ts`, `lib/auth/guest-gate.test.ts` |
-| 118 | 🟠 | **[GÜNCELLENDİ, YENİ sohbet, 2026-09-01]** İade Kuyruğu — Adım 1+2+3 (kod+test+build, yerelde doğrulanmıştı) daha önce tamamlandı. **Adım 4 (bu sohbette):** `GelAlOrderCard.tsx`/`RefundConfirmDialog.tsx`/`GelAlPanel.tsx` — `handleRefund(id, phone)` ayrı fonksiyon (mevcut `handleAction` dokunulmadı), hata mesajı dosyanın BSC-4 deseniyle tutarlı (sunucu detayı SADECE konsola, kullanıcıya genel `ACTION_ERROR_MESSAGE`), `onRefund` koşulsuz iletildi. Checkpoint istendi, **açık onay bu sohbette KAYITLI DEĞİL** (bkz. CURRENT FOCUS, DÖRDÜNCÜ-YEDİNCİ DERS deseni). Aynı sohbette kullanıcı CANLI test etti: nakit sipariş DOĞRU reddedildi (tasarım gereği, `validateRefundEligibility()` kontrol 2 — bug değil), online sipariş iadesi BAŞARILI — DB `payment_status: "iade_edildi"` ile doğrulandı (`finalizeRefund()` sadece gerçek PayTR success'inde yazıyor, dolaylı ama güvenilir kanıt). Zincir (modal→route→`refundOrder()`→`paytrRefund()`→DB) UÇTAN UCA ÇALIŞTIĞI pratikte kanıtlandı. **KALAN:** (a) test seti HENÜZ yazılmadı (Kural #6), (b) nakit siparişlerde "İade Et" butonunun gizlenmesi/"Nakit — elle iade" etiketiyle gösterilmesi kararı BEKLİYOR, (c) push/Vercel deploy bu sohbette açıkça teyit EDİLMEDİ — bir sonraki sohbette doğrulanmalı, (d) yeni Sipariş Geçmişi/Arama ekranı henüz BAŞLANMADI. Bilinen, MVP kapsamı dışı bırakılan race korunuyor: iki personel eşzamanlı "İade Et" derse PayTR'a çift istek gitme riski (#81 ile aynı desen). Ayrıca bkz. YENİ #119 (test/canlı ayrımı bulgusu, Canlı Mod geçişinden ÖNCE gözden geçirilmeli). | `lib/paytr.ts`, `lib/paytr.test.ts`, `lib/personel/gel-al-queries.ts`, `lib/personel/refund-order.test.ts`, `app/api/personel/orders/[id]/refund/route.ts`, `app/api/personel/orders/[id]/refund/route.test.ts`, `components/personel/GelAlOrderCard.tsx`, `components/personel/RefundConfirmDialog.tsx`, `components/personel/GelAlPanel.tsx`, yeni Sipariş Geçmişi ekranı (henüz oluşturulmadı) |
-| 119 | 🟡 | **[YENİ, bu turda — kod incelemesinde bulundu]** `paytrRefund()` işlem bazında test/canlı ayrımı yapmıyor: iade isteği hiçbir `test_mode` alanı taşımıyor (`buildRefundRequestBody`'de yok) — bu bir eksiklik değil, PayTR'ın resmi iade API'sinde böyle bir alan yok, dokümantasyonla eşleşiyor. Güvenlik isteğe eklenen bir bayraktan değil, iade edilmek istenen `merchant_oid`'in HANGİ modda ödendiğinden geliyor: şu an `PAYTR_TEST_MODE=1` olduğu için mevcut TÜM siparişler sandbox'ta ödendi, bu yüzden gerçek para hareket ETMİYOR. Canlı Mod geçişi (#105'in kalan adımı, `PAYTR_TEST_MODE=0` + redeploy) sonrası bu buton GERÇEK para iade EDECEK — amaç bu, ama geçiş ÖNCESİ bilinçli olunmalı. DOKUZUNCU DERS ailesiyle aynı desen: fonksiyon işlem-bazlı kontrol yerine ortam-bazlı bir varsayıma dayanıyor. | `lib/paytr.ts` (`paytrRefund`, `buildRefundRequestBody`) |
-| 39,50 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** İkisi de KAPANDI — `/hesap` akışı (Twilio kısıtı artık engellemiyor) ve `AddToCartButton.tsx` BSC-6 çift-ekleme koruması (bkz. #75). TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `components/customizer/AddToCartButton.tsx` |
+| 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
+| 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
 | 52 | 🟡 | VisualPreview.tsx görsel katman klasörü boş | `components/customizer/VisualPreview.tsx` |
 | 53 | 🟢 | CONTENT_GUIDE.md §1/§2 â→a kararına göre güncellenmedi | `CONTENT_GUIDE.md` §1, §2 |
@@ -259,34 +269,37 @@
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
-| 91 | 🔴 | **[CURRENT FOCUS]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. SEC-02 canlıda GERÇEK DENEMEYLE doğrulandı ✅. **[25. sohbette]** `middleware.test.ts` artık FİİLEN ÇALIŞTIRILDI, 10/10 PASS (ekran görüntüsüyle doğrulandı). `middleware.ts` push'u GitHub'dan doğrudan kopyala-yapıştır ile TEYİT EDİLDİ ✅. **KALAN — DOĞRULANAMADI:** `auth.ts` ve `lib/auth/rate-limit.ts` için sadece ZİP paylaşıldı (`.git` yok, push durumu BAĞIMSIZ TEYİT EDİLEMEDİ — sadece kullanıcı beyanı var). SEC-01 (role-revocation, 403 canlı testi) kullanıcı kararıyla PayTR'a öncelik verilerek YİNE ERTELENDİ. #91 SEC-01 doğrulanmadan VE 2 dosyanın push'u `git status`/`git log` ile teyit edilmeden TAM KAPANMAZ. | `middleware.ts` (push ✅), `auth.ts` (push ❓), `lib/auth/rate-limit.ts` (push ❓) |
-| 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
-| 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin doğrulanması. | ARCHITECTURE.md §2.9a |
-| 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız — bilinçli MVP-dışı bırakıldı. | `lib/personel/gel-al-queries.ts` |
-| 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
-| 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, `tsc --noEmit`+`npm run build` YEŞİL, push edildi. **KALAN:** test seti yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi. | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
-| 89 | 🟢 | **[YENİ, bu turda — 2 açık madde]** #89 IP delili + engellenen deneme logu KOD/MİGRASYON/TEST tarafı TAMAMLANDI. Kapsam dışı bırakılan 2 madde: (a) KVKK metnine IP kaydı maddesi eklenmeli; (b) `route.ts POST` 20 satır sınırını aşıyor. | `lib/db/schema.ts`, `app/api/registration/consent/route.ts`, `/kvkk` sayfası |
+| 91 | 🟠 | **[CURRENT FOCUS]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. **KALAN:** (a) canlıda bir staff hesabının role'ünü DB'de elle `customer`'a çekip eski JWT ile `/personel`'e girip 403 aldığını GÖZLE görmek; (b) aynı telefonla 6 kez yanlış şifre deneyip 6.'nın reddedildiğini GÖZLE görmek. İkisi de mock'lu testlerle DOLAYLI kanıtlandı ama GERÇEK ortamda hiç denenmedi (ÜÇÜNCÜ DERS). | `middleware.ts`, `auth.ts`, `lib/auth/rate-limit.ts` |
+| 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı (görsel tavanı `md:max-w-[280px]`, `<main>` `md:h-screen md:overflow-hidden`, sol kolon `md:overflow-y-auto`, `SummaryPanel` `md:sticky`) ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
+| 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri, emsal yoktu) kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin ve Hazırlanıyor listesinden düştüğünün doğrulanması. | ARCHITECTURE.md §2.9a |
+| 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
+| 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız (#81'in Gel Al karşılığı) — bilinçli MVP-dışı bırakıldı (kullanıcı: tek personel/tek masaüstü panel, pratik risk düşük). Kullanım yoğunlaşırsa ele alınmalı. | `lib/personel/gel-al-queries.ts` |
+| 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri (Şifre Talepleri/Gel Al/Kayıt Onayları) kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. Ayrıca Gel Al/Kayıt Onayları sekmesi aktifken ilgili endpoint 5sn'de 2 kez sorgulanıyor (rozet + panel ayrı hook, bilinçli trade-off) — kullanım yoğunlaşırsa state page.tsx'e taşınıp panellere prop geçirilmesi düşünülebilir. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
+| 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, tam repo zip'inden statik incelendi, Gel Al deseniyle tutarlı. Kullanıcı Codespaces'te `tsc --noEmit` (hatasız) VE `npm run build` (route tablosu/size özeti başarıyla üretildi — Next.js bu tabloyu SADECE derleme başarılıyken yazdırır) çalıştırdı, GitHub'a push edildi. **Build tarafı KAPANDI.** **KALAN:** test seti (Kural #6) yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi (ÜÇÜNCÜ DERS — kod+build ≠ kullanıcı deneyimi doğrulandı). | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
+| 89 | 🟢 | **[YENİ, bu turda — 2 açık madde]** #89 IP delili + engellenen deneme logu KOD/MİGRASYON/TEST tarafı TAMAMLANDI (bkz. CURRENT FOCUS + Kritik Kararlar). Kapsam dışı bırakılan 2 madde: (a) KVKK aydınlatma metnine "güvenlik amacıyla IP adresiniz kaydedilir" maddesi eklenmeli (madde 6'ya bağlı); (b) `route.ts POST` fonksiyonu AGENT.md Kural #1'deki 20 satır sınırını (bu değişiklikten önce de) aşıyor — ayrı refactor turu önerildi (`handleRateLimitExceeded()` gibi bir yardımcıya çıkarılabilir). Ayrıca `registration_blocked_attempts` için retention/pruning YOK (bilinçli, kapsam dışı) — yoğun saldırı senaryosunda disk kullanımı izlenmeli. | `lib/db/schema.ts`, `app/api/registration/consent/route.ts`, `/kvkk` sayfası |
 | 63 | 🟠 | `npm install`: 12 açık/3 kritik güvenlik açığı — `npm audit fix --force` bilinçli KOŞULMADI | `package.json` |
-| 66 | 🟢 | İmza kase "Sepete Ekle" butonu guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. Hâlâ kullanıcı kararı bekliyor. | `components/customizer/AddToCartButton.tsx` |
-| 71 | 🟠 | DEPENDENCIES.md güncel değil — `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri hiç yansımamış. | `DEPENDENCIES.md` |
-| 73 | 🟠 | `tailwind.config.ts extend.colors` custom token'ları `bg-*` sınıfı olarak derlenmiyor. Kök neden BULUNAMADI. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
-| 81 | 🟢 | **[bilinçli erteleme]** Masaya Paneli'nde optimistic lock yok, Page Visibility API kullanılmadı. MVP kapsamı dışı. | `hooks/usePersonelOrders.ts`, `app/api/personel/orders/[id]/route.ts` |
-| 80 | 🟢 | Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — risk düşük, not olarak açık. | `components/customizer/SummaryPanel.tsx` |
-| 78 | 🟢 | Customizer'da collapsed sticky özet panel "Sepete Ekle"yi gizliyor — UX çözümü hâlâ AÇIK, yön kararlaştırılmadı. | `components/customizer/MobileSummaryDrawer.tsx` |
-| 92 | 🟠 | **[sadece analiz+öneri, KOD YOK]** Çok şubeli mimari: `branches` tablosu şemada HİÇ YOK. Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §3-4-6. | `lib/db/schema.ts` (henüz dokunulmadı) |
-| 93 | 🟡 | **[sadece analiz+öneri, KOD YOK]** Şubeye göre menü farklılığı: DB'de HİÇ menü/ürün tablosu yok. | `menu-data.json` veya `lib/customizer/customizerCatalog.ts` (dosya henüz istenmedi) |
-| 94 | 🟢 | **[sadece analiz+öneri, KOD YOK]** CRM/attribution katmanı eksik — isim çakışması riski (`channel` fulfillment anlamında, pazarlama DEĞİL). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §5-6-7. | `lib/db/schema.ts` (henüz dokunulmadı) |
-| 95 | 🟡 | Sandviç akışı `lib/sandwich-data.json` TEST VERİSİ ile çalışıyor — S1/S2/S5 gerçek veri bekliyor. Launch öncesi MUTLAKA değiştirilmeli. | `lib/sandwich-data.json` |
-| 96 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** KAPANDI — sandviç bileşen testleri yazıldı, Codespaces'te 27/27 PASS doğrulandı. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `components/sandwich/*.test.tsx` |
-| 97 | 🟠 | CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor. | `CORE.md` |
-| 98 | 🟢 | **[kapsam dışı bırakıldı]** Genel `npm test` 7 dosya/9 test başarısız — sandviç kapsamı dışında, ayrı turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya |
-| 100 | 🟡 | **[HÂLÂ AÇIK — 23. sohbette #101-104'ten AYRI bırakıldı]** 4 UI düzeltmesi: (a) `Hero.tsx` buton grid'e çevrildi; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` artık `/siparis`'e yönlendiriyor. Push/canlı test TEYİT EDİLMEDİ. | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
-| 101-104 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** 23. sohbette KULLANICI BEYANIYLA kapandı (CartDrawer/OrderSummary "Özel Kase" fix'leri, "Kaldır" butonu, test mock riski) — ekran görüntüsü YOK, sözlü beyan. TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `components/cart/CartDrawer.tsx`, `components/order/OrderSummary.tsx`, `components/sandwich/SandwichCustomizer.test.tsx` |
-| 107-108 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** 24. sohbette KAPANDI — CANLIDA DOĞRULANDI (personel panelinde seçim detayları gösterimi + SandwichSummaryPanel tutarsızlığı). TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `types/index.ts`, `lib/customizer-description.ts`, `lib/sandwich-description.ts`, `components/personel/GelAlOrderCard.tsx`, `components/sandwich/SandwichSummaryPanel.tsx` |
-| 109 | 🟡 | **[YENİ, bu turda]** Sandviç fiyatlandırma tartışması (kullanıcı başlattı): (a) `proteinPortion` (single/double) `getSandwichTotals()`'da HİÇ kullanılmıyor — gerçek boşluk, S1 gerçek veri gelince çözülmeli (double'ın fiyatı boy çarpanına mı tabi olacak, ayrıca karar gerekiyor). (b) `proteinVariant` (bitkisel A/B) fiyata girmiyor — kullanıcı kararıyla ŞİMDİLİK aynı fiyatta kalacak (varyantlar arası maliyet farkı yoksa doğru, S1'de teyit edilmeli). (c) `toasted` — kullanıcı kararıyla KAPATILDI, `sandwich-data.json`'da `hasToastEquipment: false` yapıldı, push BEKLİYOR. Ayrıca Chipotle sos kartına DENEME görseli eklendi (`sos-chipotle.webp`), canlıda görüldü — kalan 5-6 sos + zemin standardı düzeltmesi SONRAYA bırakıldı. | `lib/sandwich-pricing.ts`, `lib/sandwich-data.json` |
-| 105 | 🟢 | **[25. sohbette — UÇTAN UCA CANLI SANDBOX DOĞRULANDI ✅]** Ödeme altyapısı (PayTR). Merchant başvurusu ONAYLANDI (Mağaza: 742712). Bildirim URL'i PayTR paneline girildi. 5 env değişkeni (`PAYTR_MERCHANT_ID/KEY/SALT`, `PAYTR_TEST_MODE=1`, `NEXT_PUBLIC_BASE_URL`) Vercel'e eklendi + redeploy edildi. Kullanıcı onayıyla `ONLINE_PAYMENT_ENABLED=true` yapıldı (SANDBOX testi için). İki YENİ bug bulunup AYNI turda çözüldü (#110, #111 — aşağıda). Üçüncü denemede tam akış (iFrame→3D Secure→"Ödeme Başarılı"→personel paneline düşme→sepet temizlenmesi) ekran görüntüleriyle DOĞRULANDI. **KALAN, BLOKLAYICI DEĞİL — ayrı karar gerektirir:** mağaza hâlâ PayTR "Test Modu"nda; gerçek ödeme almak için PayTR panelinde "Canlı Mod" talebi + onay + `PAYTR_TEST_MODE=0` + redeploy gerekiyor, bu turda BAŞLANMADI. Kurye/teslimat uygulaması konusu HİÇ ele alınmadı. | `lib/paytr.ts`, `app/api/payment/paytr/init/route.ts`, `app/api/payment/paytr/callback/route.ts`, `components/order/ConfirmPickupOrderButton.tsx` |
-| 106 | 🟡 | **[YENİ, bu turda — sistem tasarım boşluğu]** Personel/admin kendi şifresini unutup AYNI ZAMANDA personel paneline erişimi yoksa, normal "Şifremi Unuttum" akışı çalışmıyor (o akış personel panelinden geçiyor, ama kilitlenen kişi ZATEN personel — tavuk-yumurta). Bu turda Neon'a `pgcrypto` ile elle müdahale edilerek tek seferlik çözüldü. **Kalıcı çözüm ONAYLANMADI** — olası yönler: (a) süper-admin için ayrı kurtarma mekanizması, (b) "DB'ye elle müdahale" resmi acil-durum prosedürü olarak dokümante edilmesi. Kullanıcı kararı bekliyor. | `users.password_hash` (elle güncellendi), personel şifre sıfırlama akışı |
-| 70,85,96,99,110-111 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** Altısı da KAPANDI: #70 (`order_history.table_number` tipi `text`, migration doğrulandı), #85 (Gel Al kod incelemesi 5 bulgu, 15/15 PASS), #96 (sandviç bileşen testleri 27/27 PASS), #99 (sandviç checkout uçtan uca doğrulandı), #110 (`merchant_oid` tire sorunu — `stripUuidHyphens()`/`restoreUuidHyphens()`), #111 (`/odeme/basarili`+`/odeme/basarisiz` sayfaları eklendi). TAM metin `session_arşiv_2.md`'ye taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam5.md`. | `docs/schema-changes/*`, `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts`, `components/sandwich/*.test.tsx`, `components/checkout/FulfillmentGate.tsx`, `lib/paytr.ts`, `app/api/payment/paytr/init/route.ts`, `app/api/payment/paytr/callback/route.ts`, `app/odeme/basarili/page.tsx`, `app/odeme/basarisiz/page.tsx` |
+| 66 | 🟢 | İmza kase "Sepete Ekle" butonu (customize'a girmeden direkt ekleme) guest gate middleware'i tarafından YAKALANMIYOR — component-seviyesi guard gerekiyor. **[Session 12 devamı, kapsam teyidi]:** bu, `/menu/customize/*` (Gel Al) bağlamına özgüdür. **[2026-08-11 güncellemesi]:** 1b(ii) (`/masaya-siparis`) kapsam dışı bırakıldığı için bu sorunun "1b'nin alt-görevi mi" ikilemi ORTADAN KALKTI — artık sadece kendi başına bir karar: component-guard eklensin mi, yoksa bilinçli açık mı bırakılsın? Hâlâ kullanıcı kararı bekliyor. | `components/customizer/AddToCartButton.tsx` |
+| 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
+| 71 | 🟠 | DEPENDENCIES.md, `RegistrationChannel`'ın tüketicisi olarak `channel-options.ts`'i (ve muhtemelen görülmemiş başka dosyaları) listelemiyor — #68 kapanırken bu dosya atlandığı için canlı build kırılmıştı (düzeltildi, 1d KAPANDI). DEPENDENCIES.md bu sohbette paylaşıldı ama v1.1 (Session 3) — genel olarak ESKİ, `RegistrationChannel` tüketicileri dahil yeni alan/tablo/store değişiklikleri (tableId, order_history, users.role, vb.) hiç yansımamış. Ayrı bir turda kapsamlı güncellenmeli. | `DEPENDENCIES.md` |
+| 73 | 🟠 | `tailwind.config.ts`'teki `extend.colors` custom token'ları (`olive-primary` doğrulandı, muhtemelen `olive-deep`/`bronze`/`espresso` de) `bg-*` sınıfı olarak KULLANILDIĞINDA derlenmiyor — `bg-red-500` (standart) çalışıyor, `bg-olive-primary` (custom) çalışmıyor, `bg-[#53502A]` (arbitrary) çalışıyor. Kök neden BULUNAMADI. **[Bu turda ek kanıt]:** `AddToCartButton.tsx`'te de AYNI kırık pattern görüldü (#50'de "hiç görülmedi" idi), aynı `bg-[#53502A]` workaround'ıyla düzeltildi — üçüncü dosyada doğrulanan tekrar, sistematik tarama gerekliliğini pekiştiriyor. `text-olive-primary`'nin çalışıp çalışmadığı hâlâ TEYİT EDİLMEDİ. | `tailwind.config.ts`, tüm `bg-{custom-token}` kullanan dosyalar |
+| 81 | 🟢 | **[YENİ, bu turda — bilinçli erteleme]** Masaya Paneli'nde (1) iki personelin aynı siparişi eşzamanlı güncellemesine karşı optimistic lock yok (son yazan kazanır), (2) `usePersonelOrders` polling'i sekme arka plandayken duraklamıyor (Page Visibility API kullanılmadı). İkisi de MVP kapsamı dışı bırakıldı, kullanım yoğunlaşırsa ele alınmalı. | `hooks/usePersonelOrders.ts`, `app/api/personel/orders/[id]/route.ts` |
+| 80 | 🟢 | **[YENİ — kullanıcı kararıyla, 2026-08-09]** #79/#75 kapatıldı (mobil canlıda doğrulandı: "Sepete Ekle sorunu çözüldü"). Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — kod+test tarafı aynı (`isReadyToAddToCart()`), risk düşük görülüyor ama not olarak açık bırakılıyor. #75'in orijinal çift-tık/duplicate senaryosu da bu turda ayrıca test edilmedi. | `components/customizer/SummaryPanel.tsx` |
+| 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
+| 92 | 🟠 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** Çok şubeli mimari: `branches` tablosu şemada HİÇ YOK. Kullanıcı 2./3. şubenin "herhangi an" açılabileceğini belirtti. `order_history` ve `consent_registrations`'da hangi siparişin/kaydın hangi şubeye ait olduğunu tutan bir alan yok — şu an TEK ŞUBE varsayımıyla kurulu. Geriye dönük eklemek, mevcut kayıtlara hangi şube olduğu konusunda varsayım atamayı gerektirir (veri belirsizliği riski). **Önerilen yön (ONAYLANMADI):** `branches` tablosu tek satırla (mevcut şube) şimdiden açılsın, `order_history.branch_id` + `consent_registrations.branch_id` nullable FK olarak eklensin; `users` ASLA şubeye bağlanmasın (CRM şubeler üstü kalmalı). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §3-4-6. **Açık karar:** 2. şube yaklaşık ne zaman planlanıyor — bu, işin bu turda mı yoksa ayrı sırada mı yapılacağını belirler. | `lib/db/schema.ts` (henüz dokunulmadı) |
+| 93 | 🟡 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** Şubeye göre menü farklılığı: DB'de HİÇ menü/ürün tablosu yok — menü `menu-data.json`/`customizerCatalog.ts` gibi statik bir dosyada yaşıyor görünüyor (#24 ile bağlantılı, kesin dosya adı DOĞRULANMADI). Bu, #92'den daha KÖK bir mesele: "şubeye göre menü" kavramının DB tarafında hiç karşılığı yok, ölçeklenmeden statik dosya çoğaltmaya döner. **Önerilen yön (ONAYLANMADI):** global ürün kataloğu (marka kimliği — tüm şubelerde aynı tanım/kalori/alerjen) + `branch_menu_items` eşleme tablosu (`branch_id`+`product_id`+`is_available`+`price_override`, nullable). **KALAN:** menünün fiilen yaşadığı dosya (muhtemelen `menu-data.json` veya `customizerCatalog.ts`) GÖRÜLMEDEN kesin şema önerilemez (Kural #2). | `menu-data.json` veya `lib/customizer/customizerCatalog.ts` (dosya henüz istenmedi) |
+| 94 | 🟢 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** CRM/attribution katmanı eksik: `consent_registrations`/`order_history`'de pazarlama kaynağı (Instagram/TikTok/Marketplace/Google/UTM) hiç tutulmuyor. **İsim çakışması riski:** mevcut `channel` alanları (her iki tabloda da var) FULFILLMENT kanalı (gel-al/masaya) anlamında — pazarlama kanalı DEĞİL. Yeni alanlar eklenirse `channel` yeniden kullanılmamalı, `acquisition_source`/`utm_campaign`/`utm_medium` gibi AYRI isimler kullanılmalı. Ayrıca `order_count`/`total_spend`/`days_to_repeat` gibi CRM metrikleri `users`'a KOLON olarak eklenmemeli — `order_history` üzerinden SQL VIEW olarak hesaplanmalı (senkron kayma riski). Kullanıcının "bu yapı ileride birçok modül/uygulamanın temel iskeleti olacak" vizyonuyla bağlantılı — PUSULA OS değerlendirmesindeki "event log yok, policy engine yok" bulgusuyla örtüşüyor (tam çözüm bu turun kapsamı dışı, sadece isim/yön kararı). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §5-6-7. | `lib/db/schema.ts` (henüz dokunulmadı) |
+
+| 95 | 🟡 | **[YENİ, bu turda (21. sohbet)]** Sandviç akışı `lib/sandwich-data.json` TEST VERİSİ ile çalışıyor — S1 (gerçek fiyat/kalori/ürün isimleri), S2 (ücretsiz sebze kotası — şu an placeholder 4), S5 ("Mike's Way" preset içeriği — şu an placeholder sebze+sos) hâlâ gerçek veri bekliyor. Launch öncesi MUTLAKA değiştirilmeli, aksi halde sahte fiyat/kalori canlıya çıkar. | `lib/sandwich-data.json` |
+| 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
+| 97 | 🟠 | **[YENİ, bu turda (21. sohbet)]** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor: `StepBread/StepSize/StepProtein/StepCheese/StepVeggies/StepSauceToastExtras.tsx`, `app/sandwich/customize/[id]/page.tsx`, 7 test dosyası, `Hero.tsx` CTA değişikliği. Ayrı bir turda CORE.md güncellenmeli. | `CORE.md` |
+| 98 | 🟢 | **[YENİ, bu turda (21. sohbet) — kapsam dışı bırakıldı]** Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test başarısız çıktı, `Header.test.tsx` dahil (kritik: "Çıkış Yap"a tıklayınca signOut callbackUrl="/" ile çağrılır" testi). Bu turda kasıtlı dokunulmadı — Kural #5 izolasyon. Ayrı bir turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya (henüz listelenmedi) |
+| 99 | 🔴 | **[YENİ, 22. sohbet — GERİYE DÖNÜK loglandı, sohbet kesildi]** Sandviç checkout'u BLOKLU: "Siparişi Onayla" adımında fiyat ne olursa olsun kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor. Kök neden ŞÜPHESİ (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'teki fiyatlandırma kontrolü sadece Bowl'un `bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı istendi, YANIT GELMEDEN sohbet kesildi. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya DOĞRULANMADI) |
+| 100 | 🟡 | **[YENİ, 22. sohbet — kod üretildiği İDDİA EDİLDİ, push/test TEYİT EDİLMEDİ]** 4 UI düzeltmesi: (a) `Hero.tsx` buton düzeni `flex-wrap`→`grid grid-cols-2`, mobilde yan yana kalıcı; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` `aspect-square`→`aspect-[4/3]`+`max-h-72`, mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` sepete ekleme sonrası artık `/siparis`'e yönlendiriyor (`useRouter`, önceden `store.reset()`+aynı sayfa). | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
+| 101 | ✅ | **[BU TURDA KAPANDI, 2026-09-03, 23. sohbet]** 22. sohbetteki "Özel Kase" fallback bug'u (`item.bowlItem?.name ?? "Özel Kase"` sandviçlerde hep "Özel Kase" yazdırıyordu) `CartDrawer.tsx`'in bu turdaki motion yükseltmesiyle YENİDEN yazıldı VE test edildi — `CartDrawer.test.tsx`'teki "bowlItem null + sandwichCustomization dolu → Özel Sandviç; ikisi de null → Özel Kase" testi Codespaces'te PASS (8/8, 2026-09-03 06:16, ekran görüntüsü). Bowl davranışı da (`bowlItem?.name` önceliği) happy-path testinde doğrulandı. **KALAN:** push + canlı/production doğrulaması — bkz. #105. | `components/cart/CartDrawer.tsx` |
+| 105 | 🟡 | **[YENİ, 2026-09-03, 23. sohbet — Motion System, kullanıcı kararıyla #99/#91'in PARALELİNDE]** Rapor P0-1 (CartDrawer): `lib/motion/tokens.ts` (YENİ) + `AnimatePresence`/spring slide/backdrop fade/içerik stagger/`useReducedMotion` eklendi, `CartDrawer.test.tsx` (YENİ, 8 test) Codespaces'te 8/8 PASS (ekran görüntüsüyle doğrulandı). **KALAN:** (a) GitHub push edilmedi; (b) canlı/production'da GÖZLE doğrulanmadı; (c) DESIGN_SYSTEM.md §6.1'e CartDrawer satırı + `springs.drawer`/`springs.tactile`/`springs.badge`/`drawerContentStagger` değerleri (şu an sadece VARSAYIM, onay bekliyor) işlenmedi; (d) CORE.md Dosya Haritası'na `lib/motion/tokens.ts` + `CartDrawer.test.tsx` eklenmedi. Sıradaki: MenuCard (P0-2), CategoryNav (P0-3). | `lib/motion/tokens.ts`, `components/cart/CartDrawer.tsx`, `CartDrawer.test.tsx`, `DESIGN_SYSTEM.md`, `CORE.md` |
+| 102 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx` satır 20 — CartDrawer'daki (#101) BİREBİR AYNI "Özel Kase" fallback bug'u burada da bulundu, aynı desenle genişletildi ("Özel Sandviç"). | `components/order/OrderSummary.tsx` |
+| 103 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx`'e CartDrawer'daki gibi "Kaldır" butonu eklendi — eski fiyat düzeltmesinden ÖNCE sepete girmiş 0₺'lik test ürünlerini temizlemek için. | `components/order/OrderSummary.tsx` |
+| 104 | 🟡 | **[YENİ, 22. sohbet — çözülmeden kaldı]** #100(d) fix'i sonrası `SandwichCustomizer.test.tsx`'in sepete-ekleme testleri artık `router.push` çağıracak — `next/navigation`'ın `useRouter`'ı test ortamında mock'lanmadıysa testler kırılabilir. Kullanıcıya "şimdi düzelteyim mi yoksa `npx vitest run components/sandwich` çalıştırıp kırmızı çıkanı mı paylaşırsın" soruldu, YANIT GELMEDEN sohbet kesildi. | `components/sandwich/SandwichCustomizer.test.tsx` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -302,14 +315,25 @@
 
 ## SESSION ÖZET (tümü — 0'dan 12'ye)
 
-> **[TAŞINDI, 2026-09-01, bu sohbet — 400 satır eşiği]** Session 0-12 arası turn-by-turn
-> session tablosu TAM metniyle `session_arşiv_2.md`'ye taşındı — eklenti:
-> `session_arsiv_2_EKLENTI_2026-09-01-devam5.md` (kullanıcı elle eklemeli). Kapanış
-> gerekçesi eklentide: içerik tamamen güncelliğini yitirmişti, güncel özeti GENEL DURUM ve
-> Kritik Kararlar bölümlerinde hâlâ eksiksiz duruyor.
+| Session | Tarih | Ana içerik | Durum |
+|---|---|---|---|
+| 0 | — | Ajan altyapısı (14 dosya) | ✅ Tamamlandı |
+| 1 | 2026-07-1x | Next.js+Tailwind kurulum, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
+| 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, customizer 4→5 adım kararı | ✅ Tamamlandı |
+| 3 | 2026-07-18 | Zustand store + pricing + customizer data (kesintiye uğradı) | ✅ Büyük ölçüde tamam |
+| 4 (devam) | 2026-07-18→07-22 | Sepet/kanal seçimi, auth mimarisi+kod+DB+UI, ARCHITECTURE.md v1.4, vb. | 🟡 Devam ediyor |
+| 5 | 2026-08-01→08-02 | VisualPreview denetimi (#52), Hakkımızda sayfası, 400 satır eşiği kaldırılıp geri getirildi | 🟡 Devam ediyor |
+| 6 | 2026-08-05 | WhatsApp OTP kodlandı/test edildi. Twilio/Netgsm PARKLANDI, rıza esaslı kayıt+WhatsApp yönlendirme kararlaştırıldı (#57/#58 açıldı) | 🟡 Devam ediyor |
+| 7 | 2026-08-06 | #57 uçtan uca kodlandı (17/17 PASS). `consentRegistrations`, `RegistrationChannel` tipleri eklendi. **#57 kapanmadı** — kod sayfaya bağlanmadı. | 🟡 Devam ediyor |
+| 8 | 2026-08-06/07 | Kırık Twilio akışı keşfedildi, `/kayit-ol`+`/kvkk` bağlandı, migration koşuldu, canlı test BAŞARILI. #59/#60/#61 yeni açıldı. | 🟡 Devam ediyor |
+| 9 | 2026-08-07 | Masaya Sipariş kanalı canlıda doğrulandı. Personel Sipariş Paneli ihtiyacı keşfedildi → #62 açıldı. `session_log.md` ismi/mekanizması netleştirildi. | 🟡 Devam ediyor — #62 yeni sohbette |
+| 10 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. `order_history` tablosu migrate edildi. #63 (npm audit) yeni. | 🟡 Devam ediyor |
+| 11 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. Genel giriş/kayıt akışı netleşti (kanal bazlı tablo), #62 kapsamı genişledi ("kasa paneli" = Personel Sipariş Paneli), #64 kapandı (doğrulama durumu alanı kararı). | 🔴 Devam ediyor — #62 mimarisi bekliyor |
+| 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i zip ile doğrulandı (confidence HIGH), #65/#66 açıldı. ARCHITECTURE.md v1.7'ye güncellendi (Masaya Sipariş ayrı `/masaya-siparis/*` yüzeyine taşındı), #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi. Masa numarası kararı: TUTULACAK, ARCHITECTURE.md v1.11'e işlendi (`CartState.tableId`, path segment route, `order_history.table_number` şema notu), #69 kapsamı genişletildi (#70 yeni açıldı). Canlı build kırığı bulunup düzeltildi (`channel-options.ts`), #71 yeni açıldı. | 🟡 §2.7b kod üretimine hazır; #70/#71 netleşmeli |
+| 12 (devamı) | 2026-08-08 | 1d KAPANDI (Vercel build yeşil, kullanıcı doğruladı). #62'nin 3 mimari sorusu (personel auth, real-time, onay kuyruğu UI) kullanıcı onayıyla kapandı, ARCHITECTURE.md v1.12'ye işlendi. `users.role` için CORE.md §7.4 şema notu üretildi. `lib/db/schema.ts` diff'i + migration SQL'i üretildi, sunuldu. **Kullanıcı migration'ı Neon'da koşturdu ve Tables görünümünde `role` sütununu doğruladı.** `users.role` DB tarafı TAM kapandı — kod tarafı (`types/index.ts`/`auth.ts`/`middleware.ts`) bir sonraki tur. | 🟢 DB tamam; kod tarafı bekliyor |
+| 12 (devamı, 2026-08-09) | 2026-08-09 | #70 kapandı (`order_history` şema genişletmesi: status/table_number/customer_notes, migration koşuldu+doğrulandı). `middleware.ts`'teki `/api/personel/*` guard açığı kapatıldı. #62'nin Masaya sekmesi 10 dosyayla uçtan uca kodlandı VE canlıda test siparişiyle doğrulandı (PATCH→durum makinesi→DB→polling→UI zinciri). Yol boyunca `users.role` düzeltmesi (staff'a manuel `UPDATE`) ve JWT-cache nedeniyle yeniden giriş gerekliliği yaşandı — #74 (çıkış butonu eksikliği) bu yüzden önceliği yükseltilerek tekrar gündeme geldi. | 🟢 Masaya TAMAM; Gel Al + #74 + ARCHITECTURE.md güncellemesi bekliyor |
 
-*(Tam turn-by-turn detay: `session_arşiv.md` [0-10], `session_arşiv_1.md` [11+], Session 0-12
-özet tablosu → `session_arşiv_2.md` eklentisi.)*
+*(Tam turn-by-turn detay: `session_arşiv.md` [0-10], `session_arşiv_1.md` [11+].)*
 
 ---
 
@@ -317,17 +341,17 @@
 
 | Alan | Değer |
 |---|---|
-| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. ✅ Vercel deploy YEŞİL. |
-| Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 hiç işlenmemiş. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı. ⚠️ `BOWLERA_COK_SUBELI_CRM_VIZYON.md` taslak, ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ. |
-| Test Suite | 🟢 33/33 PASS (SEC-01/SEC-02 kapsamı, Codespaces'te doğrulandı). Genel `npm test` (TÜM proje) hâlâ hiç çalıştırılmadı. |
-| Auth | 🟡 Twilio/Netgsm PARKLI. Guest gate middleware KODLANDI. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI. SEC-02 (rate-limit) canlıda GERÇEK DENEMEYLE doğrulandı ✅. SEC-01 (role-revocation) canlı testi kullanıcı kararıyla ERTELENDİ — #91 hâlâ TAM kapanmadı, push bekliyor. **[28. sohbet devamı]** Guest-gate'e sandviç akışı için parite eklendi (kâse ile aynı korumayı alıyor) — kod verildi, push/canlı doğrulama BEKLİYOR (bkz. #117). |
-| Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu workaround'lu — kök neden #73'te açık. |
-| Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı. Masaya kendi bağımsız mini-checkout'unu kullanacak — henüz KODLANMADI. 🟢 **[23. sohbette KAPANDI]** Sandviç checkout'u canlıda uçtan uca doğrulandı — bkz. #99. #101-#104 (CartDrawer/OrderSummary fix'leri) kullanıcı beyanıyla KAPANDI. #100 HÂLÂ AÇIK. **[25. sohbette KAPANDI ✅]** Ödeme altyapısı (PayTR) — merchant onaylandı, online ödeme akışı UÇTAN UCA canlı sandbox'ta doğrulandı (iFrame+3DS+callback+personel paneli+sepet temizleme). Yol boyunca 2 yeni bug bulunup çözüldü (#110 merchant_oid format, #111 eksik success/fail sayfaları). Bkz. #105. **[26. sohbette, kullanıcı beyanıyla]** Madde 4'ün cayma hakkı istisna metni ödeme onayı öncesine eklendi (#112) — ürün+fiyat gösterimi kısmı hâlâ açık. **[YENİ sohbet]** İade Kuyruğu (#118) Adım 4 (buton+modal) verildi ve CANLIDA uçtan uca test edildi (nakit reddi doğru, online iade başarılı) — ama push/deploy bu sohbette açıkça teyit edilmedi, test seti yazılmadı. Yeni bulgu: `paytrRefund()` test/canlı ayrımını ortam değişkenine bırakıyor (#119) — Canlı Mod geçişinden ÖNCE gözden geçirilmeli. **KALAN:** Canlı Mod geçişi (PAYTR_TEST_MODE=0) ayrı bir karar/adım, henüz başlanmadı. ⚠️ Sandviç fiyatlandırma mantığı incelendi — `proteinPortion` boşluğu bulundu, bkz. #109. **[28. sohbette]** Callback route güvenlik sertleştirmesi — 4 açık bulunup düzeltildi (sipariş okuma/doğrulama, tutar doğrulaması zorunlu, paymentProviderRef persistence, idempotency/state machine) + yeni `paymentStatus="tutarsizlik"` değeri eklendi (migration YOK). İlk versiyon push edildi (kullanıcı beyanı). 2. versiyon (tutarsizlik) **deploy'u ✅ TEYİT EDİLDİ** (#115a KAPANDI) ama runtime davranışı (gerçek callback ile "tutarsizlik" durumunun tetiklenip DB'ye yazıldığı) HENÜZ doğrulanmadı (#115b 🔴 AÇIK). **[YENİ sohbet — #116 KAPANDI ✅]** Personel panelinde ödeme yöntemi/durumu rozeti (`types/index.ts`+`gel-al-queries.ts`+`GelAlOrderCard.tsx`) eklendi ve 4 ekran görüntüsüyle CANLIDA doğrulandı (online/nakit/iade senaryoları dahil). Bkz. #115a/#115b/#116. |
-| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations`, `order_history`, `users.role`, `registrationBlockedAttempts` migrate edildi ve DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). 5 tablo doğrulandı — `branches` veya menü/ürün tablosu YOK (bkz. #92/#93). |
-| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı canlı build yeşil. 🟡 Gel Al onay kuyruğu 3-durumlu revizyon (KARAR A) kodlandı, 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (#86) build tarafı KAPANDI, test+canlı doğrulama BEKLİYOR. |
-| İçerik/Metin (yeni) | 🟢 **[26. sohbette, kullanıcı beyanıyla]** İletişim/Şubeler/İptal-İade/Satış Sözleşmesi/Footer güncellendi (#113), `AboutStory.tsx` yeniden yazıldı (#114). Kod bu sohbette görülmedi, sadece sözlü beyan. |
-| Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ güncel değil (bkz. SIRADAKİ GÖREVLER 1d). ⚠️ DEPENDENCIES.md v1.1 — ESKİ (#71). ⚠️ Çok şubeli mimari + CRM/attribution önerisi ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ (bkz. #92/#93/#94). |
+| Repo | `github.com/Sovereign34/Bowlera_site` — main branch güncel. `lib/db/schema.ts` (users.role eklendi) kullanıcı tarafından manuel push edildi. ✅ Önceki turdaki `channel-options.ts` build kırığı düzeltildi, Vercel deploy YEŞİL (1d KAPANDI). |
+| Planlama Belgeleri | ✅ MASTER_PLAN.md v2.2 ve ROADMAP.md v1.3 kod ile hizalı — ⚠️ ROADMAP.md'ye #62 (Personel Sipariş Paneli) hiç işlenmemiş, ayrı bir oturum/kalem olarak eklenmesi gerekebilir. ARCHITECTURE.md v1.12'ye güncellendi, henüz koda tam yansımadı (DB var, kod yok). ⚠️ **[Bu turda]** `BOWLERA_COK_SUBELI_CRM_VIZYON.md` adlı YENİ, ayrı bir taslak vizyon belgesi üretildi (ARCHITECTURE.md'nin YERİNE geçmiyor) — çok şubeli mimari + CRM/attribution önerisi içeriyor, henüz resmi dosyalara (ARCHITECTURE.md) işlenmedi, sadece Açık Sorunlar #92/#93/#94'te özetlendi. |
+| Test Suite | 🟢 `guest-gate.test.ts` (8 — kullanıcı tarafından koşuldu, PASS doğrulandı). **[BU TURDA]** `rate-limit.test.ts` (11) + `middleware.test.ts` (10) + `auth.test.ts` (13) = 33/33 PASS, Codespaces'te kullanıcı tarafından koşuldu ve doğrulandı — SEC-01/SEC-02 kapsamı. Genel `npm test` (TÜM proje, tüm dosyalar) hâlâ hiç çalıştırılmadı. ⚠️ `users.role` migration'ı için TEST_MATRIX.md güncellemesi BEKLEMEDE (dosya paylaşılmadı). |
+| Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. **[Önceki tur]** Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı (her iki döngü de test edildi) — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI (kök neden formel izole edilmedi). **[BU TURDA]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) kod+test (33/33)+build+tsc TAMAM — canlı manuel doğrulama BEKLİYOR (#91). |
+| Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
+| Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
+| Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
+| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI (Tables görünümü, screenshot). **[Bu turda]** `consentRegistrations.ipAddress` (nullable) + yeni `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI — diğer tablolar etkilenmedi. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ⚠️ `order_history.table_number` kolonu KARARLAŞTIRILDI, migration HENÜZ KOŞULMADI — tip netleşmeden koşulmamalı (#70). **[Bu turda, 19. sohbet]** Neon'un TAM güncel şeması sorguyla doğrulandı: 5 tablo (`users`, `consent_registrations`, `order_history`, `password_reset_requests`, `registration_blocked_attempts`) — `branches` veya herhangi bir menü/ürün tablosu YOK (bkz. #92/#93). |
+| Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 **[BU TURDA]** Gel Al onay kuyruğu — canlı bulgu üzerine 3-durumlu revizyon (KARAR A): `confirmed` artık terminal değil ("Hazırlanıyor"), yeni terminal `completed` ("Teslim Edildi") eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri) kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, Gel Al deseniyle tutarlı, tam repo zip'inden statik incelendi, `npm run build`/`tsc --noEmit` YEŞİL (kullanıcı Codespaces'te doğruladı, push edildi). Test seti + canlı doğrulama BEKLİYOR. 🟢 **[önceki tur]** Şifre Talepleri/Gel Al/Kayıt Onayları sekmelerine bekleyen sayısı rozeti eklendi (DESIGN_SYSTEM.md v1.2 §2.2 personel-paneli kırmızı istisnasıyla), push edildi — test/canlı doğrulama bekliyor. |
+| Motion System (Bowlera Premium Motion Raporu) | 🟡 **[YENİ, 2026-09-03]** 11 adımlık rapor sırası: P0-1 CartDrawer TAMAMLANDI (`lib/motion/tokens.ts` YENİ + AnimatePresence/spring/stagger/reduced-motion), Codespaces'te 8/8 test PASS. Push/canlı doğrulama BEKLİYOR (bkz. #105). Kalan 10 adım: MenuCard/CategoryNav (P0), AccountMenu/Header/Hero/Page transitions (P1), Cart badge/Customizer/VisualPreview (P2), Instagram marquee (P3). |
+| Mimari Dokümantasyon | 🟡 ARCHITECTURE.md v1.12 — hâlâ bu turdaki değişiklikleri yansıtmıyor: §4.1'deki `users.role` "HENÜZ KOŞULMADI" notu KOŞULDU'ya, §2.9a'ya Masaya kısmının TAMAMLANDIĞI ve `order_history` şema genişletmesi (status/table_number/customer_notes) işlenmeli — bkz. SIRADAKİ GÖREVLER 1d. ⚠️ DEPENDENCIES.md v1.1 (Session 3) — genel olarak ESKİ, ayrı bir turda kapsamlı güncelleme gerekiyor (#71). ⚠️ **[Bu turda]** Çok şubeli mimari + CRM/attribution önerisi `BOWLERA_COK_SUBELI_CRM_VIZYON.md`'de taslak — ARCHITECTURE.md'ye HENÜZ İŞLENMEDİ, önce kullanıcı onayı gerekiyor (bkz. #92/#93/#94). |
 
 ---
 
@@ -335,37 +359,33 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -11 | **[GÜNCELLENDİ, YENİ sohbet]** #118 — İade Kuyruğu: Adım 1+2+3+4 kod verildi, Adım 4 (buton+modal) CANLIDA fiilen test edildi ve zincir uçtan uca ÇALIŞTIĞI doğrulandı (nakit reddi doğru, online iade başarılı, DB `iade_edildi`). **KALAN:** (a) test seti yazılmalı (Kural #6), (b) nakit sipariş buton kararı, (c) push/deploy bu sohbette açıkça teyit edilmeli, (d) Sipariş Geçmişi/Arama ekranı. | 🟠 |
-| -11b | **[YENİ, YENİ sohbet]** #119 — `paytrRefund()` test/canlı ayrımı yapmıyor; güvenlik sadece `PAYTR_TEST_MODE=1` olmasına dayanıyor. Canlı Mod geçişi (#105'in kalan adımı) öncesi MUTLAKA gözden geçirilmeli. | 🟡 |
-| -10b | ✅ | **[KAPANDI, bu sohbet]** #115b — script çalıştırıldı, `payment_status="tutarsizlik"` Neon'da doğrulandı, test satırı silindi. #115 TAM KAPANDI. | ✅ |
-| -10d | ✅ | **[KAPANDI, bu sohbet]** #121 — deploy ✅ Ready, canlıda Single/Double karşılaştırmasıyla doğrulandı (₺45→₺90, 390→670 kcal, fark main'in kendi değerine eşit). | ✅ |
-| -10c | **[YENİ, 28. sohbet devamı]** #117 — guest-gate parity (sandviç) 3 dosyası (`lib/auth/guest-gate.ts`, `middleware.ts`, `guest-gate.test.ts`) repoya konulmalı, Codespaces'te `npm test`+`npm run build` koşulmalı, push sonrası canlıda kayıtsız `/sandwich/customize/[id]` girişinin `/kayit-ol`'a yönlendirdiği doğrulanmalı. | 🟠 |
-| -8b | **[YENİ, 26. sohbet]** #112'nin bilinçli atlanan kısmı: Madde 4'ün ürün nitelikleri+toplam fiyat gösterimi — `useCartStore.ts`/`OrderSummary.tsx` paylaşılmalı. | 🟡 |
-| -7 | **[YENİ, 23. sohbet]** #100 — 4 UI düzeltmesi (Hero grid, SandwichSummaryPanel test-verisi rozeti, HeroImagePlaceholder mobil taşma, SandwichCustomizer yönlendirme) — push/canlı test HÂLÂ TEYİT EDİLMEDİ. #101-104'ten AYRI, bu turda ele alınmadı. | 🟡 |
-| -8 | **[YENİ, bu turda]** #106 — Personel şifre sıfırlama kilitlenmesi (tasarım boşluğu). Tek seferlik Neon müdahalesiyle çözüldü, kalıcı prosedür/mekanizma kararı kullanıcıdan bekleniyor. | 🟡 |
-| -6 | **[25. sohbette TAMAMLANDI ✅]** #105 — Ödeme altyapısı (PayTR) uçtan uca canlı sandbox'ta doğrulandı. **YENİ, kalan:** PayTR "Canlı Mod" talebi gönderilmeli, onaylanınca `PAYTR_TEST_MODE=0` + redeploy — ayrı KARAR BİLDİRİMİ gerektirir, henüz BAŞLANMADI. | 🟢 |
-| -6b | **[YENİ, bu turda — küçük, fonksiyonel değil]** `ConfirmPickupOrderButton.tsx` satır ~144'teki eski yorum ("PayTR sayfaları henüz yok") güncel değil, #111 sonrası düzeltilmeli. | 🟢 |
-| -5 | ✅ | **[TAŞINDI, 2026-09-01, bu sohbet]** #99/#101-104 (23. sohbette kapandı) + -9 (27. sohbette SESSION_INDEX taşıma kaydı) — TAM metin `session_arşiv_2.md`'ye taşındı, eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam6.md`. Ayrıntı Açık Sorunlar #99/#101-104'te hâlâ özetli.
-| -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
-| -3 | **[23. sohbette KISMEN İLERLEDİ]** #91 — SEC-02 (rate-limit) canlıda ✅ DOĞRULANDI. **KALAN:** SEC-01 (role-revocation 403 testi) — kullanıcı kararıyla SONRAYA ERTELENDİ. İkisi tamamlanmadan 5 dosya push edilmemeli. | 🔴 |
+| -5 | **[YENİ, 22. sohbet]** #99 — Sandviç checkout'u BLOKLU, "fiyatlandırılamadı" hatası her zaman çıkıyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı isteniyor, kök neden bulunup düzeltilmeli. **AYRICA:** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | 🔴 |
+| -4b | **[YENİ, 2026-09-03 — kullanıcı kararıyla #99/#91'İN PARALELİNDE, önlerine geçmiyor]** Motion System rapor P0-2/P0-3: MenuCard (lift+image zoom), CategoryNav (`layoutId` active pill). P0-1 (CartDrawer) bu turda TAMAMLANDI (bkz. #105) — kod+test var, push/canlı doğrulama + DESIGN_SYSTEM.md/CORE.md senkronu hâlâ bekliyor. | 🟡 |
+| -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri yapıldı (`BOWLERA_COK_SUBELI_CRM_VIZYON.md`), kod YOK. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
+| -3 | **[YENİ, bu turda]** #91 — Güvenlik denetimi SEC-01/SEC-02 kod+test+build+tsc TAMAM. **KALAN:** canlıda (a) role-revocation 403 testi, (b) 6. yanlış şifre denemesinin reddi — ikisi de GÖZLE doğrulanmalı, sonra 5 dosya GitHub'a push edilmeli. | 🔴 |
 | -2 | **[YENİ, bu turda]** #90 — `/menu/customize/[id]` masaüstü tek-ekrana-sığma düzeltmesi kodlandı, kullanıcıya verildi. **KALAN:** kendi `page.tsx`'ine uygulanmalı, Codespaces'te build koşulmalı, GitHub'a push edilmeli, masaüstünde GÖZLE doğrulanmalı. | 🟠 |
-| 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu #85 KAPANDI. 3-durumlu revizyon (KARAR A) kodlandı, 37/37 PASS. **KALAN:** canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin doğrulanması. | 🟠 |
-| 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı ortamda Teyit Et/Reddet-Sil aksiyonları test edilmeli. | 🟡 |
-| 1b | Genel giriş/kayıt akış kararlarını koda dök — (iii) "Sepete Ekle" bypass component-guard'ı (#66) hâlâ açık, diğer alt maddeler kapandı. | 🟡 |
-| 1d | ARCHITECTURE.md §4.1/§2.9a güncellenmeli (users.role KOŞULDU notu, Masaya+order_history şema genişletmesi) | 🟡 |
-| 1e | DEPENDENCIES.md'yi kapsamlı güncelle (#71) | 🟠 |
-| 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle | 🟡 |
-| 1g | SANDWICH_SPEC.md §8'deki 6 açık soru (S1-S6) netleştirilmeli — S1 BLOKLAYICI | 🟡 |
-| 2 | #57'yi TAM kapat — `/online-siparis` sayfası | 🔴 |
-| 3 | #73 kök neden araştırması: `tailwind.config.ts extend.colors` custom token'ları | 🟠 |
-| 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60) | 🟠 |
-| 4b | `npm audit fix` — 12 açık/3 kritik güvenlik açığı (#63) | 🟠 |
-| 5 | `app/kayit-ol/page.tsx` alt başlığı kararı (#61) | 🟢 |
-| 6 | `/kvkk` sayfasını hukuk danışmanına incelettir | 🟡 |
-| 7 | #58 Gel-al WhatsApp yönlendirme — #62 mimarisiyle birlikte tasarlanmalı | 🟡 |
+| -1 | **[TAMAMLANDI, bu turda ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda ("bari" görünür) doğrulandı. Kök neden SQL sorgusuyla izole edilmedi, kullanıcı deneyimi seviyesinde kapandı. | ✅ |
+| 0 | **[TAMAMLANDI, bu turda ✅]** #83 — "Sıfırla" → üretilen geçici kodla (460244) giriş canlıda BAŞARILI test edildi. | ✅ |
+| 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
+| 0a | #80 — masaüstünde (`SummaryPanel.tsx`) #79 fix'inin canlı doğrulaması notu (düşük öncelik, kullanıcı kararıyla #79/#75 kapatıldı) | 🟢 |
+| 0c | #78 — Customizer sticky özet panelin collapsed halde "Sepete Ekle"yi gizlemesi için UX çözümü kararlaştırılıp uygulanmalı (bu turda ek ekran görüntüsüyle yeniden doğrulandı) | 🟢 |
+| 1 | #62 Masaya sekmesi TAMAMLANDI + canlı doğrulandı (önceki tur). Gel Al onay kuyruğu #85 KAPANDI (önceki tur). **[BU TURDA]** 3-durumlu revizyon (KARAR A) — canlı bulgu üzerine `confirmed` terminal olmaktan çıkarıldı, `completed` eklendi, 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **KALAN:** canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin doğrulanması. | 🟠 |
+| 1c | **[Bu turda]** #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI (Codespaces'te `tsc --noEmit` + `npm run build` başarılı, GitHub'a push edildi). **KALAN:** test seti yazılmalı, canlı ortamda (Vercel deploy sonrası) Teyit Et/Reddet-Sil aksiyonları gerçek bir bekleyen kayıtla test edilmeli. | 🟡 |
+| 1b | Genel giriş/kayıt akış kararlarını koda dök: (i) `/menu/customize/*` guest gate middleware'i TAMAMLANDI (repoda doğrulandı); (ii) `/masaya-siparis/[tableId]/*` yüzeyi (müşterinin kendi masasından sipariş vermesi) **[BU TURDA KAPSAM DIŞI BIRAKILDI — kullanıcı kararı, 2026-08-11: dükkan küçük, personel masa siparişini zaten eliyle giriyor. Personel-tarafı Masaya PANELİ (#62) bundan ETKİLENMİYOR, o zaten TAMAMLANDI.]**; (iii) "Sepete Ekle" bypass component-guard'ı (#66 — eklensin mi kararı bekliyor, 1b'den BAĞIMSIZ hâle geldi); (iv) **[BU TURDA KAPANDI ✅ — sadece doğrulama, kod değişikliği YOK]** kayıt sayfasında zorunlu kanal seçimi ZATEN kodluymuş: `useRegistrationForm.ts`'te `channel` state'i `useState<RegistrationChannel \| null>(null)` ile başlıyor (varsayılan seçim YOK) ve `submitRegistration()` içinde `if (!channel)` guard'ı POST'u engelliyor. Zincir uçtan uca teyit edildi: form→hook→`route.ts`→`upsertConsentRegistration`→`schema.ts`'teki `channel: text("channel").notNull()` — UI/API/DB üç katmanda da zorunlu, DB'ye kanal bilgisi olmadan hiçbir kayıt yazılamıyor. SESSION_INDEX'teki eski "hâlâ kodlanmadı" notu GÜNCELLİĞİNİ YİTİRMİŞTİ, düzeltildi. | 🟡 (ii) kapandı, (iv) kapandı, (iii) hâlâ açık |
+| 1d | ARCHITECTURE.md §4.1'deki `users.role` "migration HENÜZ KOŞULMADI" notunu "KOŞULDU+DOĞRULANDI" olarak güncelle; ayrıca §2.9a'ya bu turda kapanan Masaya kısmının + `order_history` şema genişletmesinin (status/table_number/customer_notes) işlenmesi gerekiyor (bu turda sadece SESSION_INDEX işlendi, ARCHITECTURE.md hâlâ bekliyor) | 🟡 |
+| 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
+| 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
+| 1g | **[YENİ, bu turda]** SANDWICH_SPEC.md §8'deki 6 açık soru (S1-S6) netleştirilmeli — özellikle S1 (gerçek `sandwich-data.json` — ekmek/protein/peynir/sebze/sos + fiyat/kalori) BLOKLAYICI, kod üretimi bu veri olmadan başlayamaz | 🟡 |
+| 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
+| 3 | **[YENİ]** #73 kök neden araştırması: `tailwind.config.ts extend.colors` custom token'ları neden `bg-*` sınıfı olarak derlenmiyor — sistematik tarama (`RegistrationForm.tsx` dahil diğer `bg-{custom}` kullanımları #38'de işaretli) | 🟠 |
+| 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
+| 4b | `npm audit fix` — 12 açık/3 kritik güvenlik açığını ayrı, sakin bir oturumda ele al (#63) | 🟠 |
+| 5 | `app/kayit-ol/page.tsx` alt başlığı kararı — sil ya da CONTENT_GUIDE.md ile yeniden yaz (#61) | 🟢 |
+| 6 | `/kvkk` sayfasını hukuk danışmanına incelettir (kullanıcı eylemi) | 🟡 |
+| 7 | #58 Gel-al WhatsApp yönlendirme — artık #62 mimarisiyle birlikte tasarlanmalı | 🟡 |
 | 8 | Twilio/Netgsm kararı — PARKLI (#32/#56) | ⚪ |
 | 9 | Gerçek şube adresini Şubeler/Footer.tsx/JSON-LD şemasına işle (#54) | 🟡 |
-| 10 | DESIGN_SYSTEM.md paylaşılırsa Tailwind sınıflarını TAM teyit et (#38) | 🟢 |
+| 10 | DESIGN_SYSTEM.md paylaşılırsa `ProfileForm.tsx`+`RegistrationForm.tsx` Tailwind sınıflarını TAM teyit et (#38) | 🟢 |
 | 11 | CONTENT_GUIDE.md §1/§2 â örnekleri ve StepBase.tsx güncelle (#53) | 🟢 |
 | 12 | AboutValues.tsx ile ValueProps.tsx senkronunu teyit et (#55) | 🟢 |
 | 13 | Vektörel ikon seti üretimi (25-30 malzeme) (#52) | 🟡 |
@@ -378,45 +398,26 @@
 | 20 | VisualPreview çağıranlarının tam repo taraması ile #34'ü kesin kapat | 🟢 |
 | 21 | Customizer adım başlıklarını Türkçeleştir / spec ile senkronla (#28/29) | 🟢 |
 | 22 | Genel `npm test` (tüm proje) çalıştırıp güncel geçen/kalan sayıyı teyit et | 🟢 |
+| 23 | [TAMAMLANDI] `types/index.ts` görüldü, #68 (RegistrationChannel/FulfillmentChannel tip etkisi) netleşti ve kodlandı | ✅ |
+| 24 | [TAMAMLANDI] Vercel build yeşil doğrulandı (1d) | ✅ |
+| 25 | [TAMAMLANDI] #62'nin 3 mimari sorusu kapandı — ARCHITECTURE.md v1.12 | ✅ |
+| 26 | ROADMAP.md'ye #62 (Personel Sipariş Paneli) için ayrı bir oturum/kalem eklenmesi düşünülmeli — şu an hiç yer almıyor | 🟢 |
+| 27 | [TAMAMLANDI, bu turda] `users.role` migration'ı Neon'da koşuldu, `role text` sütunu Tables görünümünde doğrulandı | ✅ |
+| 28 | [TAMAMLANDI, bu turda] #70 kapandı — `order_history.table_number`/`status`/`customer_notes` migration'ı Neon'da koşuldu ve doğrulandı | ✅ |
+| 29 | [TAMAMLANDI, bu turda] #62 Masaya sekmesi (10 dosya) uçtan uca kodlandı, build+deploy yeşil, canlıda gerçek test siparişiyle doğrulandı | ✅ |
+| 30 | [TAMAMLANDI, bu turda] #89 IP delili + engellenen deneme logu — 4 dosya kodlandı, migration Neon'da koşuldu+6 sorguyla doğrulandı, test 6/6 PASS (Codespaces), Vercel deploy yeşil | ✅ |
 
 ---
 
-*v90 (v89'dan: **[bu sohbet, 2026-09-02]** #121 KAPANDI ✅ — deploy zaten push edilmişti (commit `4275a3e`, "İptal Et" özelliğiyle aynı commit'te gelmiş), Vercel ✅ Ready doğrulandı. Canlıda Somon main ile Single (₺45.00/390kcal) → Double (₺90.00/670kcal) karşılaştırıldı: fiyat tam 2x, kalori farkı (+280) main'in kendi değerine eşit — `scaleMainItem()` kararla eşleşen davranışı gösteriyor. Açık Sorunlar/Kritik Kararlar/SIRADAKİ GÖREVLER güncellendi. Bu sohbetteki tüm açık işler (nakit iptal #120, double porsiyon #121, #115a/#115b) artık ✅ KAPANDI. KALAN: #91 (SEC-01 role-revocation testi, hâlâ ertelenmiş) + dosya 400 satır eşiğinin üzerinde, arşiv taşıması bekliyor. Güncellenme: 2026-09-02.*
-*v89 (v88'den: **[bu sohbet, 2026-09-02]** #115b KAPANDI ✅ — `test-tutarsizlik-callback.js` script'i yazılıp Codespaces'te fiilen çalıştırıldı (`.env.local`'da `PAYTR_MERCHANT_KEY`/`SALT` yoktu, PayTR panelinden alınıp eklendi; `NEXT_PUBLIC_BASE_URL` de `.env.local`'da yoktu, `https://bowlera-site.vercel.app` olarak elle export edildi). Sahte "tutarsizlik" bildirimi gönderildi, HTTP 200 alındı, Neon SQL Editor'de `payment_status="tutarsizlik"` fiilen doğrulandı — runtime davranışı KANITLANDI. Test satırı silindi. #115 (a+b) TAM KAPANDI. Açık Sorunlar/SIRADAKİ GÖREVLER güncellendi. KALAN: #121 double porsiyon push+canlı doğrulaması, sonra #91 (SEC-01). Dosya hâlâ 400 satır eşiğinin üzerinde — bir sonraki sohbette arşiv taşıması yapılmalı. Güncellenme: 2026-09-02.*
-*v88 (v87'den: **[YENİ sohbet, 2026-09-02]** #118 devamı: nakit sipariş "İptal Et" verildi ve CANLIDA doğrulandı (Açık Sorun #120 KAPANDI ✅). Customizer Double porsiyon fiyat/kalori hatası bulunup düzeltildi — `scaleMainItem()` + `CUSTOMIZER_SPEC.md` v1.3, canlı doğrulama BEKLİYOR (#121, 🟠). Cayma hakkı checkbox kararı alındı (mevcut davranış korunuyor, hukuki teyit ayrı — Kritik Kararlar). #115b için test script'i + atılabilir Neon test siparişi hazırlandı, script henüz ÇALIŞTIRILMADI (checkpoint-cevapsız deseni yine tekrarladı). Açık Sorunlar/Kritik Kararlar/CURRENT FOCUS/SIRADAKİ GÖREVLER güncellendi. ⚠️ Bu güncellemeyle dosya 400 satır eşiğini aştı — bir sonraki sohbette gerçek bir arşiv taşıması yapılmalı (v84'teki aynı durumun tekrarı). KALAN: #115b script'inin çalıştırılması, double porsiyon push+canlı doğrulaması, sonra #91 (SEC-01). Güncellenme: 2026-09-02.*
-*v87 (v86'dan: **[YENİ sohbet, 2026-09-01]** Açık Sorun #116 KAPANDI ✅ — `types/index.ts` (literal union `PickupOrderPaymentMethod`/`PaymentStatus` + `PickupApprovalEntry` alanları, varsayım kodda yorumla işaretli/teyit edilmedi), `gel-al-queries.ts` (select bloğuna paymentMethod/paymentStatus eklendi, önceden sadece WHERE'de kullanılıyordu), `GelAlOrderCard.tsx` (`getPaymentBadge()` saf fonksiyon + rozet, "tutarsizlik" uyarı tonunda). Kullanıcı 4 ekran görüntüsüyle CANLIDA uçtan uca doğruladı (online/nakit/hazırlanıyor geçişi/#118 iade sonrası otomatik rozet güncellemesi). Build hatası (cast + eksik `"basarisiz"` union üyesi) düzeltildi. Açık Sorunlar tablosu + GENEL DURUM güncellendi. KALAN: `schema.ts` teyidi, nakit sipariş "İade Et" buton kararı (#118'in ayrı parçası), test seti. Güncellenme: 2026-09-01.*
-*v86 (v85'den: **[YENİ sohbet, 2026-09-01]** #118 Adım 4 verildi — `GelAlOrderCard.tsx`/`RefundConfirmDialog.tsx`/`GelAlPanel.tsx` (`handleRefund` ayrı fonksiyon, BSC-4 hata deseni korundu). Checkpoint istendi ama açık onay bu sohbette KAYITLI DEĞİL (DÖRDÜNCÜ-YEDİNCİ DERS deseni tekrarı — AÇIK SORUN olarak not düşüldü). Kullanıcı CANLI ortamda modal→route→refundOrder()→paytrRefund()→DB zincirini test etti: nakit sipariş doğru reddedildi (tasarım gereği), online sipariş iadesi başarılı oldu (DB `iade_edildi`). YENİ BULGU: `paytrRefund()` işlem bazında test/canlı ayrımı yapmıyor, güvenlik `PAYTR_TEST_MODE=1` ortam varsayımına dayanıyor — Canlı Mod geçişi öncesi (#105'in kalan adımı) gözden geçirilmeli, yeni Açık Sorun #119 olarak loglandı. CURRENT FOCUS'taki #118 Adım 3 anlatısı güncelliğini yitirince `session_arşiv_2.md`'ye taşındı (eklenti: `..._EKLENTI_2026-09-01-devam8.md`, kullanıcı elle eklemeli). KALAN: test seti (Kural #6), nakit-sipariş buton kararı, push/deploy açık teyidi. Güncellenme: 2026-09-01.*
-*v85 (v84'den: **[bu sohbet, 2026-09-01]** #118 Adım 3 verildi — `app/api/personel/orders/[id]/refund/route.ts` (POST, staff-guard) + `route.test.ts` (5 test). Kullanıcı Codespaces'te #118'in tüm test dosyalarını + build'i koşturdu: Adım 1 `paytr.test.ts` 7/7, Adım 2 `refund-order.test.ts` İLK ÖNCE 1 FAIL (test-only regex düzeltmesi sonrası 7/7), Adım 3 `route.test.ts` 5/5, regresyon `gel-al-queries.test.ts` 13/13, `npm run build` YEŞİL. Açık Sorun #118/SIRADAKİ GÖREVLER -11/Kritik Kararlar güncellendi. CURRENT FOCUS'taki #118 Adım 2 anlatısı güncelliğini yitirince dosya 400 satırı aşınca `session_arşiv_2.md`'ye taşındı (eklenti: `..._EKLENTI_2026-09-01-devam7.md`, kullanıcı elle eklemeli). KALAN: push+Vercel deploy, sandbox'ta gerçek iade denemesi, Adım 4. Güncellenme: 2026-09-01.*
-*v77 — TAŞINDI (2026-09-01, YENİ sohbet — 400 satır eşiği): TAM kayıt (26. sohbet #112/#113/
-#114 kapanışı + ONUNCU DERS'in "içerik düşmesi" olayının footer anlatısı) `session_arşiv_2.md`'ye
-taşındı — eklenti: `session_arsiv_2_EKLENTI_2026-09-01-devam8.md` (kullanıcı elle eklemeli).
-İçerik özet olarak ONUNCU DERS (header) ve Açık Sorunlar #112/#113/#114'te hâlâ duruyor.*
-*v78/v79 — TAŞINDI (2026-09-01, bu sohbet, 14. taşıma): v80-v83 tarafından süperseded
-edilen 2 eski sürüm kaydı `session_arşiv_2.md`'ye taşındı (eklenti:
-`session_arsiv_2_EKLENTI_2026-09-01-devam6.md`, kullanıcı elle eklemeli). İçerdikleri
-kararlar/bulgular Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da hâlâ güncel duruyor.*
-*v74/v75/v76 — TAŞINDI (2026-09-01): eski sürüm kayıtları `session_arşiv_2.md`'ye taşındı
-(eklenti: `session_arsiv_2_EKLENTI_2026-09-01.md`, kullanıcı elle eklemeli). İçerdikleri
-kararlar/bulgular Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da hâlâ güncel duruyor.*
-*v80 (v79'dan: **[28. sohbet devamı]** #115 deploy'u yeşil, ama DOKUZUNCU DERS uyarınca runtime
-doğrulanmadan kapanmadı — #115a (✅)/#115b (🔴) bölündü. Yeni #117 (guest-gate parity) açıldı.
-412 satırda 1 eski blok arşive taşındı (eklenti: `..._EKLENTI_2026-09-01-devam4.md`). GENEL
-DURUM güncellendi. Güncellenme: 2026-09-01.*
-*v81 (v80'den: **[bu sohbet, 2026-09-01]** Yeni #118 (İade Kuyruğu) açıldı — PayTR resmi Refund
-API dokümantasyonu (dev.paytr.com/en/iade-api) kod yazılmadan ÖNCE doğrulandı (Kural #1).
-KARAR BİLDİRİMİ alındı: tam iade/herhangi personel/on-demand/Sipariş Geçmişi ekranı/gerçek API.
-5 adımlı sıralı uygulama planı önerildi (Kural #5), kullanıcıdan başlangıç adımı bekleniyor.
-Kritik Kararlar + Açık Sorunlar + SIRADAKİ GÖREVLER + CURRENT FOCUS güncellendi. Ekleme 412
-satıra çıkarınca (400 eşiği aşıldı), "SESSION ÖZET (0-12)" tablosu TAM metniyle
-`session_arşiv_2.md`'ye taşındı (eklenti: `..._EKLENTI_2026-09-01-devam5.md`, kullanıcı elle
-eklemeli) — güncelliğini yitirmiş içerikti, GENEL DURUM/Kritik Kararlar'da özeti duruyor.
-Güncellenme: 2026-09-01.*
-*v82 (v81'den: **[bu sohbet, 2026-09-01]** #118 Adım 1 verildi — `lib/paytr.ts`'e izole `paytrRefund()` (mevcut kod dokunulmadı, 4 alt fonksiyona bölündü — 20 satır kuralı), `lib/paytr.test.ts` aynı turda verildi. Kalite 5/5, Güvenlik 7/8. Açık Sorun #118/SIRADAKİ GÖREVLER -11 güncellendi (🔴→🟠). Aynı turda dosya tekrar 400 satırı aşınca 2. bir taşıma daha yapıldı (bkz. Arşiv Taşıma Kaydı). Güncellenme: 2026-09-01.*
-*v83 (v82'den: **[bu sohbet, 2026-09-01]** #118 Adım 2 verildi — `refundOrder()` (`gel-al-queries.ts`, 5 alt fonksiyona bölündü), `refund-order.test.ts` (YENİ/izole — mevcut test dosyası paylaşılmadı). `schema.ts`+init `route.ts` incelenerek `merchant_oid` formatı HIGH güvenilirliğe çıktı, migration GEREKMEDİĞİ doğrulandı. Açık Sorun #118/SIRADAKİ GÖREVLER -11 güncellendi. Güncellenme: 2026-09-01.*
-*v84 (v83'den: **[DÜZELTME, bu sohbet, 2026-09-01]** Kullanıcı önceki turda YERİNDE
-KISALTILAN 2 blok (Arşiv Taşıma Kaydı'ndaki 2026-08-09 satırları + CURRENT FOCUS #118
-Adım 1 anlatısı) için "sıkıştırma değil taşıma yap" dedi — protokol ihlali kabul edildi
-(CORE.md §7.1: "taşınır, özetlenmez"). İlk iki blok ORİJİNAL tam metnine geri döndürüldü;
-dosya limiti aşınca bu sefer GERÇEK taşıma yapıldı: CURRENT FOCUS #118 Adım 1 (tam metin)
-+ SIRADAKİ GÖREVLER -9/-5 + footer v78/v79 (v80-v83 tarafından süperseded) `session_arşiv_2.md`'ye
-taşındı (eklenti: `..._EKLENTI_2026-09-01-devam6.md`). Güncellenme: 2026-09-01.*
+*BOWLERA SESSION_INDEX.md — v70 (v69'dan: **[23. sohbet, 2026-09-03]** Kullanıcı "BOWLERA —
+PREMIUM MOTION SYSTEM" raporunu verdi (Framer Motion mimari yükseltmesi, 11 adım P0-P3).
+Kullanıcıya #99/#91 (🔴🔴) hatırlatıldı, kullanıcı BİLİNÇLİ olarak motion işini paralel
+yürütmeyi seçti — blokajlar ERTELENMEDİ, sadece bu turun kapsamı dışı. P0-1 (CartDrawer)
+TAMAMLANDI: `lib/motion/tokens.ts` (YENİ dosya, DESIGN_SYSTEM.md §6.1 süreleri isimlendirildi +
+`springs.drawer`/`drawerContentStagger` VARSAYIM olarak işaretlendi), `CartDrawer.tsx`
+`AnimatePresence`+spring slide+backdrop fade+içerik stagger+`useReducedMotion` ile yeniden
+yazıldı (22. sohbetteki DOĞRULANMAMIŞ #101 "Özel Sandviç" fix'ini de İÇERİYOR ve KAPATIYOR),
+`CartDrawer.test.tsx` (YENİ, 8 test) yazıldı. Kullanıcı Codespaces'te koşturdu: **8/8 PASS**
+(2026-09-03 06:16, ekran görüntüsüyle doğrulandı) — yeni Açık Sorun #105 olarak loglandı.
+**KALAN (105):** push + canlı doğrulama, DESIGN_SYSTEM.md §6.1'e CartDrawer satırı ekleme,
+CORE.md Dosya Haritası senkronu. Sıradaki: MenuCard (P0-2). Güncellenme: 2026-09-03.*

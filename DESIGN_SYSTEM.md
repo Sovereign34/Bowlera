@@ -148,7 +148,7 @@ animasyonundan kaçınılmalı. Toprak tonu paletin sakinliğiyle tezat oluştur
 | Özelleştirici adım geçişi | Yatay slide (mevcut adım sola çıkar, yeni adım sağdan girer) | 350ms, `ease-in-out` | "Sonraki Adım" tıklanınca |
 | VisualPreview katmanı | Yeni malzeme seçilince ilgili katman fade-in + hafif scale (0.9→1) | 250ms, `ease-out` | Malzeme seçimi |
 | Özet panel (sticky) fiyat/kalori güncelleme | Sayı değişiminde kısa vurgu rengi flaşı (logo-degrade) | 300ms | Değer değişince |
-| Sayfa geçişleri | Hafif fade (crossfade) | 250ms, `ease-in-out` | Route değişimi (Next.js) |
+| Sayfa geçişleri | Hafif fade (crossfade) | 500ms, `ease-in-out` **[2026-09-03 güncellendi — önceki: 250ms, kullanıcı isteğiyle yavaşlatıldı]** | Route değişimi (Next.js) |
 | Instagram galeri / sosyal kanıt | Yatay kayan (marquee) şerit, hover'da durur | 30-40s tam döngü, `linear` | Sayfa görünür olunca |
 
 ### 6.2 Performans ve Erişilebilirlik Kuralları
