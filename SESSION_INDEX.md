@@ -318,7 +318,14 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| -5a | **[YENİ, 23. sohbet devamı, 2026-09-03 — bu turda karar verildi]** `lib/motion/tokens.ts` satır 61: `springs.cardRelease` `{stiffness:300, damping:24}`'ten `{duration:0.45, bounce:0.15}`'e DÜZELTİLMELİ — bu değer daha önce canlı testte 2 turda kalibre edilmişti ama koda hiç yansımamış (bkz. DESIGN_SYSTEM.md v1.5, §6.1a). Tek satırlık değişiklik, push+canlı doğrulama gerekiyor. | 🔴 |
+| -5a | **[TAMAMLANDI, 24. sohbet, 2026-09-04 ✅]** `lib/motion/tokens.ts` satır 61 `springs.cardRelease` — kullanıcının yüklediği güncel dosyada değer zaten `{duration:0.45, bounce:0.15}` olarak doğruydu (kod değişikliği GEREKMEDİ, önceki turda zaten düzeltilip push edilmiş ama SESSION_INDEX'e işlenmemişti). Kullanıcı "push edildi ve canlıda" diye doğruladı. | ✅ |
+| -6 | **[GÜNCELLENDİ, 24. sohbet, 2026-09-04 — kök neden ÇÖZÜLDÜ, ama teknik borç kaldı]** Motion System P1 — AccountMenu spring dropdown. Kök neden: kullanıcı önceki debug değişikliğini dosyaya kaydetmeden test etmişti (`grep` ile doğrulanana kadar fark edilmedi) — kod baştan beri doğruydu. `duration: 1` debug testiyle animasyonun ÇALIŞTIĞI kanıtlandı. **KALAN (teknik borç, kullanıcı kararıyla ERTELENDİ):** production'da hâlâ debug değeri (`transition={{ duration: 1 }}`) duruyor, gerçek değere (`shouldReduceMotion ? { duration: 0.15 } : springs.dropdown`) geri alınmadı — kullanıcı "bu adımları atla" dedi. | 🟠 (çalışıyor ama debug değeriyle) |
+| -7 | **[YENİ, 24. sohbet — kullanıcı kararıyla ATLANDI]** Motion System rapor §10 — Header Scroll Intelligence (scroll'da surface/shadow/logo-scale değişimi). Kullanıcı "diğer görevi geç" dedi, koda hiç dokunulmadı, `Header.tsx`'te scroll listener'ı YOK. | 🟢 (kullanıcı kararıyla ertelendi) |
+| -8 | **[TAMAMLANDI (kod), 24. sohbet, 2026-09-04]** Motion System rapor §11 — Hero Cinematic Orchestration. `Hero.tsx`+`HeroImagePlaceholder.tsx`'e paragraf(260ms)/CTA(400ms)/görsel(500ms) gecikmeli giriş eklendi, `HeroHeadline.tsx`'e DOKUNULMADI (zaten spec'e uygundu). Yeni VARSAYIM `heroTimeline` (tokens.ts) — kullanıcı testinde süre/mesafe 2 kez güçlendirildi: 0.6s/16px → 0.9s/28px → **1.2s/40px** (nihai). **YAN BULGU:** `app/layout.tsx` incelendi, global `MotionConfig` GERÇEKTEN YOK — önceki oturumlardaki belirsizlik netleşti, component-level `useReducedMotion()` güvenlik katmanları (AccountMenu, Hero) gerekliymiş, gereksiz değilmiş. **KALAN:** kullanıcı görsel olarak "herşey tamam" dedi ama bu sözlü onay, canlı ekran görüntüsüyle teyit edilmedi. | 🟢 |
+| -9 | **[TESLİM EDİLDİ, 24. sohbet — canlı doğrulama BEKLİYOR]** Motion System rapor §7 — Page transition (Fade+micro-scale). Yeni `app/template.tsx` oluşturuldu (mevcut `durations.pageTransition`/`easings.easeOut` kullanıyor, yeni token YOK). **BİLİNÇLİ SINIRLAMA:** App Router'da gerçek "exit" animasyonu desteklenmiyor, SADECE giriş (entrance) animasyonu var. Kullanıcı "devam et" dedi ama canlı test sonucu bildirilmedi. | 🟡 |
+| -10 | **[TESLİM EDİLDİ, 24. sohbet — canlı doğrulama BEKLİYOR]** Motion System rapor — AddToCart Tactile feedback. Kod ZATEN vardı (`AddToCartButton.tsx`, BSC-6 kilit mantığıyla birlikte) — sadece hardcoded `{duration:0.3, type:"spring"}` yerine merkezi `springs.tactile` token'ına bağlandı, BSC-6 mantığına DOKUNULMADI. Canlı test sonucu bildirilmedi. | 🟡 |
+| -6a | **[YENİ, 24. sohbet]** `git add .` ile ilgisiz/istenmeyen dosyalar commit'e karışmış: `tsconfig.tsbuildinfo`, `test-tutarsizlik-callback.js`. `.gitignore`'a `*.tsbuildinfo` eklenmesi ve o test dosyasının kasıtlı mı yanlışlıkla mı eklendiğinin teyit edilmesi gerekiyor. | 🟠 |
+| -6b | **[YENİ, 24. sohbet — YEDİNCİ DERS adayı]** Bu sohbette Claude, `AccountMenu.tsx` dosyasının "hiç oluşturulmamış, build kırık" olduğunu iddia etti — kullanıcı "emin değilim" deyip kontrol edince dosyanın ZATEN var olduğu ortaya çıktı. Kural hatırlatması: dosya var/yok iddiaları kullanıcının "emin değilim" cevabına rağmen kesin ifadeyle sunulmamalı, "kontrol edin" ile sınırlı kalmalı. | 🟢 (ders notu, aksiyon gerekmiyor) |
 | -5 | **[YENİ, 22. sohbet]** #99 — Sandviç checkout'u BLOKLU, "fiyatlandırılamadı" hatası her zaman çıkıyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı isteniyor, kök neden bulunup düzeltilmeli. **AYRICA:** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | 🔴 |
 | -4b | **[YENİ, 2026-09-03 — kullanıcı kararıyla #99/#91'İN PARALELİNDE, önlerine geçmiyor]** Motion System rapor P0-2/P0-3: MenuCard (lift+image zoom), CategoryNav (`layoutId` active pill). P0-1 (CartDrawer) bu turda TAMAMLANDI (bkz. #105) — kod+test var, push/canlı doğrulama + DESIGN_SYSTEM.md/CORE.md senkronu hâlâ bekliyor. | 🟡 |
 | -4 | **[YENİ, bu turda]** #92/#93/#94 — Çok şubeli mimari + şube-bazlı menü + CRM/attribution katmanı — SADECE analiz+öneri yapıldı (`BOWLERA_COK_SUBELI_CRM_VIZYON.md`), kod YOK. Kullanıcı kararıyla #91'DEN SONRAYA alındı. | 🟡 (kullanıcı kararıyla #91'in ardında) |
@@ -368,6 +375,21 @@
 | 30 | [TAMAMLANDI, bu turda] #89 IP delili + engellenen deneme logu — 4 dosya kodlandı, migration Neon'da koşuldu+6 sorguyla doğrulandı, test 6/6 PASS (Codespaces), Vercel deploy yeşil | ✅ |
 
 ---
+
+*BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
+kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
+doğruydu) ama production'da debug değeri kaldı (teknik borç, kullanıcı kararıyla ertelendi).
+-7 Header Scroll kullanıcı kararıyla atlandı. -8 Hero orchestration TAMAMLANDI, `layout.tsx`
+incelenip global MotionConfig'in GERÇEKTEN olmadığı doğrulandı. -9 Page transitions
+(`app/template.tsx`, sadece giriş animasyonu) ve -10 AddToCart token-bağlama teslim edildi
+ama canlı doğrulama bekliyor. P1 kod tarafı kapandı, kalan iş canlı doğrulamalar.)*
+
+*BOWLERA SESSION_INDEX.md — v75 (v74'ten: **[24. sohbet, 2026-09-04]** -5a KAPANDI ✅ (kod
+zaten doğruydu, sadece doğrulama gerekiyordu). Motion System P1 başladı: AccountMenu.tsx'e
+AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM'ı eklendi,
+kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
+(bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
+iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
 
 *BOWLERA SESSION_INDEX.md — v74 (v73'ten: **[23. sohbet devamı, 2026-09-03, yeni sohbet]**
 `tokens.ts` nihayet paylaşıldı. **#107 KAPANDI** ✅ — yapı çelişkisi çözüldü, gerçek kod düz
