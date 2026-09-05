@@ -196,6 +196,7 @@
 | 🗄️ | **[26. sohbet]** `menu_items.id` = `text` (UUID değil), mevcut string id'leri (`sig-teriyaki-tavuk`) korumak için | ✅ Karar verildi, migration KOŞULMADI |
 | ✅ | **[26. sohbet]** `build-your-own-kasem` grep'le "sadece CTA linki" doğrulandı, `menu_items`'a DAHİL EDİLMEDİ | ✅ Kodla teyit edildi |
 | 🗄️ | **[26. sohbet]** `next-auth.d.ts` Role union'a `"admin"` eklendi, schema/auth/middleware ile senkron | ✅ Kod üretildi, repoya UYGULANMADI |
+| 🆕 | **[26. sohbet devamı]** Menü görselleri için depolama/CDN platformu: **ImageKit** (Cloudinary DEĞİL) — gerekçe: sadece görsel (video/DAM gerekmiyor), ücretsiz kota daha geniş (20GB bant genişliği + 3GB depolama, sınırsız dönüşüm vs Cloudinary'nin 25 credit'i), ücretli kademeye geçişte $9/ay (Cloudinary $89/ay). **[BU TURDA KARARLAŞTIRILDI]** Admin panelinde upload widget'ı/API entegrasyonu OLMAYACAK — kullanıcı görseli elle ImageKit dashboard'una yükleyip URL'i alacak, admin formunda SADECE bir metin input'u (`image_url`) o linki tutacak. `menu_items` şemasına bu alan HENÜZ eklenmedi — gerçek `schema.ts` görülmeden eklenemez (Kural #2). | 🟡 Platform+akış kararı verildi, şema alanı KODLANMADI |
 
 ---
 
@@ -205,6 +206,7 @@
 |---|---|---|---|
 | 108 | 🟠 | **[26. sohbet]** menu_items migration'ları Neon'da KOŞULMADI, `schema.ts`/`next-auth.d.ts` repoya UYGULANMADI. | `schema.ts`, `next-auth.d.ts`, `00*.sql` |
 | 109 | 🟡 | **[26. sohbet]** `app/admin/page.tsx` yok — guard'ın canlıda çalıştığı (403/admin girişi) doğrulanmadı. | `app/admin/page.tsx`, `middleware.ts` |
+| 110 | 🟡 | **[GÜNCELLENDİ, 26. sohbet devamı]** ImageKit platform kararı + akış basitleştirildi (upload widget YOK, elle yükle+URL yapıştır). Kalan: `menu_items` şemasında `image_url` alanı YOK — mevcut `schema.ts` (gerçek dosya) görülmeden eklenemez; admin formuna metin input'u eklenmeli. | `lib/db/schema.ts`, admin ürün formu |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
 | 52 | 🟡 | VisualPreview.tsx görsel katman klasörü boş | `components/customizer/VisualPreview.tsx` |
 | 53 | 🟢 | CONTENT_GUIDE.md §1/§2 â→a kararına göre güncellenmedi | `CONTENT_GUIDE.md` §1, §2 |
@@ -357,6 +359,11 @@
 | 30 | [TAMAMLANDI, bu turda] #89 IP delili + engellenen deneme logu — 4 dosya kodlandı, migration Neon'da koşuldu+6 sorguyla doğrulandı, test 6/6 PASS (Codespaces), Vercel deploy yeşil | ✅ |
 
 ---
+
+*BOWLERA SESSION_INDEX.md — v81 (v80'den: **[26. sohbet devamı, 2026-09-05]** Menü görselleri
+için depolama platformu kararı verildi: ImageKit (Cloudinary değil) — ücretsiz kota+basit
+fiyatlandırma gerekçesiyle. Kritik Kararlar'a işlendi, yeni Açık Sorun #110 açıldı (`schema.ts`
+görsel alanı + ImageKit kurulumu henüz kodlanmadı).)*
 
 *BOWLERA SESSION_INDEX.md — v80 (v79'dan: **[26. sohbet, 2026-09-05]** Admin panel hazırlığı
 işlendi (bkz. CURRENT FOCUS). 400 satır eşiği 5. kez aşıldı — 6 kapanmış Açık Sorun + 7 kapanmış
