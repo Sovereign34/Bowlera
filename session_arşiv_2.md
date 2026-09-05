@@ -1208,3 +1208,55 @@ kesildi — bkz. #99 (🔴), sandviç checkout'unu tamamen bloklu.
 
 **Sonraki sohbette önce:** (a) grep çıktısını al, kök nedeni doğrula/düzelt; (b) 7 dosya
 değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (ÜÇÜNCÜ DERS).
+----.
+# EKLENTİ — session_arşiv_2.md'nin SONUNA eklenecek
+# Taşıma tarihi: 2026-09-05, 25. sohbet
+# Kaynak: SESSION_INDEX.md v77 → v78, CURRENT FOCUS bloğu (23. sohbet devamı, MOTION SYSTEM
+# MOBİL TACTILE DÜZELTMESİ anlatısı)
+# Kapanış gerekçesi: İçerik artık Açık Sorunlar tablosunda (-5a KAPANDI, P0-2/P0-3 tamamlandı,
+# tokens.ts teyidi #107 kapandı) ve Motion System raporunun P0 bölümünde zaten tam özetli —
+# aktif takip için gerekli değil, sadece turn-by-turn anlatı taşınıyor.
+
+---
+
+> **[YENİ, 2026-09-03, 23. sohbet devamı — MOTION SYSTEM, MOBİL TACTILE DÜZELTMESİ]**
+> Rapor P0-1 (CartDrawer) önceki turda TAMAMLANDI (bkz. #105). Bu turda P0-2 (MenuCard)
+> başladı ve canlı doğrulamada kritik bir bulgu çıktı: **rapor (v1.0) baştan sona
+> `whileHover` üzerine kurulu, ama Bowlera trafiği neredeyse tamamen dokunmatik** — kod+test
+> PASS olmasına rağmen kullanıcı canlıda MenuCard efektlerinin mobilde HİÇ görünmediğini
+> doğruladı (ÜÇÜNCÜ DERS'in tekrarı). Üç çözüm seçeneği sunuldu (A: `whileTap` — dokunma anı
+> çok kısa; B: mobilde efekti tamamen kaldır — trafiğin çoğu hiç görmez; C: mobile özel ayrı
+> tetikleyici), kullanıcı **A'yı** onayladı: `whileTap="hover"` eklendi — dokunma artık
+> masaüstü hover ile AYNI hedef variant'a gidiyor. Fiziksellik için giriş/çıkış ayrıştırıldı:
+> giriş (rest→hover) mevcut ease korunuyor, çıkış (hover→rest, hem mouse-leave hem
+> tap-release) spring'e çevrildi. `MenuCard.tsx` + `MenuCardImage.tsx` (variant propagation
+> ile CTA/image otomatik kapsanıyor) kodlandı.
+> **Sertlik düzeltmesi (aynı sohbet devamı):** Kullanıcı canlıda "dokunuş çok sert, süre
+> uzatılmalı" bildirdi. Release spring, elle tahmin edilen `stiffness/damping` (300/24)
+> yerine `duration/bounce` (0.45s / 0.15) tabanlı tanıma çevrildi — süre/sertlik hissini
+> doğrudan ayarlamayı sağlıyor.
+> **Merkezileştirme (aynı sohbet devamı):** Kullanıcının paylaştığı güncel `MenuCard.tsx`,
+> spring'i artık LOKAL değil `lib/motion/tokens.ts`'teki `springs.cardRelease`'ten import
+> ediyor. `MenuCardImage.tsx` da aynı kaynağa geçirildi, iki dosya arasındaki LOKAL
+> DUPLİKASYON kapandı. **AÇIK MADDE:** `tokens.ts` bu turda hiç görülmedi — `springs
+> .cardRelease`'in orada gerçekten var olduğu ve değerinin (0.45/0.15) `MenuCard.tsx`'in son
+> paylaşılan importuyla eşleştiği VARSAYILDI (Kural #2 ihlali riski — kaynak: kullanıcının
+> paylaştığı dosyanın import satırı). `tokens.ts` paylaşılınca kesin teyit edilmeli.
+> **Rapor güncellendi (v1.0→v1.1):** `BOWLERA_MOTION_SYSTEM_RAPORU.md`'ye yeni §1a (Dokunmatik
+> Öncelik — zorunlu ön koşul) eklendi, §2/§3/§6/§7 dokunma-tetikleyici ile senkronlandı,
+> `springs.cardRelease` token'ı işlendi. Dosya sonuna P1+ katmanların (AccountMenu, Header,
+> Hero, Page transitions, Add to Cart, Cart badge) AYNI denetimden HENÜZ geçmediğini belirten
+> not eklendi — bunlar kod olarak henüz uygulanmadı.
+> **KALAN (MenuCard/#105'e ek):** (a) `tokens.ts`'in gerçek içeriği hiç görülmedi, varsayım
+> teyit edilmeli; (b) MenuCard mobil-tactile kararı + `springs.cardRelease` DESIGN_SYSTEM.md
+> §6.1'e HENÜZ işlenmedi; (c) CORE.md Dosya Haritası'na rapor v1.1 + değişen dosyalar
+> yansımadı; (d) push + canlı doğrulama yapılmadı; (e) mevcut testler (`MenuCard.test.tsx`,
+> `MenuCardImage.test.tsx`) yapısal — dokunma davranışını gerçek anlamda test etmiyor, tek
+> güvenilir doğrulama telefonda canlı deneme; (f) CategoryNav (P0-3) A/B/C netleşmesine bağlı
+> olarak beklemeye devam ediyor — MenuCard'daki whileTap kararının CategoryNav'a nasıl
+> yansıyacağı henüz konuşulmadı.
+
+---
+# NOT: Yukarıdaki "KALAN" maddelerinin çoğu artık ÇÖZÜLDÜ (tokens.ts paylaşıldı ve #107
+# kapandı, P0-2/P0-3 tamamlandı, Motion System P1/P2 de tamamlandı — bkz. SESSION_INDEX.md
+# v77/v78 Açık Sorunlar tablosu). Bu blok SADECE tarihsel kayıt olarak arşivleniyor.
