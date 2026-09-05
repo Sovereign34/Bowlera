@@ -112,42 +112,11 @@
 > Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
 > için gerekli değil, sadece turn-by-turn anlatı taşındı.
 
-> **[YENİ, 2026-09-03, 23. sohbet devamı — MOTION SYSTEM, MOBİL TACTILE DÜZELTMESİ]**
-> Rapor P0-1 (CartDrawer) önceki turda TAMAMLANDI (bkz. #105). Bu turda P0-2 (MenuCard)
-> başladı ve canlı doğrulamada kritik bir bulgu çıktı: **rapor (v1.0) baştan sona
-> `whileHover` üzerine kurulu, ama Bowlera trafiği neredeyse tamamen dokunmatik** — kod+test
-> PASS olmasına rağmen kullanıcı canlıda MenuCard efektlerinin mobilde HİÇ görünmediğini
-> doğruladı (ÜÇÜNCÜ DERS'in tekrarı). Üç çözüm seçeneği sunuldu (A: `whileTap` — dokunma anı
-> çok kısa; B: mobilde efekti tamamen kaldır — trafiğin çoğu hiç görmez; C: mobile özel ayrı
-> tetikleyici), kullanıcı **A'yı** onayladı: `whileTap="hover"` eklendi — dokunma artık
-> masaüstü hover ile AYNI hedef variant'a gidiyor. Fiziksellik için giriş/çıkış ayrıştırıldı:
-> giriş (rest→hover) mevcut ease korunuyor, çıkış (hover→rest, hem mouse-leave hem
-> tap-release) spring'e çevrildi. `MenuCard.tsx` + `MenuCardImage.tsx` (variant propagation
-> ile CTA/image otomatik kapsanıyor) kodlandı.
-> **Sertlik düzeltmesi (aynı sohbet devamı):** Kullanıcı canlıda "dokunuş çok sert, süre
-> uzatılmalı" bildirdi. Release spring, elle tahmin edilen `stiffness/damping` (300/24)
-> yerine `duration/bounce` (0.45s / 0.15) tabanlı tanıma çevrildi — süre/sertlik hissini
-> doğrudan ayarlamayı sağlıyor.
-> **Merkezileştirme (aynı sohbet devamı):** Kullanıcının paylaştığı güncel `MenuCard.tsx`,
-> spring'i artık LOKAL değil `lib/motion/tokens.ts`'teki `springs.cardRelease`'ten import
-> ediyor. `MenuCardImage.tsx` da aynı kaynağa geçirildi, iki dosya arasındaki LOKAL
-> DUPLİKASYON kapandı. **AÇIK MADDE:** `tokens.ts` bu turda hiç görülmedi — `springs
-> .cardRelease`'in orada gerçekten var olduğu ve değerinin (0.45/0.15) `MenuCard.tsx`'in son
-> paylaşılan importuyla eşleştiği VARSAYILDI (Kural #2 ihlali riski — kaynak: kullanıcının
-> paylaştığı dosyanın import satırı). `tokens.ts` paylaşılınca kesin teyit edilmeli.
-> **Rapor güncellendi (v1.0→v1.1):** `BOWLERA_MOTION_SYSTEM_RAPORU.md`'ye yeni §1a (Dokunmatik
-> Öncelik — zorunlu ön koşul) eklendi, §2/§3/§6/§7 dokunma-tetikleyici ile senkronlandı,
-> `springs.cardRelease` token'ı işlendi. Dosya sonuna P1+ katmanların (AccountMenu, Header,
-> Hero, Page transitions, Add to Cart, Cart badge) AYNI denetimden HENÜZ geçmediğini belirten
-> not eklendi — bunlar kod olarak henüz uygulanmadı.
-> **KALAN (MenuCard/#105'e ek):** (a) `tokens.ts`'in gerçek içeriği hiç görülmedi, varsayım
-> teyit edilmeli; (b) MenuCard mobil-tactile kararı + `springs.cardRelease` DESIGN_SYSTEM.md
-> §6.1'e HENÜZ işlenmedi; (c) CORE.md Dosya Haritası'na rapor v1.1 + değişen dosyalar
-> yansımadı; (d) push + canlı doğrulama yapılmadı; (e) mevcut testler (`MenuCard.test.tsx`,
-> `MenuCardImage.test.tsx`) yapısal — dokunma davranışını gerçek anlamda test etmiyor, tek
-> güvenilir doğrulama telefonda canlı deneme; (f) CategoryNav (P0-3) A/B/C netleşmesine bağlı
-> olarak beklemeye devam ediyor — MenuCard'daki whileTap kararının CategoryNav'a nasıl
-> yansıyacağı henüz konuşulmadı.
+> **[TAŞINDI — 2026-09-05, 400 satır eşiği dördüncü kez aşıldı]** 23. sohbet devamı (MOTION
+> SYSTEM Mobil Tactile Düzeltmesi — MenuCard whileTap kararı, sertlik düzeltmesi,
+> merkezileştirme anlatısı) `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-05.md`). Kapanış gerekçesi: içerik artık #107 (KAPANDI) ve
+> Motion System P0 bölümünde zaten tam özetli — aktif takip için gerekli değil.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -166,6 +135,7 @@
 | 2026-09-03 | 3 blok (19. sohbet CRM keşfi, 20. sohbet SANDWICH_SPEC üretimi, 22. sohbet geriye-dönük sandviç UI/checkout bulgusu) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Açık Sorunlar #92/#93/#94/#95/#99-104'te özetli |
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
+| 2026-09-05 (25. sohbet) | 23. sohbet devamı — MOTION SYSTEM Mobil Tactile Düzeltmesi anlatısı (MenuCard whileTap kararı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-05.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — #107 (KAPANDI) ve Motion System P0 bölümünde özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -324,6 +294,9 @@
 | -8 | **[TAMAMLANDI (kod), 24. sohbet, 2026-09-04]** Motion System rapor §11 — Hero Cinematic Orchestration. `Hero.tsx`+`HeroImagePlaceholder.tsx`'e paragraf(260ms)/CTA(400ms)/görsel(500ms) gecikmeli giriş eklendi, `HeroHeadline.tsx`'e DOKUNULMADI (zaten spec'e uygundu). Yeni VARSAYIM `heroTimeline` (tokens.ts) — kullanıcı testinde süre/mesafe 2 kez güçlendirildi: 0.6s/16px → 0.9s/28px → **1.2s/40px** (nihai). **YAN BULGU:** `app/layout.tsx` incelendi, global `MotionConfig` GERÇEKTEN YOK — önceki oturumlardaki belirsizlik netleşti, component-level `useReducedMotion()` güvenlik katmanları (AccountMenu, Hero) gerekliymiş, gereksiz değilmiş. **KALAN:** kullanıcı görsel olarak "herşey tamam" dedi ama bu sözlü onay, canlı ekran görüntüsüyle teyit edilmedi. | 🟢 |
 | -9 | **[TESLİM EDİLDİ, 24. sohbet — canlı doğrulama BEKLİYOR]** Motion System rapor §7 — Page transition (Fade+micro-scale). Yeni `app/template.tsx` oluşturuldu (mevcut `durations.pageTransition`/`easings.easeOut` kullanıyor, yeni token YOK). **BİLİNÇLİ SINIRLAMA:** App Router'da gerçek "exit" animasyonu desteklenmiyor, SADECE giriş (entrance) animasyonu var. Kullanıcı "devam et" dedi ama canlı test sonucu bildirilmedi. | 🟡 |
 | -10 | **[TESLİM EDİLDİ, 24. sohbet — canlı doğrulama BEKLİYOR]** Motion System rapor — AddToCart Tactile feedback. Kod ZATEN vardı (`AddToCartButton.tsx`, BSC-6 kilit mantığıyla birlikte) — sadece hardcoded `{duration:0.3, type:"spring"}` yerine merkezi `springs.tactile` token'ına bağlandı, BSC-6 mantığına DOKUNULMADI. Canlı test sonucu bildirilmedi. | 🟡 |
+| -11 | **[KAPANDI, 25. sohbet, 2026-09-05 ✅]** CartBadge'de 2 gerçek bug bulundu ve düzeltildi (canlı testte kullanıcı bulguları üzerine): (1) `count===0` iken bileşen hiç mount olmuyordu, ilk ürün eklemede (0→1) `useRef` başlangıcı yanlış eşitlenip pulse hiç tetiklenmiyordu; (2) düzeltme sırasında `controls.start({scale:[...]})` opacity'i hiç 1'e ayarlamadığı için rozet tamamen görünmez kaldı. İkisi de düzeltildi, kullanıcı "bu sorun tamam" dedi. Ayrıca süre/bounce/scale kullanıcı testiyle güçlendirildi (0.4s/1.3→0.6s/1.5, bounce:0.35). | ✅ |
+| -12 | **[TAMAMLANDI, 25. sohbet, 2026-09-05 ✅]** Motion System rapor P2 — Customizer Spatial step transition. `app/menu/customize/[id]/page.tsx` (kase) VE `components/sandwich/SandwichCustomizer.tsx` (sandviç) — ikisine de `AnimatePresence(mode="wait")`+opacity/x eklendi, yön (ileri/geri) `currentStep`'in önceki render değeriyle hesaplanıyor, #90'ın hassas height/scroll layout'una DOKUNULMADI. Sandviç akışında kayma mesafesi kullanıcı testiyle 24px→40px'e çıkarıldı (kart sarmalayıcısı olmadığı için daha az belirgindi). **YAN BULGU (düzeltildi):** sandviç akışında "Geri" butonu HİÇ YOKTU (sadece StepDots'tan tıklanabiliyordu) — `SandwichCustomizer.tsx`'e paylaşılan tek bir "Geri" butonu eklendi (previousStep(), 1. adımda gizli). | ✅ |
+| -13 | **[TAMAMLANDI, 25. sohbet, 2026-09-05 ✅]** Motion System rapor P2 — VisualPreview Layer entrance. Kod ZATEN vardı (`VisualPreview.tsx`, opacity+scale, reduced-motion korumalı) — sadece hardcoded `0.25`/`"easeOut"` yerine merkezi `durations.visualPreviewLayer`+`easings.easeOut` token'larına bağlandı. Görsel değişiklik YOK (davranış birebir aynı), kullanıcıya bu netleştirildi. | ✅ |
 | -6a | **[YENİ, 24. sohbet]** `git add .` ile ilgisiz/istenmeyen dosyalar commit'e karışmış: `tsconfig.tsbuildinfo`, `test-tutarsizlik-callback.js`. `.gitignore`'a `*.tsbuildinfo` eklenmesi ve o test dosyasının kasıtlı mı yanlışlıkla mı eklendiğinin teyit edilmesi gerekiyor. | 🟠 |
 | -6b | **[YENİ, 24. sohbet — YEDİNCİ DERS adayı]** Bu sohbette Claude, `AccountMenu.tsx` dosyasının "hiç oluşturulmamış, build kırık" olduğunu iddia etti — kullanıcı "emin değilim" deyip kontrol edince dosyanın ZATEN var olduğu ortaya çıktı. Kural hatırlatması: dosya var/yok iddiaları kullanıcının "emin değilim" cevabına rağmen kesin ifadeyle sunulmamalı, "kontrol edin" ile sınırlı kalmalı. | 🟢 (ders notu, aksiyon gerekmiyor) |
 | -5 | **[YENİ, 22. sohbet]** #99 — Sandviç checkout'u BLOKLU, "fiyatlandırılamadı" hatası her zaman çıkıyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı isteniyor, kök neden bulunup düzeltilmeli. **AYRICA:** #100-#104'teki 7 dosya değişikliğinin (Hero/SandwichSummaryPanel/HeroImagePlaceholder/SandwichCustomizer/CartDrawer/OrderSummary×2) hangilerinin fiilen push/test edildiği kullanıcıdan tek tek teyit alınmalı — hiçbiri varsayılan "tamam" sayılmasın. | 🔴 |
@@ -375,6 +348,22 @@
 | 30 | [TAMAMLANDI, bu turda] #89 IP delili + engellenen deneme logu — 4 dosya kodlandı, migration Neon'da koşuldu+6 sorguyla doğrulandı, test 6/6 PASS (Codespaces), Vercel deploy yeşil | ✅ |
 
 ---
+
+*BOWLERA SESSION_INDEX.md — v78 (v77'den: **[25. sohbet devamı, 2026-09-05]** 400 satır eşiği
+dördüncü kez aşıldı — 23. sohbet devamının (MOTION SYSTEM Mobil Tactile Düzeltmesi, ~36 satır)
+tam anlatı bloğu `session_arşiv_2.md`'ye taşındı, kullanıcıya ayrı eklenti dosyası olarak
+verildi. İçerik zaten #107 (KAPANDI) ve Açık Sorunlar/Motion System P0 özetinde tam
+korunuyor, kayıp yok.)*
+
+*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[25. sohbet, 2026-09-05]** P2 TAMAMEN KAPANDI:
+-11 CartBadge'de 2 gerçek bug bulunup düzeltildi (0→1 mount köründü + opacity hiç
+ayarlanmıyordu), -12 Customizer spatial transition hem kase hem sandviç akışına eklendi
+(yan bulgu: sandviçte "Geri" butonu hiç yoktu, eklendi), -13 VisualPreview token'a bağlandı
+(görsel değişiklik yok, davranış aynı). Motion System raporu artık SADECE P3 (Instagram
+marquee) ve teknik borçlar (AccountMenu debug değeri, -9/-10 canlı doğrulama) hariç
+tamamlandı. Genel gözlem bu oturumdan: kullanıcı testleri defalarca "gerçek dosyanın
+kaydedilip kaydedilmediğini doğrula" adımını atlayınca zaman kaybına yol açtı (AccountMenu,
+CartBadge) — bu artık standart ilk adım olarak yerleşti.)*
 
 *BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
 kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
