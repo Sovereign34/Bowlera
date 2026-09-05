@@ -1260,3 +1260,40 @@ değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (Ü
 # NOT: Yukarıdaki "KALAN" maddelerinin çoğu artık ÇÖZÜLDÜ (tokens.ts paylaşıldı ve #107
 # kapandı, P0-2/P0-3 tamamlandı, Motion System P1/P2 de tamamlandı — bkz. SESSION_INDEX.md
 # v77/v78 Açık Sorunlar tablosu). Bu blok SADECE tarihsel kayıt olarak arşivleniyor.
+------
+> **EKLENTİ — 2026-09-05 (26. sohbet, devam 2).** Bu blok, kullanıcı tarafından mevcut
+> `session_arşiv_2.md` dosyasının SONUNA elle eklenmelidir. Aşağıdaki 13 satır, SESSION_INDEX.md
+> 400 satır eşiğini beşinci kez aştığı için taşınmıştır (CORE.md §7.1 Adım 1). Hepsi taşınma
+> anında zaten ✅ (tamamen kapanmış) durumdaydı — kapanış gerekçesi her satırın kendi metninde
+> mevcuttur, ayrıca aşağıda tek satırlık özetleri de verilmiştir.
+
+---
+
+## Taşınan Açık Sorunlar (6 madde)
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
+| 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
+| 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
+| 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
+| 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
+| 101 | ✅ | **[BU TURDA KAPANDI, 2026-09-03, 23. sohbet]** 22. sohbetteki "Özel Kase" fallback bug'u (`item.bowlItem?.name ?? "Özel Kase"` sandviçlerde hep "Özel Kase" yazdırıyordu) `CartDrawer.tsx`'in bu turdaki motion yükseltmesiyle YENİDEN yazıldı VE test edildi — `CartDrawer.test.tsx`'teki "bowlItem null + sandwichCustomization dolu → Özel Sandviç; ikisi de null → Özel Kase" testi Codespaces'te PASS (8/8, 2026-09-03 06:16, ekran görüntüsü). Bowl davranışı da (`bowlItem?.name` önceliği) happy-path testinde doğrulandı. **KALAN:** push + canlı/production doğrulaması — bkz. #105. | `components/cart/CartDrawer.tsx` |
+
+## Taşınan Sıradaki Görevler (7 madde)
+
+| Sıra | Görev | Öncelik |
+|---|---|---|
+| -5a | **[TAMAMLANDI, 24. sohbet, 2026-09-04 ✅]** `lib/motion/tokens.ts` satır 61 `springs.cardRelease` — kullanıcının yüklediği güncel dosyada değer zaten `{duration:0.45, bounce:0.15}` olarak doğruydu (kod değişikliği GEREKMEDİ, önceki turda zaten düzeltilip push edilmiş ama SESSION_INDEX'e işlenmemişti). Kullanıcı "push edildi ve canlıda" diye doğruladı. | ✅ |
+| -11 | **[KAPANDI, 25. sohbet, 2026-09-05 ✅]** CartBadge'de 2 gerçek bug bulundu ve düzeltildi (canlı testte kullanıcı bulguları üzerine): (1) `count===0` iken bileşen hiç mount olmuyordu, ilk ürün eklemede (0→1) `useRef` başlangıcı yanlış eşitlenip pulse hiç tetiklenmiyordu; (2) düzeltme sırasında `controls.start({scale:[...]})` opacity'i hiç 1'e ayarlamadığı için rozet tamamen görünmez kaldı. İkisi de düzeltildi, kullanıcı "bu sorun tamam" dedi. Ayrıca süre/bounce/scale kullanıcı testiyle güçlendirildi (0.4s/1.3→0.6s/1.5, bounce:0.35). | ✅ |
+| -12 | **[TAMAMLANDI, 25. sohbet, 2026-09-05 ✅]** Motion System rapor P2 — Customizer Spatial step transition. `app/menu/customize/[id]/page.tsx` (kase) VE `components/sandwich/SandwichCustomizer.tsx` (sandviç) — ikisine de `AnimatePresence(mode="wait")`+opacity/x eklendi, yön (ileri/geri) `currentStep`'in önceki render değeriyle hesaplanıyor, #90'ın hassas height/scroll layout'una DOKUNULMADI. Sandviç akışında kayma mesafesi kullanıcı testiyle 24px→40px'e çıkarıldı (kart sarmalayıcısı olmadığı için daha az belirgindi). **YAN BULGU (düzeltildi):** sandviç akışında "Geri" butonu HİÇ YOKTU (sadece StepDots'tan tıklanabiliyordu) — `SandwichCustomizer.tsx`'e paylaşılan tek bir "Geri" butonu eklendi (previousStep(), 1. adımda gizli). | ✅ |
+| -13 | **[TAMAMLANDI, 25. sohbet, 2026-09-05 ✅]** Motion System rapor P2 — VisualPreview Layer entrance. Kod ZATEN vardı (`VisualPreview.tsx`, opacity+scale, reduced-motion korumalı) — sadece hardcoded `0.25`/`"easeOut"` yerine merkezi `durations.visualPreviewLayer`+`easings.easeOut` token'larına bağlandı. Görsel değişiklik YOK (davranış birebir aynı), kullanıcıya bu netleştirildi. | ✅ |
+| -1 | **[TAMAMLANDI, bu turda ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda ("bari" görünür) doğrulandı. Kök neden SQL sorgusuyla izole edilmedi, kullanıcı deneyimi seviyesinde kapandı. | ✅ |
+| 0 | **[TAMAMLANDI, bu turda ✅]** #83 — "Sıfırla" → üretilen geçici kodla (460244) giriş canlıda BAŞARILI test edildi. | ✅ |
+| 0b | **[TAMAMLANDI, bu turda ✅]** #82 — Neon'a elle dokunmadan, orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
+
+---
+
+*Kapanış gerekçesi (tümü için ortak): yukarıdaki 13 satırın hepsi taşınma anında ✅ durumundaydı;
+kapanış bilgisi SESSION_INDEX.md'nin Kritik Kararlar tablosunda ve/veya bu bloğun kendisinde
+tam olarak korunmaktadır. Aktif takip için SESSION_INDEX.md'de tutulmaları gerekmiyor.*
