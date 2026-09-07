@@ -1297,3 +1297,48 @@ değişikliğinin hangilerinin fiilen push/test edildiğini tek tek teyit al (Ü
 *Kapanış gerekçesi (tümü için ortak): yukarıdaki 13 satırın hepsi taşınma anında ✅ durumundaydı;
 kapanış bilgisi SESSION_INDEX.md'nin Kritik Kararlar tablosunda ve/veya bu bloğun kendisinde
 tam olarak korunmaktadır. Aktif takip için SESSION_INDEX.md'de tutulmaları gerekmiyor.*
+------
+> Bu blok, SESSION_INDEX.md'nin 2026-09-07 (Admin Panel CRUD/cache-bug turu) güncellemesinde
+> 400 satır eşiği yeniden aşıldığı için taşındı. Kendi elinizle `session_arşiv_2.md`'nin
+> SONUNA ekleyin. Kapanış gerekçesi: bu blok artık Kritik Kararlar tablosunda (ImageKit,
+> menu_items migration, admin rolü, tags/allergens listeleri) ve Açık Sorunlar #108-#113'te
+> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn planlama anlatısı arşive
+> taşınıyor.
+
+## 26. sohbet (2026-09-05) — Admin Panel planlaması tam anlatısı
+
+**Kararlaştırılanlar:**
+- Erişim: tek admin hesabı. MVP kapsamı: tam kapsam tek seferde (görsel+menü/fiyat/kalori CRUD).
+- Görsel depolama: **ImageKit** (Cloudinary'ye karşı karşılaştırıldı — sınırsız dönüşüm +
+  daha geniş ücretsiz bant genişliği gerekçesiyle tercih edildi).
+- Menünün gerçek konumu doğrulandı (#93 KAPANDI): `lib/menu-data.json` (imza kaseler+
+  içecekler), `lib/sandwich-data.json` (sandviçler, TEST VERİSİ, #95), `lib/customizer-
+  data.ts` (build-your-own malzeme kataloğu). Bu turda SADECE `menu-data.json` ele alındı.
+- Alan listesi netleşti: `name/category/price/image` zorunlu; `calories/protein` ZORUNLU
+  (asla gizlenemez — ARCHITECTURE.md §3/DESIGN_SYSTEM.md §7.0); `allergens` (5 sabit değer:
+  gluten/dairy/nuts/soy/shellfish — kod+canlı davranışla teyitli, DESIGN_SYSTEM.md'nin 7'lik
+  listesi GÜNCEL DEĞİL, bkz. Açık Sorun #108); `tags`/diyet-kalori etiketi (5 sabit değer,
+  gerçek veriden çıkarıldı: yüksek protein/glutensiz/vegan/sıcak-tahıl/düşük kalori — canlı
+  filtre ekranının "Keto" seçeneği hiç kullanılmadığı için DAHİL EDİLMEDİ, bkz. Açık Sorun
+  #109); `carbs`/`fat` opsiyonel.
+- `build-your-own-kasem` kaydı (test verisi) `menu_items` tablosuna DAHİL EDİLMEDİ —
+  `grep -rn "build-your-own-kasem"` ile DOĞRULANDI: sadece `Hero.tsx`'te bir CTA linki
+  (`/menu/customize/build-your-own-kasem`), hiçbir menü listeleme bileşeninde ürün olarak
+  render edilmiyor.
+- `menu_items.id` bilinçli olarak `uuid` DEĞİL `text` — mevcut string id'ler
+  (`sig-teriyaki-tavuk` vb.) korundu, dış referans kırılması riske edilmedi.
+- Admin yetkisi `users.role`'e YENİ bir `"admin"` değeri olarak eklendi — mevcut `"staff"`
+  rolünden BİLİNÇLİ OLARAK AYRI (gerekçe: staff ileride birden fazla kişiye açılabilir,
+  admin "tek admin hesabı" kararı gereği ayrı kalmalı — bu karar 27. sohbette kısmen
+  revize edildi, bkz. Kritik Kararlar/#112).
+
+**Yapılıp Neon'da doğrulanan:**
+- `menu_items` tablosu migration'ı (`001_menu_items.sql`) koşuldu — 13 kolon, tipler
+  `information_schema.columns` sorgusuyla DOĞRULANDI (id:text, calories/protein:integer
+  NOT NULL, carbs/fat:integer nullable, tags/allergens:ARRAY NOT NULL — hepsi beklendiği gibi).
+- Seed (`002_seed_menu_items.sql`, 8 gerçek ürün) koşuldu — `SELECT COUNT(*)` **8** döndü,
+  DOĞRULANDI.
+
+**Bu turda kullanıcıya TESLİM EDİLDİ (27. sohbette repoya uygulanıp doğrulandı — bkz. #112):**
+- `lib/db/schema.ts`, `middleware.ts`, `auth.ts`, `types/next-auth.d.ts` — 4 dosya, `"admin"`
+  rolü için TAM DOSYA olarak, üçlü senkron üretildi.
