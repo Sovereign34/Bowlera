@@ -101,7 +101,19 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-06, 27. sohbet]** Admin Panel CANLIYA ALINDI. #110/#112 KAPANDI (4
+> **[GÜNCEL — 2026-09-07, 28. sohbet]** Admin panelde ilk gerçek kullanıcı testi yapıldı —
+> yeni ürün ("Fogy") oluşturuldu. **2 bulgu ortaya çıktı:**
+> 1. **Sitede görünmüyor — BEKLENEN, hata değil.** Canlı site hâlâ statik `menu-data.json`'dan
+>    okuyor, `menu_items` DB'sine bağlanmadı (bilinçli olarak ayrı bırakılan bir görev).
+> 2. **Admin listesinde de görünmüyordu — GERÇEK BUG, BULUNDU VE DÜZELTİLDİ.** Neon'da
+>    `SELECT` ile kayıt DB'ye YAZILMIŞ olduğu doğrulandı (`fogy-izzbw`, 2026-09-07 03:34) —
+>    yani sorun kayıtta değil, `app/admin/page.tsx`'in Next.js tarafından **build-anı statik
+>    önbellek** olarak dondurulmasıydı (server component DB'den okuyor ama `dynamic` export'u
+>    yoktu). `export const dynamic = 'force-dynamic'` hem liste sayfasına hem düzenleme
+>    sayfasına eklendi — kullanıcı henüz repoya uygulayıp push ETMEDİ, canlı doğrulama
+>    BEKLİYOR (bkz. Açık Sorun #114).
+>
+> **[ÖNCEKİ — 2026-09-06, 27. sohbet]** Admin Panel CANLIYA ALINDI. #110/#112 KAPANDI (4
 > senkron dosya repoya uygulandı, `role='admin'` Neon'da atandı ve canlıda doğrulandı).
 > Kullanıcı kararıyla admin artık `/personel`'e de erişiyor (middleware'in staff guard'ı
 > `role !== 'staff' && role !== 'admin'` olarak genişletildi — `/admin` guard'ı hâlâ SADECE
@@ -109,66 +121,15 @@
 > image + menu-items list/create/update/delete route'ları + MenuItemForm + 3 admin sayfası)
 > yazıldı, ImageKit hesabı açılıp entegre edildi. Yol boyunca 3 build hatası çıktı, hepsi
 > çözüldü (eksik `imagekit` npm paketi, TS literal-tipi `.includes()` hatası, ilk pushta
-> unutulan `app/admin/page.tsx`). **CANLIDA DOĞRULANDI:** `/admin` 8 gerçek ürünü doğru
-> isim/fiyat/kategoriyle listeliyor. **SIRADAKİ OTURUMUN İLK İŞİ:** (a) bir ürüne tıklayıp
-> düzenleme formunun dolu geldiğini, (b) "Yeni Ürün" ile gerçek bir ImageKit yüklemesi yapıp
-> kaydın DB'ye yazıldığını canlıda ucu ucuna doğrulamak — ikisi de HENÜZ TEST EDİLMEDİ.
-> Kozmetik, önemsiz bir detay: admin listesindeki `<img>` önizlemeleri kırık ikon gösteriyor
-> (`menu_items.image` alanı `/public`'ten okunan bir dosya adı, admin bu yola giremiyor).
+> unutulan `app/admin/page.tsx`). `/admin` canlıda 8 gerçek ürünü doğru isim/fiyat/kategoriyle
+> listeliyor. Kozmetik, önemsiz bir detay: admin listesindeki `<img>` önizlemeleri kırık ikon
+> gösteriyor (`menu_items.image` alanı `/public`'ten okunan bir dosya adı, admin bu yola
+> giremiyor).
 >
-> **[ÖNCEKİ — 2026-09-05, 26. sohbet]** **Admin Panel (Menü/Fiyat/Kalori/Görsel CRUD) planlaması
-> başladı ve önemli ölçüde ilerledi.** Aşağıdaki alt bölüm bu turun tam özetidir.
->
-> **Kararlaştırılanlar:**
-> - Erişim: tek admin hesabı. MVP kapsamı: tam kapsam tek seferde (görsel+menü/fiyat/kalori CRUD).
-> - Görsel depolama: **ImageKit** (Cloudinary'ye karşı karşılaştırıldı — sınırsız dönüşüm +
->   daha geniş ücretsiz bant genişliği gerekçesiyle tercih edildi). Entegrasyon HENÜZ YAPILMADI.
-> - Menünün gerçek konumu doğrulandı (#93 KAPANDI — bkz. Açık Sorunlar): `lib/menu-data.json`
->   (imza kaseler+içecekler), `lib/sandwich-data.json` (sandviçler, TEST VERİSİ, #95),
->   `lib/customizer-data.ts` (build-your-own malzeme kataloğu). Bu turda SADECE `menu-data.json`
->   ele alındı.
-> - Alan listesi netleşti: `name/category/price/image` zorunlu; `calories/protein` ZORUNLU
->   (asla gizlenemez — ARCHITECTURE.md §3/DESIGN_SYSTEM.md §7.0); `allergens` (5 sabit değer:
->   gluten/dairy/nuts/soy/shellfish — kod+canlı davranışla teyitli, DESIGN_SYSTEM.md'nin 7'lik
->   listesi GÜNCEL DEĞİL, bkz. Açık Sorun #108); `tags`/diyet-kalori etiketi (5 sabit değer,
->   gerçek veriden çıkarıldı: yüksek protein/glutensiz/vegan/sıcak-tahıl/düşük kalori — canlı
->   filtre ekranının "Keto" seçeneği hiç kullanılmadığı için DAHİL EDİLMEDİ, bkz. Açık Sorun
->   #109); `carbs`/`fat` opsiyonel.
-> - `build-your-own-kasem` kaydı (test verisi) `menu_items` tablosuna DAHİL EDİLMEDİ —
->   `grep -rn "build-your-own-kasem"` ile DOĞRULANDI: sadece `Hero.tsx`'te bir CTA linki
->   (`/menu/customize/build-your-own-kasem`), hiçbir menü listeleme bileşeninde ürün olarak
->   render edilmiyor.
-> - `menu_items.id` bilinçli olarak `uuid` DEĞİL `text` — mevcut string id'ler
->   (`sig-teriyaki-tavuk` vb.) korundu, dış referans kırılması riske edilmedi.
-> - Admin yetkisi `users.role`'e YENİ bir `"admin"` değeri olarak eklendi — mevcut `"staff"`
->   rolünden BİLİNÇLİ OLARAK AYRI (gerekçe: staff ileride birden fazla kişiye açılabilir,
->   admin "tek admin hesabı" kararı gereği ayrı kalmalı).
->
-> **Yapılıp Neon'da doğrulanan:**
-> - `menu_items` tablosu migration'ı (`001_menu_items.sql`) koşuldu — 13 kolon, tipler
->   `information_schema.columns` sorgusuyla DOĞRULANDI (id:text, calories/protein:integer
->   NOT NULL, carbs/fat:integer nullable, tags/allergens:ARRAY NOT NULL — hepsi beklendiği gibi).
-> - Seed (`002_seed_menu_items.sql`, 8 gerçek ürün) koşuldu — `SELECT COUNT(*)` **8** döndü,
->   DOĞRULANDI.
->
-> **Kullanıcıya TESLİM EDİLDİ, ama REPO'YA UYGULANDIĞI/PUSH EDİLDİĞİ TEYİT EDİLMEDİ:**
-> - `lib/db/schema.ts` — TAM DOSYA, mevcut 5 tablo korunarak `menuItems` eklendi +
->   `users.role` yorum/union'ı `"admin"`i içerecek şekilde güncellendi.
-> - `middleware.ts` — TAM DOSYA, mevcut guest-gate + `/personel` guard'ı korunarak
->   `/admin`+`/api/admin` için AYNI desende (fail-closed, taze DB okuması, `role==='admin'`
->   katı şartı — `staff` giremiyor) yeni guard bloğu eklendi.
-> - `auth.ts` — TAM DOSYA, `Role` tipi + `normalizeRole()` `"admin"`i tanıyacak şekilde
->   güncellendi (middleware'deki kopyayla senkron).
-> - `types/next-auth.d.ts` (yüklenirken dosya adı `next-auth_d.ts` olmuş, gerçek yolu
->   `types/next-auth.d.ts`) — TAM DOSYA, `Role` union'ı `"admin"`i içerecek şekilde
->   güncellendi (auth.ts/middleware.ts ile üçlü senkron).
->
-> **Sıradaki adım (net):** kullanıcı yukarıdaki 4 dosyayı repoya uygulayıp push etmeli,
-> ardından `app/admin/page.tsx` — önce basit bir placeholder sayfayla middleware guard'ının
-> gerçekten çalıştığını (staff/customer 403 alıyor mu, admin giriyor mu) canlıda doğrulamak,
-> sonra tam CRUD formuna geçmek öneriliyor — kullanıcıya bu turda soruldu, YANIT GELMEDEN
-> devamlılık notu istendi (sonra "log yazma sohbete devam et" dendi, konuşma bu güncellemeyle
-> devam ediyor — henüz cevaplanmadı).
+> **[TAŞINDI — 2026-09-07, 400 satır eşiği beşinci kez aşıldı]** 26. sohbetin (Admin Panel
+> planlaması) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-07.md`). Kapanış gerekçesi: içerik Kritik Kararlar
+> tablosunda ve Açık Sorunlar #108-#113'te zaten tam özetli — aktif takip için gerekli değil.
 
 > **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
 > 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
@@ -213,6 +174,7 @@
 | 2026-08-23 | 2 blok (18. sohbet #91 detayı, 17. sohbet #90 detayı) + 5 "KAPANDI (BU TURDA)" anlatı bloğu (#82/83/84, #74, #79/75/80, #50, #76/77) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23.md`, 2 blok halinde) | ✅ Açık Sorunlar/Kritik Kararlar'da özetli, TAM metinle taşındı |
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
 | 2026-09-05 (25. sohbet) | 23. sohbet devamı — MOTION SYSTEM Mobil Tactile Düzeltmesi anlatısı (MenuCard whileTap kararı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-05.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — #107 (KAPANDI) ve Motion System P0 bölümünde özetli |
+| 2026-09-07 (28. sohbet) | 26. sohbetin Admin Panel planlaması tam anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar ve Açık Sorunlar #108-#113'te özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -315,7 +277,8 @@
 | 110 | 🟠 | **[YENİ, 26. sohbet — Admin Panel]** ARCHITECTURE.md ve DEPENDENCIES.md `menu_items` tablosunun eklendiğini, `users.role`'e `"admin"` değerinin eklendiğini ve `/admin`+`/api/admin` middleware guard'ının varlığını YANSITMIYOR — bu turda SADECE `docs/schema-changes/20260905090000_menu_items_tablosu_eklendi.md` şema notu üretildi, mimari dokümanlar güncellenmedi. | `ARCHITECTURE.md`, `DEPENDENCIES.md` |
 | 111 | 🟡 | **[YENİ, 26. sohbet — Admin Panel]** `types/index.ts`'teki `BowlItem` tipi bu turda GÖRÜLMEDİ ve GÜNCELLENMEDİ — `menu_items` DB şemasıyla (calories/protein NOT NULL, tags/allergens array) senkron olduğu VARSAYILDI (ARCHITECTURE.md'de daha önce görülen tip tanımına dayanarak) ama bu turda dosyanın kendisi paylaşılmadı, TAM teyit edilmedi. | `types/index.ts` |
 | 112 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** 4 dosya (`schema.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts`) repoya uygulandı, `npx tsc --noEmit` + `npm run build` temiz, push edildi. Neon'da `+905431615778` numarası `role='admin'` yapıldı VE canlıda doğrulandı (`SELECT` ile teyit edildi). **YENİ KARAR (kullanıcı isteğiyle):** bu hesabın hem `/personel` hem `/admin`'e erişmesi istendiği için `middleware.ts`'teki `/personel` guard'ı `role !== 'staff' && role !== 'admin'` olarak GENİŞLETİLDİ (admin artık staff'ın süperkümesi, ama `/admin` guard'ı hâlâ SADECE `role==='admin'` — tek admin kararı bozulmadı). Canlıda hem `/personel` hem `/admin` (o an 404 — sayfa yoktu ama 403 YOKTU) doğrulandı. | `middleware.ts` |
-| 113 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** Admin panelinin ilk CRUD'u yazıldı ve DEPLOY EDİLDİ: `lib/imagekit.ts`, `lib/admin/menu-item-constants.ts`, `app/api/admin/upload-image/route.ts`, `app/api/admin/menu-items/route.ts` (GET+POST), `app/api/admin/menu-items/[id]/route.ts` (GET+PATCH+DELETE), `components/admin/MenuItemForm.tsx`, `app/admin/page.tsx` (liste), `app/admin/menu-items/new/page.tsx`, `app/admin/menu-items/[id]/page.tsx`. ImageKit hesabı açıldı (Public Key/Private Key/URL Endpoint alındı, `.env.local`+Vercel env'e eklendi), `imagekit` npm paketi kuruldu. Yol boyunca 3 build hatası çıktı, hepsi çözüldü: (1) `imagekit` paketi package.json'a hiç eklenmemişti — `npm install imagekit --save`; (2) `MENU_ITEM_TAGS.includes()` TS literal-tipi hatası — `as readonly string[]` cast'iyle çözüldü; (3) `app/admin/page.tsx`'in kendisi ilk pushta unutulmuştu (sadece alt sayfalar gitmişti) — ayrıca eklenip push edildi. **CANLIDA DOĞRULANDI:** `/admin` artık 8 gerçek ürünü doğru isim/fiyat/kategoriyle listeliyor. **KALAN (henüz canlıda test edilmedi):** (a) bir ürüne tıklayıp düzenleme formunun dolu geldiği; (b) "Yeni Ürün" ile gerçek bir ImageKit yüklemesi yapıp kaydın DB'ye yazıldığı; (c) liste sayfasındaki `<img>` önizlemelerinin kırık ikon göstermesi — kozmetik, `menu_items.image` alanı site içinde `/public`'ten okunan bir dosya adı, admin listesi bu yola doğrudan erişemiyor, gerçek bir hata değil ama düzeltilmek istenirse ayrı bir görev. | `app/admin/*`, `app/api/admin/*`, `lib/imagekit.ts`, `components/admin/MenuItemForm.tsx` |
+| 113 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** Admin panelinin ilk CRUD'u yazıldı ve DEPLOY EDİLDİ: `lib/imagekit.ts`, `lib/admin/menu-item-constants.ts`, `app/api/admin/upload-image/route.ts`, `app/api/admin/menu-items/route.ts` (GET+POST), `app/api/admin/menu-items/[id]/route.ts` (GET+PATCH+DELETE), `components/admin/MenuItemForm.tsx`, `app/admin/page.tsx` (liste), `app/admin/menu-items/new/page.tsx`, `app/admin/menu-items/[id]/page.tsx`. ImageKit hesabı açıldı (Public Key/Private Key/URL Endpoint alındı, `.env.local`+Vercel env'e eklendi), `imagekit` npm paketi kuruldu. Yol boyunca 3 build hatası çıktı, hepsi çözüldü: (1) `imagekit` paketi package.json'a hiç eklenmemişti — `npm install imagekit --save`; (2) `MENU_ITEM_TAGS.includes()` TS literal-tipi hatası — `as readonly string[]` cast'iyle çözüldü; (3) `app/admin/page.tsx`'in kendisi ilk pushta unutulmuştu (sadece alt sayfalar gitmişti) — ayrıca eklenip push edildi. **CANLIDA DOĞRULANDI:** `/admin` artık 8 gerçek ürünü doğru isim/fiyat/kategoriyle listeliyor. | `app/admin/*`, `app/api/admin/*`, `lib/imagekit.ts`, `components/admin/MenuItemForm.tsx` |
+| 114 | 🔴 | **[YENİ, 28. sohbet]** Admin panelde yeni ürün oluşturuldu ("Fogy"), Neon'da DB'ye yazıldığı DOĞRULANDI — ama `app/admin/page.tsx` build-anı statik önbelleğe alındığı için (server component'te `dynamic` export'u yoktu) liste sayfasında hiç görünmedi. `export const dynamic = 'force-dynamic'` hem liste hem düzenleme sayfasına eklendi — kullanıcı henüz repoya uygulayıp push ETMEDİ, canlı doğrulama BEKLİYOR. Ayrıca kalan (önceki turdan devam eden, henüz test edilmeyen): düzenleme formunun dolu geldiği + gerçek ImageKit yüklemesinin uçtan uca çalıştığı hâlâ canlıda doğrulanmadı; liste sayfasındaki `<img>` önizlemelerinin kırık ikon göstermesi kozmetik, ayrı görev. | `app/admin/page.tsx`, `app/admin/menu-items/[id]/page.tsx` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -440,6 +403,17 @@
 | 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı doğrulanmalı. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
+
+*BOWLERA SESSION_INDEX.md — v82 (v81'den: **[28. sohbet, 2026-09-07]** İLK GERÇEK KULLANICI
+TESTİ VE CACHE BUG'I. Admin panelde yeni ürün ("Fogy") oluşturuldu — Neon'da DB'ye yazıldığı
+DOĞRULANDI ama liste sayfasında hiç görünmedi. Kök neden bulundu: `app/admin/page.tsx`
+`dynamic` export'u olmadığı için Next.js tarafından build-anı statik önbelleğe alınıyordu.
+`export const dynamic = 'force-dynamic'` hem liste hem düzenleme sayfasına eklendi — canlı
+doğrulama BEKLİYOR (#114, YENİ). Ayrıca netleşti: sitenin kendisinin `menu_items`'a hiç
+bağlanmadığı (bilinçli, ayrı görev) bu turda kullanıcıya AÇIKÇA hatırlatıldı, bir "hata"
+sanılmasın diye. 400 satır eşiği beşinci kez aşıldığı için 26. sohbetin ayrıntılı planlama
+anlatısı arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) — içerik Kritik
+Kararlar/Açık Sorunlar'da zaten tam özetli, kayıp yok.)*
 
 *BOWLERA SESSION_INDEX.md — v81 (v80'den: **[27. sohbet, 2026-09-06]** ADMIN PANEL CANLIYA
 ALINDI. #112 KAPANDI — 4 senkron dosya (schema/auth/middleware/next-auth.d.ts) repoya
