@@ -58,6 +58,33 @@ Gerekçe:    Kırmızı, personel için evrensel "acil/bekliyor" konvansiyonu �
 > ⚠️ Bu istisna Bölüm 8 Self-Check'teki "Yeni renk kullanılıyor mu?" sorusunu geçersiz
 > KILMAZ — kontrol ederken "personel rotası mı?" sorusu da eklenmiş sayılmalı.
 
+### 2.3 Kart Çerçevesi (MenuCard)
+
+> **[BU TURDA EKLENDİ, KARAR BİLDİRİMİ onaylandı]** MenuCard.tsx dosya başı yorumu önceden
+> bu bölüme atıfta bulunuyordu ama kural fiilen tanımlı değildi — senkron kopukluğu bu
+> ekleme ile çözüldü.
+
+```
+Renk:       Primary Olive (#53502A) — YENİ RENK DEĞİL, §2'deki mevcut CTA/buton tokenı.
+Uygulama:   box-shadow tabanlı ince kenarlık (Tailwind ring utility DEĞİL — bkz. not).
+Rest:       0 0 0 1px rgba(83, 80, 42, 0.15)  (mevcut hafif kart gölgesiyle birlikte)
+Hover:      0 0 0 1px rgba(83, 80, 42, 0.30)  (mevcut kart lift gölgesiyle birlikte)
+Geçiş:      §6.1'deki MenuCard hover/dokunma variant çiftine (rest/hover) BAĞLI —
+            statik CSS `hover:` pseudo-class KULLANILMAZ, çünkü bu §6.3 Dokunmatik
+            Öncelik kuralını ihlal eder (dokunmatik cihazda hiç görünmez).
+```
+
+> ⚠️ **Neden Tailwind `ring-*`/`hover:` değil:** MenuCard zaten bir kez (Motion System
+> raporu, 2026-09-03) tamamen hover-merkezli yazılıp mobilde hiç görünmeyen bir tactile
+> katman ürettiği için canlıda düzeltilmişti (§6.3). Çerçeve/gölge kararının aynı hatayı
+> tekrarlamaması için Framer Motion'ın `whileTap="hover"` ile paylaştığı variant çiftine
+> bağlandı — hem fare hem dokunma AYNI çerçeve geçişini tetikler.
+
+> **Açık madde:** Opacity değerleri (0.15 / 0.30) ilk tahmin — canlı/görsel doğrulama
+> sonrası ayarlanabilir, DESIGN_SYSTEM.md'de kesinleşince güncellenmeli.
+
+---
+
 ### 2.1 Logo Degradesi — Sınırlı Kullanım
 
 ```css
@@ -301,8 +328,8 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.5 — Session 1 (2026-07-17), Session 4 (2026-07-21),
-Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur)*
+*BOWLERA DESIGN_SYSTEM.md — v1.6 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur), bu sohbet (2026-09-13)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
@@ -349,3 +376,10 @@ bu tablonun önceden kayıtlı canlı-kalibrasyon sonucu (`duration:0.45/bounce:
 kod eski değerde kalmış, kalibrasyon hiç commit edilmemiş görünüyor. Kullanıcı adına karar
 verildi (bkz. tablo): canlı test sonucu esas alınır, `tokens.ts` düzeltilmeli — SESSION_INDEX'e
 🔴 aksiyon olarak işlendi.*
+*v1.6: Yeni §2.3 "Kart Çerçevesi (MenuCard)" eklendi — Primary Olive tonlu (`#53502A`,
+YENİ RENK DEĞİL) box-shadow tabanlı çerçeve, rest 0.15/hover 0.30 opacity, §6.1'deki
+mevcut hover/dokunma variant çiftine bağlı (Tailwind statik `hover:` KULLANILMADI —
+§6.3 Dokunmatik Öncelik ihlali riski). Gerekçe: MenuCard.tsx dosya başı yorumu önceden
+bu bölüme atıfta bulunuyordu ama kural fiilen tanımlı değildi (senkron kopukluğu, bu
+turda tespit edildi ve çözüldü). Kullanıcı onaylı [KARAR BİLDİRİMİ] sonrası işlendi.
+Açık madde: opacity değerleri ilk tahmin, canlı doğrulama bekliyor.*
