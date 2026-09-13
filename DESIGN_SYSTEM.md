@@ -67,8 +67,10 @@ Gerekçe:    Kırmızı, personel için evrensel "acil/bekliyor" konvansiyonu �
 ```
 Renk:       Primary Olive (#53502A) — YENİ RENK DEĞİL, §2'deki mevcut CTA/buton tokenı.
 Uygulama:   box-shadow tabanlı ince kenarlık (Tailwind ring utility DEĞİL — bkz. not).
-Rest:       0 0 0 1px rgba(83, 80, 42, 0.15)  (mevcut hafif kart gölgesiyle birlikte)
-Hover:      0 0 0 1px rgba(83, 80, 42, 0.30)  (mevcut kart lift gölgesiyle birlikte)
+Rest:       0 0 0 2px rgba(83, 80, 42, 0.65)  (mevcut hafif kart gölgesiyle birlikte)
+Hover:      0 0 0 2px rgba(83, 80, 42, 0.85)  (mevcut kart lift gölgesiyle birlikte)
+            **[GÜNCELLENDİ, 2. canlı doğrulama]** 0.35/0.55 (1px) hâlâ "neredeyse
+            görünmüyor" bulundu — kalınlık 1px→2px, opacity ~2-3 kat artırıldı.
 Geçiş:      §6.1'deki MenuCard hover/dokunma variant çiftine (rest/hover) BAĞLI —
             statik CSS `hover:` pseudo-class KULLANILMAZ, çünkü bu §6.3 Dokunmatik
             Öncelik kuralını ihlal eder (dokunmatik cihazda hiç görünmez).
@@ -80,8 +82,22 @@ Geçiş:      §6.1'deki MenuCard hover/dokunma variant çiftine (rest/hover) BA
 > tekrarlamaması için Framer Motion'ın `whileTap="hover"` ile paylaştığı variant çiftine
 > bağlandı — hem fare hem dokunma AYNI çerçeve geçişini tetikler.
 
-> **Açık madde:** Opacity değerleri (0.15 / 0.30) ilk tahmin — canlı/görsel doğrulama
-> sonrası ayarlanabilir, DESIGN_SYSTEM.md'de kesinleşince güncellenmeli.
+> **Açık madde ÇÖZÜLDÜ:** Opacity değerleri iki canlı kullanıcı testiyle 0.65/0.85'e
+> (2px kalınlık) kalibre edildi (bkz. yukarıdaki değer tablosu).
+
+### 2.3a Rozet Çerçevesi (MenuCardBadges — diyet etiketleri)
+
+> **[BU TURDA EKLENDİ, kullanıcı onaylı [KARAR BİLDİRİMİ]]** §2.3'ten (kart çerçevesi,
+> Primary Olive) BİLİNÇLİ olarak farklı — rozet küçük bir eleman, kartla birebir aynı
+> ağırlık orantısız kalabalık oluşturur.
+
+```
+Renk:       Deep Olive (#6A6541) — §2'deki "ikincil buton/ikon" rolüyle tutarlı,
+            Primary Olive'den (kart çerçevesi) bilinçli olarak farklı.
+Kalınlık:   ring-2 (önceki ring-1'den artırıldı)
+Opaklık:    /50 (önceki /30'dan artırıldı — canlıda "neredeyse görünmüyor" bulundu)
+Durum:      Statik — hover/dokunma state'i yok, §6.3 kapsamı dışında.
+```
 
 ---
 
@@ -328,8 +344,8 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.6 — Session 1 (2026-07-17), Session 4 (2026-07-21),
-Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur), bu sohbet (2026-09-13)*
+*BOWLERA DESIGN_SYSTEM.md — v1.9 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur), bu sohbet (2026-09-13, dört alt-tur)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
@@ -383,3 +399,15 @@ mevcut hover/dokunma variant çiftine bağlı (Tailwind statik `hover:` KULLANIL
 bu bölüme atıfta bulunuyordu ama kural fiilen tanımlı değildi (senkron kopukluğu, bu
 turda tespit edildi ve çözüldü). Kullanıcı onaylı [KARAR BİLDİRİMİ] sonrası işlendi.
 Açık madde: opacity değerleri ilk tahmin, canlı doğrulama bekliyor.*
+*v1.7: §2.3'teki opacity değerleri canlı kullanıcı testiyle kalibre edildi — ilk tahmin
+(0.15 rest / 0.30 hover) canlıda pratik olarak görünmüyordu, 0.35/0.55'e yükseltildi
+(aynı Primary Olive tonu, yeni renk yok). MenuCard.tsx ile aynı turda senkron tutuldu.*
+*v1.8: §2.3 ikinci kalibrasyon turu — 0.35/0.55 (1px) hâlâ "neredeyse görünmüyor"
+bulundu, kullanıcı isteğiyle kalınlık 1px→2px'e, opacity 0.65/0.85'e çıkarıldı. Ton
+aynı (Primary Olive), yeni renk yok. Açık madde: bir sonraki canlı testte "çok
+belirgin" bulunursa geri ayar gerekebilir.*
+*v1.9: Yeni §2.3a "Rozet Çerçevesi (MenuCardBadges)" eklendi — Deep Olive (`#6A6541`,
+§2'deki mevcut "ikincil buton/ikon" rolü, yeni renk YOK), `ring-1/30`→`ring-2/50`.
+Bilinçli olarak §2.3'ten (kart, Primary Olive) daha hafif tutuldu — küçük bir rozette
+kartla aynı ağırlık orantısız kalabalık oluşturur. Kullanıcı onaylı [KARAR BİLDİRİMİ]
+sonrası işlendi.*
