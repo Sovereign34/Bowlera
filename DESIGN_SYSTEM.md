@@ -85,6 +85,10 @@ Geçiş:      §6.1'deki MenuCard hover/dokunma variant çiftine (rest/hover) BA
 > **Açık madde ÇÖZÜLDÜ:** Opacity değerleri iki canlı kullanıcı testiyle 0.65/0.85'e
 > (2px kalınlık) kalibre edildi (bkz. yukarıdaki değer tablosu).
 
+> **[BU TURDA EKLENDİ]** Aynı kalibre edilmiş değer (2px, Primary Olive, ~%65 opaklık)
+> `HeroImagePlaceholder.tsx`'e de statik `border` olarak uygulandı — bu bileşende hover/
+> dokunma state'i olmadığı için Framer variant'a bağlama gerekmedi, düz CSS yeterli.
+
 ### 2.3a Rozet Çerçevesi (MenuCardBadges — diyet etiketleri)
 
 > **[BU TURDA EKLENDİ, kullanıcı onaylı [KARAR BİLDİRİMİ]]** §2.3'ten (kart çerçevesi,
@@ -344,8 +348,8 @@ Yeni bir "uyarı kırmızısı" YOK — palet toprak tonunda kalır.
 
 ---
 
-*BOWLERA DESIGN_SYSTEM.md — v1.9 — Session 1 (2026-07-17), Session 4 (2026-07-21),
-Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur), bu sohbet (2026-09-13, dört alt-tur)*
+*BOWLERA DESIGN_SYSTEM.md — v2.0 — Session 1 (2026-07-17), Session 4 (2026-07-21),
+Session 14 (2026-08-11), 23. sohbet (2026-09-03, üç alt-tur), bu sohbet (2026-09-13, beş alt-tur)*
 *Kaynak: MASTER_PLAN.md §2, §4 · CORE.md §6 (Kritik Tasarım/Ürün Varsayımları)*
 *v1.1: §7 "Alerjen Gösterim Sistemi" eklendi (Açık Sorun #7 kapatıldı, Session 4,
 2026-07-21). Eski §7 (Kalite Kontrol) §8'e kaydı, self-check listesine alerjen
@@ -411,3 +415,6 @@ belirgin" bulunursa geri ayar gerekebilir.*
 Bilinçli olarak §2.3'ten (kart, Primary Olive) daha hafif tutuldu — küçük bir rozette
 kartla aynı ağırlık orantısız kalabalık oluşturur. Kullanıcı onaylı [KARAR BİLDİRİMİ]
 sonrası işlendi.*
+*v2.0: §2.3'teki kalibre edilmiş kart çerçevesi değeri (2px, Primary Olive, ~%65 opaklık)
+`HeroImagePlaceholder.tsx`'e de statik `border` olarak uygulandı — görsel tutarlılık,
+kullanıcı onaylı. Bu bileşende hover/dokunma state'i yok, §6.3 kapsamı dışında.*
