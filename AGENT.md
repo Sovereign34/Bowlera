@@ -291,221 +291,21 @@ Tüm checkları geç → sonra [KARAR BİLDİRİMİ] üret.
 
 > KOD KALİTESİ KURALLARI'nın güvenlik uzantısıdır.
 > Her kod üretiminde geçerlidir. "Hızlıca yap" dese bile atlanamaz.
+> Detaylı kod örnekleri (❌/✅ tam blok): `BSC_EXAMPLES.md` — SADECE ihlal
+> tespit edildiğinde veya örneğe ihtiyaç duyulduğunda oraya bakılır; kuralın
+> kendisi (bu tablo) her session'da zaten yüklü.
 
----
-
-### BSC-1. XSS / GİRDİ SANİTİZASYONU
-
-```
-Kural: Kullanıcı girdisi (form, yorum, arama) doğrudan DOM'a/HTML'e basılamaz.
-```
-
-```tsx
-// ❌
-<div dangerouslySetInnerHTML={{ __html: userInput }} />
-
-// ✅
-<div>{userInput}</div>  // React otomatik escape eder
-// Zorunlu HTML render gerekiyorsa:
-import DOMPurify from 'isomorphic-dompurify'
-<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userInput) }} />
-```
-
-**Tespit edilince:** `"⚠️ BSC-1 ihlali — Sanitize edilmemiş HTML render. DOMPurify ekliyorum."`
-
----
-
-### BSC-2. GİZLİ VERİ YASAĞI
-
-```
-Kural: CMS token, Adisyo/SepetTakip API key, Twilio credential kaynak koduna
-       veya client bundle'a yazılamaz. Sadece server-side (.env / Route Handler).
-```
-
-```ts
-// ❌ — client component içinde
-const res = await fetch(`https://api.adisyo.com/orders?key=abc123`)
-
-// ✅ — server-side API Route
-// app/api/orders/route.ts
-const res = await fetch(`https://api.adisyo.com/orders`, {
-  headers: { Authorization: `Bearer ${process.env.ADISYO_API_KEY}` }
-})
-```
-
-**Ek:** `.env.local` önerilirse `.gitignore`'da olduğu doğrulanır.
-**Tespit edilince:** `"⚠️ BSC-2 ihlali — Secret client tarafında. Server-side'a taşıyorum."`
-
----
-
-### BSC-3. GİRDİ DOĞRULAMA ZORUNLULUĞU
-
-```
-Kural: Formdan veya dış kaynaktan (CMS, marketplace webhook) gelen her veri doğrulanır.
-       Özellikle: ürün ID, miktar, şube ID, telefon/adres alanları.
-```
-
-```ts
-// ❌
-const { productId, quantity } = req.body
-addToCart(productId, quantity)
-
-// ✅
-const { productId, quantity } = req.body
-if (!productId || !menuData.find(i => i.id === productId)) {
-  return res.status(400).json({ error: 'Geçersiz ürün' })
-}
-if (!Number.isInteger(quantity) || quantity <= 0 || quantity > MAX_ITEM_QTY) {
-  return res.status(400).json({ error: 'Geçersiz miktar' })
-}
-addToCart(productId, quantity)
-```
-
-**Tespit edilince:** `"⚠️ BSC-3 ihlali — [alan] doğrulanmamış. Validasyon ekliyorum."`
-
----
-
-### BSC-4. HATA YÖNETİMİ STANDARDI
-
-```
-Kural: Sessiz catch yasak. Her hata: structured log + trace_id + güvenli mesaj.
-       İç hata mesajı kullanıcıya döndürülemez (stack trace sızdırma yok).
-```
-
-```ts
-// ❌
-} catch (e) {}
-} catch (err) { return res.status(500).json({ error: err.message }) }
-
-// ✅
-} catch (err) {
-  const message = err instanceof Error ? err.message : 'Bilinmeyen hata'
-  logger.error({
-    trace_id: req.headers.get('x-trace-id') ?? generateTraceId(),
-    module: 'cart-api',
-    action: 'addToCart',
-    error: message,
-    timestamp: new Date().toISOString()
-  })
-  return res.status(500).json({ error: 'Sepete eklenemedi, tekrar deneyin' })
-}
-```
-
-**Tespit edilince:** `"⚠️ BSC-4 ihlali — Sessiz catch veya iç hata açıkta. Structured log ekliyorum."`
-
----
-
-### BSC-5. SAHTE VERİ YASAĞI (PRODUCTION)
-
-```
-Kural: Math.random(), hardcode fiyat/kalori/şube adresi production kodunda yasak.
-       Test modunda açıkça işaretlenmiş olmalı.
-```
-
-```ts
-// ❌
-const calories = 450  // hardcode
-
-// ✅
-const calories = bowlItem.calories  // menu-data.json / CMS'den
-
-// Test modunda:
-// TEST_ONLY: const calories = 450
-```
-
-**Tespit edilince:** `"⚠️ BSC-5 ihlali — Hardcode/rastgele değer. Kaynağı belirtiniz."`
-
----
-
-### BSC-6. RACE CONDITION KORUMASI (SEPET/CUSTOMIZER)
-
-```
-Kural: Sepete ekleme ve fiyat/kalori hesaplama atomik yapılmalı.
-       Çift tıklama aynı ürünü iki kez eklemez, state kilitlenmeyi önler.
-```
-
-```ts
-// ❌
-addToCart(item)  // hızlı çift tıklamada iki kez eklenebilir
-
-// ✅
-const isAdding = useRef(false)
-const handleAddToCart = () => {
-  if (isAdding.current) return
-  isAdding.current = true
-  addToCart(item)
-  setTimeout(() => { isAdding.current = false }, 500)
-}
-```
-
-**Tespit edilince:** `"⚠️ BSC-6 ihlali — Race condition riski. Debounce/lock ekleyorum."`
-
----
-
-### BSC-7. ÜÇÜNCÜ PARTİ İSTEK KORUMASI
-
-```
-Kural: Adisyo/SepetTakip/Twilio/WhatsApp API'ye giden her istek
-       rate limit + retry-backoff koruması altında olmalı.
-```
-
-```ts
-// ✅
-const rateLimiter = new RateLimiter({ maxRequests: 60, windowMs: 60000 })
-router.post('/api/orders/sync', rateLimitMiddleware, syncOrderHandler)
-```
-
-**Tespit edilince:** `"⚠️ BSC-7 ihlali — Üçüncü parti istek korumasız. Rate limit ekliyorum."`
-
----
-
-### BSC-8. ÜÇÜNCÜ PARTİ KOPMA — GRACEFUL DEGRADATION
-
-```
-Kural: WhatsApp/Adisyo/QR entegrasyonu down olursa sipariş akışı tamamen kesilmemeli.
-       Kullanıcıya net fallback mesajı gösterilmeli.
-```
-
-```ts
-// ✅
-try {
-  await sendToMarketplace(order)
-} catch (err) {
-  logger.error({ event: 'MARKETPLACE_SYNC_FAILED', orderId: order.id })
-  await queueForRetry(order)  // sipariş kaybolmaz, kuyruğa alınır
-  return { status: 'QUEUED', message: 'Siparişiniz alındı, onay birazdan gelecek' }
-}
-```
-
-**Tespit edilince:** `"⚠️ BSC-8 ihlali — Entegrasyon kopma senaryosu ele alınmamış. Fallback ekliyorum."`
-
----
-
-### BSC-9. SECRET DOSYASI COMMIT YASAĞI
-
-```
-Kural: BSC-2 kodun İÇİNDEKİ secret string'ini kapsar (hardcode credential).
-       BSC-9 ayrı bir vektörü kapsar: bir secret'ın DOSYA olarak (.env, servis
-       hesabı JSON'ı, imzalama/sertifika dosyası) yanlışlıkla repoya eklenmesi.
-       Bu, "AI hatırlasın" ile önlenemez — otomatik tarama zorunludur.
-```
-
-```
-// ❌ — repo kökünde bırakılıp `git add .` ile commit edilen dosya
-service-account.json
-.env.production
-signing.key
-
-// ✅ — .gitignore'da açıkça listelenir + commit öncesi otomatik tarama
-*.env*
-*.key
-*.pem
-service-account*.json
-```
-
-**Ek:** Böyle bir dosya yanlışlıkla commit edilirse, silmek yetmez — o secret
-**iptal edilip yeniden üretilmelidir** (git geçmişinde kalır).
-**Tespit edilince:** `"⚠️ BSC-9 ihlali — Secret dosyası repoya eklenmiş/eklenecek. RISK_DOMAINS.md §1'e göre işlem yapıyorum."`
+| # | Kural | Tespit edilince söylenecek |
+|---|---|---|
+| **BSC-1** XSS | Kullanıcı girdisi (form, yorum, arama) doğrudan DOM'a/HTML'e basılamaz — React'in otomatik escape'i kullanılır, zorunlu HTML render'da DOMPurify | `"⚠️ BSC-1 ihlali — Sanitize edilmemiş HTML render. DOMPurify ekliyorum."` |
+| **BSC-2** Gizli Veri | CMS token, Adisyo/SepetTakip API key, Twilio credential kaynak koduna veya client bundle'a yazılamaz — sadece server-side (.env / Route Handler) | `"⚠️ BSC-2 ihlali — Secret client tarafında. Server-side'a taşıyorum."` |
+| **BSC-3** Girdi Doğrulama | Formdan/dış kaynaktan (CMS, marketplace webhook) gelen her veri doğrulanır — özellikle ürün ID, miktar, şube ID, telefon/adres | `"⚠️ BSC-3 ihlali — [alan] doğrulanmamış. Validasyon ekliyorum."` |
+| **BSC-4** Hata Yönetimi | Sessiz catch yasak — her hata: structured log + trace_id + güvenli mesaj; iç hata mesajı kullanıcıya döndürülemez | `"⚠️ BSC-4 ihlali — Sessiz catch veya iç hata açıkta. Structured log ekliyorum."` |
+| **BSC-5** Sahte Veri (Prod) | Math.random(), hardcode fiyat/kalori/şube adresi production kodunda yasak — test modu açıkça işaretlenir | `"⚠️ BSC-5 ihlali — Hardcode/rastgele değer. Kaynağı belirtiniz."` |
+| **BSC-6** Race Condition | Sepete ekleme ve fiyat/kalori hesaplama atomik olmalı — çift tıklama aynı ürünü iki kez eklemez | `"⚠️ BSC-6 ihlali — Race condition riski. Debounce/lock ekleyorum."` |
+| **BSC-7** 3. Parti İstek | Adisyo/SepetTakip/Twilio/WhatsApp API'ye giden her istek rate limit + retry-backoff korumasında olmalı | `"⚠️ BSC-7 ihlali — Üçüncü parti istek korumasız. Rate limit ekliyorum."` |
+| **BSC-8** 3. Parti Kopma | WhatsApp/Adisyo/QR entegrasyonu down olursa sipariş akışı tamamen kesilmez — net fallback mesajı gösterilir | `"⚠️ BSC-8 ihlali — Entegrasyon kopma senaryosu ele alınmamış. Fallback ekliyorum."` |
+| **BSC-9** Secret Dosyası | BSC-2'den farkı: kod İÇİ değil, secret'ın DOSYA olarak (.env, servis hesabı JSON'ı, imzalama dosyası) repoya commit edilmesi — otomatik tarama zorunlu, AI hatırlamasına güvenilmez. İhlal olursa: silmek yetmez, secret iptal/yeniden üretilir | `"⚠️ BSC-9 ihlali — Secret dosyası repoya eklenmiş/eklenecek. RISK_DOMAINS.md §1'e göre işlem yapıyorum."` |
 
 ---
 
@@ -723,7 +523,7 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 
 ---
 
-*BOWLERA AGENT.md — v1.7*
+*BOWLERA AGENT.md — v1.8*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
@@ -754,3 +554,9 @@ FAILURE_PATTERNS.md'nin "olay oldu → kaydedildi" mantığını tamamlayan, "he
 olabilir" sınıfındaki riskler (secret dosyası, fiyat/ödeme, concurrency, KVKK) için önleyici,
 araç-tabanlı (AI hatırlamasına değil) kontrol zorunlu kılındı. BSC KALİTE SKORU 13/13→14/14.
 CORE.md v1.8 ile eşleştirildi (2026-09-22).*
+*v1.8: BSC-1..9 formatı sıkıştırıldı — prose+kod bloğu (258 satır) yerine tek
+tablo (kural + tespit mesajı, ~20 satır). Tam kod örnekleri bilgi kaybı olmadan
+`BSC_EXAMPLES.md`'ye taşındı, CORE.md §3'ten ihtiyaç anında çekilir. Kuralın
+kendisi (ne yapılır/yapılmaz) her session'da hâlâ tam yüklü — sadece örnek kodlar
+referansa taşındı. Gerekçe: context/token optimizasyonu, davranışsal risk yok
+(kural metni ve tespit mesajları hiçbiri kısaltılmadı/atlanmadı).*

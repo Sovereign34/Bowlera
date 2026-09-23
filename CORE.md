@@ -104,6 +104,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
 | Secret/gizli veri, ödeme mantığı, eşzamanlılık (concurrency), KVKK/kişisel veri işleyen görev | `RISK_DOMAINS.md` | `FAILURE_PATTERNS.md` (geçmiş örnek varsa) |
+| BSC ihlali tespit edildi / ihlal düzeltmesi için tam kod örneği lazım | `BSC_EXAMPLES.md` | — |
 
 ---
 
@@ -195,6 +196,12 @@ RISK_DOMAINS.md            ← YENİ (2026-09-22) — henüz yaşanmamış ama y
                              FAILURE_PATTERNS.md'den farkı: geçmişe değil geleceğe
                              bakar. Bir olay gerçekten yaşanırsa buradan
                              FAILURE_PATTERNS.md'ye FP-N olarak taşınır.
+
+BSC_EXAMPLES.md             ← YENİ (2026-09-22) — AGENT.md'deki BSC-1..9
+                             tablosunun tam kod örnekleri (❌/✅ blokları).
+                             Kuralın kendisi AGENT.md'de kalır (her session
+                             yüklü), sadece örnek kodlar buraya taşındı —
+                             token/context optimizasyonu, bilgi kaybı yok.
 
 TEST_MATRIX.md             ← Modül bazlı test senaryoları ve durum
 CONFIG_SCHEMA.md           ← Env değişkenleri şeması (.env.local kontratı)
