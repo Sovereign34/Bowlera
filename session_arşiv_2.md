@@ -1342,3 +1342,49 @@ tam olarak korunmaktadır. Aktif takip için SESSION_INDEX.md'de tutulmaları ge
 **Bu turda kullanıcıya TESLİM EDİLDİ (27. sohbette repoya uygulanıp doğrulandı — bkz. #112):**
 - `lib/db/schema.ts`, `middleware.ts`, `auth.ts`, `types/next-auth.d.ts` — 4 dosya, `"admin"`
   rolü için TAM DOSYA olarak, üçlü senkron üretildi.
+-----.> ⚠️ Bu blok SESSION_INDEX.md'den taşındı (400 satır eşiği, 2026-09-23 taşıması).
+> Kapsam: v75-v79 sürüm notları (24-25. sohbet, Motion System P1/P2 kapanışı).
+> Kapanış gerekçesi: içerik Açık Sorunlar tablosunda (#107 KAPANDI, Motion System P0/P1/P2
+> özetleri) ve Kritik Kararlar'da zaten tam özetli — aktif takip için gerekli değil, sadece
+> turn-by-turn sürüm geçmişi anlatısı taşınıyor. Bu, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI/YEDİNCİ DERS
+> kapsamındaki bir taşıma değil — tamamlanmış, kullanıcı tarafından zaten kapatılmış işlerin
+> arşivlenmesi.
+
+*BOWLERA SESSION_INDEX.md — v79 (v78'den: **[25. sohbet devamı, 2026-09-05]** MOTION SYSTEM
+RAPORU KAPANDI. P3 (Instagram controlled marquee) reponuzda hiçbir karşılığı olmadığı için
+(grep sonucu boş — `Instagram` metnini içeren tek bir `.tsx` yok) kapsam dışı bırakıldı;
+özellik ileride inşa edilirse ayrıca ele alınmalı, önkoşulu yok. Raporun P0/P1/P2 bölümündeki
+9 kalemin TAMAMI mevcut kod tabanında işlendi. Kalan teknik borçlar hâlâ açık: -6 (AccountMenu
+debug değeri `duration:1` production'da kaldı, kalıcı değere dönülmedi — kullanıcı kararıyla
+ertelendi), -9/-10 (Page transitions/AddToCart canlı doğrulama hâlâ bildirilmedi).)*
+
+*BOWLERA SESSION_INDEX.md — v78 (v77'den: **[25. sohbet devamı, 2026-09-05]** 400 satır eşiği
+dördüncü kez aşıldı — 23. sohbet devamının (MOTION SYSTEM Mobil Tactile Düzeltmesi, ~36 satır)
+tam anlatı bloğu `session_arşiv_2.md`'ye taşındı, kullanıcıya ayrı eklenti dosyası olarak
+verildi. İçerik zaten #107 (KAPANDI) ve Açık Sorunlar/Motion System P0 özetinde tam
+korunuyor, kayıp yok.)*
+
+*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[25. sohbet, 2026-09-05]** P2 TAMAMEN KAPANDI:
+-11 CartBadge'de 2 gerçek bug bulunup düzeltildi (0→1 mount köründü + opacity hiç
+ayarlanmıyordu), -12 Customizer spatial transition hem kase hem sandviç akışına eklendi
+(yan bulgu: sandviçte "Geri" butonu hiç yoktu, eklendi), -13 VisualPreview token'a bağlandı
+(görsel değişiklik yok, davranış aynı). Motion System raporu artık SADECE P3 (Instagram
+marquee) ve teknik borçlar (AccountMenu debug değeri, -9/-10 canlı doğrulama) hariç
+tamamlandı. Genel gözlem bu oturumdan: kullanıcı testleri defalarca "gerçek dosyanın
+kaydedilip kaydedilmediğini doğrula" adımını atlayınca zaman kaybına yol açtı (AccountMenu,
+CartBadge) — bu artık standart ilk adım olarak yerleşti.)*
+
+*BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
+kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
+doğruydu) ama production'da debug değeri kaldı (teknik borç, kullanıcı kararıyla ertelendi).
+-7 Header Scroll kullanıcı kararıyla atlandı. -8 Hero orchestration TAMAMLANDI, `layout.tsx`
+incelenip global MotionConfig'in GERÇEKTEN olmadığı doğrulandı. -9 Page transitions
+(`app/template.tsx`, sadece giriş animasyonu) ve -10 AddToCart token-bağlama teslim edildi
+ama canlı doğrulama bekliyor. P1 kod tarafı kapandı, kalan iş canlı doğrulamalar.)*
+
+*BOWLERA SESSION_INDEX.md — v75 (v74'ten: **[24. sohbet, 2026-09-04]** -5a KAPANDI ✅ (kod
+zaten doğruydu, sadece doğrulama gerekiyordu). Motion System P1 başladı: AccountMenu.tsx'e
+AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM'ı eklendi,
+kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
+(bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
+iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
