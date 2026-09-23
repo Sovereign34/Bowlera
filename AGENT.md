@@ -272,6 +272,8 @@ Tüm checkları geç → sonra [KARAR BİLDİRİMİ] üret.
 - [ ] Hardcode credential var mı? → EVET: BSC-2 ihlali — DUR
 - [ ] Kullanıcı girdisi render edilirken XSS riski var mı? → EVET: sanitize et (BSC-1)
 - [ ] Sessiz catch bloğu var mı? → EVET: structured log + güvenli mesaj ekle (BSC-4)
+- [ ] Repo köküne .env/.key/.pem/servis hesabı dosyası eklendi mi? → EVET: BSC-9 ihlali — DUR (RISK_DOMAINS.md §1)
+- [ ] Görev fiyat/ödeme mantığına, yeni bir paylaşılan state'e veya KVKK kapsamlı veriye (consentRegistrations/users/order_history) dokunuyor mu? → EVET: RISK_DOMAINS.md'deki ilgili maddeyi uygula, AI kendi kendine "temiz" onayı veremez
 
 ### Bağlam Katmanı
 - [ ] Tüm gerekli dosyalar sağlandı mı? → HAYIR: `HIGH confidence` yasak
@@ -479,6 +481,34 @@ try {
 
 ---
 
+### BSC-9. SECRET DOSYASI COMMIT YASAĞI
+
+```
+Kural: BSC-2 kodun İÇİNDEKİ secret string'ini kapsar (hardcode credential).
+       BSC-9 ayrı bir vektörü kapsar: bir secret'ın DOSYA olarak (.env, servis
+       hesabı JSON'ı, imzalama/sertifika dosyası) yanlışlıkla repoya eklenmesi.
+       Bu, "AI hatırlasın" ile önlenemez — otomatik tarama zorunludur.
+```
+
+```
+// ❌ — repo kökünde bırakılıp `git add .` ile commit edilen dosya
+service-account.json
+.env.production
+signing.key
+
+// ✅ — .gitignore'da açıkça listelenir + commit öncesi otomatik tarama
+*.env*
+*.key
+*.pem
+service-account*.json
+```
+
+**Ek:** Böyle bir dosya yanlışlıkla commit edilirse, silmek yetmez — o secret
+**iptal edilip yeniden üretilmelidir** (git geçmişinde kalır).
+**Tespit edilince:** `"⚠️ BSC-9 ihlali — Secret dosyası repoya eklenmiş/eklenecek. RISK_DOMAINS.md §1'e göre işlem yapıyorum."`
+
+---
+
 ### BSC KALİTE SKORU
 
 | Kriter | Kontrol |
@@ -491,9 +521,10 @@ try {
 | BSC-6 Race condition | Sepet/customizer lock var mı? |
 | BSC-7 Rate limit | Üçüncü parti isteği korunuyor mu? |
 | BSC-8 Graceful degradation | Entegrasyon kopma senaryosu ele alındı mı? |
+| BSC-9 Secret dosyası | Repo köküne .env/.key/.pem/servis hesabı dosyası eklenmiş mi? |
 
-**Format:** `"Güvenlik skoru: 7/8 — BSC-3 eksik. Validasyon ekliyorum."`
-**Toplam skor:** Kalite 5/5 + Güvenlik 8/8 = **13/13**
+**Format:** `"Güvenlik skoru: 7/9 — BSC-3 eksik. Validasyon ekliyorum."`
+**Toplam skor:** Kalite 5/5 + Güvenlik 9/9 = **14/14**
 
 ---
 
@@ -508,6 +539,7 @@ try {
 [ ] Sepete ekleme / customizer state var mı?        → race condition koruması? (BSC-6)
 [ ] Üçüncü parti API'ye istek gidiyor mu?           → rate limit sayacından geçiyor mu? (BSC-7)
 [ ] WhatsApp/Adisyo/QR entegrasyonu kullanılıyor mu? → kopma senaryosu ele alındı mı? (BSC-8)
+[ ] Repo köküne .env/.key/.pem/servis hesabı dosyası eklendi mi? → .gitignore'da mı, tarama geçti mi? (BSC-9)
 ```
 
 ---
@@ -604,6 +636,8 @@ ayrıca CORE.md'nin güncellenmiş hâli de eklenir — atlanamaz.]
 | Arşiv parçalandı ama CORE.md güncellenmedi | Yeni `session_arşiv_N.md` açıldı (arşivin kendisi şiştiği için, CORE.md §7.1 Adım 1.7) ama CORE.md'nin Dosya Haritası/Versiyon Geçmişi aynı turda güncellenmedi | Dur — CORE.md'yi hemen aynı turda güncelle; geriye dönük eksik parçalamalar varsa tek seferde hepsini belgele |
 | SESSION_INDEX "taşındı" dediği içerik arşivde yok | SESSION_INDEX bir bloğun arşiv parçasına taşındığını iddia ediyor ama o parça dosyasında/eklentisinde bu blok fiilen bulunmuyor | Dur — kullanıcıya eksik eklenti dosyasını sor, teyit gelmeden "taşındı" notunu doğru kabul etme |
 | Tactile animasyon sadece `whileHover` ile tanımlandı | Kart/CTA/görsel lift-zoom gibi bir etkileşim SADECE fare hover'ına bağlı, dokunma (`whileTap`) karşılığı yok | Dur — `whileTap="hover"` (aynı hedef variant) ekle, giriş/çıkış transition'ını ayrıştır (BOWLERA_MOTION_SYSTEM_RAPORU.md §1a) |
+| Secret dosyası commit edildi/edilecek | Repo köküne .env/.key/.pem/servis hesabı dosyası eklendi, .gitignore'da yok | Dur — BSC-9 ihlali, RISK_DOMAINS.md §1'e göre işlem yap, secret'ı iptal/yeniden üret önerisi sun |
+| RISK_DOMAINS kapsamındaki bir alanı AI kendi onayladı | Fiyat/ödeme, KVKK verisi veya secret dosyası konusunda "kontrol ettim, sorun yok" denip insan onayı atlandı | Dur — RISK_DOMAINS.md "Son karar mercii" alanına göre insan onayına yönlendir, AI kendi kendine kapatamaz |
 
 **Sapma fark edilince Claude şunu söyler:**
 > "⚠️ Kural sapması tespit ettim — [ne yaptım]. Düzeltiyorum: [doğru adım]."
@@ -648,6 +682,8 @@ ayrıca CORE.md'nin güncellenmiş hâli de eklenir — atlanamaz.]
 | Checkpoint sorusu sormadan ("Checkpoint alayım mı?") SESSION_INDEX/TEST_MATRIX güncellemesi üret |
 | Arşiv dosyasının kendisi parçalara ayrılırken (session_arşiv_N.md açılırken) CORE.md Dosya Haritası/Versiyon Geçmişini aynı turda güncellemeden geç (CORE.md §7.1 Adım 1.7) |
 | Tactile animasyon (lift/zoom/CTA micro-interaction) ekle ama sadece `whileHover`'a bağlı bırak, dokunma karşılığı sağlamadan geç — Bowlera trafiği neredeyse tamamen dokunmatik |
+| `.env`/`.key`/`.pem`/servis hesabı dosyasını `.gitignore`'a eklemeden repoya commit et (BSC-9) |
+| Fiyat/ödeme mantığı, yeni paylaşılan state veya KVKK kapsamlı veri (consentRegistrations/users/order_history) değişikliğini RISK_DOMAINS.md'ye bakmadan "tamamlandı" say |
 
 ---
 
@@ -681,12 +717,13 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 4 | 2026-07-22 | SELF-CHECK (Marka & Tasarım Katmanı) ve YASAK LİSTE'ye alerjen bilgisi satırı eklendi — DESIGN_SYSTEM.md §7.0'daki "alerjen, kalori/protein ile aynı zorunluluk statüsünde, gizlenemez/opsiyonel yapılamaz" kararının AGENT.md tarafındaki karşılığı. Açık Sorun #44 kapandı. |
 | Session 8 | 2026-08-07 | **`session_log.md` ismi ve mekanizması TAMAMEN KALDIRILDI** — "her session kapanışında ayrı anlatı bloğu yaz" (eski ÇALIŞMA AKIŞI madde 12, KARAR BİLDİRİMİ FORMATI "Session Log" bölümü, CORE.md eski §7.1 Adım 2 + §7.2 session_log referansı) kullanıcı tarafından kafa karıştırıcı bulundu — iki ayrı, örtüşen mekanizma (her-session-anlatısı + 400-satır-taşıması) tek isim altında karışıyordu. Yerine `session_arşiv.md` getirildi: TEK işlevi SESSION_INDEX.md 400 satırı geçtiğinde kapanmış içeriği taşımak (CORE.md §7.1 Adım 1). Amaç: SESSION_INDEX'in (aktif hafızanın) boyutunu küçük tutup sistemin hafif çalışmasını sağlamak. "Asla tam dosya olarak yeniden üretilmez, sadece yeni taşıma bloğu verilir" güvenlik kuralı DEĞİŞMEDİ. Ayrıca SELF-CORRECTION'a "Checkpoint sorulmadan dosya üretildi" satırı eklendi — aynı sohbette Claude'un checkpoint onayı almadan session_arşiv bloğu ürettiği gerçek bir ihlal sonrası. CORE.md v1.3 ile eşleştirildi. |
 | 23. sohbet | 2026-09-03 | SELF-CHECK (Marka & Tasarım Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye "tactile animasyon sadece `whileHover` ile tanımlanamaz, dokunma karşılığı zorunlu" maddesi eklendi. Gerekçe: MenuCard P0-2'de "BOWLERA — PREMIUM MOTION SYSTEM" raporunun (v1.0) tamamen hover-merkezli yazılmış olması, Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen canlıda kritik bir eksiklik olarak tespit edildi — ÜÇÜNCÜ DERS'in (kod+build başarı ≠ gerçek kullanıcı deneyimi) bir tekrarı. `whileTap="hover"` + ayrıştırılmış giriş/çıkış transition (spring) ile düzeltildi, rapor v1.1'e işlendi (§1a Dokunmatik Öncelik). CORE.md v1.7 ile eşleştirildi. |
+| — | 2026-09-22 | Yeni `RISK_DOMAINS.md` referans dosyası eklendi (geçmişe değil geleceğe bakan, "henüz yaşanmamış ama yaşanması muhtemel" hata sınıfları: secret dosyası, fiyat/ödeme mantığı, eşzamanlılık, KVKK verisi). Buna karşılık BSC modülüne **BSC-9 (Secret Dosyası Commit Yasağı)** eklendi — BSC-2'den farkı: BSC-2 kod İÇİNDEKİ hardcode credential'ı kapsar, BSC-9 bir secret'ın DOSYA olarak repoya commit edilmesini kapsar. BSC KALİTE SKORU 8/8→9/9 (toplam 13/13→14/14) güncellendi. SELF-CHECK (Güvenlik Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye karşılık gelen satırlar eklendi. Gerekçe: ayrı bir projede (Sovereign) yapılan incelemede, imzalama anahtarı dosyasının repoya commit edildiği ve hassas veriye düz metin olarak Supabase'de yer verildiği tespit edildi; bu, Bowlera'da henüz yaşanmamış olsa da aynı sınıf bir riskin bu projede de mümkün olduğu görüldü — FAILURE_PATTERNS.md'nin yalnızca *olmuş* hataları kaydetme mantığının, *henüz olmamış ama öngörülebilir* riskler için yetersiz kaldığı sonucuna varıldı. CORE.md v1.8 ile eşleştirildi. |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.6*
+*BOWLERA AGENT.md — v1.7*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
@@ -712,3 +749,8 @@ eklendi. Gerekçe: MenuCard P0-2'de Motion System raporunun (v1.0) tamamen hover
 yazılmış olması, Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen canlıda kritik
 bir eksiklik olarak tespit edildi (ÜÇÜNCÜ DERS'in tekrarı) — `whileTap="hover"` ile düzeltildi.
 CORE.md v1.7 ile eşleştirildi (23. sohbet, 2026-09-03).*
+*v1.7: Yeni `RISK_DOMAINS.md` dosyası + BSC-9 (Secret Dosyası Commit Yasağı) eklendi.
+FAILURE_PATTERNS.md'nin "olay oldu → kaydedildi" mantığını tamamlayan, "henüz olmadı ama
+olabilir" sınıfındaki riskler (secret dosyası, fiyat/ödeme, concurrency, KVKK) için önleyici,
+araç-tabanlı (AI hatırlamasına değil) kontrol zorunlu kılındı. BSC KALİTE SKORU 13/13→14/14.
+CORE.md v1.8 ile eşleştirildi (2026-09-22).*

@@ -9,6 +9,11 @@
 Yeni bir hata kalıbı keşfedildiğinde buraya eklenir (CORE.md §7.1 Adım 4). Aynı hata
 tekrar yaşanmasın diye kalıp + kök neden + çözüm + önleme birlikte tutulur.
 
+> Bu dosya yalnızca **gerçekten yaşanmış** olayları kaydeder. Henüz yaşanmamış ama
+> yaşanması muhtemel risk sınıfları (secret dosyası, fiyat/ödeme mantığı, KVKK
+> kapsamlı veri) için bkz. RISK_DOMAINS.md — bir risk orada tarif edilen şekilde
+> gerçekten yaşanırsa, o olay buraya FP-N olarak taşınır.
+
 ---
 
 ## 1. SEPET / STATE KALIPLARI
