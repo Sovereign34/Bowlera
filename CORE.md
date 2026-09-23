@@ -103,6 +103,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Test / doğrulama / çalışıyor mu | `TEST_MATRIX.md` | — |
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
+| Secret/gizli veri, ödeme mantığı, eşzamanlılık (concurrency), KVKK/kişisel veri işleyen görev | `RISK_DOMAINS.md` | `FAILURE_PATTERNS.md` (geçmiş örnek varsa) |
 
 ---
 
@@ -187,6 +188,13 @@ BOWLERA_MOTION_SYSTEM_RAPORU.md ← Framer Motion mimari yükseltme raporu (v1.1
 FAILURE_PATTERNS.md        ← Projeye özgü hata kalıpları: sepet state kaybı,
                              checkout race condition, üçüncü parti entegrasyon
                              kopması, mobil responsive bugları
+
+RISK_DOMAINS.md            ← YENİ (2026-09-22) — henüz yaşanmamış ama yaşanması
+                             muhtemel hata sınıfları: gizli veri/secret dosyası,
+                             fiyat/ödeme mantığı, eşzamanlılık, KVKK kapsamlı veri.
+                             FAILURE_PATTERNS.md'den farkı: geçmişe değil geleceğe
+                             bakar. Bir olay gerçekten yaşanırsa buradan
+                             FAILURE_PATTERNS.md'ye FP-N olarak taşınır.
 
 TEST_MATRIX.md             ← Modül bazlı test senaryoları ve durum
 CONFIG_SCHEMA.md           ← Env değişkenleri şeması (.env.local kontratı)
@@ -586,3 +594,12 @@ Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen, canlıda kri
 olarak tespit edildi (whileTap="hover" + springs.cardRelease ile düzeltildi, rapor v1.1'e işlendi).
 Bu, yeni bir çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının
 (bkz. v1.4/v1.5 notları) bir tekrarı. AGENT.md v1.6 ile eşleştirildi (2026-09-03).*
+*v1.8 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
+`RISK_DOMAINS.md` referansı eklendi — FAILURE_PATTERNS.md'nin geçmişe bakan (olay oldu →
+kaydedildi) mantığını tamamlayan, geleceğe bakan (bu alana dokunuyorsan → şu kontrol zorunlu)
+bir dosya: secret/gizli veri, fiyat/ödeme mantığı, eşzamanlılık, KVKK kapsamlı veri. Gerekçe:
+"hatayı ancak fark edildikten sonra kural haline getirme" döngüsünün, kullanıcı/geliştirici
+tarafından fark edilmesi zor olan ("sessiz") hata sınıflarında yetersiz kalacağı tespit edildi —
+bu sınıflar için önleyici, araç-tabanlı kontrol (AI'ın hatırlamasına değil) zorunlu kılındı. Yeni
+bir çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının (bkz.
+v1.4/v1.5/v1.7 notları) bir tekrarı. AGENT.md v1.7 ile eşleştirildi (2026-09-22).*
