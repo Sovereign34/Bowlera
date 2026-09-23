@@ -40,118 +40,19 @@ Kullanıcı              → Onaylar → kod uygulanır → loglanır
 > Bu kurallar her yeni bileşende ve her kod üretiminde geçerlidir.
 > Claude bu standartların altında kod üretemez — kullanıcı "hızlı yap" dese bile.
 > Hedef: production kalitesi 90/100 üzeri, her dosyada.
+> Detaylı örnekler (ihlal/doğru senaryolar, tam kod parçaları): `KOD_KALITESI_EXAMPLES.md`
+> — SADECE ihlal tespit edildiğinde veya somut örneğe ihtiyaç duyulduğunda oraya bakılır;
+> kuralın kendisi (bu tablo) her session'da zaten yüklü.
 
----
-
-### 1. BİLEŞEN/FONKSİYON BOYUTU DİSİPLİNİ
-
-```
-Kural: Tek bileşen/fonksiyon → tek iş → maksimum 20 satır (JSX hariç yapısal iskelet)
-```
-
-- 20 satırı geçen fonksiyon/bileşen tespit edilince Claude otomatik böler — kullanıcı istemese bile
-- Bölme önerisi şu formatta verilir:
-  > "⚠️ Bu bileşen [X] satır — [A] ve [B] olarak bölüyorum."
-- Bölme sırasında mevcut davranış korunur, refactor değişiklik getirmez
-- Örnek ihlal: `CustomizerStep.tsx` 90 satır — state yönetimi, validasyon, animasyon, render tek bileşende
-- Örnek doğru: `useCustomizerStep()` hook + `StepValidation.ts` + `StepAnimation.tsx` + `StepRender.tsx` ayrı
-
----
-
-### 2. NİYET YORUMU ZORUNLULUĞU
-
-Her dosyanın en üstüne şu blok yazılır — atlanamaz:
-
-```ts
-// [DOSYA ADI]
-// Amaç:    [bu dosya ne iş yapar — tek cümle]
-// Bağlı:   [hangi sayfaya / store'a / API route'a bağlı]
-// Risk:    [bu dosya hatalı çalışırsa ne olur — örn: "sepet fiyatı yanlış hesaplanır" / "sipariş WhatsApp'a gitmez"]
-// Dokunma: [bu dosya değiştirilmeden önce ne kontrol edilmeli]
-```
-
-- Yorum yoksa Claude dosyayı üretmeden önce bu bloğu sorar
-- Mevcut dosya güncelleniyorsa yorum bloğu da güncellenir
-- `Risk:` alanı Bowlera'ya özgüdür — kullanıcı/sipariş deneyimine etkisi her zaman belirtilir
-
----
-
-### 3. EDGE CASE ÖNCE, KOD SONRA
-
-Her yeni özellik için Claude şu sırayı izler:
-
-```
-1. "Bu özellik nasıl kırılır?" → 3-5 senaryo listele
-2. "Hangi edge case'ler var?" → sınır değerleri belirle
-3. Kod yaz
-4. Yazılan kodun edge case'leri kapattığını doğrula
-```
-
-- Kullanıcı "hızlıca yaz" dese bile adım 1-2 atlanamaz
-- Edge case sayısı 3-5 ile sınırlıdır — 2 yetersiz, 6+ analiz felcine yol açar
-- Bowlera kritik örnekler:
-  - `useCartStore.ts` → edge case: aynı ürün iki kez eklenmesi, tarayıcı kapanıp açılması, stok/şube değişikliği
-  - `CustomizerStep.tsx` → edge case: adım atlanarak URL'den erişim, çift tıklama, malzeme tükenmesi
-  - `whatsapp.ts` → edge case: `wa.me` linki oluşturulamaması, özel karakter encode hatası, şube numarası eksik
-
----
-
-### 4. SAHTE VERİ YASAĞI
-
-```
-Production kodunda Math.random(), hardcode fiyat/kalori, placeholder değer olamaz
-```
-
-- `Math.random()` tespit edilince Claude uyarır:
-  > "⚠️ Math.random() production'da sahte veri üretir — gerçek değeri nereden alacağız?"
-- Geçici çözüm kabul edilir ama dosyaya `// TODO: PROD — gerçek değerle değiştir` notu eklenir
-- Session kapanışında bu TODO'lar SESSION_INDEX.md'ye teknik borç olarak kaydedilir
-- Bowlera özel: hardcode fiyat/kalori/şube adresi kesinlikle yasak — her zaman `menu-data.json`/CMS'den
-
----
-
-### 5. BAĞIMLILIK DİSİPLİNİ
-
-Her yeni import veya bağımlılık için Claude şunu sorar:
-
-```
-Bu bağımlılık:
-- Zaten mevcut mu? (duplicate önleme)
-- Sadece bu dosyada mı kullanılacak? (gereksiz global önleme)
-- Kaldırılırsa ne kırılır? (DEPENDENCIES.md güncellenmeli mi?)
-```
-
-- Yeni npm paketi eklenmeden önce kullanıcı onayı zorunlu
-- Tek kullanımlık util için ayrı paket eklenmez — inline yazılır
-- Bundle boyutu önemlidir (Core Web Vitals) — her yeni paket gerekçelendirilir, Framer Motion gibi ağır kütüphaneler yalnızca orkestrasyon gerektiren yerlerde kullanılır
-
----
-
-### 6. TEST YAZIM STANDARDI
-
-Her yeni bileşen/store için minimum test seti:
-
-```
-✅ Happy path — normal çalışma
-✅ Edge case — sınır değeri (boş sepet, max toppings, eksik alerjen verisi)
-✅ Failure path — hata durumu (API/CMS erişilemez, üçüncü parti entegrasyon down)
-```
-
-- Test yoksa Claude modülü "tamamlandı" saymaz
-- Test dosyası modülle aynı anda teslim edilir — sonraya bırakılamaz
-- Test dosyası lokasyonu: `components/[katman]/[bileşen].test.tsx` veya `store/[store].test.ts`
-- Test çerçevesi: `package.json`'dan okunur — belirsizse kullanıcıya sorulur (Vitest/Jest varsayılan)
-- Bowlera kritik: `useCartStore` ve customizer fiyat/kalori hesaplama testleri ZORUNLU — diğerleri geciktirilebilir
-
----
-
-### 7. CONTEXT KAYBI KORUMASI
-
-- Her session başında SESSION_INDEX.md okunmadan kod üretilemez
-- "Hızlıca bir şey yapalım" isteği gelince Claude sorar:
-  > "SESSION_INDEX var mı? Yoksa kararlar ve açık sorunlar kaybolur."
-- Dosya adı, bileşen adı SESSION_INDEX ile tutarlı olmalı
-- 20 mesajda re-injection → CORE.md Bölüm 11
+| # | Kural | Tespit edilince söylenecek / yapılacak |
+|---|---|---|
+| **1** Bileşen Boyutu | Tek bileşen/fonksiyon → tek iş → maksimum 20 satır (JSX hariç yapısal iskelet). 20 satırı geçen tespit edilince Claude otomatik böler — kullanıcı istemese bile, davranış korunur | `"⚠️ Bu bileşen [X] satır — [A] ve [B] olarak bölüyorum."` |
+| **2** Niyet Yorumu | Her dosyanın en üstüne zorunlu blok: `// Amaç / Bağlı / Risk / Dokunma` (tam format → `KOD_KALITESI_EXAMPLES.md`). `Risk:` alanı Bowlera'ya özgü — sipariş/kullanıcı deneyimine etkisi belirtilir | Yorum yoksa Claude üretmeden önce sorar; dosya güncellenirken yorum da güncellenir |
+| **3** Edge Case Önce | Her yeni özellik: (1) "nasıl kırılır?" → 3-5 senaryo (2) sınır değerleri (3) kod (4) kapsandığını doğrula. "Hızlıca yaz" dese bile 1-2 atlanamaz. 3-5 sınırı: 2 yetersiz, 6+ analiz felci | `"⚠️ Edge case analizi atlanmış — önce 3-5 senaryo çıkarıyorum."` |
+| **4** Sahte Veri Yasağı | Production kodunda `Math.random()`, hardcode fiyat/kalori/şube adresi olamaz — her zaman `menu-data.json`/CMS'den | `"⚠️ Math.random() production'da sahte veri üretir — gerçek değeri nereden alacağız?"` — geçiciyse `// TODO: PROD` notu + SESSION_INDEX'e teknik borç |
+| **5** Bağımlılık Disiplini | Yeni import/paket öncesi: zaten var mı? sadece bu dosyada mı? kaldırılırsa ne kırılır? Kullanıcı onayı zorunlu, tek kullanımlık util inline yazılır | `"⚠️ Yeni bağımlılık: [paket] — onay gerekiyor, [gerekçe]."` |
+| **6** Test Yazım Standardı | Her yeni bileşen/store: Happy path + Edge case + Failure path — 3'ü de zorunlu, modülle aynı anda teslim edilir | Test yoksa Claude modülü "tamamlandı" saymaz |
+| **7** Context Kaybı Koruması | Her session başında SESSION_INDEX.md okunmadan kod üretilemez; dosya/bileşen adı SESSION_INDEX ile tutarlı olmalı | `"SESSION_INDEX var mı? Yoksa kararlar ve açık sorunlar kaybolur."` |
 
 ---
 
@@ -518,12 +419,13 @@ Bu görevi çözmek için 2 dosya gerekiyor:
 | Session 8 | 2026-08-07 | **`session_log.md` ismi ve mekanizması TAMAMEN KALDIRILDI** — "her session kapanışında ayrı anlatı bloğu yaz" (eski ÇALIŞMA AKIŞI madde 12, KARAR BİLDİRİMİ FORMATI "Session Log" bölümü, CORE.md eski §7.1 Adım 2 + §7.2 session_log referansı) kullanıcı tarafından kafa karıştırıcı bulundu — iki ayrı, örtüşen mekanizma (her-session-anlatısı + 400-satır-taşıması) tek isim altında karışıyordu. Yerine `session_arşiv.md` getirildi: TEK işlevi SESSION_INDEX.md 400 satırı geçtiğinde kapanmış içeriği taşımak (CORE.md §7.1 Adım 1). Amaç: SESSION_INDEX'in (aktif hafızanın) boyutunu küçük tutup sistemin hafif çalışmasını sağlamak. "Asla tam dosya olarak yeniden üretilmez, sadece yeni taşıma bloğu verilir" güvenlik kuralı DEĞİŞMEDİ. Ayrıca SELF-CORRECTION'a "Checkpoint sorulmadan dosya üretildi" satırı eklendi — aynı sohbette Claude'un checkpoint onayı almadan session_arşiv bloğu ürettiği gerçek bir ihlal sonrası. CORE.md v1.3 ile eşleştirildi. |
 | 23. sohbet | 2026-09-03 | SELF-CHECK (Marka & Tasarım Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye "tactile animasyon sadece `whileHover` ile tanımlanamaz, dokunma karşılığı zorunlu" maddesi eklendi. Gerekçe: MenuCard P0-2'de "BOWLERA — PREMIUM MOTION SYSTEM" raporunun (v1.0) tamamen hover-merkezli yazılmış olması, Bowlera trafiğinin neredeyse tamamen dokunmatik olmasına rağmen canlıda kritik bir eksiklik olarak tespit edildi — ÜÇÜNCÜ DERS'in (kod+build başarı ≠ gerçek kullanıcı deneyimi) bir tekrarı. `whileTap="hover"` + ayrıştırılmış giriş/çıkış transition (spring) ile düzeltildi, rapor v1.1'e işlendi (§1a Dokunmatik Öncelik). CORE.md v1.7 ile eşleştirildi. |
 | — | 2026-09-22 | Yeni `RISK_DOMAINS.md` referans dosyası eklendi (geçmişe değil geleceğe bakan, "henüz yaşanmamış ama yaşanması muhtemel" hata sınıfları: secret dosyası, fiyat/ödeme mantığı, eşzamanlılık, KVKK verisi). Buna karşılık BSC modülüne **BSC-9 (Secret Dosyası Commit Yasağı)** eklendi — BSC-2'den farkı: BSC-2 kod İÇİNDEKİ hardcode credential'ı kapsar, BSC-9 bir secret'ın DOSYA olarak repoya commit edilmesini kapsar. BSC KALİTE SKORU 8/8→9/9 (toplam 13/13→14/14) güncellendi. SELF-CHECK (Güvenlik Katmanı), SELF-CORRECTION ve YASAK LİSTE'ye karşılık gelen satırlar eklendi. Gerekçe: ayrı bir projede (Sovereign) yapılan incelemede, imzalama anahtarı dosyasının repoya commit edildiği ve hassas veriye düz metin olarak Supabase'de yer verildiği tespit edildi; bu, Bowlera'da henüz yaşanmamış olsa da aynı sınıf bir riskin bu projede de mümkün olduğu görüldü — FAILURE_PATTERNS.md'nin yalnızca *olmuş* hataları kaydetme mantığının, *henüz olmamış ama öngörülebilir* riskler için yetersiz kaldığı sonucuna varıldı. CORE.md v1.8 ile eşleştirildi. |
+| — | 2026-09-23 | KOD KALİTESİ KURALLARI (1-7, ~139 satır) BSC ile aynı şablonla tek tabloya sıkıştırıldı — kural metni ve tespit mesajları hiçbiri kısaltılmadı, sadece örnek/senaryo detayları yeni `KOD_KALITESI_EXAMPLES.md` dosyasına taşındı. Gerekçe: BSC-1..9 sıkıştırmasının (v1.8) aynı optimizasyonun bir sonraki bölüme uygulanması, davranışsal risk yok. CORE.md v1.9 ile eşleştirildi. |
 
 > Yeni ekleme yapılırken bu tablo güncellenir — session numarası ve tarih zorunlu.
 
 ---
 
-*BOWLERA AGENT.md — v1.8*
+*BOWLERA AGENT.md — v1.9*
 *Next.js (App Router) + Tailwind CSS + TypeScript + Zustand · Framer Motion*
 *NEXUS_OS metodolojisi esas alınarak Bowlera'ya özgü uyarlanmıştır.*
 *İlk üretim: Session 1 — 2026-07-17*
@@ -560,3 +462,7 @@ tablo (kural + tespit mesajı, ~20 satır). Tam kod örnekleri bilgi kaybı olma
 kendisi (ne yapılır/yapılmaz) her session'da hâlâ tam yüklü — sadece örnek kodlar
 referansa taşındı. Gerekçe: context/token optimizasyonu, davranışsal risk yok
 (kural metni ve tespit mesajları hiçbiri kısaltılmadı/atlanmadı).*
+*v1.9: Aynı sıkıştırma KOD KALİTESİ KURALLARI (1-7) bölümüne uygulandı — prose
+(~139 satır) yerine tek tablo (~10 satır). Örnek/senaryo detayları
+`KOD_KALITESI_EXAMPLES.md`'ye taşındı, kuralın kendisi hâlâ tam yüklü. CORE.md
+v1.9 ile eşleştirildi (2026-09-23).*
