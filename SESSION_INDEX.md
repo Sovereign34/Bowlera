@@ -10,65 +10,22 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
-> ⚠️ **TAŞIMA NOTU (2026-09-08, 29. sohbet kapanışı):** SESSION_INDEX.md yeniden 400 satır
-> eşiğini aştı. DÖRDÜNCÜ, BEŞİNCİ, ALTINCI ve YEDİNCİ DERS blokları (4 blok, ~42 satır — hepsi
-> "checkpoint sık sorulmalı, sohbet aniden kesilebilir" temasının tekrarı, en eskisi
-> 2026-08-07 tarihli) TAM metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir
-> eklenti dosyası (`session_arsiv_2_EKLENTI_2026-09-08.md`) olarak verildi, kendi elinizle
-> mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada
-> mevcut — ders içerikleri AGENT.md'nin genel ilkesine zaten kalıcı işlendiği için aktif
-> takip gerektirmiyorlardı. ⚠️ **DÜRÜST NOT:** bu tek taşıma (42 satır) yeni eklenen içeriği
-> (kategori sistemi + #116 dersi, ~55 satır) dengelemedi — dosya bu güncellemeyle de 400
-> satırın ÜZERİNDE kalıyor. Bir sonraki sohbette İKİNCİ bir taşıma turu (aday: en eski
-> KAPANDI ✅ satırlarının [#85/#93/#96/#101/#112/#113 gibi] tam anlatısı, SESSION ÖZET
-> tablosundaki 0-9 arası satırlar) ele alınmalı.
-> ⚠️ **YENİ TAŞIMA UYARISI (bu güncelleme, 2026-09-05, 26. sohbet):** Bu dosya bu güncellemeyle
-> 407 satırdan ~480+ satıra çıktı — 400 satır eşiği (CORE.md §7.1 Adım 1) yeniden aşıldı.
-> Bu turda AJAN dosyanın SADECE 93-315. satırları arasını (eski turlarda) görebildi, TAM
-> içeriği bu turda ilk kez uçtan uca okundu — ama hacim/taşıma işlemi (hangi bloğun
-> `session_arşiv_2.md`'ye gideceği) BU TURDA YAPILMADI, çünkü arşiv dosyasının güncel hâli
-> görülmedi (Kural #2 — arşive ekleme yapmadan önce dosyanın mevcut sonunu görmek gerekir).
-> **Bir sonraki sohbette ele alınmalı:** en eski/en çok özetlenmiş bloklar (SESSION ÖZET
-> tablosundaki 0-10, ve/veya en eski KAPANDI notları) taşınmalı.
-> ⚠️ GEÇMİŞ İHLAL KAYDI (ders çıkarıldı, hâlâ geçerli):
-> 2026-07-20'de üretilen bir "v2 sıkıştırılmış" SESSION_INDEX dosyası, kapanış notu
-> olmadan 7 açık sorunu (#4,7,15,16,20,22,34) ve 2 kararı (#11,#12) tablolardan düşürmüştü.
-> Bu, aynı gün içindeki bir sonraki sohbette fark edilip geri eklenmiş, ve BU sohbette
-> tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
-> tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
-> aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
-> ⚠️ **TAŞIMA NOTU (2026-08-23, 21. sohbet):** SESSION_INDEX.md 441 satıra ulaşınca (400 satır
-> eşiği aşıldı), 7 kapanmış/güncelliğini yitirmiş blok (18. sohbet #91 detayı, 17. sohbet #90
-> detayı, + 5 "KAPANDI (BU TURDA)" anlatı bloğu: #82/83/84, #74, #79/75/80, #50, #76/77) TAM
-> metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir eklenti dosyası
-> (`session_arsiv_2_EKLENTI_2026-08-23.md`) olarak verildi, kendi elinizle mevcut
-> `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada mevcut.
-> ⚠️ **TAŞIMA NOTU (2026-08-23, 22. sohbet):** SESSION_INDEX.md yeniden 400 satır eşiğini
-> aşınca, SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu TAM metniyle `session_arşiv_2.md`'ye
-> taşındı — kullanıcıya ayrı bir eklenti dosyası (`session_arsiv_2_EKLENTI_2026-08-23-devam2.md`)
-> olarak verildi, kendi elinizle mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor.
-> Kapanış gerekçesi o dosyada ve Arşiv Taşıma Kaydı tablosunda mevcut.
-> ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
-> kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
-> belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
-> Net etki: kural DEĞİŞMEDİ. Governance dosyalarında büyük kural değişikliği istenirse
-> önce açıkça onay alınmalı, geri dönüşü kolay olmayan varsayımlar yapılmamalı.
-> ⚠️ ÜÇÜNCÜ DERS (2026-08-06/07, Session 8): Session 7'de #57 "kod+test tamam" olarak
-> kapanış notuyla işaretlenmişti — ama kod hiçbir sayfaya bağlanmamıştı. Kullanıcı canlı
-> production'da eski/kırık Twilio giriş akışıyla karşılaşana kadar bu fark edilmedi.
-> Kural: bir görev "tamamlandı" işaretlenmeden önce SADECE kod+test yeterli değildir —
-> kullanıcının o akışa GERÇEKTEN erişebildiği (route bağlı, buton/link çalışıyor) ayrıca
-> doğrulanmalı. "Dokümantasyon tamam" ile "kullanıcı deneyimi tamam" AYRI kontrol noktaları.
+> ⚠️ **TAŞIMA NOTU (2026-09-24, 30. sohbet kapanışı):** SESSION_INDEX.md 499 satıra ulaşınca (400 satır
+> eşiği aşıldı), aşağıdaki içerik TAM metniyle `session_arşiv_2.md`'ye taşındı: 5 eski üst-not
+> bloğu (21./22. sohbet TAŞIMA NOTU'ları, İKİNCİ/ÜÇÜNCÜ DERS, 13. sohbet devamı TAŞIMA NOTU'su —
+> ders içerikleri AGENT.md VERSİYON GEÇMİŞİ'ne zaten kalıcı işlendiği için aktif takip
+> gerektirmiyordu), 2 eski CURRENT FOCUS anlatısı (27./28. sohbet), SESSION ÖZET tablosundaki
+> Session 0-9 satırları, 6 KAPANDI ✅ açık-sorun satırının tam anlatısı (#85/#93/#96/#101/#112/
+> #113 — hepsi Kritik Kararlar/GENEL DURUM'da zaten özetli) ve en eski 5 sürüm-geçmişi notu
+> (v75-v79) — eklenti dosyası (`session_arsiv_2_EKLENTI_2026-09-24.md`) olarak verildi, kendi
+> elinizle mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçeleri
+> eklenti dosyasında mevcut.
+> ⚠️ Geçmiş ihlal kaydı (2026-07-20, gerekçesiz satır silme) ve o dersten doğan "400 satır
+> eşiği" kuralı artık AGENT.md VERSİYON GEÇMİŞİ'nde (Session 4) kalıcı olarak işli — ayrıntı
+> için oraya bakın.
 > **[DÖRDÜNCÜ-YEDİNCİ DERS → TAŞINDI, 2026-09-08]** "Checkpoint sık sorulmalı, sohbet aniden
 > kesilebilir" temalı 4 ders bloğu (2026-08-07→08-09 arası) `session_arşiv_2.md`'ye taşındı —
 > bkz. dosya başındaki 2026-09-08 TAŞIMA NOTU.
-> ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
-> (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
-> FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
-> bloğu) TAM metinleriyle `session_arşiv_1.md`'ye taşındı — kullanıcıya ayrı bir eklenti
-> dosyası (`session_arsiv_1_EKLENTI_2026-08-10.md`) olarak verildi, kendi elinizle mevcut
-> `session_arşiv_1.md`'nizin sonuna eklemeniz gerekiyor. Her taşınan madde için kapanış
-> gerekçesi o dosyada mevcut.
 
 ---
 
@@ -104,30 +61,9 @@
 > bu sohbette kararlaştırıldı) HENÜZ KODLANMADI, `/menu` hâlâ statik `menu-data.json`
 > okuyor — bu bir hata DEĞİL, ayrı bir görev (bkz. Sıradaki Görevler A9).
 >
-> **[ÖNCEKİ — 2026-09-07, 28. sohbet]** Admin panelde ilk gerçek kullanıcı testi yapıldı —
-> yeni ürün ("Fogy") oluşturuldu. **2 bulgu ortaya çıktı:**
-> 1. **Sitede görünmüyor — BEKLENEN, hata değil.** Canlı site hâlâ statik `menu-data.json`'dan
->    okuyor, `menu_items` DB'sine bağlanmadı (bilinçli olarak ayrı bırakılan bir görev).
-> 2. **Admin listesinde de görünmüyordu — GERÇEK BUG, BULUNDU VE DÜZELTİLDİ.** Neon'da
->    `SELECT` ile kayıt DB'ye YAZILMIŞ olduğu doğrulandı (`fogy-izzbw`, 2026-09-07 03:34) —
->    yani sorun kayıtta değil, `app/admin/page.tsx`'in Next.js tarafından **build-anı statik
->    önbellek** olarak dondurulmasıydı (server component DB'den okuyor ama `dynamic` export'u
->    yoktu). `export const dynamic = 'force-dynamic'` hem liste sayfasına hem düzenleme
->    sayfasına eklendi — kullanıcı henüz repoya uygulayıp push ETMEDİ, canlı doğrulama
->    BEKLİYOR (bkz. Açık Sorun #114).
->
-> **[ÖNCEKİ — 2026-09-06, 27. sohbet]** Admin Panel CANLIYA ALINDI. #110/#112 KAPANDI (4
-> senkron dosya repoya uygulandı, `role='admin'` Neon'da atandı ve canlıda doğrulandı).
-> Kullanıcı kararıyla admin artık `/personel`'e de erişiyor (middleware'in staff guard'ı
-> `role !== 'staff' && role !== 'admin'` olarak genişletildi — `/admin` guard'ı hâlâ SADECE
-> `admin`'e özel, tek-admin kararı korundu). #111/#113 KAPANDI — ilk CRUD (9 dosya: upload-
-> image + menu-items list/create/update/delete route'ları + MenuItemForm + 3 admin sayfası)
-> yazıldı, ImageKit hesabı açılıp entegre edildi. Yol boyunca 3 build hatası çıktı, hepsi
-> çözüldü (eksik `imagekit` npm paketi, TS literal-tipi `.includes()` hatası, ilk pushta
-> unutulan `app/admin/page.tsx`). `/admin` canlıda 8 gerçek ürünü doğru isim/fiyat/kategoriyle
-> listeliyor. Kozmetik, önemsiz bir detay: admin listesindeki `<img>` önizlemeleri kırık ikon
-> gösteriyor (`menu_items.image` alanı `/public`'ten okunan bir dosya adı, admin bu yola
-> giremiyor).
+> **[TAŞINDI — 2026-09-24]** 28. sohbet (ilk gerçek admin kullanıcı testi, cache bug keşfi) ve
+> 27. sohbet (Admin Panel canlıya alınışı) tam anlatı blokları `session_arşiv_2.md`'ye
+> taşındı — içerik #110-#114 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.
 >
 > **[TAŞINDI — 2026-09-07, 400 satır eşiği beşinci kez aşıldı]** 26. sohbetin (Admin Panel
 > planlaması) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
@@ -246,7 +182,6 @@
 | 91 | 🟠 | **[CURRENT FOCUS]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM. **KALAN:** (a) canlıda bir staff hesabının role'ünü DB'de elle `customer`'a çekip eski JWT ile `/personel`'e girip 403 aldığını GÖZLE görmek; (b) aynı telefonla 6 kez yanlış şifre deneyip 6.'nın reddedildiğini GÖZLE görmek. İkisi de mock'lu testlerle DOLAYLI kanıtlandı ama GERÇEK ortamda hiç denenmedi (ÜÇÜNCÜ DERS). | `middleware.ts`, `auth.ts`, `lib/auth/rate-limit.ts` |
 | 90 | 🟡 | **[YENİ, bu turda]** `/menu/customize/[id]` masaüstünde tek ekrana sığmıyordu — `VisualPreview` görseli (`aspect-square`) masaüstünde tavansız büyüyüp adım alanını görünür alanın dışına itiyordu. `page.tsx`'te 4 satırlık düzeltme kodlandı (görsel tavanı `md:max-w-[280px]`, `<main>` `md:h-screen md:overflow-hidden`, sol kolon `md:overflow-y-auto`, `SummaryPanel` `md:sticky`) ve kullanıcıya verildi. **KALAN:** Codespaces'te build koşulmadı, GitHub'a push edilmedi, canlıda/yerelde masaüstünde tek ekrana sığdığı GÖZLE doğrulanmadı. | `app/menu/customize/[id]/page.tsx` |
 | 62 | 🟡 | Personel Sipariş Paneli — Masaya sekmesi TAMAMLANDI + canlı doğrulandı. Gel Al onay kuyruğu: #85 KAPANDI (önceki tur). **[BU TURDA]** Canlı bulgu üzerine 3-durumlu revizyon (KARAR A) — `confirmed` terminal olmaktan çıkarıldı, yeni `completed` durumu eklendi. 7 kaynak + 5 test dosyası (2'si YENİ — projedeki ilk API route testleri, emsal yoktu) kodlandı, Codespaces'te 37/37 PASS. **KALAN:** SADECE canlı ortamda "Teslim Edildi" butonunun tıklanıp gerçekten `completed`'e geçtiğinin ve Hazırlanıyor listesinden düştüğünün doğrulanması. | ARCHITECTURE.md §2.9a |
-| 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
 | 87 | 🟢 | **[YENİ, bu turda]** Gel Al'da `confirmPickupOrder`/`rejectPickupOrder` eşzamanlı-güncelleme/optimistic-lock korumasız (#81'in Gel Al karşılığı) — bilinçli MVP-dışı bırakıldı (kullanıcı: tek personel/tek masaüstü panel, pratik risk düşük). Kullanım yoğunlaşırsa ele alınmalı. | `lib/personel/gel-al-queries.ts` |
 | 88 | 🟢 | **[YENİ, bu turda]** Sekme rozetleri (Şifre Talepleri/Gel Al/Kayıt Onayları) kod+push tamam ama test yazılmadı, canlı ortamda hiç görsel kontrol edilmedi. Ayrıca Gel Al/Kayıt Onayları sekmesi aktifken ilgili endpoint 5sn'de 2 kez sorgulanıyor (rozet + panel ayrı hook, bilinçli trade-off) — kullanım yoğunlaşırsa state page.tsx'e taşınıp panellere prop geçirilmesi düşünülebilir. | `app/personel/page.tsx`, `hooks/usePersonelPasswordResetQueue.ts` |
 | 86 | 🟡 | **[Bu turda, build DOĞRULANDI]** Kayıt Onayları (4. sekme) — 8 dosya kodlandı, tam repo zip'inden statik incelendi, Gel Al deseniyle tutarlı. Kullanıcı Codespaces'te `tsc --noEmit` (hatasız) VE `npm run build` (route tablosu/size özeti başarıyla üretildi — Next.js bu tabloyu SADECE derleme başarılıyken yazdırır) çalıştırdı, GitHub'a push edildi. **Build tarafı KAPANDI.** **KALAN:** test seti (Kural #6) yok, canlı ortamda Teyit Et/Reddet-Sil hiç test edilmedi (ÜÇÜNCÜ DERS — kod+build ≠ kullanıcı deneyimi doğrulandı). | `lib/personel/kayit-onaylari-queries.ts`, `app/api/personel/kayit-onaylari/*`, `components/personel/KayitOnaylariPanel.tsx` |
@@ -260,15 +195,12 @@
 | 80 | 🟢 | **[YENİ — kullanıcı kararıyla, 2026-08-09]** #79/#75 kapatıldı (mobil canlıda doğrulandı: "Sepete Ekle sorunu çözüldü"). Masaüstü (`SummaryPanel.tsx`) fix'i AYRICA canlıda doğrulanmadı — kod+test tarafı aynı (`isReadyToAddToCart()`), risk düşük görülüyor ama not olarak açık bırakılıyor. #75'in orijinal çift-tık/duplicate senaryosu da bu turda ayrıca test edilmedi. | `components/customizer/SummaryPanel.tsx` |
 | 78 | 🟢 | **[Kaynak bileşen bu turda teyit edildi — UX çözümü hâlâ AÇIK]** Customizer'da collapsed sticky özet panel (fiyat/kalori satırı + ▲ ikonu) seçim anında "Sepete Ekle" butonunu ve Base/Main/Flavor özetini GİZLİYOR — panel manuel genişletilmeden görünmüyor. Kaynak bileşenin `MobileSummaryDrawer.tsx` olduğu bu turda doğrulandı (bkz. #75) — SADECE o dosyadaki build-kırığı prop eksikliği düzeltildi, panel-görünürlüğü UX çözümüne bilinçli olarak DOKUNULMADI (Kural #5, ayrı karar). CORE.md §8 mimari varsayımı "Özet panel her zaman görünür... asla gizlenmez" ile çelişiyor. Çözüm yönü henüz kararlaştırılmadı (varsayılan yarı-açık / mikro-metin / otomatik ilk-açılış seçenekleri konuşuldu). | `components/customizer/MobileSummaryDrawer.tsx` |
 | 92 | 🟠 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** Çok şubeli mimari: `branches` tablosu şemada HİÇ YOK. Kullanıcı 2./3. şubenin "herhangi an" açılabileceğini belirtti. `order_history` ve `consent_registrations`'da hangi siparişin/kaydın hangi şubeye ait olduğunu tutan bir alan yok — şu an TEK ŞUBE varsayımıyla kurulu. Geriye dönük eklemek, mevcut kayıtlara hangi şube olduğu konusunda varsayım atamayı gerektirir (veri belirsizliği riski). **Önerilen yön (ONAYLANMADI):** `branches` tablosu tek satırla (mevcut şube) şimdiden açılsın, `order_history.branch_id` + `consent_registrations.branch_id` nullable FK olarak eklensin; `users` ASLA şubeye bağlanmasın (CRM şubeler üstü kalmalı). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §3-4-6. **Açık karar:** 2. şube yaklaşık ne zaman planlanıyor — bu, işin bu turda mı yoksa ayrı sırada mı yapılacağını belirler. | `lib/db/schema.ts` (henüz dokunulmadı) |
-| 93 | ✅ | **[BU TURDA (26. sohbet) KAPANDI]** Menü verisinin gerçek konumu doğrulandı: `lib/menu-data.json` (imza kaseler+içecekler), `lib/sandwich-data.json` (sandviçler, TEST VERİSİ, #95), `lib/customizer-data.ts` (build-your-own malzeme kataloğu). `menu-data.json`'daki 8 gerçek ürün `menu_items` DB tablosuna taşındı, migration+seed Neon'da doğrulandı. Şube-bazlı menü önerisi (branch_menu_items eşleme tablosu) HÂLÂ ONAYLANMADI, ayrı bir karar — bu turun kapsamı SADECE tek-şube admin panel ön koşuluydu. | `lib/menu-data.json`, `lib/db/schema.ts` |
 | 94 | 🟢 | **[YENİ, bu turda (19. sohbet) — sadece analiz+öneri, KOD YOK]** CRM/attribution katmanı eksik: `consent_registrations`/`order_history`'de pazarlama kaynağı (Instagram/TikTok/Marketplace/Google/UTM) hiç tutulmuyor. **İsim çakışması riski:** mevcut `channel` alanları (her iki tabloda da var) FULFILLMENT kanalı (gel-al/masaya) anlamında — pazarlama kanalı DEĞİL. Yeni alanlar eklenirse `channel` yeniden kullanılmamalı, `acquisition_source`/`utm_campaign`/`utm_medium` gibi AYRI isimler kullanılmalı. Ayrıca `order_count`/`total_spend`/`days_to_repeat` gibi CRM metrikleri `users`'a KOLON olarak eklenmemeli — `order_history` üzerinden SQL VIEW olarak hesaplanmalı (senkron kayma riski). Kullanıcının "bu yapı ileride birçok modül/uygulamanın temel iskeleti olacak" vizyonuyla bağlantılı — PUSULA OS değerlendirmesindeki "event log yok, policy engine yok" bulgusuyla örtüşüyor (tam çözüm bu turun kapsamı dışı, sadece isim/yön kararı). Detay: `BOWLERA_COK_SUBELI_CRM_VIZYON.md` §5-6-7. | `lib/db/schema.ts` (henüz dokunulmadı) |
 | 95 | 🟡 | **[YENİ, bu turda (21. sohbet)]** Sandviç akışı `lib/sandwich-data.json` TEST VERİSİ ile çalışıyor — S1 (gerçek fiyat/kalori/ürün isimleri), S2 (ücretsiz sebze kotası — şu an placeholder 4), S5 ("Mike's Way" preset içeriği — şu an placeholder sebze+sos) hâlâ gerçek veri bekliyor. Launch öncesi MUTLAKA değiştirilmeli, aksi halde sahte fiyat/kalori canlıya çıkar. | `lib/sandwich-data.json` |
-| 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
 | 97 | 🟠 | **[YENİ, bu turda (21. sohbet)]** CORE.md Dosya Haritası bu turda eklenen dosyaları yansıtmıyor: `StepBread/StepSize/StepProtein/StepCheese/StepVeggies/StepSauceToastExtras.tsx`, `app/sandwich/customize/[id]/page.tsx`, 7 test dosyası, `Hero.tsx` CTA değişikliği. **[26. sohbet notu]:** ayrıca `middleware.ts`/`auth.ts`/`types/next-auth.d.ts` admin guard değişiklikleri ve `lib/db/schema.ts`'e `menuItems` de eklenmeli. Ayrı bir turda CORE.md güncellenmeli. | `CORE.md` |
 | 98 | 🟢 | **[YENİ, bu turda (21. sohbet) — kapsam dışı bırakıldı]** Genel proje `npm test` çalıştırıldığında (sandviç kapsamı DIŞINDA) 7 dosya/9 test başarısız çıktı, `Header.test.tsx` dahil (kritik: "Çıkış Yap"a tıklayınca signOut callbackUrl="/" ile çağrılır" testi). Bu turda kasıtlı dokunulmadı — Kural #5 izolasyon. Ayrı bir turda ele alınmalı. | `components/layout/Header.test.tsx` + 6 diğer dosya (henüz listelenmedi) |
 | 99 | 🔴 | **[YENİ, 22. sohbet — GERİYE DÖNÜK loglandı, sohbet kesildi]** Sandviç checkout'u BLOKLU: "Siparişi Onayla" adımında fiyat ne olursa olsun kırmızı "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor. Kök neden ŞÜPHESİ (doğrulanmadı): `FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'teki fiyatlandırma kontrolü sadece Bowl'un `bowlItem`/`customization` alanlarını tanıyor, `sandwichCustomization`'ı bilmiyor. Kullanıcıdan `grep -rn "fiyatlandırılamadı" --include="*.tsx" --include="*.ts" .` çıktısı istendi, YANIT GELMEDEN sohbet kesildi. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya DOĞRULANMADI) |
 | 100 | 🟡 | **[YENİ, 22. sohbet — kod üretildiği İDDİA EDİLDİ, push/test TEYİT EDİLMEDİ]** 4 UI düzeltmesi: (a) `Hero.tsx` buton düzeni `flex-wrap`→`grid grid-cols-2`, mobilde yan yana kalıcı; (b) `SandwichSummaryPanel.tsx`'e TEST VERİSİ rozeti eklendi; (c) `HeroImagePlaceholder.tsx` `aspect-square`→`aspect-[4/3]`+`max-h-72`, mobil taşma düzeltildi; (d) `SandwichCustomizer.tsx` sepete ekleme sonrası artık `/siparis`'e yönlendiriyor (`useRouter`, önceden `store.reset()`+aynı sayfa). | `components/home/Hero.tsx`, `components/sandwich/SandwichSummaryPanel.tsx`, `components/home/HeroImagePlaceholder.tsx`, `components/sandwich/SandwichCustomizer.tsx` |
-| 101 | ✅ | **[BU TURDA KAPANDI, 2026-09-03, 23. sohbet]** 22. sohbetteki "Özel Kase" fallback bug'u (`item.bowlItem?.name ?? "Özel Kase"` sandviçlerde hep "Özel Kase" yazdırıyordu) `CartDrawer.tsx`'in bu turdaki motion yükseltmesiyle YENİDEN yazıldı VE test edildi — `CartDrawer.test.tsx`'teki "bowlItem null + sandwichCustomization dolu → Özel Sandviç; ikisi de null → Özel Kase" testi Codespaces'te PASS (8/8, 2026-09-03 06:16, ekran görüntüsü). Bowl davranışı da (`bowlItem?.name` önceliği) happy-path testinde doğrulandı. **KALAN:** push + canlı/production doğrulaması — bkz. #105. | `components/cart/CartDrawer.tsx` |
 | 102 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx` satır 20 — CartDrawer'daki (#101) BİREBİR AYNI "Özel Kase" fallback bug'u burada da bulundu, aynı desenle genişletildi ("Özel Sandviç"). | `components/order/OrderSummary.tsx` |
 | 103 | 🟢 | **[YENİ, 22. sohbet — push/test TEYİT EDİLMEDİ]** `OrderSummary.tsx`'e CartDrawer'daki gibi "Kaldır" butonu eklendi — eski fiyat düzeltmesinden ÖNCE sepete girmiş 0₺'lik test ürünlerini temizlemek için. | `components/order/OrderSummary.tsx` |
 | 104 | 🟡 | **[YENİ, 22. sohbet — çözülmeden kaldı]** #100(d) fix'i sonrası `SandwichCustomizer.test.tsx`'in sepete-ekleme testleri artık `router.push` çağıracak — `next/navigation`'ın `useRouter`'ı test ortamında mock'lanmadıysa testler kırılabilir. Kullanıcıya "şimdi düzelteyim mi yoksa `npx vitest run components/sandwich` çalıştırıp kırmızı çıkanı mı paylaşırsın" soruldu, YANIT GELMEDEN sohbet kesildi. | `components/sandwich/SandwichCustomizer.test.tsx` |
@@ -279,8 +211,6 @@
 | 109 | 🟡 | **[YENİ, 26. sohbet — Admin Panel]** Canlı `/menu` filtre ekranı "Diyet & Kalori" bölümünde **Keto** seçeneği gösteriyor ama gerçek `menu-data.json` verisinde HİÇBİR üründe bu tag yok. Ayrıca gerçek veride kullanılan **glutensiz** ve **sıcak-tahıl** etiketleri filtre ekranında HİÇ YOK — bu iki tag'e sahip ürünler filtrelenemiyor. Admin panel formu gerçek veriye göre 5 doğru değeri (yüksek protein/glutensiz/vegan/sıcak-tahıl/düşük kalori) kullanacak şekilde kararlaştırıldı, ama canlı filtre ekranının KENDİSİ bu turda düzeltilmedi — ayrı bir görev. | `/menu` filtre bileşeni (kesin dosya adı bu turda doğrulanmadı) |
 | 110 | 🟠 | **[YENİ, 26. sohbet — Admin Panel]** ARCHITECTURE.md ve DEPENDENCIES.md `menu_items` tablosunun eklendiğini, `users.role`'e `"admin"` değerinin eklendiğini ve `/admin`+`/api/admin` middleware guard'ının varlığını YANSITMIYOR — bu turda SADECE `docs/schema-changes/20260905090000_menu_items_tablosu_eklendi.md` şema notu üretildi, mimari dokümanlar güncellenmedi. | `ARCHITECTURE.md`, `DEPENDENCIES.md` |
 | 111 | 🟡 | **[YENİ, 26. sohbet — Admin Panel]** `types/index.ts`'teki `BowlItem` tipi bu turda GÖRÜLMEDİ ve GÜNCELLENMEDİ — `menu_items` DB şemasıyla (calories/protein NOT NULL, tags/allergens array) senkron olduğu VARSAYILDI (ARCHITECTURE.md'de daha önce görülen tip tanımına dayanarak) ama bu turda dosyanın kendisi paylaşılmadı, TAM teyit edilmedi. | `types/index.ts` |
-| 112 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** 4 dosya (`schema.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts`) repoya uygulandı, `npx tsc --noEmit` + `npm run build` temiz, push edildi. Neon'da `+905431615778` numarası `role='admin'` yapıldı VE canlıda doğrulandı (`SELECT` ile teyit edildi). **YENİ KARAR (kullanıcı isteğiyle):** bu hesabın hem `/personel` hem `/admin`'e erişmesi istendiği için `middleware.ts`'teki `/personel` guard'ı `role !== 'staff' && role !== 'admin'` olarak GENİŞLETİLDİ (admin artık staff'ın süperkümesi, ama `/admin` guard'ı hâlâ SADECE `role==='admin'` — tek admin kararı bozulmadı). Canlıda hem `/personel` hem `/admin` (o an 404 — sayfa yoktu ama 403 YOKTU) doğrulandı. | `middleware.ts` |
-| 113 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** Admin panelinin ilk CRUD'u yazıldı ve DEPLOY EDİLDİ: `lib/imagekit.ts`, `lib/admin/menu-item-constants.ts`, `app/api/admin/upload-image/route.ts`, `app/api/admin/menu-items/route.ts` (GET+POST), `app/api/admin/menu-items/[id]/route.ts` (GET+PATCH+DELETE), `components/admin/MenuItemForm.tsx`, `app/admin/page.tsx` (liste), `app/admin/menu-items/new/page.tsx`, `app/admin/menu-items/[id]/page.tsx`. ImageKit hesabı açıldı (Public Key/Private Key/URL Endpoint alındı, `.env.local`+Vercel env'e eklendi), `imagekit` npm paketi kuruldu. Yol boyunca 3 build hatası çıktı, hepsi çözüldü: (1) `imagekit` paketi package.json'a hiç eklenmemişti — `npm install imagekit --save`; (2) `MENU_ITEM_TAGS.includes()` TS literal-tipi hatası — `as readonly string[]` cast'iyle çözüldü; (3) `app/admin/page.tsx`'in kendisi ilk pushta unutulmuştu (sadece alt sayfalar gitmişti) — ayrıca eklenip push edildi. **CANLIDA DOĞRULANDI:** `/admin` artık 8 gerçek ürünü doğru isim/fiyat/kategoriyle listeliyor. | `app/admin/*`, `app/api/admin/*`, `lib/imagekit.ts`, `components/admin/MenuItemForm.tsx` |
 | 114 | ✅ | **[BU TURDA (29. sohbet) KAPANDI — kök neden REVİZE EDİLDİ]** Admin panelde yeni ürün oluşturuldu ("Fogy"), DB'ye yazıldığı doğrulanmıştı ama listede görünmüyordu. `export const dynamic = 'force-dynamic'` (28. sohbet fix'i) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı — asıl kök neden `neon-http` sürücüsünün iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasıydı (bkz. #116). `lib/db/client.ts`'e `fetchOptions:{cache:'no-store'}` eklenerek KÖKTEN çözüldü, canlıda doğrulandı. | `lib/db/client.ts`, `app/admin/page.tsx` |
 | 115 | ✅ | **[BU TURDA (29. sohbet) KAPANDI]** Kategori sistemi uçtan uca kodlandı: `categories` tablosu (`id`=ASCII slug PK, `name`, `sortOrder`) + `menu_items.category`'ye FK (RESTRICT — bağlı ürün varken silme DB seviyesinde engellenir, cascade YOK, kullanıcı kararı). Admin'e `/admin/categories` (liste+ekle+sil) eklendi, `MenuItemForm.tsx`'teki serbest metin `category` alanı `<select>`'e çevrildi, `POST`/`PATCH` menu-items route'ları FK ihlalini (23503) 400 ile kullanıcı dostu mesaja çeviriyor. 7 kategori (İmza Ürünler/Bowl/Dürüm/Salata Bowl/Sandviç/Tatlı/İçecek) seed edildi. 8 test ürünü kullanıcı onayıyla `DELETE FROM menu_items` ile temizlendi. **CANLIDA DOĞRULANDI.** | `lib/db/schema.ts`, `types/index.ts`, `components/admin/MenuItemForm.tsx`, `components/admin/CategoryForm.tsx`, `components/admin/DeleteCategoryButton.tsx`, `app/admin/categories/*`, `app/api/admin/categories/*`, `app/api/admin/menu-items/*` |
 | 116 | 🟢 | **[YENİ, 29. sohbet — DOKUZUNCU DERS, kalıcı ilke]** Next.js App Router'da sayfa-seviyesi `export const dynamic = 'force-dynamic'`, DB sürücüsünün KENDİ iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasını OTOMATİK ENGELLEMEZ — bu iki ayrı önbellek katmanı. `@neondatabase/serverless`'in `neon-http` sürücüsü tam bunu yaşattı (bkz. #114). Kalıcı ilke: bu proje herhangi bir `fetch()`-tabanlı DB/HTTP sürücüsü kullanırken, sürücünün kendi önbellek/no-store ayarı olup olmadığı AYRICA kontrol edilmeli — sayfa seviyesindeki `dynamic`/`revalidate` ayarları yeterli VARSAYILMAMALI. Düzeltme merkezi dosyada (`lib/db/client.ts`) yapıldığı için tüm mevcut VE gelecekteki admin sayfalarını otomatik kapsıyor, tekrar dosya dosya düzeltme gerekmedi. | `lib/db/client.ts` |
@@ -301,16 +231,7 @@
 
 | Session | Tarih | Ana içerik | Durum |
 |---|---|---|---|
-| 0 | — | Ajan altyapısı (14 dosya) | ✅ Tamamlandı |
-| 1 | 2026-07-1x | Next.js+Tailwind kurulum, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
-| 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, customizer 4→5 adım kararı | ✅ Tamamlandı |
-| 3 | 2026-07-18 | Zustand store + pricing + customizer data (kesintiye uğradı) | ✅ Büyük ölçüde tamam |
-| 4 (devam) | 2026-07-18→07-22 | Sepet/kanal seçimi, auth mimarisi+kod+DB+UI, ARCHITECTURE.md v1.4, vb. | 🟡 Devam ediyor |
-| 5 | 2026-08-01→08-02 | VisualPreview denetimi (#52), Hakkımızda sayfası, 400 satır eşiği kaldırılıp geri getirildi | 🟡 Devam ediyor |
-| 6 | 2026-08-05 | WhatsApp OTP kodlandı/test edildi. Twilio/Netgsm PARKLANDI, rıza esaslı kayıt+WhatsApp yönlendirme kararlaştırıldı (#57/#58 açıldı) | 🟡 Devam ediyor |
-| 7 | 2026-08-06 | #57 uçtan uca kodlandı (17/17 PASS). `consentRegistrations`, `RegistrationChannel` tipleri eklendi. **#57 kapanmadı** — kod sayfaya bağlanmadı. | 🟡 Devam ediyor |
-| 8 | 2026-08-06/07 | Kırık Twilio akışı keşfedildi, `/kayit-ol`+`/kvkk` bağlandı, migration koşuldu, canlı test BAŞARILI. #59/#60/#61 yeni açıldı. | 🟡 Devam ediyor |
-| 9 | 2026-08-07 | Masaya Sipariş kanalı canlıda doğrulandı. Personel Sipariş Paneli ihtiyacı keşfedildi → #62 açıldı. `session_log.md` ismi/mekanizması netleştirildi. | 🟡 Devam ediyor — #62 yeni sohbette |
+| 0-9 | 2026-07 → 2026-08-07 | **[TAŞINDI, 2026-09-24]** Ajan altyapısı kurulumundan Personel Sipariş Paneli ihtiyacının keşfine kadarki 10 session'ın tam özeti `session_arşiv_2.md`'ye taşındı — hepsi ✅/🟡 durumuyla zaten kapanmış veya sonraki session'larda devam ettirilmiş, aktif takip gerektirmiyor. | taşındı |
 | 10 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. `order_history` tablosu migrate edildi. #63 (npm audit) yeni. | 🟡 Devam ediyor |
 | 11 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. Genel giriş/kayıt akışı netleşti (kanal bazlı tablo), #62 kapsamı genişledi ("kasa paneli" = Personel Sipariş Paneli), #64 kapandı (doğrulama durumu alanı kararı). | 🔴 Devam ediyor — #62 mimarisi bekliyor |
 | 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i zip ile doğrulandı (confidence HIGH), #65/#66 açıldı. ARCHITECTURE.md v1.7'ye güncellendi (Masaya Sipariş ayrı `/masaya-siparis/*` yüzeyine taşındı), #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi. Masa numarası kararı: TUTULACAK, ARCHITECTURE.md v1.11'e işlendi (`CartState.tableId`, path segment route, `order_history.table_number` şema notu), #69 kapsamı genişletildi (#70 yeni açıldı). Canlı build kırığı bulunup düzeltildi (`channel-options.ts`), #71 yeni açıldı. | 🟡 §2.7b kod üretimine hazır; #70/#71 netleşmeli |
@@ -459,41 +380,7 @@ eşiğinin ÜZERİNE çıkardı — bir sonraki sohbette arşivleme/taşıma ele
 arşiv dosyasının güncel hâli görülmediği için taşıma yapılamadı, bkz. dosya başındaki YENİ
 TAŞIMA UYARISI).)*
 
-*BOWLERA SESSION_INDEX.md — v79 (v78'den: **[25. sohbet devamı, 2026-09-05]** MOTION SYSTEM
-RAPORU KAPANDI. P3 (Instagram controlled marquee) reponuzda hiçbir karşılığı olmadığı için
-(grep sonucu boş — `Instagram` metnini içeren tek bir `.tsx` yok) kapsam dışı bırakıldı;
-özellik ileride inşa edilirse ayrıca ele alınmalı, önkoşulu yok. Raporun P0/P1/P2 bölümündeki
-9 kalemin TAMAMI mevcut kod tabanında işlendi. Kalan teknik borçlar hâlâ açık: -6 (AccountMenu
-debug değeri `duration:1` production'da kaldı, kalıcı değere dönülmedi — kullanıcı kararıyla
-ertelendi), -9/-10 (Page transitions/AddToCart canlı doğrulama hâlâ bildirilmedi).)*
 
-*BOWLERA SESSION_INDEX.md — v78 (v77'den: **[25. sohbet devamı, 2026-09-05]** 400 satır eşiği
-dördüncü kez aşıldı — 23. sohbet devamının (MOTION SYSTEM Mobil Tactile Düzeltmesi, ~36 satır)
-tam anlatı bloğu `session_arşiv_2.md`'ye taşındı, kullanıcıya ayrı eklenti dosyası olarak
-verildi. İçerik zaten #107 (KAPANDI) ve Açık Sorunlar/Motion System P0 özetinde tam
-korunuyor, kayıp yok.)*
-
-*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[25. sohbet, 2026-09-05]** P2 TAMAMEN KAPANDI:
--11 CartBadge'de 2 gerçek bug bulunup düzeltildi (0→1 mount köründü + opacity hiç
-ayarlanmıyordu), -12 Customizer spatial transition hem kase hem sandviç akışına eklendi
-(yan bulgu: sandviçte "Geri" butonu hiç yoktu, eklendi), -13 VisualPreview token'a bağlandı
-(görsel değişiklik yok, davranış aynı). Motion System raporu artık SADECE P3 (Instagram
-marquee) ve teknik borçlar (AccountMenu debug değeri, -9/-10 canlı doğrulama) hariç
-tamamlandı. Genel gözlem bu oturumdan: kullanıcı testleri defalarca "gerçek dosyanın
-kaydedilip kaydedilmediğini doğrula" adımını atlayınca zaman kaybına yol açtı (AccountMenu,
-CartBadge) — bu artık standart ilk adım olarak yerleşti.)*
-
-*BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
-kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
-doğruydu) ama production'da debug değeri kaldı (teknik borç, kullanıcı kararıyla ertelendi).
--7 Header Scroll kullanıcı kararıyla atlandı. -8 Hero orchestration TAMAMLANDI, `layout.tsx`
-incelenip global MotionConfig'in GERÇEKTEN olmadığı doğrulandı. -9 Page transitions
-(`app/template.tsx`, sadece giriş animasyonu) ve -10 AddToCart token-bağlama teslim edildi
-ama canlı doğrulama bekliyor. P1 kod tarafı kapandı, kalan iş canlı doğrulamalar.)*
-
-*BOWLERA SESSION_INDEX.md — v75 (v74'ten: **[24. sohbet, 2026-09-04]** -5a KAPANDI ✅ (kod
-zaten doğruydu, sadece doğrulama gerekiyordu). Motion System P1 başladı: AccountMenu.tsx'e
-AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM'ı eklendi,
-kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
-(bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
-iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
+*[**TAŞINDI — 2026-09-24**] v75-v79 sürüm-geçmişi notları (2026-09-04→2026-09-05, Motion System
+P1/P2 çalışması) `session_arşiv_2.md`'ye taşındı — içerik #107/#105 ve GENEL DURUM'da zaten
+özetli. v80'in üstündeki not artık dosyanın en eski sürüm kaydıdır.*
