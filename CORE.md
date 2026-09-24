@@ -104,8 +104,6 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
 | Secret/gizli veri, ödeme mantığı, eşzamanlılık (concurrency), KVKK/kişisel veri işleyen görev | `RISK_DOMAINS.md` | `FAILURE_PATTERNS.md` (geçmiş örnek varsa) |
-| BSC ihlali tespit edildi / ihlal düzeltmesi için tam kod örneği lazım | `BSC_EXAMPLES.md` | — |
-| KOD KALİTESİ KURALLARI (1-7) ihlali için somut örnek/senaryo lazım | `KOD_KALITESI_EXAMPLES.md` | — |
 
 ---
 
@@ -197,18 +195,6 @@ RISK_DOMAINS.md            ← YENİ (2026-09-22) — henüz yaşanmamış ama y
                              FAILURE_PATTERNS.md'den farkı: geçmişe değil geleceğe
                              bakar. Bir olay gerçekten yaşanırsa buradan
                              FAILURE_PATTERNS.md'ye FP-N olarak taşınır.
-
-BSC_EXAMPLES.md             ← YENİ (2026-09-22) — AGENT.md'deki BSC-1..9
-                             tablosunun tam kod örnekleri (❌/✅ blokları).
-                             Kuralın kendisi AGENT.md'de kalır (her session
-                             yüklü), sadece örnek kodlar buraya taşındı —
-                             token/context optimizasyonu, bilgi kaybı yok.
-
-KOD_KALITESI_EXAMPLES.md    ← YENİ (2026-09-23) — AGENT.md'deki KOD KALİTESİ
-                             KURALLARI (1-7) tablosunun örnek/senaryo detayları.
-                             Kuralın kendisi AGENT.md'de kalır (her session
-                             yüklü), sadece örnekler buraya taşındı — aynı
-                             optimizasyonun BSC_EXAMPLES.md'den sonraki tekrarı.
 
 TEST_MATRIX.md             ← Modül bazlı test senaryoları ve durum
 CONFIG_SCHEMA.md           ← Env değişkenleri şeması (.env.local kontratı)
@@ -617,15 +603,3 @@ tarafından fark edilmesi zor olan ("sessiz") hata sınıflarında yetersiz kala
 bu sınıflar için önleyici, araç-tabanlı kontrol (AI'ın hatırlamasına değil) zorunlu kılındı. Yeni
 bir çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının (bkz.
 v1.4/v1.5/v1.7 notları) bir tekrarı. AGENT.md v1.7 ile eşleştirildi (2026-09-22).*
-*v1.9 — ⚠️ GERİYE DÖNÜK EKLEME: Bölüm 4'e `BSC_EXAMPLES.md` referansı zaten eklenmişti
-(2026-09-22, AGENT.md'nin BSC-1..9 tablosunu sıkıştırdığı turda) ama bu değişiklik o turda
-versiyon geçmişine hiç işlenmemişti — kendi kuralımızın (yeni referans dosyası eklenince
-CORE.md aynı turda güncellenir) kısmi bir ihlaliydi: dosya haritası güncellendi ama log
-atlandı. Bu turda (2026-09-23) fark edilip düzeltildi, içerik kaybı yok — sadece kayıt
-eksikliği giderildi. AGENT.md v1.8 ile eşleştirildi.*
-*v1.10 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni
-`KOD_KALITESI_EXAMPLES.md` referansı eklendi — AGENT.md'deki KOD KALİTESİ KURALLARI (1-7)
-bölümünün BSC-1..9 ile aynı şablonda (kural+tespit mesajı tablosu, örnekler ayrı dosyada)
-sıkıştırılmasının karşılığı. Gerekçe: token/context optimizasyonunun bir önceki bölüme
-(BSC) uygulanan aynı yöntemle devamı, davranışsal risk yok. AGENT.md v1.9 ile eşleştirildi
-(2026-09-23).*
