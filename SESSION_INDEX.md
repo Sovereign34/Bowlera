@@ -10,7 +10,93 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
-> > ⚠️ **DERS ARŞİVİ NOTU (2026-09-23 güncellemesi):** Bu dosyanın başında önceden 7 ayrı "DERS" (İkinci-Yedinci) + birden fazla "TAŞIMA UYARISI/NOTU" bloğu (toplam ~87 satır) tutuluyordu. Hepsi zaten `session_arşiv_1.md`/`session_arşiv_2.md`'ye TAM metinle taşınmıştı (bkz. Arşiv Taşıma Kaydı tablosu) ve buradaki kopyaları sadece tekrar niteliğindeydi — 400 satır eşiğini (CORE.md §7.1 Adım 1) aşmanın başlıca nedeniydi. Bu turda tek satıra indirildi: ders özetleri (checkpoint sıklığı, "kod≠kullanıcı deneyimi", TAM DOSYA üretimi yarım bırakılmaz, vb.) hâlâ AGENT.md/CORE.md'ye işli ve geçerlidir, sadece bu dosyadaki tekrar kaldırıldı. Tam metin: `session_arşiv_2_EKLENTI_2026-09-23-ders-arsivi.md` (kullanıcı elle `session_arşiv_2.md`'nin sonuna ekleyecek).
+> ⚠️ **YENİ TAŞIMA UYARISI (bu güncelleme, 2026-09-05, 26. sohbet):** Bu dosya bu güncellemeyle
+> 407 satırdan ~480+ satıra çıktı — 400 satır eşiği (CORE.md §7.1 Adım 1) yeniden aşıldı.
+> Bu turda AJAN dosyanın SADECE 93-315. satırları arasını (eski turlarda) görebildi, TAM
+> içeriği bu turda ilk kez uçtan uca okundu — ama hacim/taşıma işlemi (hangi bloğun
+> `session_arşiv_2.md`'ye gideceği) BU TURDA YAPILMADI, çünkü arşiv dosyasının güncel hâli
+> görülmedi (Kural #2 — arşive ekleme yapmadan önce dosyanın mevcut sonunu görmek gerekir).
+> **Bir sonraki sohbette ele alınmalı:** en eski/en çok özetlenmiş bloklar (SESSION ÖZET
+> tablosundaki 0-10, ve/veya en eski KAPANDI notları) taşınmalı.
+> ⚠️ GEÇMİŞ İHLAL KAYDI (ders çıkarıldı, hâlâ geçerli):
+> 2026-07-20'de üretilen bir "v2 sıkıştırılmış" SESSION_INDEX dosyası, kapanış notu
+> olmadan 7 açık sorunu (#4,7,15,16,20,22,34) ve 2 kararı (#11,#12) tablolardan düşürmüştü.
+> Bu, aynı gün içindeki bir sonraki sohbette fark edilip geri eklenmiş, ve BU sohbette
+> tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
+> tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
+> aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 21. sohbet):** SESSION_INDEX.md 441 satıra ulaşınca (400 satır
+> eşiği aşıldı), 7 kapanmış/güncelliğini yitirmiş blok (18. sohbet #91 detayı, 17. sohbet #90
+> detayı, + 5 "KAPANDI (BU TURDA)" anlatı bloğu: #82/83/84, #74, #79/75/80, #50, #76/77) TAM
+> metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir eklenti dosyası
+> (`session_arsiv_2_EKLENTI_2026-08-23.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada mevcut.
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 22. sohbet):** SESSION_INDEX.md yeniden 400 satır eşiğini
+> aşınca, SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu TAM metniyle `session_arşiv_2.md`'ye
+> taşındı — kullanıcıya ayrı bir eklenti dosyası (`session_arsiv_2_EKLENTI_2026-08-23-devam2.md`)
+> olarak verildi, kendi elinizle mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor.
+> Kapanış gerekçesi o dosyada ve Arşiv Taşıma Kaydı tablosunda mevcut.
+> ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
+> kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
+> belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
+> Net etki: kural DEĞİŞMEDİ. Governance dosyalarında büyük kural değişikliği istenirse
+> önce açıkça onay alınmalı, geri dönüşü kolay olmayan varsayımlar yapılmamalı.
+> ⚠️ ÜÇÜNCÜ DERS (2026-08-06/07, Session 8): Session 7'de #57 "kod+test tamam" olarak
+> kapanış notuyla işaretlenmişti — ama kod hiçbir sayfaya bağlanmamıştı. Kullanıcı canlı
+> production'da eski/kırık Twilio giriş akışıyla karşılaşana kadar bu fark edilmedi.
+> Kural: bir görev "tamamlandı" işaretlenmeden önce SADECE kod+test yeterli değildir —
+> kullanıcının o akışa GERÇEKTEN erişebildiği (route bağlı, buton/link çalışıyor) ayrıca
+> doğrulanmalı. "Dokümantasyon tamam" ile "kullanıcı deneyimi tamam" AYRI kontrol noktaları.
+> ⚠️ DÖRDÜNCÜ DERS (2026-08-07, Session 11): Session 10'un kapanış notunda "konuşma
+> giriş/kayıt akışlarına geçti, içeriği sağlanmadı, bir sonraki güncellemede eklenecek"
+> denmişti — ama o sohbet kapandığında SESSION_INDEX GÜNCELLENMEDEN kaldı. Kullanıcı,
+> kapanan sohbetin tam metnini yeni bir sohbete taşıyarak bu güncellemeyi GERİYE DÖNÜK
+> yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
+> güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
+> kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
+> ⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
+> `middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
+> varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
+> gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
+> AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
+> yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
+> senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
+> etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
+> set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
+> senkron, ama açıklayıcı yorum bloklarından biri geride kalmış — bkz. Açık Sorun #72).
+> Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
+> gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
+> yapılıyor.
+> ⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
+> derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
+> süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
+> yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
+> koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
+> yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
+> taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
+> istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu (Bölüm 7.2) her büyük görev
+> ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
+> KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
+> düşülmeli, sohbetin kesilme anını beklemeden.
+> ⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
+> masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası (`SummaryPanel.test.tsx`,
+> `MobileSummaryDrawer.test.tsx`) düzeltildi, `npm run build` yerelde temiz koştu, kullanıcı
+> 3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi TAM DOSYA olarak
+> üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT FOCUS bloğunun
+> `session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem TAMAMLANMADAN sohbet
+> kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak güncellemeyi GERİ
+> DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/dosya-üretimi
+> "başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
+> kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
+> ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
+> ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
+> (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
+> FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
+> bloğu) TAM metinleriyle `session_arşiv_1.md`'ye taşındı — kullanıcıya ayrı bir eklenti
+> dosyası (`session_arsiv_1_EKLENTI_2026-08-10.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_1.md`'nizin sonuna eklemeniz gerekiyor. Her taşınan madde için kapanış
+> gerekçesi o dosyada mevcut.
+
 ---
 
 ## 🎯 CURRENT FOCUS
@@ -39,8 +125,36 @@
 > listeliyor. Kozmetik, önemsiz bir detay: admin listesindeki `<img>` önizlemeleri kırık ikon
 > gösteriyor (`menu_items.image` alanı `/public`'ten okunan bir dosya adı, admin bu yola
 > giremiyor).
+>
+> **[TAŞINDI — 2026-09-07, 400 satır eşiği beşinci kez aşıldı]** 26. sohbetin (Admin Panel
+> planlaması) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-07.md`). Kapanış gerekçesi: içerik Kritik Kararlar
+> tablosunda ve Açık Sorunlar #108-#113'te zaten tam özetli — aktif takip için gerekli değil.
 
-> **[TAŞINDI, çeşitli tarihler]** 26., 22., 21., 20., 19. ve 18./17. sohbetlerin ayrıntılı anlatı blokları (Admin Panel planlaması, sandviç UI/checkout keşfi, CRM/çok-şubeli vizyon, SANDWICH_SPEC üretimi, güvenlik denetimi ve masaüstü sığdırma detayları) `session_arşiv_2.md`'ye taşındı — hepsi aşağıdaki Arşiv Taşıma Kaydı tablosunda ve ilgili Açık Sorun/Kritik Kararlar satırlarında (bkz. #90-#113) zaten tam özetli, aktif takip için gerekli değil.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
+> 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
+> Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
+> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
+>
+> **[TAŞINDI — 2026-09-03, 400 satır eşiği üçüncü kez aşıldı]** 19. sohbet (CRM/çok-şubeli
+> vizyon keşfi), 20. sohbet (SANDWICH_SPEC.md v1.0/v1.1 üretimi) ve 22. sohbet (sandviç UI
+> düzeltmeleri + checkout blokajı keşfi, geriye dönük işlendi) blokları `session_arşiv_2.md`'ye
+> taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`). Kapanış gerekçesi: üçü de Açık
+> Sorunlar #92/#93/#94 (19. sohbet), #95 (20. sohbet, S1/S2/S5 hâlâ bekliyor), #99-#104 (22.
+> sohbet) ve Kritik Kararlar tablosunda zaten tam özetli — aktif takip için gerekli değil,
+> sadece turn-by-turn anlatı taşındı.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
+> bloğu (build hatası düzeltmesi, `sandwich-data.json` TEST VERİSİ üretimi, `Hero.tsx` CTA
+> değişikliği, 6 adım bileşeni + eksik `page.tsx` kodlanması, 7 test dosyası/27 test PASS)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`).
+> Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
+> için gerekli değil, sadece turn-by-turn anlatı taşındı.
+
+> **[TAŞINDI — 2026-09-05, 400 satır eşiği dördüncü kez aşıldı]** 23. sohbet devamı (MOTION
+> SYSTEM Mobil Tactile Düzeltmesi — MenuCard whileTap kararı, sertlik düzeltmesi,
+> merkezileştirme anlatısı) `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-05.md`). Kapanış gerekçesi: içerik artık #107 (KAPANDI) ve
+> Motion System P0 bölümünde zaten tam özetli — aktif takip için gerekli değil.
 
 ### 📦 Arşiv Taşıma Kaydı (CORE.md §7.1 Adım 1.5 gereği tek satır/taşıma)
 
@@ -61,7 +175,6 @@
 | 2026-08-23 (22. sohbet, 2. taşıma) | SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`) | ✅ Açık Sorunlar #95/#96/#97/#98'de özetli, TAM metinle taşındı |
 | 2026-09-05 (25. sohbet) | 23. sohbet devamı — MOTION SYSTEM Mobil Tactile Düzeltmesi anlatısı (MenuCard whileTap kararı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-05.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — #107 (KAPANDI) ve Motion System P0 bölümünde özetli |
 | 2026-09-07 (28. sohbet) | 26. sohbetin Admin Panel planlaması tam anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar ve Açık Sorunlar #108-#113'te özetli |
-| 2026-09-23 (bu turda) | Header ders/taşıma-uyarı bloğu (7 DERS + çoklu TAŞIMA NOTU, 87 satır) + CURRENT FOCUS'taki çoklu TAŞINDI anlatısı + v75-v79 footer sürüm notları (toplam ~150 satır) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-23-ders-arsivi.md` + `..._versiyon-notlari.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — ders özetleri AGENT.md/CORE.md'de geçerliliğini koruyor, kayıp yok |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -291,8 +404,6 @@
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
-*BOWLERA SESSION_INDEX.md — v85 (v82'den: **[bu turda, 2026-09-23]** 400 satır eşiği altıncı kez aşıldı (485 satır) — bu kez tablo hücreleri değil, ÇOK SATIRLI bloklar (header ders/taşıma-uyarı bloğu, CURRENT FOCUS TAŞINDI anlatıları, v75-v79 footer sürüm notları) tek satıra indirilip arşive taşındı; 485→334 satıra indi. Kayıp yok, hepsi Arşiv Taşıma Kaydı tablosunda ve ilgili Açık Sorun/Kritik Kararlar satırlarında özetli.)*
-
 *BOWLERA SESSION_INDEX.md — v82 (v81'den: **[28. sohbet, 2026-09-07]** İLK GERÇEK KULLANICI
 TESTİ VE CACHE BUG'I. Admin panelde yeni ürün ("Fogy") oluşturuldu — Neon'da DB'ye yazıldığı
 DOĞRULANDI ama liste sayfasında hiç görünmedi. Kök neden bulundu: `app/admin/page.tsx`
@@ -334,4 +445,41 @@ eşiğinin ÜZERİNE çıkardı — bir sonraki sohbette arşivleme/taşıma ele
 arşiv dosyasının güncel hâli görülmediği için taşıma yapılamadı, bkz. dosya başındaki YENİ
 TAŞIMA UYARISI).)*
 
-*BOWLERA SESSION_INDEX.md — v75-v79 sürüm notları (2026-09-04/05 arası, Motion System P0-P2 kapanışı + AccountMenu/CartBadge/Customizer spatial transition detayları) `session_arsiv_2_EKLENTI_2026-09-23-versiyon-notlari.md`'ye taşındı — içerik zaten Kritik Kararlar/Açık Sorunlar tablosunda (#105-#107, Motion System P0 bölümü) özetli.*
+*BOWLERA SESSION_INDEX.md — v79 (v78'den: **[25. sohbet devamı, 2026-09-05]** MOTION SYSTEM
+RAPORU KAPANDI. P3 (Instagram controlled marquee) reponuzda hiçbir karşılığı olmadığı için
+(grep sonucu boş — `Instagram` metnini içeren tek bir `.tsx` yok) kapsam dışı bırakıldı;
+özellik ileride inşa edilirse ayrıca ele alınmalı, önkoşulu yok. Raporun P0/P1/P2 bölümündeki
+9 kalemin TAMAMI mevcut kod tabanında işlendi. Kalan teknik borçlar hâlâ açık: -6 (AccountMenu
+debug değeri `duration:1` production'da kaldı, kalıcı değere dönülmedi — kullanıcı kararıyla
+ertelendi), -9/-10 (Page transitions/AddToCart canlı doğrulama hâlâ bildirilmedi).)*
+
+*BOWLERA SESSION_INDEX.md — v78 (v77'den: **[25. sohbet devamı, 2026-09-05]** 400 satır eşiği
+dördüncü kez aşıldı — 23. sohbet devamının (MOTION SYSTEM Mobil Tactile Düzeltmesi, ~36 satır)
+tam anlatı bloğu `session_arşiv_2.md`'ye taşındı, kullanıcıya ayrı eklenti dosyası olarak
+verildi. İçerik zaten #107 (KAPANDI) ve Açık Sorunlar/Motion System P0 özetinde tam
+korunuyor, kayıp yok.)*
+
+*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[25. sohbet, 2026-09-05]** P2 TAMAMEN KAPANDI:
+-11 CartBadge'de 2 gerçek bug bulunup düzeltildi (0→1 mount köründü + opacity hiç
+ayarlanmıyordu), -12 Customizer spatial transition hem kase hem sandviç akışına eklendi
+(yan bulgu: sandviçte "Geri" butonu hiç yoktu, eklendi), -13 VisualPreview token'a bağlandı
+(görsel değişiklik yok, davranış aynı). Motion System raporu artık SADECE P3 (Instagram
+marquee) ve teknik borçlar (AccountMenu debug değeri, -9/-10 canlı doğrulama) hariç
+tamamlandı. Genel gözlem bu oturumdan: kullanıcı testleri defalarca "gerçek dosyanın
+kaydedilip kaydedilmediğini doğrula" adımını atlayınca zaman kaybına yol açtı (AccountMenu,
+CartBadge) — bu artık standart ilk adım olarak yerleşti.)*
+
+*BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
+kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
+doğruydu) ama production'da debug değeri kaldı (teknik borç, kullanıcı kararıyla ertelendi).
+-7 Header Scroll kullanıcı kararıyla atlandı. -8 Hero orchestration TAMAMLANDI, `layout.tsx`
+incelenip global MotionConfig'in GERÇEKTEN olmadığı doğrulandı. -9 Page transitions
+(`app/template.tsx`, sadece giriş animasyonu) ve -10 AddToCart token-bağlama teslim edildi
+ama canlı doğrulama bekliyor. P1 kod tarafı kapandı, kalan iş canlı doğrulamalar.)*
+
+*BOWLERA SESSION_INDEX.md — v75 (v74'ten: **[24. sohbet, 2026-09-04]** -5a KAPANDI ✅ (kod
+zaten doğruydu, sadece doğrulama gerekiyordu). Motion System P1 başladı: AccountMenu.tsx'e
+AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM'ı eklendi,
+kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
+(bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
+iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
