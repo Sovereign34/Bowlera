@@ -1395,3 +1395,189 @@ tam olarak korunmaktadır. Aktif takip için SESSION_INDEX.md'de tutulmaları ge
 > turn-by-turn tarihsel kanıt olarak tutuluyorlardı. Aktif takip gerektiren hiçbir açık
 > madde içermiyorlar.
 
+---------
+<!-- session_arşiv_2_EKLENTI_2026-09-24.md -->
+<!-- SADECE YENİ EKLEME: kullanıcı bu bloğu kendi elinle mevcut session_arşiv_2.md dosyasının sonuna ekler. -->
+<!-- Kaynak: SESSION_INDEX.md, 2026-09-24 (30. sohbet kapanışı), 400 satır eşiği aşıldığı için taşındı (CORE.md §7.1 Adım 1). -->
+
+---
+
+## TAŞIMA BLOĞU — 2026-09-24 (30. sohbet kapanışı, 400 satır eşiği)
+
+### 1. Eski üst-not (header) blokları
+
+**Kapanış gerekçesi:** Bunlar SESSION_INDEX.md'nin başındaki uyarı yığınında biriken, artık tamamlanmış geçmiş taşıma kayıtları ve iki ders bloğuydu (İKİNCİ DERS, ÜÇÜNCÜ DERS). Ders içerikleri AGENT.md VERSİYON GEÇMİŞİ'nde (Session 4 — 400 satır eşiği kuralının kendisi; 23. sohbet — ÜÇÜNCÜ DERS'in "dokunmatik öncelik" tekrarı) kalıcı ilke olarak zaten işli, aktif takip gerektirmiyordu.
+
+> ⚠️ **TAŞIMA NOTU (2026-09-08, 29. sohbet kapanışı):** SESSION_INDEX.md yeniden 400 satır
+> eşiğini aştı. DÖRDÜNCÜ, BEŞİNCİ, ALTINCI ve YEDİNCİ DERS blokları (4 blok, ~42 satır — hepsi
+> "checkpoint sık sorulmalı, sohbet aniden kesilebilir" temasının tekrarı, en eskisi
+> 2026-08-07 tarihli) TAM metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir
+> eklenti dosyası (`session_arsiv_2_EKLENTI_2026-09-08.md`) olarak verildi, kendi elinizle
+> mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada
+> mevcut — ders içerikleri AGENT.md'nin genel ilkesine zaten kalıcı işlendiği için aktif
+> takip gerektirmiyorlardı. ⚠️ **DÜRÜST NOT:** bu tek taşıma (42 satır) yeni eklenen içeriği
+> (kategori sistemi + #116 dersi, ~55 satır) dengelemedi — dosya bu güncellemeyle de 400
+> satırın ÜZERİNDE kalıyor. Bir sonraki sohbette İKİNCİ bir taşıma turu (aday: en eski
+> KAPANDI ✅ satırlarının [#85/#93/#96/#101/#112/#113 gibi] tam anlatısı, SESSION ÖZET
+> tablosundaki 0-9 arası satırlar) ele alınmalı.
+> ⚠️ **YENİ TAŞIMA UYARISI (bu güncelleme, 2026-09-05, 26. sohbet):** Bu dosya bu güncellemeyle
+> 407 satırdan ~480+ satıra çıktı — 400 satır eşiği (CORE.md §7.1 Adım 1) yeniden aşıldı.
+> Bu turda AJAN dosyanın SADECE 93-315. satırları arasını (eski turlarda) görebildi, TAM
+> içeriği bu turda ilk kez uçtan uca okundu — ama hacim/taşıma işlemi (hangi bloğun
+> `session_arşiv_2.md`'ye gideceği) BU TURDA YAPILMADI, çünkü arşiv dosyasının güncel hâli
+> görülmedi (Kural #2 — arşive ekleme yapmadan önce dosyanın mevcut sonunu görmek gerekir).
+> **Bir sonraki sohbette ele alınmalı:** en eski/en çok özetlenmiş bloklar (SESSION ÖZET
+> tablosundaki 0-10, ve/veya en eski KAPANDI notları) taşınmalı.
+> ⚠️ GEÇMİŞ İHLAL KAYDI (ders çıkarıldı, hâlâ geçerli):
+> 2026-07-20'de üretilen bir "v2 sıkıştırılmış" SESSION_INDEX dosyası, kapanış notu
+> olmadan 7 açık sorunu (#4,7,15,16,20,22,34) ve 2 kararı (#11,#12) tablolardan düşürmüştü.
+> Bu, aynı gün içindeki bir sonraki sohbette fark edilip geri eklenmiş, ve BU sohbette
+> tek tek dosyayla teyit edilerek gerçek sonuçlarına kavuşturulmuştur. Kural teyit edildi:
+> tamamlanmış görev silinirken MUTLAKA kapanış gerekçesi session_arşiv.md'ye yazılmalı;
+> aksi halde "tamamlandı" iddiası doğrulanamaz hale geliyor.
+
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 21. sohbet):** SESSION_INDEX.md 441 satıra ulaşınca (400 satır
+> eşiği aşıldı), 7 kapanmış/güncelliğini yitirmiş blok (18. sohbet #91 detayı, 17. sohbet #90
+> detayı, + 5 "KAPANDI (BU TURDA)" anlatı bloğu: #82/83/84, #74, #79/75/80, #50, #76/77) TAM
+> metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir eklenti dosyası
+> (`session_arsiv_2_EKLENTI_2026-08-23.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada mevcut.
+
+> ⚠️ **TAŞIMA NOTU (2026-08-23, 22. sohbet):** SESSION_INDEX.md yeniden 400 satır eşiğini
+> aşınca, SEKİZİNCİ DERS (21. sohbet) tam anlatı bloğu TAM metniyle `session_arşiv_2.md`'ye
+> taşındı — kullanıcıya ayrı bir eklenti dosyası (`session_arsiv_2_EKLENTI_2026-08-23-devam2.md`)
+> olarak verildi, kendi elinizle mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor.
+> Kapanış gerekçesi o dosyada ve Arşiv Taşıma Kaydı tablosunda mevcut.
+
+> ⚠️ İKİNCİ DERS (2026-08-02): AGENT.md/CORE.md'deki "400 satır eşiği" kuralı bu sohbette
+> kısa süreliğine kaldırılmış, kullanıcı aynı gün içinde bunun yanlış anlaşılma olduğunu
+> belirtmiş ve kural AYNEN eski hâline döndürülmüştür (AGENT.md v1.5, CORE.md v1.4).
+> Net etki: kural DEĞİŞMEDİ. Governance dosyalarında büyük kural değişikliği istenirse
+> önce açıkça onay alınmalı, geri dönüşü kolay olmayan varsayımlar yapılmamalı.
+
+> ⚠️ ÜÇÜNCÜ DERS (2026-08-06/07, Session 8): Session 7'de #57 "kod+test tamam" olarak
+> kapanış notuyla işaretlenmişti — ama kod hiçbir sayfaya bağlanmamıştı. Kullanıcı canlı
+> production'da eski/kırık Twilio giriş akışıyla karşılaşana kadar bu fark edilmedi.
+> Kural: bir görev "tamamlandı" işaretlenmeden önce SADECE kod+test yeterli değildir —
+> kullanıcının o akışa GERÇEKTEN erişebildiği (route bağlı, buton/link çalışıyor) ayrıca
+> doğrulanmalı. "Dokümantasyon tamam" ile "kullanıcı deneyimi tamam" AYRI kontrol noktaları.
+
+> ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
+> (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
+> FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
+> bloğu) TAM metinleriyle `session_arşiv_1.md`'ye taşındı — kullanıcıya ayrı bir eklenti
+> dosyası (`session_arsiv_1_EKLENTI_2026-08-10.md`) olarak verildi, kendi elinizle mevcut
+> `session_arşiv_1.md`'nizin sonuna eklemeniz gerekiyor. Her taşınan madde için kapanış
+> gerekçesi o dosyada mevcut.
+
+
+### 2. CURRENT FOCUS — 28. sohbet (2026-09-07) tam anlatısı
+
+**Kapanış gerekçesi:** İçerik Açık Sorunlar #114 (kapandı, kök neden REVİZE EDİLDİ) ve #116'da (DOKUZUNCU DERS) zaten tam özetli; turn-by-turn anlatı aktif takip için gerekli değil.
+
+> **[ÖNCEKİ — 2026-09-07, 28. sohbet]** Admin panelde ilk gerçek kullanıcı testi yapıldı —
+> yeni ürün ("Fogy") oluşturuldu. **2 bulgu ortaya çıktı:**
+> 1. **Sitede görünmüyor — BEKLENEN, hata değil.** Canlı site hâlâ statik `menu-data.json`'dan
+>    okuyor, `menu_items` DB'sine bağlanmadı (bilinçli olarak ayrı bırakılan bir görev).
+> 2. **Admin listesinde de görünmüyordu — GERÇEK BUG, BULUNDU VE DÜZELTİLDİ.** Neon'da
+>    `SELECT` ile kayıt DB'ye YAZILMIŞ olduğu doğrulandı (`fogy-izzbw`, 2026-09-07 03:34) —
+>    yani sorun kayıtta değil, `app/admin/page.tsx`'in Next.js tarafından **build-anı statik
+>    önbellek** olarak dondurulmasıydı (server component DB'den okuyor ama `dynamic` export'u
+>    yoktu). `export const dynamic = 'force-dynamic'` hem liste sayfasına hem düzenleme
+>    sayfasına eklendi — kullanıcı henüz repoya uygulayıp push ETMEDİ, canlı doğrulama
+>    BEKLİYOR (bkz. Açık Sorun #114).
+
+
+### 3. CURRENT FOCUS — 27. sohbet (2026-09-06) tam anlatısı
+
+**Kapanış gerekçesi:** İçerik Açık Sorunlar #112/#113 (ikisi de kapandı) ve GENEL DURUM'daki "Auth"/"Admin Panel" satırlarında zaten tam özetli.
+
+> **[ÖNCEKİ — 2026-09-06, 27. sohbet]** Admin Panel CANLIYA ALINDI. #110/#112 KAPANDI (4
+> senkron dosya repoya uygulandı, `role='admin'` Neon'da atandı ve canlıda doğrulandı).
+> Kullanıcı kararıyla admin artık `/personel`'e de erişiyor (middleware'in staff guard'ı
+> `role !== 'staff' && role !== 'admin'` olarak genişletildi — `/admin` guard'ı hâlâ SADECE
+> `admin`'e özel, tek-admin kararı korundu). #111/#113 KAPANDI — ilk CRUD (9 dosya: upload-
+> image + menu-items list/create/update/delete route'ları + MenuItemForm + 3 admin sayfası)
+> yazıldı, ImageKit hesabı açılıp entegre edildi. Yol boyunca 3 build hatası çıktı, hepsi
+> çözüldü (eksik `imagekit` npm paketi, TS literal-tipi `.includes()` hatası, ilk pushta
+> unutulan `app/admin/page.tsx`). `/admin` canlıda 8 gerçek ürünü doğru isim/fiyat/kategoriyle
+> listeliyor. Kozmetik, önemsiz bir detay: admin listesindeki `<img>` önizlemeleri kırık ikon
+> gösteriyor (`menu_items.image` alanı `/public`'ten okunan bir dosya adı, admin bu yola
+> giremiyor).
+
+
+### 4. SESSION ÖZET tablosu — Session 0-9 satırları
+
+**Kapanış gerekçesi:** Bu 10 session'ın tamamı ✅ Tamamlandı veya 🟡/🔴 durumuyla sonraki session'lara devretmiş biçimde kapanmıştı; ilerleyişleri Açık Sorunlar tablosunda ve GENEL DURUM özetinde ayrıca izleniyor, tarihsel kayıt olarak burada saklanıyor.
+
+| Session | Tarih | Ana içerik | Durum |
+|---|---|---|---|
+| 0 | — | Ajan altyapısı (14 dosya) | ✅ Tamamlandı |
+| 1 | 2026-07-1x | Next.js+Tailwind kurulum, font/renk, Header/Footer, Hero | ✅ Tamamlandı |
+| 2 | 2026-07-18 | Menü sayfası, filtreleme, MenuCard, customizer 4→5 adım kararı | ✅ Tamamlandı |
+| 3 | 2026-07-18 | Zustand store + pricing + customizer data (kesintiye uğradı) | ✅ Büyük ölçüde tamam |
+| 4 (devam) | 2026-07-18→07-22 | Sepet/kanal seçimi, auth mimarisi+kod+DB+UI, ARCHITECTURE.md v1.4, vb. | 🟡 Devam ediyor |
+| 5 | 2026-08-01→08-02 | VisualPreview denetimi (#52), Hakkımızda sayfası, 400 satır eşiği kaldırılıp geri getirildi | 🟡 Devam ediyor |
+| 6 | 2026-08-05 | WhatsApp OTP kodlandı/test edildi. Twilio/Netgsm PARKLANDI, rıza esaslı kayıt+WhatsApp yönlendirme kararlaştırıldı (#57/#58 açıldı) | 🟡 Devam ediyor |
+| 7 | 2026-08-06 | #57 uçtan uca kodlandı (17/17 PASS). `consentRegistrations`, `RegistrationChannel` tipleri eklendi. **#57 kapanmadı** — kod sayfaya bağlanmadı. | 🟡 Devam ediyor |
+| 8 | 2026-08-06/07 | Kırık Twilio akışı keşfedildi, `/kayit-ol`+`/kvkk` bağlandı, migration koşuldu, canlı test BAŞARILI. #59/#60/#61 yeni açıldı. | 🟡 Devam ediyor |
+| 9 | 2026-08-07 | Masaya Sipariş kanalı canlıda doğrulandı. Personel Sipariş Paneli ihtiyacı keşfedildi → #62 açıldı. `session_log.md` ismi/mekanizması netleştirildi. | 🟡 Devam ediyor — #62 yeni sohbette |
+
+
+### 5. Açık Sorunlar tablosu — KAPANDI ✅ satırlarının tam anlatısı (#85/#93/#96/#101/#112/#113)
+
+**Kapanış gerekçesi (hepsi):** Bu 6 madde de ✅ KAPANDI durumunda; sonuçları Kritik Kararlar tablosunda ve/veya GENEL DURUM özetinde hâlâ özet olarak duruyor. Aşağıda tam anlatı korunuyor.
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 85 | ✅ | **[BU TURDA KAPANDI]** Gel Al kod incelemesi bulgularının 5'i de ele alındı: (1) BSC-4 sessiz catch → structured log + kullanıcı mesajı; (2) reduced-motion → `motion-safe:` varyantı; (3) bayat yorumlar temizlendi; (4) `recordFailedContactAttempt` atomik SQL UPDATE'e çevrildi (confirm/reject kısmı bilinçli MVP-dışı bırakıldı, bkz. #87); (5) 3 test dosyası yazıldı, Codespaces'te 15/15 PASS doğrulandı, GitHub'a push edildi. | `components/personel/GelAlPanel.tsx`, `GelAlOrderCard.tsx`, `lib/personel/gel-al-queries.ts` + 3 test dosyası |
+| 93 | ✅ | **[BU TURDA (26. sohbet) KAPANDI]** Menü verisinin gerçek konumu doğrulandı: `lib/menu-data.json` (imza kaseler+içecekler), `lib/sandwich-data.json` (sandviçler, TEST VERİSİ, #95), `lib/customizer-data.ts` (build-your-own malzeme kataloğu). `menu-data.json`'daki 8 gerçek ürün `menu_items` DB tablosuna taşındı, migration+seed Neon'da doğrulandı. Şube-bazlı menü önerisi (branch_menu_items eşleme tablosu) HÂLÂ ONAYLANMADI, ayrı bir karar — bu turun kapsamı SADECE tek-şube admin panel ön koşuluydu. | `lib/menu-data.json`, `lib/db/schema.ts` |
+| 96 | ✅ | **[BU TURDA KAPANDI]** Sandviç bileşen testleri (`SandwichCustomizer` + 6 adım bileşeni) yazıldı ve Codespaces'te doğrulandı: 7/7 dosya, 27/27 test PASS (2026-08-23 18:28). Yol boyunca 2 sorun çıktı, ikisi de çözüldü: `act()` eksikliği ve unutulan `StepSauceToastExtras.test.tsx` pushu. | `components/sandwich/*.test.tsx` |
+| 101 | ✅ | **[BU TURDA KAPANDI, 2026-09-03, 23. sohbet]** 22. sohbetteki "Özel Kase" fallback bug'u (`item.bowlItem?.name ?? "Özel Kase"` sandviçlerde hep "Özel Kase" yazdırıyordu) `CartDrawer.tsx`'in bu turdaki motion yükseltmesiyle YENİDEN yazıldı VE test edildi — `CartDrawer.test.tsx`'teki "bowlItem null + sandwichCustomization dolu → Özel Sandviç; ikisi de null → Özel Kase" testi Codespaces'te PASS (8/8, 2026-09-03 06:16, ekran görüntüsü). Bowl davranışı da (`bowlItem?.name` önceliği) happy-path testinde doğrulandı. **KALAN:** push + canlı/production doğrulaması — bkz. #105. | `components/cart/CartDrawer.tsx` |
+| 112 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** 4 dosya (`schema.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts`) repoya uygulandı, `npx tsc --noEmit` + `npm run build` temiz, push edildi. Neon'da `+905431615778` numarası `role='admin'` yapıldı VE canlıda doğrulandı (`SELECT` ile teyit edildi). **YENİ KARAR (kullanıcı isteğiyle):** bu hesabın hem `/personel` hem `/admin`'e erişmesi istendiği için `middleware.ts`'teki `/personel` guard'ı `role !== 'staff' && role !== 'admin'` olarak GENİŞLETİLDİ (admin artık staff'ın süperkümesi, ama `/admin` guard'ı hâlâ SADECE `role==='admin'` — tek admin kararı bozulmadı). Canlıda hem `/personel` hem `/admin` (o an 404 — sayfa yoktu ama 403 YOKTU) doğrulandı. | `middleware.ts` |
+| 113 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** Admin panelinin ilk CRUD'u yazıldı ve DEPLOY EDİLDİ: `lib/imagekit.ts`, `lib/admin/menu-item-constants.ts`, `app/api/admin/upload-image/route.ts`, `app/api/admin/menu-items/route.ts` (GET+POST), `app/api/admin/menu-items/[id]/route.ts` (GET+PATCH+DELETE), `components/admin/MenuItemForm.tsx`, `app/admin/page.tsx` (liste), `app/admin/menu-items/new/page.tsx`, `app/admin/menu-items/[id]/page.tsx`. ImageKit hesabı açıldı (Public Key/Private Key/URL Endpoint alındı, `.env.local`+Vercel env'e eklendi), `imagekit` npm paketi kuruldu. Yol boyunca 3 build hatası çıktı, hepsi çözüldü: (1) `imagekit` paketi package.json'a hiç eklenmemişti — `npm install imagekit --save`; (2) `MENU_ITEM_TAGS.includes()` TS literal-tipi hatası — `as readonly string[]` cast'iyle çözüldü; (3) `app/admin/page.tsx`'in kendisi ilk pushta unutulmuştu (sadece alt sayfalar gitmişti) — ayrıca eklenip push edildi. **CANLIDA DOĞRULANDI:** `/admin` artık 8 gerçek ürünü doğru isim/fiyat/kategoriyle listeliyor. | `app/admin/*`, `app/api/admin/*`, `lib/imagekit.ts`, `components/admin/MenuItemForm.tsx` |
+
+
+### 6. Sürüm geçmişi — v75 ila v79 (tam metin)
+
+**Kapanış gerekçesi:** Bu 5 sürüm notu 2026-09-04→2026-09-05 arası Motion System P1/P2 çalışmasını anlatıyor; sonuçları Açık Sorunlar #105/#107 ve GENEL DURUM'da zaten özetli. v80 artık dosyanın en eski sürüm kaydı olarak kalıyor.
+
+*BOWLERA SESSION_INDEX.md — v79 (v78'den: **[25. sohbet devamı, 2026-09-05]** MOTION SYSTEM
+RAPORU KAPANDI. P3 (Instagram controlled marquee) reponuzda hiçbir karşılığı olmadığı için
+(grep sonucu boş — `Instagram` metnini içeren tek bir `.tsx` yok) kapsam dışı bırakıldı;
+özellik ileride inşa edilirse ayrıca ele alınmalı, önkoşulu yok. Raporun P0/P1/P2 bölümündeki
+9 kalemin TAMAMI mevcut kod tabanında işlendi. Kalan teknik borçlar hâlâ açık: -6 (AccountMenu
+debug değeri `duration:1` production'da kaldı, kalıcı değere dönülmedi — kullanıcı kararıyla
+ertelendi), -9/-10 (Page transitions/AddToCart canlı doğrulama hâlâ bildirilmedi).)*
+
+*BOWLERA SESSION_INDEX.md — v78 (v77'den: **[25. sohbet devamı, 2026-09-05]** 400 satır eşiği
+dördüncü kez aşıldı — 23. sohbet devamının (MOTION SYSTEM Mobil Tactile Düzeltmesi, ~36 satır)
+tam anlatı bloğu `session_arşiv_2.md`'ye taşındı, kullanıcıya ayrı eklenti dosyası olarak
+verildi. İçerik zaten #107 (KAPANDI) ve Açık Sorunlar/Motion System P0 özetinde tam
+korunuyor, kayıp yok.)*
+
+*BOWLERA SESSION_INDEX.md — v77 (v76'dan: **[25. sohbet, 2026-09-05]** P2 TAMAMEN KAPANDI:
+-11 CartBadge'de 2 gerçek bug bulunup düzeltildi (0→1 mount köründü + opacity hiç
+ayarlanmıyordu), -12 Customizer spatial transition hem kase hem sandviç akışına eklendi
+(yan bulgu: sandviçte "Geri" butonu hiç yoktu, eklendi), -13 VisualPreview token'a bağlandı
+(görsel değişiklik yok, davranış aynı). Motion System raporu artık SADECE P3 (Instagram
+marquee) ve teknik borçlar (AccountMenu debug değeri, -9/-10 canlı doğrulama) hariç
+tamamlandı. Genel gözlem bu oturumdan: kullanıcı testleri defalarca "gerçek dosyanın
+kaydedilip kaydedilmediğini doğrula" adımını atlayınca zaman kaybına yol açtı (AccountMenu,
+CartBadge) — bu artık standart ilk adım olarak yerleşti.)*
+
+*BOWLERA SESSION_INDEX.md — v76 (v75'ten: **[24. sohbet devamı, 2026-09-04]** P1'in geri
+kalanı işlendi: -6 (AccountMenu) kök nedeni çözüldü (kayıt/doğrulama sorunuymuş, kod baştan
+doğruydu) ama production'da debug değeri kaldı (teknik borç, kullanıcı kararıyla ertelendi).
+-7 Header Scroll kullanıcı kararıyla atlandı. -8 Hero orchestration TAMAMLANDI, `layout.tsx`
+incelenip global MotionConfig'in GERÇEKTEN olmadığı doğrulandı. -9 Page transitions
+(`app/template.tsx`, sadece giriş animasyonu) ve -10 AddToCart token-bağlama teslim edildi
+ama canlı doğrulama bekliyor. P1 kod tarafı kapandı, kalan iş canlı doğrulamalar.)*
+
+*BOWLERA SESSION_INDEX.md — v75 (v74'ten: **[24. sohbet, 2026-09-04]** -5a KAPANDI ✅ (kod
+zaten doğruydu, sadece doğrulama gerekiyordu). Motion System P1 başladı: AccountMenu.tsx'e
+AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM'ı eklendi,
+kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
+(bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
+iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
+
