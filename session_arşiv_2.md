@@ -1342,3 +1342,56 @@ tam olarak korunmaktadır. Aktif takip için SESSION_INDEX.md'de tutulmaları ge
 **Bu turda kullanıcıya TESLİM EDİLDİ (27. sohbette repoya uygulanıp doğrulandı — bkz. #112):**
 - `lib/db/schema.ts`, `middleware.ts`, `auth.ts`, `types/next-auth.d.ts` — 4 dosya, `"admin"`
   rolü için TAM DOSYA olarak, üçlü senkron üretildi.
+  ----
+  > ─────────────────────────────────────────────────────────────────────────
+> **EKLENTİ — 2026-09-08, 29. sohbet kapanışı, SESSION_INDEX.md 400 satır eşiği**
+> **yeniden aşıldığı için taşındı.** Kendi elinizle mevcut `session_arşiv_2.md`
+> dosyanızın SONUNA aşağıdaki 4 bloğu (DÖRDÜNCÜ–YEDİNCİ DERS) ekleyin.
+> ─────────────────────────────────────────────────────────────────────────
+
+> ⚠️ DÖRDÜNCÜ DERS (2026-08-07, Session 11): Session 10'un kapanış notunda "konuşma
+> giriş/kayıt akışlarına geçti, içeriği sağlanmadı, bir sonraki güncellemede eklenecek"
+> denmişti — ama o sohbet kapandığında SESSION_INDEX GÜNCELLENMEDEN kaldı. Kullanıcı,
+> kapanan sohbetin tam metnini yeni bir sohbete taşıyarak bu güncellemeyi GERİYE DÖNÜK
+> yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
+> güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
+> kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
+
+> ⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
+> `middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
+> varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
+> gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
+> AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
+> yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
+> senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
+> etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
+> set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
+> senkron, ama açıklayıcı yorum bloklarından biri geride kalmış). Kural pekiştirildi:
+> KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint gelmeden sohbet kapanma
+> riski varsa, en azından AÇIK SORUN olarak loglanmalı.
+
+> ⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
+> derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
+> süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
+> yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
+> koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
+> yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
+> taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
+> istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu her büyük görev ADIMINDAN sonra
+> (sadece görev TAMAMEN bitince değil) daha sık sorulmalı.
+
+> ⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
+> masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası düzeltildi, `npm run build` yerelde
+> temiz koştu, kullanıcı 3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi
+> TAM DOSYA olarak üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT
+> FOCUS bloğunun `session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem
+> TAMAMLANMADAN sohbet kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak
+> güncellemeyi GERİ DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/
+> dosya-üretimi "başladım" demek "bitti" demek değildir.
+
+> **Kapanış gerekçesi (bu taşımanın kendisi için):** Bu 4 ders bloğu SESSION_INDEX.md'nin
+> güncel çalışma alanı için artık gerekli değil — ders içerikleri zaten AGENT.md'nin genel
+> "checkpoint sık sorulmalı" ilkesine kalıcı olarak işlenmiş durumda, burada sadece
+> turn-by-turn tarihsel kanıt olarak tutuluyorlardı. Aktif takip gerektiren hiçbir açık
+> madde içermiyorlar.
+
