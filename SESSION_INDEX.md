@@ -10,6 +10,18 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
+> ⚠️ **TAŞIMA NOTU (2026-09-08, 29. sohbet kapanışı):** SESSION_INDEX.md yeniden 400 satır
+> eşiğini aştı. DÖRDÜNCÜ, BEŞİNCİ, ALTINCI ve YEDİNCİ DERS blokları (4 blok, ~42 satır — hepsi
+> "checkpoint sık sorulmalı, sohbet aniden kesilebilir" temasının tekrarı, en eskisi
+> 2026-08-07 tarihli) TAM metinleriyle `session_arşiv_2.md`'ye taşındı — kullanıcıya ayrı bir
+> eklenti dosyası (`session_arsiv_2_EKLENTI_2026-09-08.md`) olarak verildi, kendi elinizle
+> mevcut `session_arşiv_2.md`'nizin sonuna eklemeniz gerekiyor. Kapanış gerekçesi o dosyada
+> mevcut — ders içerikleri AGENT.md'nin genel ilkesine zaten kalıcı işlendiği için aktif
+> takip gerektirmiyorlardı. ⚠️ **DÜRÜST NOT:** bu tek taşıma (42 satır) yeni eklenen içeriği
+> (kategori sistemi + #116 dersi, ~55 satır) dengelemedi — dosya bu güncellemeyle de 400
+> satırın ÜZERİNDE kalıyor. Bir sonraki sohbette İKİNCİ bir taşıma turu (aday: en eski
+> KAPANDI ✅ satırlarının [#85/#93/#96/#101/#112/#113 gibi] tam anlatısı, SESSION ÖZET
+> tablosundaki 0-9 arası satırlar) ele alınmalı.
 > ⚠️ **YENİ TAŞIMA UYARISI (bu güncelleme, 2026-09-05, 26. sohbet):** Bu dosya bu güncellemeyle
 > 407 satırdan ~480+ satıra çıktı — 400 satır eşiği (CORE.md §7.1 Adım 1) yeniden aşıldı.
 > Bu turda AJAN dosyanın SADECE 93-315. satırları arasını (eski turlarda) görebildi, TAM
@@ -47,48 +59,9 @@
 > Kural: bir görev "tamamlandı" işaretlenmeden önce SADECE kod+test yeterli değildir —
 > kullanıcının o akışa GERÇEKTEN erişebildiği (route bağlı, buton/link çalışıyor) ayrıca
 > doğrulanmalı. "Dokümantasyon tamam" ile "kullanıcı deneyimi tamam" AYRI kontrol noktaları.
-> ⚠️ DÖRDÜNCÜ DERS (2026-08-07, Session 11): Session 10'un kapanış notunda "konuşma
-> giriş/kayıt akışlarına geçti, içeriği sağlanmadı, bir sonraki güncellemede eklenecek"
-> denmişti — ama o sohbet kapandığında SESSION_INDEX GÜNCELLENMEDEN kaldı. Kullanıcı,
-> kapanan sohbetin tam metnini yeni bir sohbete taşıyarak bu güncellemeyi GERİYE DÖNÜK
-> yaptırdı. Kural teyit edildi: "bir sonraki güncellemede eklenecek" notu bırakmak,
-> güncellemenin GERÇEKTEN yapılacağının garantisi değildir. Mümkünse görev, sohbet
-> kapanmadan ÖNCE işlenmeli; bu mümkün değilse not AÇIK SORUN olarak da ayrıca loglanmalı.
-> ⚠️ BEŞİNCİ DERS (2026-08-08, DÖRDÜNCÜ DERS'in TEKRARI): `types/index.ts`/`auth.ts`/
-> `middleware.ts` kodu üretilip [KARAR BİLDİRİMİ] ile sunulmuştu (confidence MEDIUM, 2 açık
-> varsayım: 403-vs-redirect kararı + `next-auth.d.ts` görülmedi) — ama kullanıcı onayı
-> gelmeden ve SESSION_INDEX güncellenmeden sohbet kesildi. Kullanıcı üretilen 3 dosyayı +
-> AGENT.md/CORE.md/SESSION_INDEX.md'yi yeni sohbete taşıyarak güncellemeyi GERİYE DÖNÜK
-> yaptırdı — DÖRDÜNCÜ DERS'teki mekanizmanın birebir tekrarı. Ek bulgu: dosyalar arası
-> senkron kontrolünde `types/index.ts`'in kendi iç yorumu ("auth.ts HENÜZ bu alanı set
-> etmiyor") GÜNCEL DEĞİL — auth.ts fiilen zaten `role`'ü JWT/session callback'lerine
-> set ediyor. Bu, "üç dosya senkron" iddiasının TAM doğru olmadığını gösteriyor (kod
-> senkron, ama açıklayıcı yorum bloklarından biri geride kalmış — bkz. Açık Sorun #72).
-> Kural pekiştirildi: KARAR BİLDİRİMİ + kod üretimi sonrası kullanıcı onayı/checkpoint
-> gelmeden sohbet kapanma riski varsa, en azından AÇIK SORUN olarak loglanmalı — bu turda
-> yapılıyor.
-> ⚠️ ALTINCI DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ DERS'in ÜÇÜNCÜ TEKRARI): #75 üzerinde
-> derin bir çözüm turu yapıldı (3 iterasyon: `useRef`→`useState` görsel geri bildirim,
-> süre-bazlı kilit→seçim-kimliği kilidi, tekil `lockedKey`→`Set<string> addedKeys` — testin
-> yakaladığı gerçek bir tasarım hatası düzeltildi) — ama sohbet, testlerin YENİDEN
-> koşturulduğu/geçtiği, `npm run build`'in yerel doğrulandığı VE commit+push'un fiilen
-> yapıldığı teyit edilmeden kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete
-> taşıyarak güncellemeyi GERİYE DÖNÜK yaptırdı. Kural aynı: bu üç ders artık tek seferlik
-> istisna değil, TEKRARLAYAN bir kalıp — checkpoint sorusu (Bölüm 7.2) her büyük görev
-> ADIMINDAN sonra (sadece görev TAMAMEN bitince değil) daha sık sorulmalı; mümkünse ara
-> KARAR BİLDİRİMİ'nden hemen sonra SESSION_INDEX'e "beklemede" statüsüyle taslak satır
-> düşülmeli, sohbetin kesilme anını beklemeden.
-> ⚠️ YEDİNCİ DERS (2026-08-09, DÖRDÜNCÜ/BEŞİNCİ/ALTINCI DERS'in DÖRDÜNCÜ TEKRARI): #79'un
-> masaüstü ayağı (`SummaryPanel.tsx`) + iki test dosyası (`SummaryPanel.test.tsx`,
-> `MobileSummaryDrawer.test.tsx`) düzeltildi, `npm run build` yerelde temiz koştu, kullanıcı
-> 3 dosyayı GitHub'a manuel kaydettiğini onayladı. Ajan SESSION_INDEX.md'yi TAM DOSYA olarak
-> üretmeye başlamıştı (400 satır eşiği geçildiği için önce 2 eski CURRENT FOCUS bloğunun
-> `session_arşiv_1.md`'ye taşınacağını bildirmişti) — ama bu işlem TAMAMLANMADAN sohbet
-> kesildi. Kullanıcı yine tam sohbet metnini yeni bir sohbete taşıyarak güncellemeyi GERİ
-> DÖNÜK yaptırdı. Kural aynı, artık dördüncü kez doğrulandı: checkpoint/dosya-üretimi
-> "başladım" demek "bitti" demek değildir — bir TAM DOSYA üretimi yarım kalmışsa, session
-> kapanmadan ÖNCE tamamlanmalı ya da en azından hangi adımda kaldığı AÇIK SORUN olarak
-> ayrıca loglanmalı, sadece niyet belirtmek yeterli değil.
+> **[DÖRDÜNCÜ-YEDİNCİ DERS → TAŞINDI, 2026-09-08]** "Checkpoint sık sorulmalı, sohbet aniden
+> kesilebilir" temalı 4 ders bloğu (2026-08-07→08-09 arası) `session_arşiv_2.md`'ye taşındı —
+> bkz. dosya başındaki 2026-09-08 TAŞIMA NOTU.
 > ⚠️ **TAŞIMA NOTU (2026-08-10, 13. sohbet devamı):** SESSION_INDEX.md 463 satıra ulaşınca
 > (400 satır eşiği aşıldı, CORE.md §7.1 Adım 1), 4 kapanmış/güncelliğini yitirmiş CURRENT
 > FOCUS bloğu (SOHBET KAYBI uyarısı, iki adet #62 Gel Al ara-durum bloğu, #82/#83/#84 kapanış
@@ -101,7 +74,37 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-07, 28. sohbet]** Admin panelde ilk gerçek kullanıcı testi yapıldı —
+> **[GÜNCEL — 2026-09-08, 29. sohbet, KAPANDI]** Kategori sistemi UÇTAN UCA kodlandı VE
+> canlıda doğrulandı; #114'ün KÖK NEDENİ önceki turda sanılandan daha derinmiş, o da bulunup
+> düzeltildi. Üç ayrı iş:
+> 1. **Kategori sistemi (YENİ #115, KAPANDI).** `categories` tablosu (id=ASCII slug/name/
+>    sortOrder) eklendi, `menu_items.category` buna FK (RESTRICT) ile bağlandı. Admin'e
+>    `/admin/categories` ekranı (liste+ekle+sil) eklendi, `MenuItemForm.tsx`'teki serbest
+>    metin `category` alanı sabit bir `<select>`'e çevrildi, her iki `menu-items` API
+>    route'u (POST+PATCH) FK ihlalini (23503) kullanıcı dostu mesaja çeviriyor. 7 başlangıç
+>    kategorisi (İmza Ürünler/Bowl/Dürüm/Salata Bowl/Sandviç/Tatlı/İçecek) kullanıcı kararıyla
+>    belirlendi. **CANLIDA DOĞRULANDI** — `/admin/categories` 7 kategoriyi doğru listeliyor.
+> 2. **Migration uygulandı.** 8 test ürünü `DELETE FROM menu_items` ile temizlendi (kullanıcı
+>    onayı: gerçek ürün yoktu), `categories` 7 satırla seed edildi, FK constraint eklendi —
+>    hepsi Neon konsolunda ekran görüntüsüyle doğrulandı.
+> 3. **#114'ün KÖK NEDENİ REVİZE EDİLDİ — YENİ DERS (bkz. #116).** Migration sonrası admin
+>    listesi hâlâ eski 8 ürünü gösterdi; `export const dynamic = 'force-dynamic'` (önceki
+>    turun düzeltmesi) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı. Gerçek kök neden: Neon'un
+>    `neon-http` sürücüsü sorguları arka planda `fetch()` ile yapıyor, Next.js bu iç
+>    `fetch()` çağrılarını sayfa-seviyesi `force-dynamic`'ten TAMAMEN AYRI bir katmanda
+>    (Data Cache) önbelleğe alıyordu. `lib/db/client.ts`'teki `neon()` çağrısına
+>    `fetchOptions: { cache: 'no-store' }` eklenerek KÖKTEN çözüldü — bu merkezi dosyada
+>    olduğu için TÜM admin sayfalarını otomatik kapsıyor. **CANLIDA DOĞRULANDI** (ekran
+>    görüntüsü: "Henüz ürün yok." — DB'nin gerçek boş durumunu artık doğru yansıtıyor).
+>
+> **KALAN (sıradaki oturumun işi):** (a) gerçek ürünleri admin panelden yeni kategorilerle
+> girmek; (b) `app/api/admin/menu-items/[id]/page.tsx`'in dolu geldiği + gerçek ImageKit
+> yüklemesinin uçtan uca çalıştığı hâlâ canlıda TEST EDİLMEDİ; (c) public `/menu`'nün
+> `menu_items`/`categories` DB'sine bağlanması (Seçenek B — ISR + on-demand `revalidatePath`,
+> bu sohbette kararlaştırıldı) HENÜZ KODLANMADI, `/menu` hâlâ statik `menu-data.json`
+> okuyor — bu bir hata DEĞİL, ayrı bir görev (bkz. Sıradaki Görevler A9).
+>
+> **[ÖNCEKİ — 2026-09-07, 28. sohbet]** Admin panelde ilk gerçek kullanıcı testi yapıldı —
 > yeni ürün ("Fogy") oluşturuldu. **2 bulgu ortaya çıktı:**
 > 1. **Sitede görünmüyor — BEKLENEN, hata değil.** Canlı site hâlâ statik `menu-data.json`'dan
 >    okuyor, `menu_items` DB'sine bağlanmadı (bilinçli olarak ayrı bırakılan bir görev).
@@ -278,7 +281,9 @@
 | 111 | 🟡 | **[YENİ, 26. sohbet — Admin Panel]** `types/index.ts`'teki `BowlItem` tipi bu turda GÖRÜLMEDİ ve GÜNCELLENMEDİ — `menu_items` DB şemasıyla (calories/protein NOT NULL, tags/allergens array) senkron olduğu VARSAYILDI (ARCHITECTURE.md'de daha önce görülen tip tanımına dayanarak) ama bu turda dosyanın kendisi paylaşılmadı, TAM teyit edilmedi. | `types/index.ts` |
 | 112 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** 4 dosya (`schema.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts`) repoya uygulandı, `npx tsc --noEmit` + `npm run build` temiz, push edildi. Neon'da `+905431615778` numarası `role='admin'` yapıldı VE canlıda doğrulandı (`SELECT` ile teyit edildi). **YENİ KARAR (kullanıcı isteğiyle):** bu hesabın hem `/personel` hem `/admin`'e erişmesi istendiği için `middleware.ts`'teki `/personel` guard'ı `role !== 'staff' && role !== 'admin'` olarak GENİŞLETİLDİ (admin artık staff'ın süperkümesi, ama `/admin` guard'ı hâlâ SADECE `role==='admin'` — tek admin kararı bozulmadı). Canlıda hem `/personel` hem `/admin` (o an 404 — sayfa yoktu ama 403 YOKTU) doğrulandı. | `middleware.ts` |
 | 113 | ✅ | **[BU TURDA (27. sohbet) KAPANDI]** Admin panelinin ilk CRUD'u yazıldı ve DEPLOY EDİLDİ: `lib/imagekit.ts`, `lib/admin/menu-item-constants.ts`, `app/api/admin/upload-image/route.ts`, `app/api/admin/menu-items/route.ts` (GET+POST), `app/api/admin/menu-items/[id]/route.ts` (GET+PATCH+DELETE), `components/admin/MenuItemForm.tsx`, `app/admin/page.tsx` (liste), `app/admin/menu-items/new/page.tsx`, `app/admin/menu-items/[id]/page.tsx`. ImageKit hesabı açıldı (Public Key/Private Key/URL Endpoint alındı, `.env.local`+Vercel env'e eklendi), `imagekit` npm paketi kuruldu. Yol boyunca 3 build hatası çıktı, hepsi çözüldü: (1) `imagekit` paketi package.json'a hiç eklenmemişti — `npm install imagekit --save`; (2) `MENU_ITEM_TAGS.includes()` TS literal-tipi hatası — `as readonly string[]` cast'iyle çözüldü; (3) `app/admin/page.tsx`'in kendisi ilk pushta unutulmuştu (sadece alt sayfalar gitmişti) — ayrıca eklenip push edildi. **CANLIDA DOĞRULANDI:** `/admin` artık 8 gerçek ürünü doğru isim/fiyat/kategoriyle listeliyor. | `app/admin/*`, `app/api/admin/*`, `lib/imagekit.ts`, `components/admin/MenuItemForm.tsx` |
-| 114 | 🔴 | **[YENİ, 28. sohbet]** Admin panelde yeni ürün oluşturuldu ("Fogy"), Neon'da DB'ye yazıldığı DOĞRULANDI — ama `app/admin/page.tsx` build-anı statik önbelleğe alındığı için (server component'te `dynamic` export'u yoktu) liste sayfasında hiç görünmedi. `export const dynamic = 'force-dynamic'` hem liste hem düzenleme sayfasına eklendi — kullanıcı henüz repoya uygulayıp push ETMEDİ, canlı doğrulama BEKLİYOR. Ayrıca kalan (önceki turdan devam eden, henüz test edilmeyen): düzenleme formunun dolu geldiği + gerçek ImageKit yüklemesinin uçtan uca çalıştığı hâlâ canlıda doğrulanmadı; liste sayfasındaki `<img>` önizlemelerinin kırık ikon göstermesi kozmetik, ayrı görev. | `app/admin/page.tsx`, `app/admin/menu-items/[id]/page.tsx` |
+| 114 | ✅ | **[BU TURDA (29. sohbet) KAPANDI — kök neden REVİZE EDİLDİ]** Admin panelde yeni ürün oluşturuldu ("Fogy"), DB'ye yazıldığı doğrulanmıştı ama listede görünmüyordu. `export const dynamic = 'force-dynamic'` (28. sohbet fix'i) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı — asıl kök neden `neon-http` sürücüsünün iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasıydı (bkz. #116). `lib/db/client.ts`'e `fetchOptions:{cache:'no-store'}` eklenerek KÖKTEN çözüldü, canlıda doğrulandı. | `lib/db/client.ts`, `app/admin/page.tsx` |
+| 115 | ✅ | **[BU TURDA (29. sohbet) KAPANDI]** Kategori sistemi uçtan uca kodlandı: `categories` tablosu (`id`=ASCII slug PK, `name`, `sortOrder`) + `menu_items.category`'ye FK (RESTRICT — bağlı ürün varken silme DB seviyesinde engellenir, cascade YOK, kullanıcı kararı). Admin'e `/admin/categories` (liste+ekle+sil) eklendi, `MenuItemForm.tsx`'teki serbest metin `category` alanı `<select>`'e çevrildi, `POST`/`PATCH` menu-items route'ları FK ihlalini (23503) 400 ile kullanıcı dostu mesaja çeviriyor. 7 kategori (İmza Ürünler/Bowl/Dürüm/Salata Bowl/Sandviç/Tatlı/İçecek) seed edildi. 8 test ürünü kullanıcı onayıyla `DELETE FROM menu_items` ile temizlendi. **CANLIDA DOĞRULANDI.** | `lib/db/schema.ts`, `types/index.ts`, `components/admin/MenuItemForm.tsx`, `components/admin/CategoryForm.tsx`, `components/admin/DeleteCategoryButton.tsx`, `app/admin/categories/*`, `app/api/admin/categories/*`, `app/api/admin/menu-items/*` |
+| 116 | 🟢 | **[YENİ, 29. sohbet — DOKUZUNCU DERS, kalıcı ilke]** Next.js App Router'da sayfa-seviyesi `export const dynamic = 'force-dynamic'`, DB sürücüsünün KENDİ iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasını OTOMATİK ENGELLEMEZ — bu iki ayrı önbellek katmanı. `@neondatabase/serverless`'in `neon-http` sürücüsü tam bunu yaşattı (bkz. #114). Kalıcı ilke: bu proje herhangi bir `fetch()`-tabanlı DB/HTTP sürücüsü kullanırken, sürücünün kendi önbellek/no-store ayarı olup olmadığı AYRICA kontrol edilmeli — sayfa seviyesindeki `dynamic`/`revalidate` ayarları yeterli VARSAYILMAMALI. Düzeltme merkezi dosyada (`lib/db/client.ts`) yapıldığı için tüm mevcut VE gelecekteki admin sayfalarını otomatik kapsıyor, tekrar dosya dosya düzeltme gerekmedi. | `lib/db/client.ts` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -328,9 +333,9 @@
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
-| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet, YENİ]** `menu_items` tablosu (6. tablo) migrate edildi ve DOĞRULANDI — 13 kolon (tipler teyitli), 8 satır (`SELECT COUNT(*)` ile doğrulandı). `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). |
+| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
-| Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟡 **[YENİ, 26. sohbet]** Planlama+DB katmanı TAMAMLANDI: `menu_items` tablosu migrate+doğrulandı, admin yetkisi (`users.role="admin"`) + `/admin` middleware guard'ı 4 dosyada senkron kodlandı. **KALAN:** 4 dosyanın (`schema.ts`/`middleware.ts`/`auth.ts`/`types/next-auth.d.ts`) repoya uygulanıp push edilmesi (#112), `app/admin/page.tsx` (placeholder önerisi henüz onaylanmadı), CRUD API route'ları+formlar, ImageKit entegrasyonu — hiçbiri başlanmadı. Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
+| Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
 
 ---
 
@@ -338,14 +343,12 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
-| A1 | **[YENİ, 26. sohbet, EN ÖNCELİKLİ]** `schema.ts`/`middleware.ts`/`auth.ts`/`types/next-auth.d.ts` dosyalarını repoya uygulayıp GitHub'a push et, Vercel build'in yeşil olduğunu doğrula (#112) | 🔴 |
-| A2 | **[YENİ, 26. sohbet]** Kendi hesabına Neon'dan elle `role='admin'` ata | 🔴 |
-| A3 | **[YENİ, 26. sohbet]** `app/admin/page.tsx` — basit placeholder sayfa, middleware guard'ının canlıda çalıştığını (staff/customer 403, admin giriyor) GÖZLE doğrula | 🟠 |
-| A4 | **[YENİ, 26. sohbet]** Admin panel CRUD API route'ları (`/api/admin/menu-items`) + formlar kodlanmalı | 🟡 |
-| A5 | **[YENİ, 26. sohbet]** ImageKit entegrasyonu (upload akışı) | 🟡 |
+| A9 | **[YENİ, 29. sohbet, EN ÖNCELİKLİ]** Public `/menu` sayfasını `menu_items`/`categories` DB'sine bağla — Seçenek B (ISR + admin CRUD route'larından `revalidatePath('/menu')`) bu sohbette kararlaştırıldı, HENÜZ KODLANMADI. Dikkat: #114/#116'nın dersi burada da geçerli — her admin CRUD route'una revalidate eklemek unutulursa aynı "sessiz stale veri" sınıfı hata tekrarlanır. | 🔴 |
+| A10 | **[YENİ, 29. sohbet]** Admin panelden gerçek ürünleri yeni 7 kategoriyle gir (DB şu an tamamen boş) | 🔴 |
+| A11 | **[YENİ, 29. sohbet]** `app/admin/menu-items/[id]/page.tsx` düzenleme formunun dolu geldiği + gerçek ImageKit yüklemesinin uçtan uca çalıştığı canlıda hiç test edilmedi | 🟠 |
 | A6 | **[YENİ, 26. sohbet]** `/menu` canlı filtre ekranındaki Keto/glutensiz/sıcak-tahıl tag uyuşmazlığı düzeltilmeli (#109) | 🟡 |
 | A7 | **[YENİ, 26. sohbet]** DESIGN_SYSTEM.md §7.2 alerjen listesi (7→5) kod ile senkron güncellenmeli (#108) | 🟢 |
-| A8 | **[YENİ, 26. sohbet]** ARCHITECTURE.md + DEPENDENCIES.md — `menu_items`/`admin` rolü/`/admin` guard'ı işlenmeli (#110) | 🟢 |
+| A8 | **[YENİ, 26. sohbet, GENİŞLEDİ]** ARCHITECTURE.md + DEPENDENCIES.md — `menu_items`/`categories` tablosu/`admin` rolü/`/admin` guard'ı işlenmeli (#110) | 🟢 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
 | 1g | SANDWICH_SPEC.md §8'deki 6 açık soru (S1-S6) netleştirilmeli — özellikle S1 (gerçek `sandwich-data.json`) BLOKLAYICI | 🟡 |
@@ -403,6 +406,17 @@
 | 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı doğrulanmalı. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
+
+*BOWLERA SESSION_INDEX.md — v83 (v82'den: **[29. sohbet, 2026-09-08]** KATEGORİ SİSTEMİ +
+GERÇEK KÖK NEDEN BULUNDU. #115 KAPANDI: `categories` tablosu (FK ile `menu_items.category`'ye
+bağlı, RESTRICT) + admin CRUD ekranı + form/API validasyonu uçtan uca kodlanıp deploy edildi,
+7 kategori seed edildi, 8 test ürünü kullanıcı onayıyla temizlendi — hepsi CANLIDA DOĞRULANDI.
+#114 KAPANDI ama kök neden REVİZE EDİLDİ: 28. sohbetteki `force-dynamic` fix'i doğruydu ama
+TEK BAŞINA YETERSİZDİ — asıl sorun Neon `neon-http` sürücüsünün iç `fetch()` çağrılarının
+Next.js Data Cache'inde önbelleğe alınmasıydı, `lib/db/client.ts`'e `fetchOptions:
+{cache:'no-store'}` eklenerek KÖKTEN çözüldü (YENİ #116, kalıcı ilke olarak loglandı — bkz.
+DOKUZUNCU DERS). Bu turda 4 eski "checkpoint" ders bloğu (DÖRDÜNCÜ-YEDİNCİ) 400 satır eşiği
+yeniden aşıldığı için arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-08.md`).)*
 
 *BOWLERA SESSION_INDEX.md — v82 (v81'den: **[28. sohbet, 2026-09-07]** İLK GERÇEK KULLANICI
 TESTİ VE CACHE BUG'I. Admin panelde yeni ürün ("Fogy") oluşturuldu — Neon'da DB'ye yazıldığı
