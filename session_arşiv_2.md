@@ -1641,3 +1641,84 @@ kırıldı, Karar A'ya dönüldü. Bkz. güncel SESSION_INDEX.md CURRENT FOCUS +
 
 *Bu eklentinin `session_arşiv_2.md`'nin sonuna eklenmesiyle taşıma tamamlanmış olur.*
 
+------
+> ⚠️ Bu dosya `session_arşiv_2.md`'nin SONUNA elle eklenmesi gereken bir EKLENTİdir — TAM dosya
+> değildir, sadece bu taşımada çıkarılan iki blok. Kapanış gerekçeleri SESSION_INDEX.md'nin
+> Arşiv Taşıma Kaydı tablosunda (2026-09-25, 31. sohbet satırı) özetlidir.
+
+---
+
+## [TAŞINDI — 2026-09-25, 31. sohbet kapanışı] BLOK 1: 30. sohbet CURRENT FOCUS tam anlatısı (A9)
+
+**[2026-09-25, 30. sohbet, KAPANDI]** A9 (public `/menu` → DB bağlantısı) UÇTAN UCA
+TAMAMLANDI, kullanıcı onayıyla ("Her şey tamam") kapatıldı. Üç ayrı iş:
+
+1. **Kategori sekmeleri dinamikleştirildi (YENİ #117, KAPANDI).** `lib/menu-filters.ts`'teki
+   sabit `CategoryTabId` union'ı (`'tumu'|'imza'|'sicak-tahil'|'vegan'|'icecek'`) KALDIRILDI —
+   sekmeler artık `categories` DB tablosundan `buildCategoryTabs()` ile üretiliyor. "vegan"/
+   "sicak-tahil" sanal sekmeleri (gerçek bir DB kategorisi DEĞİLDİ) `DIET_FILTERS`'a taşındı.
+   `CategoryNav.tsx` artık `categories` prop'unu kabul ediyor, `MenuPageClient.tsx` bunu
+   geçiriyor. Gerçek 7 kategori id'si (`bowl`/`durum`/`icecek`/`imza-urunler`/`salata-bowl`/
+   `sandwic`/`tatli`) kullanıcının Neon ekran görüntüsüyle DOĞRULANDI.
+
+2. **Cache mimarisi — ONUNCU DERS (YENİ #118, kalıcı ilke).** Önce Karar B (`unstable_cache`
+   ile ISR denemesi) kodlandı, CANLI BUILD'DE KIRILDI: `DYNAMIC_SERVER_USAGE` hatası
+   (`no-store fetch .../menu`, prerender hatası). Kök neden: `unstable_cache` içindeki bir
+   fetch'in AÇIK `cache:'no-store'` ayarını MASKELEMİYOR — bu sarmalayıcı esas olarak fetch
+   KULLANMAYAN fonksiyonlar için tasarlanmış. `neon()` sürücüsü (#116 gereği) no-store fetch
+   yapmaya devam ettiği için `/menu` gerçek ISR/statik üretime bu mimariyle UYGUN DEĞİL.
+   **KARAR A'ya (her istekte taze DB sorgusu, `force-dynamic`) kullanıcı onayıyla GERİ
+   DÖNÜLDÜ.** 3 mutasyon route'u (`POST`/`PATCH`/`DELETE`) `revalidatePath('/menu')`
+   kullanıyor — no-store nedeniyle fiilen no-op ama zararsız, gelecek-kanıtı.
+
+3. **Teknik borç açıldı (YENİ #119).** `lib/db/queries/menu.ts` (Karar B'nin unstable_cache
+   sarmalayıcısı) artık HİÇBİR yerden import edilmiyor — kullanıcı tarafından repodan
+   SİLİNMELİ.
+
+**AÇIK KALAN RİSK:** `CategoryTabButton.tsx` hâlâ hiç görülmedi, uyumluluk varsayımla kabul
+edildi — detay Açık Sorun #120'de.
+
+**KALAN:** (a) gerçek ürünleri admin panelden 7 kategoriyle girmek (A10); (b) düzenleme
+formu + gerçek ImageKit yüklemesi uçtan uca canlıda TEST EDİLMEDİ (A11).
+
+*Kapanış gerekçesi: içerik SESSION_INDEX.md'nin Kritik Kararlar tablosunda ve Açık Sorunlar
+#117/#118/#119/#120 satırlarında, ayrıca GENEL DURUM'daki "Public Menü"/"Admin Panel"
+satırlarında zaten tam özetli — aktif takip için turn-by-turn anlatının SESSION_INDEX.md'de
+kalması gerekli değildi. A10/A11 kalan görevleri SIRADAKİ GÖREVLER tablosunda hâlâ açık,
+kaybolmadı.*
+
+---
+
+## [TAŞINDI — 2026-09-25, 31. sohbet kapanışı] BLOK 2: v80/v81 sürüm-geçmişi notları
+
+*BOWLERA SESSION_INDEX.md — v81 (v80'den: **[27. sohbet, 2026-09-06]** ADMIN PANEL CANLIYA
+ALINDI. #112 KAPANDI — 4 senkron dosya (schema/auth/middleware/next-auth.d.ts) repoya
+uygulandı, tsc+build temiz, push edildi, Neon'da `role='admin'` atandı ve canlıda
+doğrulandı. **YENİ KARAR:** admin hesabının aynı zamanda staff paneline de erişmesi
+istendi — `middleware.ts`'teki `/personel` guard'ı `admin`'i de kabul edecek şekilde
+genişletildi (`/admin` guard'ı hâlâ sadece `admin`'e özel, tek-admin kararı korundu).
+#113 KAPANDI — Admin panelinin ilk CRUD'u (9 dosya: upload-image route, menu-items
+list+create+update+delete route'ları, MenuItemForm, admin sayfaları) yazıldı, ImageKit
+hesabı açılıp entegre edildi, 3 build hatası (eksik npm paketi, TS literal-tipi hatası,
+unutulan app/admin/page.tsx) sırayla bulunup düzeltildi. **CANLIDA DOĞRULANDI:** `/admin`
+8 gerçek ürünü doğru listeliyor. **KALAN:** düzenleme formu + yeni ürün oluşturma + gerçek
+ImageKit yüklemesi ucu ucuna henüz canlıda test edilmedi (bkz. #113 detayı) — sıradaki
+oturumun ilk işi bu olmalı. Görsel önizlemenin admin listesinde kırık ikon göstermesi
+kozmetik bir detay, gerçek bir hata değil.)*
+
+*BOWLERA SESSION_INDEX.md — v80 (v79'dan: **[26. sohbet, 2026-09-05]** ADMIN PANEL
+PLANLAMASI BAŞLADI. Görsel depolama ImageKit olarak kararlaştırıldı. Menünün gerçek konumu
+doğrulandı (#93 KAPANDI). `menu_items` DB tablosu migration+seed Neon'da koşuldu ve
+doğrulandı (13 kolon, 8 satır). `"admin"` rolü `schema.ts`/`auth.ts`/`middleware.ts`/
+`types/next-auth.d.ts` dört dosyada senkron kodlandı, `/admin`+`/api/admin` middleware
+guard'ı `/personel` deseniyle aynı şekilde (fail-closed, role==='admin' katı şartı)
+eklendi — DÖRDÜ DE kullanıcıya verildi ama REPOYA UYGULANDIĞI/PUSH EDİLDİĞİ TEYİT EDİLMEDİ
+(YENİ Açık Sorun #112, en yüksek öncelik). 2 yeni doküman-kod uyuşmazlığı bulundu: alerjen
+listesi DESIGN_SYSTEM.md'de 7, kodda 5 (#108); canlı filtre ekranında Keto/glutensiz/
+sıcak-tahıl tag'leri gerçek veriyle uyuşmuyor (#109). `build-your-own-kasem` test kaydının
+tabloya dahil edilmemesi kararı `grep` ile KODDA DOĞRULANDI.)*
+
+*Kapanış gerekçesi: her iki not da (#108/#109/#112/#113) SESSION_INDEX.md'nin Açık
+Sorunlar/Kritik Kararlar tablosunda ve GENEL DURUM'da hâlâ özetli — turn-by-turn sürüm
+notunun kendisinin aktif dosyada kalması gerekli değildi. #109 bu arada (31. sohbette)
+KAPANDI, #108/#112/#113'ün güncel durumu SESSION_INDEX.md'nin ilgili satırlarında görülebilir.*
