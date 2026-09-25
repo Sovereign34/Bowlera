@@ -1580,4 +1580,64 @@ AnimatePresence+spring dropdown eklendi, tokens.ts'e `springs.dropdown` VARSAYIM
 kod push edildi — ama canlıda animasyon GÖRÜNMÜYOR, kök neden bulunamadı, debug sürüyor
 (bkz. Açık Sorun -6). Yan bulgular: `.gitignore` eksikliği (-6a), bir file-existence
 iddiasının yanlış çıkması (-6b, ders notu). Bir önceki sürüm notu aşağıda korunmuştur.)*
+===
+# EKLENTİ — session_arşiv_2.md sonuna eklenecek (2026-09-25, 30. sohbet kapanışı)
+
+> Bu blok SESSION_INDEX.md'nin 400 satır eşiğini aşması nedeniyle taşındı. İçerik Kritik
+> Kararlar tablosunda ve Açık Sorunlar #114/#115/#116'da hâlâ özetli olduğu için aktif takip
+> gerektirmiyor — bu SADECE turn-by-turn tam anlatının arşiv kaydıdır.
+
+---
+
+## [TAŞINAN BLOK 1] Eski CURRENT FOCUS — 29. sohbet (2026-09-08)
+
+**[GÜNCEL — 2026-09-08, 29. sohbet, KAPANDI]** Kategori sistemi UÇTAN UCA kodlandı VE
+canlıda doğrulandı; #114'ün KÖK NEDENİ önceki turda sanılandan daha derinmiş, o da bulunup
+düzeltildi. Üç ayrı iş:
+
+1. **Kategori sistemi (YENİ #115, KAPANDI).** `categories` tablosu (id=ASCII slug/name/
+   sortOrder) eklendi, `menu_items.category` buna FK (RESTRICT) ile bağlandı. Admin'e
+   `/admin/categories` ekranı (liste+ekle+sil) eklendi, `MenuItemForm.tsx`'teki serbest
+   metin `category` alanı sabit bir `<select>`'e çevrildi, her iki `menu-items` API
+   route'u (POST+PATCH) FK ihlalini (23503) kullanıcı dostu mesaja çeviriyor. 7 başlangıç
+   kategorisi (İmza Ürünler/Bowl/Dürüm/Salata Bowl/Sandviç/Tatlı/İçecek) kullanıcı kararıyla
+   belirlendi. **CANLIDA DOĞRULANDI** — `/admin/categories` 7 kategoriyi doğru listeliyor.
+2. **Migration uygulandı.** 8 test ürünü `DELETE FROM menu_items` ile temizlendi (kullanıcı
+   onayı: gerçek ürün yoktu), `categories` 7 satırla seed edildi, FK constraint eklendi —
+   hepsi Neon konsolunda ekran görüntüsüyle doğrulandı.
+3. **#114'ün KÖK NEDENİ REVİZE EDİLDİ — YENİ DERS (bkz. #116).** Migration sonrası admin
+   listesi hâlâ eski 8 ürünü gösterdi; `export const dynamic = 'force-dynamic'` (önceki
+   turun düzeltmesi) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı. Gerçek kök neden: Neon'un
+   `neon-http` sürücüsü sorguları arka planda `fetch()` ile yapıyor, Next.js bu iç
+   `fetch()` çağrılarını sayfa-seviyesi `force-dynamic`'ten TAMAMEN AYRI bir katmanda
+   (Data Cache) önbelleğe alıyordu. `lib/db/client.ts`'teki `neon()` çağrısına
+   `fetchOptions: { cache: 'no-store' }` eklenerek KÖKTEN çözüldü — bu merkezi dosyada
+   olduğu için TÜM admin sayfalarını otomatik kapsıyor. **CANLIDA DOĞRULANDI** (ekran
+   görüntüsü: "Henüz ürün yok." — DB'nin gerçek boş durumunu artık doğru yansıtıyor).
+
+**KALAN (sıradaki oturumun işi):** (a) gerçek ürünleri admin panelden yeni kategorilerle
+girmek; (b) `app/api/admin/menu-items/[id]/page.tsx`'in dolu geldiği + gerçek ImageKit
+yüklemesinin uçtan uca çalıştığı hâlâ canlıda TEST EDİLMEDİ; (c) public `/menu`'nün
+`menu_items`/`categories` DB'sine bağlanması (Seçenek B — ISR + on-demand `revalidatePath`,
+bu sohbette kararlaştırıldı) HENÜZ KODLANMADI, `/menu` hâlâ statik `menu-data.json`
+okuyor — bu bir hata DEĞİL, ayrı bir görev (bkz. Sıradaki Görevler A9).
+
+*(Not: A9'un fiili sonucu 30. sohbette CURRENT FOCUS'a farklı çıktı — Seçenek B canlı build'de
+kırıldı, Karar A'ya dönüldü. Bkz. güncel SESSION_INDEX.md CURRENT FOCUS + Açık Sorun #117/#118.)*
+
+---
+
+## [TAŞINAN BLOK 2] SESSION ÖZET tablosu — Session 10, 11, 12, 12 (devamı), 12 (devamı, 2026-08-09)
+
+| Session | Tarih | Ana içerik | Durum |
+|---|---|---|---|
+| 10 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. `order_history` tablosu migrate edildi. #63 (npm audit) yeni. | 🟡 Devam ediyor |
+| 11 | 2026-08-07 | ⚠️ Geriye dönük tamamlandı. Genel giriş/kayıt akışı netleşti (kanal bazlı tablo), #62 kapsamı genişledi ("kasa paneli" = Personel Sipariş Paneli), #64 kapandı (doğrulama durumu alanı kararı). | 🔴 Devam ediyor — #62 mimarisi bekliyor |
+| 12 | 2026-08-08 | ⚠️ Retroaktif: guest-gate middleware'i zip ile doğrulandı (confidence HIGH), #65/#66 açıldı. ARCHITECTURE.md v1.7'ye güncellendi (Masaya Sipariş ayrı `/masaya-siparis/*` yüzeyine taşındı), #65 KAPANDI, #67/#68/#69 açıldı+kapandı, 400 satır eşiği tetiklendi. Masa numarası kararı: TUTULACAK, ARCHITECTURE.md v1.11'e işlendi (`CartState.tableId`, path segment route, `order_history.table_number` şema notu), #69 kapsamı genişletildi (#70 yeni açıldı). Canlı build kırığı bulunup düzeltildi (`channel-options.ts`), #71 yeni açıldı. | 🟡 §2.7b kod üretimine hazır; #70/#71 netleşmeli |
+| 12 (devamı) | 2026-08-08 | 1d KAPANDI (Vercel build yeşil, kullanıcı doğruladı). #62'nin 3 mimari sorusu (personel auth, real-time, onay kuyruğu UI) kullanıcı onayıyla kapandı, ARCHITECTURE.md v1.12'ye işlendi. `users.role` için CORE.md §7.4 şema notu üretildi. `lib/db/schema.ts` diff'i + migration SQL'i üretildi, sunuldu. **Kullanıcı migration'ı Neon'da koşturdu ve Tables görünümünde `role` sütununu doğruladı.** `users.role` DB tarafı TAM kapandı — kod tarafı (`types/index.ts`/`auth.ts`/`middleware.ts`) bir sonraki tur. | 🟢 DB tamam; kod tarafı bekliyor |
+| 12 (devamı, 2026-08-09) | 2026-08-09 | #70 kapandı (`order_history` şema genişletmesi: status/table_number/customer_notes, migration koşuldu+doğrulandı). `middleware.ts`'teki `/api/personel/*` guard açığı kapatıldı. #62'nin Masaya sekmesi 10 dosyayla uçtan uca kodlandı VE canlıda test siparişiyle doğrulandı (PATCH→durum makinesi→DB→polling→UI zinciri). Yol boyunca `users.role` düzeltmesi (staff'a manuel `UPDATE`) ve JWT-cache nedeniyle yeniden giriş gerekliliği yaşandı — #74 (çıkış butonu eksikliği) bu yüzden önceliği yükseltilerek tekrar gündeme geldi. | 🟢 Masaya TAMAM; Gel Al + #74 + ARCHITECTURE.md güncellemesi bekliyor |
+
+---
+
+*Bu eklentinin `session_arşiv_2.md`'nin sonuna eklenmesiyle taşıma tamamlanmış olur.*
 
