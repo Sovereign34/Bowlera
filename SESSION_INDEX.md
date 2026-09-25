@@ -10,6 +10,9 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
+> ⚠️ **TAŞIMA NOTU (2026-09-25, 31. sohbet kapanışı):** 400 satır eşiği ÜÇÜNCÜ kez aynı gün
+> aşıldığı için eski CURRENT FOCUS (30. sohbet, A9 tam anlatısı) arşive taşındı — detay Arşiv
+> Taşıma Kaydı tablosunda, eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`.
 > ⚠️ **TAŞIMA NOTU (2026-09-25, 30. sohbet kapanışı):** 400 satır eşiği yeniden aşıldığı için
 > eski CURRENT FOCUS (29. sohbet) + Session 10-12 anlatıları arşive taşındı — detay Arşiv
 > Taşıma Kaydı tablosunda, eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`.
@@ -34,33 +37,29 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-25, 30. sohbet, KAPANDI]** A9 (public `/menu` → DB bağlantısı) UÇTAN UCA
-> TAMAMLANDI, kullanıcı onayıyla ("Her şey tamam") kapatıldı. Üç ayrı iş:
-> 1. **Kategori sekmeleri dinamikleştirildi (YENİ #117, KAPANDI).** `lib/menu-filters.ts`'teki
->    sabit `CategoryTabId` union'ı (`'tumu'|'imza'|'sicak-tahil'|'vegan'|'icecek'`) KALDIRILDI —
->    sekmeler artık `categories` DB tablosundan `buildCategoryTabs()` ile üretiliyor. "vegan"/
->    "sicak-tahil" sanal sekmeleri (gerçek bir DB kategorisi DEĞİLDİ) `DIET_FILTERS`'a taşındı.
->    `CategoryNav.tsx` artık `categories` prop'unu kabul ediyor, `MenuPageClient.tsx` bunu
->    geçiriyor. Gerçek 7 kategori id'si (`bowl`/`durum`/`icecek`/`imza-urunler`/`salata-bowl`/
->    `sandwic`/`tatli`) kullanıcının Neon ekran görüntüsüyle DOĞRULANDI.
-> 2. **Cache mimarisi — ONUNCU DERS (YENİ #118, kalıcı ilke).** Önce Karar B (`unstable_cache`
->    ile ISR denemesi) kodlandı, CANLI BUILD'DE KIRILDI: `DYNAMIC_SERVER_USAGE` hatası
->    (`no-store fetch .../menu`, prerender hatası). Kök neden: `unstable_cache` içindeki bir
->    fetch'in AÇIK `cache:'no-store'` ayarını MASKELEMİYOR — bu sarmalayıcı esas olarak fetch
->    KULLANMAYAN fonksiyonlar için tasarlanmış. `neon()` sürücüsü (#116 gereği) no-store fetch
->    yapmaya devam ettiği için `/menu` gerçek ISR/statik üretime bu mimariyle UYGUN DEĞİL.
->    **KARAR A'ya (her istekte taze DB sorgusu, `force-dynamic`) kullanıcı onayıyla GERİ
->    DÖNÜLDÜ.** 3 mutasyon route'u (`POST`/`PATCH`/`DELETE`) `revalidatePath('/menu')`
->    kullanıyor — no-store nedeniyle fiilen no-op ama zararsız, gelecek-kanıtı.
-> 3. **Teknik borç açıldı (YENİ #119).** `lib/db/queries/menu.ts` (Karar B'nin unstable_cache
->    sarmalayıcısı) artık HİÇBİR yerden import edilmiyor — kullanıcı tarafından repodan
->    SİLİNMELİ.
+> **[GÜNCEL — 2026-09-25, 31. sohbet, KAPANDI]** Açık Sorun #109 KAPANDI (A6 tamamlandı).
+> **Karar 1:** Keto filtre panelinden kaldırıldı — admin sabitlerinde hiç yoktu, gerçek veride
+> hiç kullanılmıyordu, kalıcı kritere dayanmadan her zaman 0 sonuç veren bir seçenek olarak
+> durması güven-verme ilkesine aykırıydı. **Karar 2:** "sıcak-tahıl" de kaldırıldı, `DIET_FILTERS`
+> artık `MENU_ITEM_TAGS`'tan TÜRETİLİYOR (allergen'lerle aynı desen) — yapısal senkron sağlandı.
+> Etiket görünüm senkronu: yeni `MENU_ITEM_TAG_LABELS` haritası admin formu + `MenuCardBadges.tsx`
+> tarafından okunuyor, eski/silinmiş id için `?? tag` fallback'i var (crash yok). 4 dosya:
+> `menu-item-constants.ts`, `menu-filters.ts`, `MenuItemForm.tsx`, `MenuCardBadges.tsx`.
+> **⚠️ A7 (#108, DESIGN_SYSTEM.md alerjen listesi 7→5 senkronu) bu turda KAPATILMADI** — kullanıcı
+> A6 ile birlikte kapatılmasını istedi ama bu turun değişiklikleri sadece diyet tag'lerini
+> kapsıyor, alerjen dokümanına hiç dokunulmadı; gerekçesiz madde düşürülmesin diye açık bırakıldı
+> (Self-Correction, bkz. Açık Görevler A7).
+> **⚠️ Dosya hacmi notu:** bu güncelleme dosyayı 425 satıra çıkarmıştı, 400 satır eşiği aşıldı.
+> 30. sohbetin (A9) tam anlatı bloğu arşive taşındı (bkz. üst not + Arşiv Taşıma Kaydı) —
+> dosya artık eşiğin ALTINDA. Taşıma bloğu kullanıcıya AYRI bir dosya olarak verildi, kendi
+> elinizle `session_arşiv_2.md`'nin sonuna eklemeniz gerekiyor.
 >
-> **AÇIK KALAN RİSK:** `CategoryTabButton.tsx` hâlâ hiç görülmedi, uyumluluk varsayımla kabul
-> edildi — detay Açık Sorun #120'de.
->
-> **KALAN:** (a) gerçek ürünleri admin panelden 7 kategoriyle girmek (A10); (b) düzenleme
-> formu + gerçek ImageKit yüklemesi uçtan uca canlıda TEST EDİLMEDİ (A11).
+> **[TAŞINDI — 2026-09-25, 31. sohbet kapanışı]** 30. sohbetin (A9 tam anlatısı: kategori sekmeleri
+> #117, cache mimarisi ONUNCU DERS #118, teknik borç #119, açık risk #120) tam anlatı bloğu
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`) —
+> içerik Kritik Kararlar/#117/#118/#119/#120 ve GENEL DURUM'daki "Public Menü"/"Admin Panel"
+> satırlarında zaten tam özetli, aktif takip için gerekli değil. **KALAN görevler A10/A11 olarak
+> SIRADAKİ GÖREVLER'de hâlâ açık duruyor, kaybolmadı.**
 >
 > **[TAŞINDI — 2026-09-25]** 29. sohbetin (kategori sistemi #115 + #114 kök neden revizyonu #116)
 > tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`)
@@ -120,6 +119,7 @@
 | 2026-09-05 (25. sohbet) | 23. sohbet devamı — MOTION SYSTEM Mobil Tactile Düzeltmesi anlatısı (MenuCard whileTap kararı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-05.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — #107 (KAPANDI) ve Motion System P0 bölümünde özetli |
 | 2026-09-07 (28. sohbet) | 26. sohbetin Admin Panel planlaması tam anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar ve Açık Sorunlar #108-#113'te özetli |
 | 2026-09-25 (30. sohbet) | 29. sohbetin CURRENT FOCUS anlatısı (kategori sistemi #115 + #114 kök neden revizyonu #116) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#115/#116/GENEL DURUM'da özetli |
+| 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -214,7 +214,7 @@
 | 107 | ✅ | **[KAPANDI]** `tokens.ts` paylaşıldı, yapı çelişkisi çözüldü — gerçek kod düz `durations/easings/springs` export'ları kullanıyor. | `lib/motion/tokens.ts` |
 | 105 | 🟡 | **[2026-09-03, 23. sohbet — Motion System, kullanıcı kararıyla #99/#91'in PARALELİNDE]** Rapor P0-1 (CartDrawer) kod+test TAMAM. P0-2 MenuCard kod TAMAM. **KALAN:** push edilmedi, canlı/production'da GÖZLE doğrulanmadı. Detay `session_arşiv_2.md`/Motion System P0 özetinde. | `lib/motion/tokens.ts`, `components/cart/CartDrawer.tsx`, `components/menu/MenuCard.tsx` |
 | 108 | 🟠 | **[YENİ, 26. sohbet — Admin Panel]** `DESIGN_SYSTEM.md` §7.2'nin alerjen listesi (7 değer: Gluten/Süt/Yumurta/Fındık-Kuruyemiş/Soya/Balık-Kabuklu Deniz Ürünü/Susam) kodda (`types/index.ts`'teki `BowlItem.allergens`) ve canlı filtre ekranında SADECE 5 değerle karşılığı var (gluten/dairy/nuts/soy/shellfish — Yumurta ve Susam hiç kodlanmamış). Kod+canlı davranış esas alınıp `menu_items` DB şeması 5 değere göre kuruldu — DESIGN_SYSTEM.md'nin GÜNCEL OLMADIĞI değerlendirildi, ama doküman henüz düzeltilmedi. | `DESIGN_SYSTEM.md` §7.2, `types/index.ts` |
-| 109 | 🟡 | **[26. sohbet, KISMEN İLERLEDİ — 30. sohbet]** Canlı `/menu` filtre ekranı "Diyet & Kalori" bölümünde **Keto** seçeneği gösteriyor ama gerçek verinin bu tag'i taşıyıp taşımadığı hâlâ TEYİT EDİLMEDİ. **[30. sohbet, YENİ]** "sıcak-tahıl" bu turda `lib/menu-filters.ts`'teki `DIET_FILTERS`'a eklendi (CategoryNav'daki eski sanal sekmenin yerini aldı) — bu tag artık filtre ekranında GÖRÜNÜR. **KALAN:** "glutensiz" hâlâ `DIET_FILTERS`'ta YOK; Keto/gerçek-veri uyuşmazlığı hâlâ doğrulanmadı (DB şu an boş, A10 tamamlanınca test edilebilir). | `lib/menu-filters.ts` |
+| 109 | ✅ | **[BU TURDA (31. sohbet) KAPANDI]** Karar 1: **Keto** filtre panelinden tamamen KALDIRILDI — admin'in kendi `MENU_ITEM_TAGS` sabitinde hiç yoktu, gerçek veride hiç kullanılmıyordu, kalıcı bir kritere (karb/yağ eşiği) dayanmadan sadece her zaman 0 sonuç veren bir seçenek olarak durması YASAK LİSTE'deki "context eksikken güven verme" ilkesine aykırıydı — gerçek kriter belirlenip ürünlere işlenince geri eklenebilir. Karar 2: **"sıcak-tahıl"** de kaldırıldı; `DIET_FILTERS` artık elle yazılan liste değil, `MENU_ITEM_TAGS`'tan TÜRETİLİYOR (allergen'lerle aynı desen) — böylece ikisi kendiliğinden senkron kalıyor, tekrar ayrışma riski yapısal olarak kapandı. Ayrıca etiket görünüm senkronu uygulandı: yeni `MENU_ITEM_TAG_LABELS` haritası (`menu-item-constants.ts`) admin formu VE `MenuCardBadges.tsx` tarafından okunuyor; `MenuCardBadges.tsx`'e eski/silinmiş id için `?? tag` fallback'i eklendi (crash yok, ham id gösterir). **RİSK (kapanmadı, kayıt altında):** DB'de hâlâ `sıcak-tahıl` etiketli bir ürün varsa kartında bu ham id görünmeye devam eder — DB'den elle temizlenmesi gerekir (DB şu an boş olduğu için şu an fiili risk yok, bkz. #115). | `lib/menu-item-constants.ts`, `lib/menu-filters.ts`, `components/admin/MenuItemForm.tsx`, `components/menu/MenuCardBadges.tsx` |
 | 110 | 🟠 | **[YENİ, 26. sohbet — Admin Panel]** ARCHITECTURE.md ve DEPENDENCIES.md `menu_items` tablosunun eklendiğini, `users.role`'e `"admin"` değerinin eklendiğini ve `/admin`+`/api/admin` middleware guard'ının varlığını YANSITMIYOR — bu turda SADECE `docs/schema-changes/20260905090000_menu_items_tablosu_eklendi.md` şema notu üretildi, mimari dokümanlar güncellenmedi. | `ARCHITECTURE.md`, `DEPENDENCIES.md` |
 | 111 | 🟡 | **[YENİ, 26. sohbet — Admin Panel]** `types/index.ts`'teki `BowlItem` tipi bu turda GÖRÜLMEDİ ve GÜNCELLENMEDİ — `menu_items` DB şemasıyla (calories/protein NOT NULL, tags/allergens array) senkron olduğu VARSAYILDI (ARCHITECTURE.md'de daha önce görülen tip tanımına dayanarak) ama bu turda dosyanın kendisi paylaşılmadı, TAM teyit edilmedi. | `types/index.ts` |
 | 114 | ✅ | **[BU TURDA (29. sohbet) KAPANDI — kök neden REVİZE EDİLDİ]** Admin panelde yeni ürün oluşturuldu ("Fogy"), DB'ye yazıldığı doğrulanmıştı ama listede görünmüyordu. `export const dynamic = 'force-dynamic'` (28. sohbet fix'i) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı — asıl kök neden `neon-http` sürücüsünün iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasıydı (bkz. #116). `lib/db/client.ts`'e `fetchOptions:{cache:'no-store'}` eklenerek KÖKTEN çözüldü, canlıda doğrulandı. | `lib/db/client.ts`, `app/admin/page.tsx` |
@@ -275,8 +275,8 @@
 | A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
 | A10 | **[YENİ, 29. sohbet]** Admin panelden gerçek ürünleri yeni 7 kategoriyle gir (DB şu an tamamen boş) | 🔴 |
 | A11 | **[YENİ, 29. sohbet]** `app/admin/menu-items/[id]/page.tsx` düzenleme formunun dolu geldiği + gerçek ImageKit yüklemesinin uçtan uca çalıştığı canlıda hiç test edilmedi | 🟠 |
-| A6 | **[YENİ, 26. sohbet]** `/menu` canlı filtre ekranındaki Keto/glutensiz/sıcak-tahıl tag uyuşmazlığı düzeltilmeli (#109) | 🟡 |
-| A7 | **[YENİ, 26. sohbet]** DESIGN_SYSTEM.md §7.2 alerjen listesi (7→5) kod ile senkron güncellenmeli (#108) | 🟢 |
+| A6 | **[TAMAMLANDI, 31. sohbet ✅]** `/menu` canlı filtre ekranındaki Keto/sıcak-tahıl tag uyuşmazlığı — Keto kaldırıldı, `DIET_FILTERS` admin sabitlerinden türetilir hale getirildi, tag label senkronu eklendi (#109 KAPANDI). | ✅ |
+| A7 | **[YENİ, 26. sohbet — ⚠️ BU TURDA KAPATILMADI]** DESIGN_SYSTEM.md §7.2 alerjen listesi (7→5) kod ile senkron güncellenmeli (#108). **Self-Correction notu:** kullanıcı bu turda A6 ile birlikte A7'nin de kapatılmasını istedi, ama bu turda üretilen 4 dosya SADECE `MENU_ITEM_TAGS`/diyet tag'lerini kapsıyor — `DESIGN_SYSTEM.md` §7.2'ye hiç dokunulmadı, Yumurta/Susam allerjenleri hâlâ dokümana işlenmedi. YASAK LİSTE'deki "gerekçesiz madde düşürme" kuralı gereği A7 açık bırakıldı; kapatmak için ayrı bir tur (DESIGN_SYSTEM.md dosyası) gerekiyor. | 🟢 (açık kaldı) |
 | A8 | **[YENİ, 26. sohbet, GENİŞLEDİ]** ARCHITECTURE.md + DEPENDENCIES.md — `menu_items`/`categories` tablosu/`admin` rolü/`/admin` guard'ı işlenmeli (#110) | 🟢 |
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
@@ -336,6 +336,16 @@
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
+*BOWLERA SESSION_INDEX.md — v85 (v84'ten: **[31. sohbet, 2026-09-25]** Açık Sorun #109 KAPANDI,
+A6 tamamlandı — Keto filtre panelinden kaldırıldı, "sıcak-tahıl" kaldırıldı, `DIET_FILTERS`
+artık `MENU_ITEM_TAGS`'tan türetiliyor (yapısal senkron), `MENU_ITEM_TAG_LABELS` etiket görünüm
+haritası eklendi (4 dosya: `menu-item-constants.ts`/`menu-filters.ts`/`MenuItemForm.tsx`/
+`MenuCardBadges.tsx`). **A7 (#108) BİLİNÇLİ OLARAK KAPATILMADI** — kullanıcının isteğine rağmen
+bu turun kapsamı dışında kaldığı için Self-Correction ile açık bırakıldı, gerekçe CURRENT
+FOCUS'ta. Bu güncelleme dosyayı 400 satır eşiğinin üzerine (425) çıkardığı için AYNI TURDA
+taşıma da yapıldı: 30. sohbetin (A9) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-25-devam2.md`), dosya eşiğin altına indi.)*
+
 *BOWLERA SESSION_INDEX.md — v84 (v83'ten: **[30. sohbet, 2026-09-25]** A9 KAPANDI — detay
 CURRENT FOCUS'ta. Özet: kategori sekmeleri dinamikleşti (#117), Karar B build'de kırıldı,
 ONUNCU DERS olarak kalıcı ilkeye işlendi (#118), Karar A'ya dönüldü. #119/#120 açık kaldı.
@@ -364,37 +374,12 @@ sanılmasın diye. 400 satır eşiği beşinci kez aşıldığı için 26. sohbe
 anlatısı arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) — içerik Kritik
 Kararlar/Açık Sorunlar'da zaten tam özetli, kayıp yok.)*
 
-*BOWLERA SESSION_INDEX.md — v81 (v80'den: **[27. sohbet, 2026-09-06]** ADMIN PANEL CANLIYA
-ALINDI. #112 KAPANDI — 4 senkron dosya (schema/auth/middleware/next-auth.d.ts) repoya
-uygulandı, tsc+build temiz, push edildi, Neon'da `role='admin'` atandı ve canlıda
-doğrulandı. **YENİ KARAR:** admin hesabının aynı zamanda staff paneline de erişmesi
-istendi — `middleware.ts`'teki `/personel` guard'ı `admin`'i de kabul edecek şekilde
-genişletildi (`/admin` guard'ı hâlâ sadece `admin`'e özel, tek-admin kararı korundu).
-#113 KAPANDI — Admin panelinin ilk CRUD'u (9 dosya: upload-image route, menu-items
-list+create+update+delete route'ları, MenuItemForm, admin sayfaları) yazıldı, ImageKit
-hesabı açılıp entegre edildi, 3 build hatası (eksik npm paketi, TS literal-tipi hatası,
-unutulan app/admin/page.tsx) sırayla bulunup düzeltildi. **CANLIDA DOĞRULANDI:** `/admin`
-8 gerçek ürünü doğru listeliyor. **KALAN:** düzenleme formu + yeni ürün oluşturma + gerçek
-ImageKit yüklemesi ucu ucuna henüz canlıda test edilmedi (bkz. #113 detayı) — sıradaki
-oturumun ilk işi bu olmalı. Görsel önizlemenin admin listesinde kırık ikon göstermesi
-kozmetik bir detay, gerçek bir hata değil.)*
-
-*BOWLERA SESSION_INDEX.md — v80 (v79'dan: **[26. sohbet, 2026-09-05]** ADMIN PANEL
-PLANLAMASI BAŞLADI. Görsel depolama ImageKit olarak kararlaştırıldı. Menünün gerçek konumu
-doğrulandı (#93 KAPANDI). `menu_items` DB tablosu migration+seed Neon'da koşuldu ve
-doğrulandı (13 kolon, 8 satır). `"admin"` rolü `schema.ts`/`auth.ts`/`middleware.ts`/
-`types/next-auth.d.ts` dört dosyada senkron kodlandı, `/admin`+`/api/admin` middleware
-guard'ı `/personel` deseniyle aynı şekilde (fail-closed, role==='admin' katı şartı)
-eklendi — DÖRDÜ DE kullanıcıya verildi ama REPOYA UYGULANDIĞI/PUSH EDİLDİĞİ TEYİT EDİLMEDİ
-(YENİ Açık Sorun #112, en yüksek öncelik). 2 yeni doküman-kod uyuşmazlığı bulundu: alerjen
-listesi DESIGN_SYSTEM.md'de 7, kodda 5 (#108); canlı filtre ekranında Keto/glutensiz/
-sıcak-tahıl tag'leri gerçek veriyle uyuşmuyor (#109). `build-your-own-kasem` test kaydının
-tabloya dahil edilmemesi kararı `grep` ile KODDA DOĞRULANDI. Bu güncelleme dosyayı 400 satır
-eşiğinin ÜZERİNE çıkardı — bir sonraki sohbette arşivleme/taşıma ele alınmalı (bu turda
-arşiv dosyasının güncel hâli görülmediği için taşıma yapılamadı, bkz. dosya başındaki YENİ
-TAŞIMA UYARISI).)*
-
+*[**TAŞINDI — 2026-09-25, 31. sohbet kapanışı**] v80/v81 sürüm-geçmişi notları (26./27. sohbet:
+Admin Panel planlaması + canlıya alınışı) `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, aynı dosyanın devamı) — içerik #108/#109/#112/
+#113 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil. v82'nin üstündeki not
+artık dosyanın en eski sürüm kaydıdır.*
 
 *[**TAŞINDI — 2026-09-24**] v75-v79 sürüm-geçmişi notları (2026-09-04→2026-09-05, Motion System
 P1/P2 çalışması) `session_arşiv_2.md`'ye taşındı — içerik #107/#105 ve GENEL DURUM'da zaten
-özetli. v80'in üstündeki not artık dosyanın en eski sürüm kaydıdır.*
+özetli.*
