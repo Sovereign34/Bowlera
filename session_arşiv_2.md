@@ -1774,3 +1774,121 @@ elinizle `session_arşiv_2.md`'nin sonuna eklemeniz gerekiyor.
 
 > Kapanış gerekçesi: içerik Kritik Kararlar tablosunda ve Açık Sorunlar #121/#122'de zaten tam
 > özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
+------
+# EKLENTİ — session_arşiv_2.md'nin sonuna eklenecek
+> Kaynak: SESSION_INDEX.md, 34. sohbet kapanışı (2026-09-26), Self-Correction sonrası taşıma.
+> Taşınan blok: A13 teyit checkpoint'inin tam anlatısı.
+> Kapanış gerekçesi: içerik SIRADAKİ GÖREVLER (A13) ve GENEL DURUM (Sandviç Akışı satırı)
+> tablolarında zaten tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı
+> taşınıyor. Bu blok normalde 33. sohbet kapanışında taşınması gerekirken (dosya o turda da
+> 400 satır eşiğinin üzerindeydi, 416 satır), CORE.md §7.1 Adım 1'e aykırı biçimde 34. sohbete
+> kadar taşınmadan bırakılmıştı; bu eklenti o gecikmiş taşımayı tamamlıyor.
+
+---
+
+**[2026-09-26, A13 teyit checkpoint'i]** Kullanıcı sandviç customize akışının 2 canlı
+ekran görüntüsünü paylaştı ve A13'ü AÇIKÇA kapattı: Ekmek adımında Glutensiz Somun (+13 TL,
+25 kcal)/Tam Buğday Somun (+12 TL, 150 kcal), Peynir adımında Cheddar (+58 TL, 25 kcal,
+görseliyle) — gerçek ürün adı/fiyat/kalori/görsel DOĞRULANDI (bkz. SIRADAKİ GÖREVLER A13,
+GENEL DURUM Sandviç Akışı satırı). **33. sohbetin tam anlatısı** (#124 — client bundle'a `db`
+sızması → DATABASE_URL çökmesi; #125 — 4 adımda eksik ürün görseli; ON İKİNCİ DERS: `db`
+import eden dosyadaki HERHANGİ export client component'e sızma riski taşır) daha önce arşive
+taşınmıştı — özeti Kritik Kararlar #124/#125'te ve GENEL DURUM'da hâlâ tam mevcut.
+
+------
+# EKLENTİ — session_arşiv_2.md'nin sonuna eklenecek
+> Kaynak: SESSION_INDEX.md, 34. sohbet kapanışı Self-Correction'ının 2. taşıma turu (2026-09-26).
+> Taşınan: sürüm-geçmişi footer'ındaki v82-v87 girdileri (28.-33. sohbet).
+> Kapanış gerekçesi: içeriği Açık Sorunlar #114/#115/#116/#117/#118/#119/#120/#121/#122/#123/
+> #124/#125/#126'da ve Kritik Kararlar tablosunda ("33. sohbet" satırı) zaten tam özetli — aktif
+> takip için gerekli değil, sadece sürüm-değişikliği anlatısı taşınıyor.
+
+---
+
+*BOWLERA SESSION_INDEX.md — v87 (v86'dan: **[33. sohbet, 2026-09-26]** #124 KAPANDI —
+customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu, kök neden:
+`lib/sandwich-catalog.ts` (db import eden) içindeki `SANDWICH_BRANCH_CONFIG` sabitini 2 client
+component doğrudan import ediyor, webpack `db`'yi tarayıcı bundle'ına sızdırıyordu — sabit
+`lib/sandwich-constants.ts`'e (db import etmeyen) taşınarak çözüldü. #125 KAPANDI — Ekmek/
+Protein/Peynir/Sebzeler adımlarında DB'de dolu olan `item.image` hiç gösterilmiyordu, Sos
+adımıyla aynı `<img>` deseni 4 bileşene eklendi. Kullanıcı canlıda 6 adımın tamamını ekran
+görüntüsüyle DOĞRULADI. ON İKİNCİ DERS (kalıcı ilke) eklendi: db import eden bir dosyadaki HER
+export, o dosyayı client bundle'ına sızdırma riski taşır — "saf sabit, zararsız" varsayımı
+yeterli değil, gerçek bir derleme-zamanı güvenlik ağı (`server-only` paketi) YOKTU (#126, yeni
+açık sorun, npm paket onayı bekliyor). GERİYE DÖNÜK KAYIT: #123 (isCatalogReady guard'ı, 32.
+sohbette kodlanmış ama SESSION_INDEX'e hiç işlenmemiş) bu turda fark edilip kapalı olarak
+kaydedildi. A13 durumu düşürüldü (🔴→🟡) — ekran görüntülerinde gerçek veri var GİBİ görünüyor
+ama kullanıcı açıkça teyit etmedi. Dosya zaten 400 satır eşiğinin üzerindeydi (416 satır); bu
+turun eklediği içerikle AYNI TURDA taşıma da yapıldı: 32. sohbetin (#121/#122) tam anlatı bloğu
+`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`).)*
+
+*BOWLERA SESSION_INDEX.md — v86 (v85'ten: **[32. sohbet, 2026-09-26]** ON BİRİNCİ DERS + DB
+şema senkron hatası bulundu/düzeltildi (#121, YENİ). Önceki turda schema.ts'e eklenen
+`ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` GitHub'a push edilmişti ama
+gerçek Neon DB'sine hiç işlenmemişti — admin `ingredients` sayfaları (liste/yeni/düzenle) bu
+yüzden çöküyordu. Kullanıcının Codespaces limiti dolu olduğu için CLI kullanılamadı; teşhis +
+düzeltme Neon SQL Editor'den 2 ALTER TABLE ile yapıldı, kullanıcı çökmenin gittiğini doğruladı.
+**KAPANMADI (#122, YENİ):** kod tarafı (pricing motoru/store/6 step/Mike's Way preseti) hiç
+canlı test edilmedi, iki tablo da gerçek veri içermiyor, `docs/schema-changes/` notu hâlâ dosya
+olarak yok. A12/A13/A14 SIRADAKİ GÖREVLER'e eklendi. Bu güncelleme dosyayı 400 satır eşiğinin
+üzerine çıkardığı için AYNI TURDA taşıma da yapıldı: 31. sohbetin (A6/#109) tam anlatı bloğu
+`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`).)*
+
+*BOWLERA SESSION_INDEX.md — v85 (v84'ten: **[31. sohbet, 2026-09-25]** Açık Sorun #109 KAPANDI,
+A6 tamamlandı — Keto filtre panelinden kaldırıldı, "sıcak-tahıl" kaldırıldı, `DIET_FILTERS`
+artık `MENU_ITEM_TAGS`'tan türetiliyor (yapısal senkron), `MENU_ITEM_TAG_LABELS` etiket görünüm
+haritası eklendi (4 dosya: `menu-item-constants.ts`/`menu-filters.ts`/`MenuItemForm.tsx`/
+`MenuCardBadges.tsx`). **A7 (#108) BİLİNÇLİ OLARAK KAPATILMADI** — kullanıcının isteğine rağmen
+bu turun kapsamı dışında kaldığı için Self-Correction ile açık bırakıldı, gerekçe CURRENT
+FOCUS'ta. Bu güncelleme dosyayı 400 satır eşiğinin üzerine (425) çıkardığı için AYNI TURDA
+taşıma da yapıldı: 30. sohbetin (A9) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-25-devam2.md`), dosya eşiğin altına indi.)*
+
+*BOWLERA SESSION_INDEX.md — v84 (v83'ten: **[30. sohbet, 2026-09-25]** A9 KAPANDI — detay
+CURRENT FOCUS'ta. Özet: kategori sekmeleri dinamikleşti (#117), Karar B build'de kırıldı,
+ONUNCU DERS olarak kalıcı ilkeye işlendi (#118), Karar A'ya dönüldü. #119/#120 açık kaldı.
+Eski CURRENT FOCUS + Session 10-12 anlatıları 400 satır eşiği için arşive taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-25.md`).)*
+
+*BOWLERA SESSION_INDEX.md — v83 (v82'den: **[29. sohbet, 2026-09-08]** KATEGORİ SİSTEMİ +
+GERÇEK KÖK NEDEN BULUNDU. #115 KAPANDI: `categories` tablosu (FK ile `menu_items.category`'ye
+bağlı, RESTRICT) + admin CRUD ekranı + form/API validasyonu uçtan uca kodlanıp deploy edildi,
+7 kategori seed edildi, 8 test ürünü kullanıcı onayıyla temizlendi — hepsi CANLIDA DOĞRULANDI.
+#114 KAPANDI ama kök neden REVİZE EDİLDİ: 28. sohbetteki `force-dynamic` fix'i doğruydu ama
+TEK BAŞINA YETERSİZDİ — asıl sorun Neon `neon-http` sürücüsünün iç `fetch()` çağrılarının
+Next.js Data Cache'inde önbelleğe alınmasıydı, `lib/db/client.ts`'e `fetchOptions:
+{cache:'no-store'}` eklenerek KÖKTEN çözüldü (YENİ #116, kalıcı ilke olarak loglandı — bkz.
+DOKUZUNCU DERS). Bu turda 4 eski "checkpoint" ders bloğu (DÖRDÜNCÜ-YEDİNCİ) 400 satır eşiği
+yeniden aşıldığı için arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-08.md`).)*
+
+*BOWLERA SESSION_INDEX.md — v82 (v81'den: **[28. sohbet, 2026-09-07]** İLK GERÇEK KULLANICI
+TESTİ VE CACHE BUG'I. Admin panelde yeni ürün ("Fogy") oluşturuldu — Neon'da DB'ye yazıldığı
+DOĞRULANDI ama liste sayfasında hiç görünmedi. Kök neden bulundu: `app/admin/page.tsx`
+`dynamic` export'u olmadığı için Next.js tarafından build-anı statik önbelleğe alınıyordu.
+`export const dynamic = 'force-dynamic'` hem liste hem düzenleme sayfasına eklendi — canlı
+doğrulama BEKLİYOR (#114, YENİ). Ayrıca netleşti: sitenin kendisinin `menu_items`'a hiç
+bağlanmadığı (bilinçli, ayrı görev) bu turda kullanıcıya AÇIKÇA hatırlatıldı, bir "hata"
+sanılmasın diye. 400 satır eşiği beşinci kez aşıldığı için 26. sohbetin ayrıntılı planlama
+anlatısı arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) — içerik Kritik
+Kararlar/Açık Sorunlar'da zaten tam özetli, kayıp yok.)*
+
+---
+
+## Ayrıca taşınan Açık Sorunlar satırları (kısaltıldı, tam metin)
+
+**#50 [BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition)
+doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75.
+(`components/customizer/AddToCartButton.tsx`)
+
+**#124/#125 [KAPANDI, 33. sohbet]** Customize sayfası ilk mount'ta "DATABASE_URL eksik"
+hatasıyla çöküyordu — `lib/sandwich-catalog.ts` (`db` import eden, server-only) içindeki
+`SANDWICH_BRANCH_CONFIG` sabitini 2 client component doğrudan import ediyordu, webpack `db`'yi
+de tarayıcı bundle'ına dahil ediyordu. Sabit `lib/sandwich-constants.ts`'e (db import etmeyen)
+taşınarak çözüldü — kullanıcı canlıda tüm 6 adımı ekran görüntüsüyle test etti, çökme gitti.
+Ayrıca Ekmek/Protein/Peynir/Sebzeler adımlarında DB'de zaten dolu olan `ingredients.image` hiç
+render edilmiyordu — 5 adım bileşeninden sadece Sos adımı `<img>` basıyordu. Aynı desen 4
+bileşene eklendi ("Peynirsiz" sentetik seçeneği BSC-5 gereği görselsiz bırakıldı, "Boy" adımı
+şema gereği zaten görselsiz — kasıtlı). Kullanıcı canlıda doğruladı.
+(`lib/sandwich-catalog.ts`, `lib/sandwich-constants.ts`, `store/useSandwichStore.ts`,
+`components/sandwich/StepBread.tsx`, `StepProtein.tsx`, `StepCheese.tsx`, `StepVeggies.tsx`,
+`StepSauceToastExtras.tsx`)
