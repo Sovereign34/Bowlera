@@ -1749,3 +1749,28 @@ kapsıyor, alerjen dokümanına hiç dokunulmadı; gerekçesiz madde düşürül
 30. sohbetin (A9) tam anlatı bloğu arşive taşındı (bkz. üst not + Arşiv Taşıma Kaydı) —
 dosya artık eşiğin ALTINDA. Taşıma bloğu kullanıcıya AYRI bir dosya olarak verildi, kendi
 elinizle `session_arşiv_2.md`'nin sonuna eklemeniz gerekiyor.
+--------
+## [TAŞINAN BLOK — 32. sohbet CURRENT FOCUS tam anlatısı, taşıma tarihi: 2026-09-26 (33. sohbet kapanışı)]
+
+> **[GÜNCEL — 2026-09-26, 32. sohbet]** **ON BİRİNCİ DERS (#121, kalıcı ilke) + DB şema senkron
+> hatası bulundu/düzeltildi.** Önceki turda (25 dosyalık sandviç→DB bağlama refactoru) `lib/db/schema.ts`'e
+> eklenen `ingredients.isMikesWayDefault` ve `sandwich_sizes.priceMultiplier` (priceModifier'ın
+> yerine) kodda/GitHub'da vardı, ama gerçek Neon veritabanı tablosuna HİÇ İŞLENMEMİŞTİ —
+> `docs/schema-changes/` klasöründe de bu değişikliğin dosyası yoktu (CORE §7.4 notu metin olarak
+> yazıldı ama dosyaya hiç düşmedi). Sonuç: `db.select().from(ingredients)` yapan 3 admin sayfası
+> (liste/yeni/düzenle) "column does not exist" ile çöküyordu. **Kalıcı ilke:** `schema.ts`
+> değiştirip GitHub'a push etmek, gerçek DB'nin senkron olduğu anlamına GELMEZ — `db:push`/ALTER
+> AYRICA koşulmalı, aksi halde şemadaki TÜM kolonları SELECT eden her sayfa production'da aynı
+> şekilde çöker. Kullanıcının Codespaces limiti dolu olduğu için terminal/CLI kullanılamadı —
+> teşhis Neon SQL Editor'e yapıştırılan `information_schema.columns` sorgusuyla doğrulandı
+> (kolonlar gerçekten yoktu, `sandwich_sizes` 0 satır — veri kaybı riski yoktu), düzeltme de aynı
+> yerden 2 ALTER TABLE ile koşuldu: `ingredients.is_mikes_way_default boolean NOT NULL DEFAULT
+> false` eklendi; `sandwich_sizes.price_modifier` DROP edilip `price_multiplier numeric(4,2)
+> NOT NULL DEFAULT 1` eklendi. **Kullanıcı doğruladı: admin/ingredients çökmesi gitti.** **KALAN
+> (bkz. Açık Sorun #122):** kod tarafı (pricing motoru, store, 6 step bileşeni, admin
+> sandwich-sizes formu) bu turda HİÇ görülmedi/test edilmedi; `docs/schema-changes/` notu hâlâ
+> dosya olarak yok (kullanıcıya soruldu, henüz yanıt gelmedi); iki tablo da gerçek beden/malzeme
+> verisi içermiyor.
+
+> Kapanış gerekçesi: içerik Kritik Kararlar tablosunda ve Açık Sorunlar #121/#122'de zaten tam
+> özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
