@@ -24,6 +24,11 @@
 
 ## 🎯 CURRENT FOCUS
 
+> **[GÜNCEL — 2026-09-26, 35. sohbet devamı]** #2/#57 PARKLANDI: kullanıcı `/online-siparis`
+> sayfasının sanal POS (ödeme ağ geçidi) entegrasyonu olmadan tamamlanamayacağını belirtti —
+> dış bağımlılık (banka/ödeme kuruluşu sözleşmesi/API anahtarı gerekiyor), bu turda kod
+> üretilmedi. Hangi sanal POS sağlayıcısının kullanılacağı kararı hâlâ kullanıcıdan bekleniyor.
+>
 > **[GÜNCEL — 2026-09-26, 35. sohbet devamı]** #91 KAPANDI: kullanıcı canlıda hem role-revocation
 > 403'ü hem rate-limit'i test etti — 5'ten fazla yanlış şifre denemesinde sistem girişi bir süre
 > bekletiyor (geçici cooldown). Kısa sözlü onay, ekran görüntüsü yok.
@@ -116,6 +121,7 @@
 | 2026-09-25 (30. sohbet) | 29. sohbetin CURRENT FOCUS anlatısı (kategori sistemi #115 + #114 kök neden revizyonu #116) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#115/#116/GENEL DURUM'da özetli |
 | 2026-09-26 (35. sohbet devamı, konsolidasyon) | 26-34. sohbet + A13'ün 9 tekil TAŞINDI pointer'ı (zaten arşivdeki içeriğe işaret ediyordu, yeni içerik değil) TEK pointer'a indirildi | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — içerik zaten Açık Sorunlar/GENEL DURUM/SIRADAKİ GÖREVLER'de özetli, kayıp yok |
 | 2026-09-26 (35. sohbet devamı, 2. kez) | v94 versiyon paragrafı (A12/#122 kapanış anlatısı) kısaltıldı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam8.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — içerik SIRADAKİ GÖREVLER A12 ve Kritik Kararlar #91 satırında özetli, kayıp yok |
+| 2026-09-26 (35. sohbet devamı, 3. kez) | v95 versiyon paragrafı (#91 kapanış anlatısı) kısaltıldı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam9.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — içerik Açık Sorunlar #91 ve GENEL DURUM/Auth satırında özetli, kayıp yok |
 | 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
 | 2026-09-26 (32. sohbet) | 31. sohbetin CURRENT FOCUS anlatısı (A6/#109 tam kapanışı: Keto/"sıcak-tahıl" kaldırma, `DIET_FILTERS` türetme refactoru) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#109/A6/A7/GENEL DURUM'da özetli |
 | 2026-09-26 (33. sohbet) | 32. sohbetin CURRENT FOCUS anlatısı (ON BİRİNCİ DERS #121 + DB şema senkron hatası #121/#122) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#121/#122/GENEL DURUM'da özetli |
@@ -185,7 +191,7 @@
 | 54 | 🟡 | Gerçek şube adresi Şubeler/Footer.tsx/JSON-LD'ye işlenmedi — aciliyet var | `Footer.tsx` |
 | 55 | 🟢 | `AboutValues.tsx` ile `ValueProps.tsx` senkronu teyit edilmedi | `components/about/AboutValues.tsx` |
 | 56 | 🟢 | Twilio WhatsApp Business Sender onayı — PARKLI | `lib/auth/send-otp.ts` |
-| 57 | 🟡 | Rıza esaslı kayıt — kod+test+canlı BAĞLANDI. KAPANMADI: `/online-siparis` sayfası yok | `app/kayit-ol/page.tsx` |
+| 57 | ⚪ | Rıza esaslı kayıt — kod+test+canlı BAĞLANDI. `/online-siparis` sayfası **PARKLI** — sanal POS (ödeme ağ geçidi) entegrasyonu olmadan tamamlanamıyor, dış bağımlılık | `app/kayit-ol/page.tsx` |
 | 58 | 🟡 | Gel-al WhatsApp yönlendirme henüz kodlanmadı — #62 ile iç içe geçti | `lib/integrations/whatsapp.ts` |
 | 60 | 🟠 | Neon DB şifresi 3 kez açığa çıktı — Reset password HENÜZ ONAYLANMADI | Neon console, `.env.local` |
 | 61 | 🟢 | `app/kayit-ol/page.tsx` alt başlığı uydurmaydı — kullanıcı karar bekliyor | `app/kayit-ol/page.tsx` |
@@ -304,7 +310,7 @@
 | 1e | DEPENDENCIES.md'yi kapsamlı güncelle — `RegistrationChannel`'ın TÜM tüketicileri taransın (#71), ayrıca `useCartStore.tableId`, `order_history`, `users.role` gibi bu sohbetlerde eklenen alan/tablo/store değişiklikleri haritaya işlensin | 🟠 |
 | 1f | TEST_MATRIX.md paylaşılınca `users.role` doğrulama testini işle: sütun var/`NOT NULL`/default doğru, mevcut kullanıcı kırılmadı (şu an 0 satır olduğu için gerçek regresyon testi #32 çözülünce yapılabilir) | 🟡 |
 | 1g | SANDWICH_SPEC.md §8'deki 6 açık soru (S1-S6) netleştirilmeli — özellikle S1 (gerçek `sandwich-data.json`) BLOKLAYICI | 🟡 |
-| 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri) | 🔴 |
+| 2 | #57'yi TAM kapat — `/online-siparis` sayfası (marketplace linkleri). **PARKLI (bu turda):** kullanıcı, sanal POS (ödeme ağ geçidi) entegrasyonu olmadan bu sayfanın tamamlanamayacağını belirtti — dış bağımlılık (banka/ödeme kuruluşu sözleşmesi), üçüncü parti entegrasyon fazına ait (bkz. CORE.md §8). | ⚪ (dış olay bekliyor) |
 | 3 | #73 kök neden araştırması: `tailwind.config.ts extend.colors` custom token'ları neden `bg-*` sınıfı olarak derlenmiyor | 🟠 |
 | 4 | Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik) | 🟠 |
 | 4b | `npm audit fix` — 12 açık/3 kritik güvenlik açığını ayrı, sakin bir oturumda ele al (#63) | 🟠 |
@@ -360,20 +366,17 @@
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
 
-*BOWLERA SESSION_INDEX.md — v95 (v94'ten: **[35. sohbet devamı, 2026-09-26]** #91 KAPANDI —
-kullanıcı canlıda güvenlik denetimini test etti: (a) role-revocation 403 doğrulandı; (b)
-rate-limit doğrulandı, kullanıcının gözlemi: 5'ten fazla yanlış şifre denemesinde sistem girişi
-bir süre bekletiyor (geçici cooldown/kilit). Kapanış kısa sözlü onaya dayanıyor, ekran görüntüsü
-yok; 5 dosyanın push/deploy edildiği başarılı canlı testten örtük çıkarsandı, ayrıca teyit
-istenmedi. Açık Sorunlar #91, SIRADAKİ GÖREVLER 91, GENEL DURUM/Auth ve eski "-3" satırı hepsi
-KAPANDI'ya çekildi. Ayrıca v94'ün tam paragrafı (A12/#122 kapanışı) bu turda kısaltıldı.)*
+*BOWLERA SESSION_INDEX.md — v96 (v95'ten: **[35. sohbet devamı, 2026-09-26]** #2/#57 PARKLANDI —
+kullanıcı `/online-siparis` sayfasının sanal POS (ödeme ağ geçidi) entegrasyonu olmadan
+tamamlanamayacağını belirtti, dış bağımlılık. Açık Sorunlar #2/#57 ve SIRADAKİ GÖREVLER 2 satırı
+⚪'ye çekildi, CURRENT FOCUS'a not eklendi. Hangi sağlayıcının kullanılacağı kararı kullanıcıdan
+bekleniyor. Başka hiçbir tabloya/karara dokunulmadı.)*
 
-*[**TAŞINDI/KISALTILDI — 2026-09-26, bu turda (35. sohbet devamı)**] v94'ün tam paragrafı
-(A12/#122 kapanışı) `session_arşiv_2.md`'ye taşınacak YENİ bir eklentide duruyor (eklenti:
-`session_arsiv_2_EKLENTI_2026-09-26-devam8.md`, bu bloğun TAM metni). v93'ün tam paragrafı
-(400 satır eşiği aşımı + 9 pointer'ın konsolidasyonu), v92'nin tam paragrafı (SELF-CORRECTION:
-v91 footer'ının #128/A16 çelişkisinin düzeltilmesi) ve daha eski v90/v88/v89/v82-v87/v80-v81/
-v75-v79 sürüm-geçmişi notlarının TAM metinleri ayrı bir eklentide duruyor (eklenti:
-`session_arsiv_2_EKLENTI_2026-09-26-devam7.md`). Hepsi Açık Sorunlar (#91,#99,#107,#108,#109,
-#112-#130,#122) ve Kritik Kararlar/GENEL DURUM'da zaten tam özetli, aktif takip için gerekli
-değil. Sonuç aynı: #91/#122/#127/#128/#129/A12 KAPANDI, A16 canlı doğrulama bekliyor.*
+*[**TAŞINDI/KISALTILDI — 2026-09-26, bu turda (35. sohbet devamı, 3. kez)**] v95'in tam paragrafı
+(#91 kapanışı) `session_arşiv_2.md`'ye taşınacak YENİ bir eklentide duruyor (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-26-devam9.md`, bu bloğun TAM metni). v94 (A12/#122), v93 (400
+satır eşiği aşımı), v92 (SELF-CORRECTION) ve daha eski v90/v88/v89/v82-v87/v80-v81/v75-v79
+sürüm-geçmişi notlarının TAM metinleri önceki eklentilerde duruyor (`...-devam7.md`,
+`...-devam8.md`). Hepsi Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da zaten tam özetli, aktif
+takip için gerekli değil. Sonuç aynı: #91/#122/#127/#128/#129/A12 KAPANDI, #2/#57 PARKLI, A16
+canlı doğrulama bekliyor.*
