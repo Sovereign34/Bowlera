@@ -50,21 +50,56 @@
 > kesilebilir" temalı 4 ders bloğu (2026-08-07→08-09 arası) `session_arşiv_2.md`'ye taşındı —
 > bkz. dosya başındaki 2026-09-08 TAŞIMA NOTU.
 
+> ⚠️ **SELF-CORRECTION (2026-09-26, 34. sohbetin kapanışı düzeltildi, 2 turda):** Önceki turda bu
+> dosya 400 satır eşiğinin üzerinde ("HENÜZ YAPILMADI" notuyla) TESLİM EDİLMİŞTİ — CORE.md §7.1
+> Adım 1 Madde 3'ün ("taşıma AYNI TURDA yapılır, biri verilip diğeri sonraya bırakılamaz") açık
+> bir ihlaliydi; "BLOKAJ önceliği" bu adımı atlamak için geçerli bir gerekçe değildir. Bu turda 2
+> taşıma yapıldı: (1) 33. sohbetin artık-eski A13 checkpoint anlatısı `session_arşiv_2.md`'ye
+> taşındı (eklenti: `..._EKLENTI_2026-09-26-devam4.md`) — SIRADAKİ GÖREVLER A13/GENEL DURUM'da
+> zaten özetli; (2) sürüm-geçmişi footer'ındaki v82-v87 (28.-33. sohbet, #114-#126) + Açık
+> Sorunlar'daki 3 zaten-Kritik-Kararlar'da-özetli satır (#50, #124, #125) da taşındı/kısaltıldı
+> (eklenti: `..._EKLENTI_2026-09-26-devam5.md`). **Dosya 528→465 satıra indi, ama HÂLÂ 400 satırın
+> ÜZERİNDE.** Kalan hacmin büyük kısmı SIRADAKİ GÖREVLER'deki uzun, hâlâ AÇIK (kapanmamış) eski
+> madde listesi (1e-12, Session 1-3'ten kalma) — bunlar "çözülenler kaldırılır" kuralına
+> girmiyor (kapanmadılar), gerekçesiz düşürülemez. Bu noktadan sonraki küçültme, kullanıcının
+> hangi eski açık maddelerin gerçekten önceliksiz/terk edilmiş sayılacağına karar vermesini
+> gerektiriyor — tek başıma varsayamam, sıradaki oturumda kullanıcıya sorulmalı.
+
 ---
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-26, A13 teyit checkpoint'i]** Kullanıcı sandviç customize akışının 2 canlı
-> ekran görüntüsünü paylaştı ve A13'ü AÇIKÇA kapattı: Ekmek adımında Glutensiz Somun (+13 TL,
-> 25 kcal)/Tam Buğday Somun (+12 TL, 150 kcal), Peynir adımında Cheddar (+58 TL, 25 kcal,
-> görseliyle) — gerçek ürün adı/fiyat/kalori/görsel DOĞRULANDI (bkz. SIRADAKİ GÖREVLER A13,
-> GENEL DURUM Sandviç Akışı satırı). **33. sohbetin tam anlatısı** (#124 — client bundle'a `db`
-> sızması → DATABASE_URL çökmesi; #125 — 4 adımda eksik ürün görseli; ON İKİNCİ DERS: `db`
-> import eden dosyadaki HERHANGİ export client component'e sızma riski taşır) bu turda arşive
-> taşındı (bkz. üst not) — özeti Kritik Kararlar #124/#125'te ve GENEL DURUM'da hâlâ tam mevcut.
-> **KALAN (değişmedi):** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only`
-> paketi kurulumu kullanıcı onayı bekliyor (A15/#126); sandviç sipariş verme ucu (Sepete Ekle→
-> checkout) hâlâ hiç canlı test edilmedi.
+> **[GÜNCEL — 2026-09-26, 34. sohbet — Bowl akışı DB'ye bağlandı, BLOKAJ bulundu]** Sandviç
+> akışında kullanılan desen (`ingredients` tablosu + server component catalog fetch +
+> `setCatalog()`) Bowl ("Kâseni Yarat") tarafına da uygulandı — #127 KAPANDI, detay Açık
+> Sorunlar tablosunda. Kapsam genişledi: `app/menu/customize/[id]/page.tsx` server component'e
+> çevrilince client mantığı (Zustand/framer-motion/Sepete Ekle) yeni bir dosyaya
+> (`components/customizer/BowlCustomizer.tsx`) taşındı — bu, ilk onaylanan dosya planında YOKTU,
+> Self-Correction ile şeffafça bildirildi ve kullanıcı onayı sonrası eklendi (SandwichCustomizer.tsx
+> ile birebir aynı mimari). Ölü kod `lib/customizer-data.ts` SİLİNDİ — yeni zorunlu
+> `isAlwaysPaid` alanını karşılamadığı için build'i kırıyordu (kimse import etmiyordu, temiz silme).
+> Kullanıcı `npm run build`'i yeşile aldı, GitHub'a push etti.
+> **BLOKAJ (YENİ, #128, 🔴):** Ana sayfadaki (`Hero.tsx`) "Kaseni Oluştur"/"Sandviçini Oluştur"
+> butonları sabit `build-your-own-kasem`/`build-your-own-sandwich` id'lerine gidiyor — bu id'ler
+> `menu_items` tablosuna HİÇ GİRİLMEMİŞTİ (bu durum aslında #126/26. sohbette ZATEN NOT
+> EDİLMİŞTİ — "build-your-own-kasem DAHİL EDİLMEDİ, grep ile doğrulandı" — ama o zaman kod tarafı
+> henüz DB'ye bağlı olmadığı için sorun fiilen tetiklenmiyordu). Bowl DB'ye bağlanınca ilk kez
+> gerçek 404 olarak ortaya çıktı. Ayrıca admin `menu-items` POST route'u id'yi HER ZAMAN
+> `slugify(isim)+"-"+rastgele5harf` ile ürettiği için (`app/api/admin/menu-items/route.ts`), admin
+> panelinden bu sabit id'ler ELLE GİRİLEMEZ — kalıcı çözüm ya Hero.tsx'in linkini kullanıcının
+> oluşturduğu GERÇEK id'ye göre güncellemek (hızlı, bu turda yapılabilir) ya da admin formuna
+> manuel id alanı eklemek (ayrı karar/tur, Kural #5). **KALAN, sohbet burada kesildi:** kullanıcı
+> admin'den "Kendi Kasem" ürününü oluşturuyor, gerçek üretilen id henüz paylaşılmadı — paylaşılınca
+> Hero.tsx güncellenip test edilmeli. Sandviç tarafı için de AYNI sorun muhtemelen geçerli
+> (`build-your-own-sandwich` id'sinin `menu_items`'da var olup olmadığı bu turda TEYİT EDİLMEDİ).
+>
+> **[TAŞINDI — 2026-09-26, bu turda]** A13 teyit checkpoint'inin tam anlatısı (kullanıcının 2
+> canlı ekran görüntüsüyle Ekmek/Peynir adımlarındaki gerçek fiyat/kalori/görseli doğrulaması)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam4.md`) —
+> içerik SIRADAKİ GÖREVLER A13 ve GENEL DURUM Sandviç Akışı satırında zaten tam özetli. **KALAN
+> (değişmedi):** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi
+> kurulumu kullanıcı onayı bekliyor (A15/#126); sandviç sipariş verme ucu (Sepete Ekle→checkout)
+> hâlâ hiç canlı test edilmedi.
 >
 > **[TAŞINDI — 2026-09-26, 33. sohbet kapanışı]** 32. sohbetin (ON BİRİNCİ DERS #121 + DB şema
 > senkron hatası #121/#122 tam anlatısı) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı
@@ -205,7 +240,6 @@
 | # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
 |---|---|---|---|
 | 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
-| 50 | ✅ | **[BU TURDA KAPANDI]** `AddToCartButton.tsx` görüldü, BSC-6 (çift ekleme race condition) doğrudan ele alındı ve seçim-kimliği bazlı kilitle çözüldü — bkz. #75. | `components/customizer/AddToCartButton.tsx` |
 | 51 | 🟢 | `useCartStore.ts` tam dosya/persist davranışı hâlâ uçtan uca teyit edilmedi | `store/useCartStore.ts` |
 | 52 | 🟡 | VisualPreview.tsx görsel katman klasörü boş | `components/customizer/VisualPreview.tsx` |
 | 53 | 🟢 | CONTENT_GUIDE.md §1/§2 â→a kararına göre güncellenmedi | `CONTENT_GUIDE.md` §1, §2 |
@@ -258,10 +292,11 @@
 
 | 121 | 🟢 | **[YENİ, 32. sohbet — ON BİRİNCİ DERS, kalıcı ilke]** `schema.ts` değiştirip GitHub'a push etmek, gerçek Neon DB tablosunun senkron güncellendiği anlamına GELMEZ — bu turda `ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` kodda/repoda vardı ama DB'de yoktu, `db.select()` yapan 3 admin sayfası (liste/yeni/düzenle) bu yüzden çöktü (bkz. Kritik Kararlar). Kalıcı ilke: her `schema.ts` değişikliğinde `db:push`/ALTER'in GERÇEKTEN koşulduğu (CLI veya Neon SQL Editor'den) AYRICA doğrulanmalı — "kod push edildi" ≠ "DB güncel". Ayrıca: bu değişikliğin `docs/schema-changes/` notu önceki turda METİN olarak yazıldı ama DOSYA olarak hiç üretilmedi (CORE §7.4) — kullanıcıya bu turda tekrar soruldu, henüz yanıt yok. | `lib/db/schema.ts`, `docs/schema-changes/` |
 | 123 | ✅ | **[GERİYE DÖNÜK KAYIT, 33. sohbet — 32. sohbette yapılmış ama hiç loglanmamış]** `app/sandwich/customize/[id]/page.tsx`'e `isCatalogReady()` guard'ı eklenmişti (boş/kısmi katalog varsa `SandwichCustomizer`'a hiç geçilmiyor) — kod `lib/sandwich-catalog.ts` header yorumunda "#123 düzeltmesi" olarak anılıyordu ama SESSION_INDEX.md'ye hiç işlenmemişti (governance/fiili kod arasında senkron kopukluğu, AGENT.md v1.5'teki arşiv-parçalama dersiyle AYNI TÜR ihlal). Bu turda dosya okunurken fark edildi, gerekçesiz kaybolmasın diye buraya geriye dönük kaydedildi. | `app/sandwich/customize/[id]/page.tsx`, `lib/sandwich-catalog.ts` |
-| 124 | ✅ | **[YENİ, 33. sohbet — KAPANDI, canlıda doğrulandı]** Customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu — `lib/sandwich-catalog.ts` (`db` import eden, server-only) içindeki `SANDWICH_BRANCH_CONFIG` sabitini 2 client component doğrudan import ediyordu, webpack `db`'yi de tarayıcı bundle'ına dahil ediyordu. Sabit `lib/sandwich-constants.ts`'e (db import etmeyen) taşınarak çözüldü — kullanıcı canlıda tüm 6 adımı ekran görüntüsüyle test etti, çökme gitti. | `lib/sandwich-catalog.ts`, `lib/sandwich-constants.ts` (yeni), `store/useSandwichStore.ts`, `components/sandwich/StepSauceToastExtras.tsx` |
-| 125 | ✅ | **[YENİ, 33. sohbet — KAPANDI, canlıda doğrulandı]** Ekmek/Protein/Peynir/Sebzeler adımlarında DB'de zaten dolu olan `ingredients.image` hiç render edilmiyordu — 5 adım bileşeninden sadece Sos adımı `<img>` basıyordu. Aynı desen 4 bileşene eklendi ("Peynirsiz" sentetik seçeneği BSC-5 gereği görselsiz bırakıldı, "Boy" adımı şema gereği zaten görselsiz — kasıtlı). Kullanıcı canlıda doğruladı. | `components/sandwich/StepBread.tsx`, `StepProtein.tsx`, `StepCheese.tsx`, `StepVeggies.tsx` |
+| 124/125 | ✅ | **[KAPANDI, 33. sohbet — özet, tam anlatı Kritik Kararlar tablosunda]** `db` bundle sızması (#124) ve eksik ürün görselleri (#125) — bkz. Kritik Kararlar "33. sohbet" satırı. | `lib/sandwich-catalog.ts`, `lib/sandwich-constants.ts`, `components/sandwich/Step*.tsx` |
 | 126 | 🟢 | **[YENİ, 33. sohbet]** `server-only` npm paketinin kurulup `lib/db/client.ts`'in başına eklenmesi ÖNERİLDİ — #124'teki gibi bir hatayı gelecekte derleme zamanında yakalamak için (şu an gerçek bir güvenlik ağı YOK, sadece dosya-içi yorum uyarısı var). AGENT.md Kural gereği ("Yeni npm paketi kullanıcı onayı olmadan ekle" yasak) bu turda UYGULANMADI, kullanıcı onayı bekliyor. | `lib/db/client.ts`, `package.json` |
 | 122 | 🔴 | **[YENİ, 32. sohbet]** DB şema senkron hatası düzeltildi ve kullanıcı admin/ingredients çökmesinin gittiğini DOĞRULADI, ama **kullanıcı henüz uçtan uca denemedi** (kendi ifadesi). Bu turda SADECE `lib/db/schema.ts`, admin `ingredients` sayfaları (liste/yeni/`[id]`), `IngredientForm.tsx` ve `ingredients` API route'u statik olarak incelendi — önceki turda "25 dosya" olarak push edildiği bildirilen sandviç-DB bağlama refactorunun geri kalanı (`lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, 6 `Step*.tsx`, `SandwichSummaryPanel.tsx`, `SandwichCustomizer.tsx`, `app/sandwich/customize/[id]/page.tsx`, `app/api/orders/gel-al/route.ts`, `SandwichSizeForm.tsx`) bu sohbette HİÇ GÖRÜLMEDİ. Ayrıca `sandwich_sizes` (0 satır) ve muhtemelen `ingredients` (sandviç malzemeleri) tabloları gerçek beden/malzeme verisi içermiyor — Mike's Way preseti/fiyat hesaplama gerçek veri girilmeden ANLAMLI test edilemez. | `lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, `components/sandwich/*`, `app/api/orders/gel-al/route.ts` |
+| 127 | ✅ | **[YENİ, 34. sohbet — KAPANDI, kullanıcı build'i yeşile aldı]** Bowl ("Kâseni Yarat") akışı sandviçteki AYNI desenle DB'ye bağlandı: yeni `lib/bowl-catalog.ts` (`buildBowlCatalog`/`isCatalogReady`), `types/index.ts`'e `CustomizerGardenCatalogItem`+`isAlwaysPaid` (Garden'daki "her zaman ücretli" tespiti artık `item.id==="avocado"` hardcode DEĞİL, DB-yönetimli bayrak — `lib/customizer-pricing.ts` + `StepGarden.tsx` ikisi de güncellendi), `store/useCustomizerStore.ts`'e `catalog` state+`setCatalog()` (statik `customizerCatalog` importu kalktı), 5 `Step*.tsx`+`VisualPreview.tsx`+`MobileSummaryDrawer.tsx` store'dan okuyacak şekilde değişti, `app/api/orders/gel-al/route.ts` BSC-3 gereği `buildBowlCatalog()` çağırıyor. **Onaylı plana 1 ekleme:** `app/menu/customize/[id]/page.tsx` server component'e çevrilince client mantığı yeni `components/customizer/BowlCustomizer.tsx`'e taşındı (plan dışıydı, Self-Correction ile bildirildi, SandwichCustomizer.tsx ile aynı mimari). **Yan düzeltme:** ölü kod `lib/customizer-data.ts` build'i kırdığı için SİLİNDİ (hiçbir gerçek kod import etmiyordu, grep ile doğrulandı). Kullanıcı onayları: Extras DB'ye taşınmadı (Soru #1), malzeme kartı görseli bu turda eklenmedi (Soru #2, kapsam dışı), admin veri girişini kullanıcı elle yapacak (Soru #3, seed script yok). | `lib/bowl-catalog.ts`, `types/index.ts`, `lib/customizer-pricing.ts`, `store/useCustomizerStore.ts`, `components/customizer/BowlCustomizer.tsx` (yeni), `app/menu/customize/[id]/page.tsx`, `components/customizer/Step{Base,Main,Garden,SignatureFlavor,Finish}.tsx`, `VisualPreview.tsx`, `MobileSummaryDrawer.tsx`, `app/api/orders/gel-al/route.ts` |
+| 128 | 🔴 | **[YENİ, 34. sohbet — BLOKLAYICI, sohbet kesilirken hâlâ açık]** `components/home/Hero.tsx`'teki "Kaseni Oluştur"/"Sandviçini Oluştur" CTA'ları sabit `/menu/customize/build-your-own-kasem` / `/sandwich/customize/build-your-own-sandwich` id'lerine gidiyor. Bu id'lerin `menu_items`'a hiç girilmediği aslında #126'da (26. sohbet) ZATEN NOT EDİLMİŞTİ, ama Bowl DB'ye bağlı olmadığı için o zaman fiilen tetiklenmiyordu — bu turda Bowl bağlanınca ilk kez GERÇEK 404 olarak ortaya çıktı. Kök neden GENİŞ: `app/api/admin/menu-items/route.ts`'teki POST, id'yi HER ZAMAN `slugify(isim)+"-"+rastgele5harf` ile üretiyor (`ingredients` POST route'uyla AYNI desen) — admin panelinden bu sabit id'ler hiçbir zaman ELLE GİRİLEMEZ. Kullanıcı admin'den "Kendi Kasem" ürününü oluşturuyordu, gerçek üretilen id paylaşılmadan sohbet kesildi. **Sıradaki adım:** id paylaşılınca Hero.tsx'teki 2 `href` güncellenmeli (hızlı çözüm); kalıcı çözüm (admin formuna manuel/sabit id girme opsiyonu) AYRI bir karar/tur gerektirir (Kural #5, tek problem tek çözüm). Sandviç tarafında `build-your-own-sandwich` id'sinin durumu bu turda hiç TEYİT EDİLMEDİ, aynı sorun orada da olabilir. | `components/home/Hero.tsx`, `app/api/admin/menu-items/route.ts` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
@@ -302,6 +337,7 @@
 | Sandviç Akışı (DB bağlantısı) | 🟢 **[bu turda, A13 KAPANDI]** #124 (client bundle'a `db` sızması → DATABASE_URL çökmesi) ve #125 (4 adımda eksik ürün görseli) düzeltildi, kullanıcı canlıda 6 adımın tamamını (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/Ekstralar) ekran görüntüsüyle DOĞRULADI. **A13 bu turda AÇIKÇA kapandı** ("A13 kapandı") — 2 yeni ekran görüntüsü gerçek ürün adı/fiyat/kalori/görsel gösteriyor (Ekmek: Glutensiz Somun +13TL/25kcal, Tam Buğday Somun +12TL/150kcal; Peynir: Cheddar +58TL/25kcal, görseliyle). **KALAN:** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi kararı bekliyor (#126/A15); sipariş verme (Sepete Ekle → checkout) ucu hâlâ hiç test edilmedi. |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
 | Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
+| Bowl Akışı (DB bağlantısı) | 🟡 **[YENİ, 34. sohbet]** #127 KAPANDI — kod tarafı sandviçteki desenle DB'ye bağlandı, kullanıcı build'i yeşile aldı, push edildi. **BLOKAJ:** `Hero.tsx`'teki "Kaseni Oluştur" butonu `menu_items`'da hiç var olmayan sabit bir id'ye gidiyor (#128, 🔴) — kullanıcı gerçek ürünü admin'den oluşturana ve id'yi paylaşana kadar canlıda hiç uçtan uca test EDİLEMEDİ. |
 | Public Menü (`/menu`) | ✅ **[30. sohbet, A9 KAPANDI]** Artık `menu_items`/`categories` DB'sine bağlı — statik `menu-data.json` KULLANILMIYOR. Karar A (`force-dynamic`, her istekte taze sorgu) — ISR denemesi (Karar B) canlı build'de kırıldı, geri dönüldü (bkz. #118, ONUNCU DERS). Kategori sekmeleri DB'den dinamik. Kullanıcı onayıyla canlı build doğrulandı. **KALAN:** `lib/db/queries/menu.ts` silinmeli (#119), `CategoryTabButton.tsx` hâlâ hiç görülmedi (#120, düşük öncelik). |
 
 ---
@@ -310,6 +346,7 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| A16 | **[YENİ, 34. sohbet — BLOKLAYICI]** `Hero.tsx`'teki "Kaseni Oluştur"/"Sandviçini Oluştur" sabit id'lerini kullanıcının admin'de oluşturduğu GERÇEK `menu_items` id'siyle güncelle, sonra canlıda test et (#128) | 🔴 |
 | A15 | **[YENİ, 33. sohbet]** `server-only` npm paketini kurup `lib/db/client.ts`'e eklemek isteniyor mu? (#126 — kullanıcı onayı bekliyor, bu sınıf hatayı derleme zamanında yakalamak için) | 🟢 |
 | A12 | **[YENİ, 32. sohbet]** Admin `ingredients` sayfalarını (liste/yeni/düzenle) canlıda uçtan uca test et — malzeme ekle/düzenle, Mike's Way checkbox'ının sadece sandwich+veggies/sauce'ta göründüğünü doğrula (#122) | 🔴 |
 | A13 | **[KAPANDI, bu turda ✅]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi girildi — kullanıcı 2 canlı ekran görüntüsüyle AÇIKÇA teyit etti ("A13 kapandı"): Ekmek adımında Glutensiz Somun (+13 TL/25 kcal)/Tam Buğday Somun (+12 TL/150 kcal), Peynir adımında Cheddar (+58 TL/25 kcal, görseliyle). | ✅ |
@@ -379,6 +416,21 @@
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
+*BOWLERA SESSION_INDEX.md — v90 (v89'dan: **[34. sohbet, 2026-09-26]** #127 KAPANDI — Bowl
+("Kâseni Yarat") akışı sandviçteki AYNI desenle DB'ye bağlandı (14 dosya: `lib/bowl-catalog.ts`
+yeni, `types/index.ts`/`lib/customizer-pricing.ts`/`store/useCustomizerStore.ts` değişti, 8
+customizer bileşeni store'dan okuyacak şekilde güncellendi, `app/api/orders/gel-al/route.ts`
+BSC-3 için `buildBowlCatalog()` çağırıyor). Onaylı plana 1 ekleme yapıldı ve Self-Correction ile
+bildirildi: `components/customizer/BowlCustomizer.tsx` (yeni) — server component dönüşümü client
+mantığının ayrı dosyaya taşınmasını zorunlu kıldı. Ölü kod `lib/customizer-data.ts` build'i
+kırdığı için SİLİNDİ. Kullanıcı `npm run build`'i yeşile aldı, push etti. **YENİ BLOKAJ (#128,
+🔴):** `Hero.tsx`'teki "Kaseni Oluştur" CTA'sı `menu_items`'da hiç var olmayan sabit bir id'ye
+(`build-your-own-kasem`) gidiyor — bu durum #126'da (26. sohbet) zaten not edilmişti ama Bowl
+DB'ye bağlı olmadığı için tetiklenmiyordu, bu turda ilk kez gerçek 404 olarak ortaya çıktı. Admin
+`menu-items` POST route'u id'yi her zaman otomatik+rastgele ürettiği için sabit id ELLE
+GİRİLEMİYOR. Kullanıcı admin'den gerçek ürünü oluşturuyordu, id paylaşılmadan sohbet kesildi —
+A16/#128 olarak SIRADAKİ GÖREVLER'de açık bırakıldı.)*
+
 *BOWLERA SESSION_INDEX.md — v89 (v88'den: **[bu turda, 2026-09-26]** #99 KAPANDI —
 sandviç checkout blokajı artık yok, kullanıcı 3 canlı ekran görüntüsüyle doğruladı: sepet
 ("Özel Sandviç" 156₺) → Gel Al/Nakit → "Siparişi Onayla" hatasız tamamlandı (156₺/174 kcal) →
@@ -397,78 +449,17 @@ anlatısı (#124/#125, ON İKİNCİ DERS) `session_arşiv_2.md`'ye taşındı (e
 `session_arsiv_2_EKLENTI_2026-09-26-devam3.md`) — içerik Kritik Kararlar/#124/#125/GENEL
 DURUM'da zaten tam özetli.)*
 
-*BOWLERA SESSION_INDEX.md — v87 (v86'dan: **[33. sohbet, 2026-09-26]** #124 KAPANDI —
-customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu, kök neden:
-`lib/sandwich-catalog.ts` (db import eden) içindeki `SANDWICH_BRANCH_CONFIG` sabitini 2 client
-component doğrudan import ediyor, webpack `db`'yi tarayıcı bundle'ına sızdırıyordu — sabit
-`lib/sandwich-constants.ts`'e (db import etmeyen) taşınarak çözüldü. #125 KAPANDI — Ekmek/
-Protein/Peynir/Sebzeler adımlarında DB'de dolu olan `item.image` hiç gösterilmiyordu, Sos
-adımıyla aynı `<img>` deseni 4 bileşene eklendi. Kullanıcı canlıda 6 adımın tamamını ekran
-görüntüsüyle DOĞRULADI. ON İKİNCİ DERS (kalıcı ilke) eklendi: db import eden bir dosyadaki HER
-export, o dosyayı client bundle'ına sızdırma riski taşır — "saf sabit, zararsız" varsayımı
-yeterli değil, gerçek bir derleme-zamanı güvenlik ağı (`server-only` paketi) YOKTU (#126, yeni
-açık sorun, npm paket onayı bekliyor). GERİYE DÖNÜK KAYIT: #123 (isCatalogReady guard'ı, 32.
-sohbette kodlanmış ama SESSION_INDEX'e hiç işlenmemiş) bu turda fark edilip kapalı olarak
-kaydedildi. A13 durumu düşürüldü (🔴→🟡) — ekran görüntülerinde gerçek veri var GİBİ görünüyor
-ama kullanıcı açıkça teyit etmedi. Dosya zaten 400 satır eşiğinin üzerindeydi (416 satır); bu
-turun eklediği içerikle AYNI TURDA taşıma da yapıldı: 32. sohbetin (#121/#122) tam anlatı bloğu
-`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`).)*
-
-*BOWLERA SESSION_INDEX.md — v86 (v85'ten: **[32. sohbet, 2026-09-26]** ON BİRİNCİ DERS + DB
-şema senkron hatası bulundu/düzeltildi (#121, YENİ). Önceki turda schema.ts'e eklenen
-`ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` GitHub'a push edilmişti ama
-gerçek Neon DB'sine hiç işlenmemişti — admin `ingredients` sayfaları (liste/yeni/düzenle) bu
-yüzden çöküyordu. Kullanıcının Codespaces limiti dolu olduğu için CLI kullanılamadı; teşhis +
-düzeltme Neon SQL Editor'den 2 ALTER TABLE ile yapıldı, kullanıcı çökmenin gittiğini doğruladı.
-**KAPANMADI (#122, YENİ):** kod tarafı (pricing motoru/store/6 step/Mike's Way preseti) hiç
-canlı test edilmedi, iki tablo da gerçek veri içermiyor, `docs/schema-changes/` notu hâlâ dosya
-olarak yok. A12/A13/A14 SIRADAKİ GÖREVLER'e eklendi. Bu güncelleme dosyayı 400 satır eşiğinin
-üzerine çıkardığı için AYNI TURDA taşıma da yapıldı: 31. sohbetin (A6/#109) tam anlatı bloğu
-`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`).)*
-
-*BOWLERA SESSION_INDEX.md — v85 (v84'ten: **[31. sohbet, 2026-09-25]** Açık Sorun #109 KAPANDI,
-A6 tamamlandı — Keto filtre panelinden kaldırıldı, "sıcak-tahıl" kaldırıldı, `DIET_FILTERS`
-artık `MENU_ITEM_TAGS`'tan türetiliyor (yapısal senkron), `MENU_ITEM_TAG_LABELS` etiket görünüm
-haritası eklendi (4 dosya: `menu-item-constants.ts`/`menu-filters.ts`/`MenuItemForm.tsx`/
-`MenuCardBadges.tsx`). **A7 (#108) BİLİNÇLİ OLARAK KAPATILMADI** — kullanıcının isteğine rağmen
-bu turun kapsamı dışında kaldığı için Self-Correction ile açık bırakıldı, gerekçe CURRENT
-FOCUS'ta. Bu güncelleme dosyayı 400 satır eşiğinin üzerine (425) çıkardığı için AYNI TURDA
-taşıma da yapıldı: 30. sohbetin (A9) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
-`session_arsiv_2_EKLENTI_2026-09-25-devam2.md`), dosya eşiğin altına indi.)*
-
-*BOWLERA SESSION_INDEX.md — v84 (v83'ten: **[30. sohbet, 2026-09-25]** A9 KAPANDI — detay
-CURRENT FOCUS'ta. Özet: kategori sekmeleri dinamikleşti (#117), Karar B build'de kırıldı,
-ONUNCU DERS olarak kalıcı ilkeye işlendi (#118), Karar A'ya dönüldü. #119/#120 açık kaldı.
-Eski CURRENT FOCUS + Session 10-12 anlatıları 400 satır eşiği için arşive taşındı (eklenti:
-`session_arsiv_2_EKLENTI_2026-09-25.md`).)*
-
-*BOWLERA SESSION_INDEX.md — v83 (v82'den: **[29. sohbet, 2026-09-08]** KATEGORİ SİSTEMİ +
-GERÇEK KÖK NEDEN BULUNDU. #115 KAPANDI: `categories` tablosu (FK ile `menu_items.category`'ye
-bağlı, RESTRICT) + admin CRUD ekranı + form/API validasyonu uçtan uca kodlanıp deploy edildi,
-7 kategori seed edildi, 8 test ürünü kullanıcı onayıyla temizlendi — hepsi CANLIDA DOĞRULANDI.
-#114 KAPANDI ama kök neden REVİZE EDİLDİ: 28. sohbetteki `force-dynamic` fix'i doğruydu ama
-TEK BAŞINA YETERSİZDİ — asıl sorun Neon `neon-http` sürücüsünün iç `fetch()` çağrılarının
-Next.js Data Cache'inde önbelleğe alınmasıydı, `lib/db/client.ts`'e `fetchOptions:
-{cache:'no-store'}` eklenerek KÖKTEN çözüldü (YENİ #116, kalıcı ilke olarak loglandı — bkz.
-DOKUZUNCU DERS). Bu turda 4 eski "checkpoint" ders bloğu (DÖRDÜNCÜ-YEDİNCİ) 400 satır eşiği
-yeniden aşıldığı için arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-08.md`).)*
-
-*BOWLERA SESSION_INDEX.md — v82 (v81'den: **[28. sohbet, 2026-09-07]** İLK GERÇEK KULLANICI
-TESTİ VE CACHE BUG'I. Admin panelde yeni ürün ("Fogy") oluşturuldu — Neon'da DB'ye yazıldığı
-DOĞRULANDI ama liste sayfasında hiç görünmedi. Kök neden bulundu: `app/admin/page.tsx`
-`dynamic` export'u olmadığı için Next.js tarafından build-anı statik önbelleğe alınıyordu.
-`export const dynamic = 'force-dynamic'` hem liste hem düzenleme sayfasına eklendi — canlı
-doğrulama BEKLİYOR (#114, YENİ). Ayrıca netleşti: sitenin kendisinin `menu_items`'a hiç
-bağlanmadığı (bilinçli, ayrı görev) bu turda kullanıcıya AÇIKÇA hatırlatıldı, bir "hata"
-sanılmasın diye. 400 satır eşiği beşinci kez aşıldığı için 26. sohbetin ayrıntılı planlama
-anlatısı arşive taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) — içerik Kritik
-Kararlar/Açık Sorunlar'da zaten tam özetli, kayıp yok.)*
+*[**TAŞINDI — 2026-09-26, bu turda**] v82-v87 sürüm-geçmişi notları (28.-33. sohbet: ilk admin
+cache bug'ı, kategori sistemi/#114-#120, sandviç DB şema senkron hatası #121/#122, `db` bundle
+sızması #123-#126) `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-26-devam5.md`) — içerik Açık Sorunlar #114-#126 ve Kritik
+Kararlar tablosunda zaten tam özetli, aktif takip için gerekli değil. v88'in üstündeki not
+artık dosyanın en eski sürüm kaydıdır.*
 
 *[**TAŞINDI — 2026-09-25, 31. sohbet kapanışı**] v80/v81 sürüm-geçmişi notları (26./27. sohbet:
 Admin Panel planlaması + canlıya alınışı) `session_arşiv_2.md`'ye taşındı (eklenti:
 `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, aynı dosyanın devamı) — içerik #108/#109/#112/
-#113 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil. v82'nin üstündeki not
-artık dosyanın en eski sürüm kaydıdır.*
+#113 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.*
 
 *[**TAŞINDI — 2026-09-24**] v75-v79 sürüm-geçmişi notları (2026-09-04→2026-09-05, Motion System
 P1/P2 çalışması) `session_arşiv_2.md`'ye taşındı — içerik #107/#105 ve GENEL DURUM'da zaten
