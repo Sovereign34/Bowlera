@@ -10,6 +10,13 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
+> ⚠️ **TAŞIMA NOTU (2026-09-26, 33. sohbet kapanışı):** 32. sohbetin CURRENT FOCUS tam anlatısı
+> taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) ama bu turda eklenen yeni
+> içerik (#123/#124/#125/#126 + Kritik Kararlar satırı + CURRENT FOCUS'un kendisi) dosyayı YİNE
+> 400 satır eşiğinin üzerinde bıraktı (465 satır) — CORE.md §7.1 Adım 1 gereği gerekçesiz
+> sıkıştırma YAPILMADI, bir sonraki oturumda İKİNCİ bir taşıma turu (muhtemelen bu turun CURRENT
+> FOCUS anlatısının kendisi, kapandıktan sonra) gerekecek. Emsal: 2026-09-03/2026-09-25'te de
+> aynı gün birden fazla taşıma turu yapılmıştı.
 > ⚠️ **TAŞIMA NOTU (2026-09-25, 31. sohbet kapanışı):** 400 satır eşiği ÜÇÜNCÜ kez aynı gün
 > aşıldığı için eski CURRENT FOCUS (30. sohbet, A9 tam anlatısı) arşive taşındı — detay Arşiv
 > Taşıma Kaydı tablosunda, eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`.
@@ -37,25 +44,49 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-26, 32. sohbet]** **ON BİRİNCİ DERS (#121, kalıcı ilke) + DB şema senkron
-> hatası bulundu/düzeltildi.** Önceki turda (25 dosyalık sandviç→DB bağlama refactoru) `lib/db/schema.ts`'e
-> eklenen `ingredients.isMikesWayDefault` ve `sandwich_sizes.priceMultiplier` (priceModifier'ın
-> yerine) kodda/GitHub'da vardı, ama gerçek Neon veritabanı tablosuna HİÇ İŞLENMEMİŞTİ —
-> `docs/schema-changes/` klasöründe de bu değişikliğin dosyası yoktu (CORE §7.4 notu metin olarak
-> yazıldı ama dosyaya hiç düşmedi). Sonuç: `db.select().from(ingredients)` yapan 3 admin sayfası
-> (liste/yeni/düzenle) "column does not exist" ile çöküyordu. **Kalıcı ilke:** `schema.ts`
-> değiştirip GitHub'a push etmek, gerçek DB'nin senkron olduğu anlamına GELMEZ — `db:push`/ALTER
-> AYRICA koşulmalı, aksi halde şemadaki TÜM kolonları SELECT eden her sayfa production'da aynı
-> şekilde çöker. Kullanıcının Codespaces limiti dolu olduğu için terminal/CLI kullanılamadı —
-> teşhis Neon SQL Editor'e yapıştırılan `information_schema.columns` sorgusuyla doğrulandı
-> (kolonlar gerçekten yoktu, `sandwich_sizes` 0 satır — veri kaybı riski yoktu), düzeltme de aynı
-> yerden 2 ALTER TABLE ile koşuldu: `ingredients.is_mikes_way_default boolean NOT NULL DEFAULT
-> false` eklendi; `sandwich_sizes.price_modifier` DROP edilip `price_multiplier numeric(4,2)
-> NOT NULL DEFAULT 1` eklendi. **Kullanıcı doğruladı: admin/ingredients çökmesi gitti.** **KALAN
-> (bkz. Açık Sorun #122):** kod tarafı (pricing motoru, store, 6 step bileşeni, admin
-> sandwich-sizes formu) bu turda HİÇ görülmedi/test edilmedi; `docs/schema-changes/` notu hâlâ
-> dosya olarak yok (kullanıcıya soruldu, henüz yanıt gelmedi); iki tablo da gerçek beden/malzeme
-> verisi içermiyor.
+> **[GÜNCEL — 2026-09-26, 33. sohbet]** **İKİ YENİ HATA BULUNDU/DÜZELTİLDİ + CANLIDA DOĞRULANDI
+> (#124, #125) + ON İKİNCİ DERS (kalıcı ilke).** Kullanıcı customize sayfasında "DATABASE_URL
+> eksik — Vercel Storage → Neon entegrasyonu kontrol edilmeli (CONFIG_SCHEMA.md §2)" hatasıyla
+> karşılaştı (32. sohbetin #121/#122 düzeltmesinden SONRA, ayrı bir hata). **Kök neden (#124):**
+> `lib/sandwich-catalog.ts` `db` client'ını (server-only, `DATABASE_URL` gerektirir) import
+> ediyordu, ama bu dosyadaki saf sabit `SANDWICH_BRANCH_CONFIG`'i İKİ "use client" bileşeni
+> (`store/useSandwichStore.ts`, `StepSauceToastExtras.tsx`) doğrudan buradan import ediyordu —
+> webpack tek sabit için TÜM dosyayı (dolayısıyla `db`'yi) tarayıcı bundle'ına dahil etti,
+> DATABASE_URL tarayıcıda hiç olmadığından ilk mount'ta çöktü. **Önceki turun (32. sohbet, bkz.
+> `lib/sandwich-catalog.ts` header yorumu) "client'a import edilirse Next.js derleme hatası
+> verir" iddiası YANLIŞ ÇIKTI — gerçek bir derleme-zamanı güvenlik ağı YOKTU, bu turda header
+> yorumu da düzeltildi.** **Çözüm:** `SANDWICH_BRANCH_CONFIG` `db` import ETMEYEN yeni bir
+> dosyaya (`lib/sandwich-constants.ts`) taşındı, 2 import satırı güncellendi — mantık değişmedi,
+> 4 dosya (1 yeni + 3 güncelleme). **Canlı doğrulama sonrası kullanıcı 2. bir eksik fark etti
+> (#125):** Ekmek/Protein/Peynir/Sebzeler adımlarında `ingredients.image` (DB'de `NOT NULL`,
+> gerçek veri dolu) hiç render edilmiyordu — 5 adım bileşeninden SADECE `StepSauceToastExtras.tsx`
+> `<img>` basıyordu. "Boy" adımında görsel YOK ama bu bilinçli (şema tasarımı: `sandwich_sizes`
+> tablosunda `image` kolonu hiç yok, boy bir malzeme değil yapısal bir çarpan). Aynı `<img>`
+> deseni `StepBread.tsx`/`StepProtein.tsx`/`StepCheese.tsx`/`StepVeggies.tsx`'e eklendi
+> ("Peynirsiz" sentetik seçeneği BSC-5 gereği görselsiz bırakıldı — DB kaydı yok, uydurma
+> görsel yasak). **Kullanıcı canlıda tüm akışı (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/
+> Ekstralar) ekran görüntüleriyle test etti, hem çökmenin gittiğini hem görsellerin geldiğini
+> DOĞRULADI ("Herşey yolunda görünüyor").** **ON İKİNCİ DERS (kalıcı ilke, #121/#116/#118'in
+> devamı):** Next.js'te bir dosyanın `db`/server-only import etmesi, o dosyadaki HERHANGİ bir
+> export'un (fiyat/kalori hesaplaması olsun ya da sadece saf bir sabit olsun) bir client
+> component tarafından import edilmesini GÜVENLİ hale getirmez — webpack tüm dosyayı bundle'a
+> dahil eder, Next.js bunu ÇOĞU ZAMAN derleme hatasıyla yakalamaz (`server-only` paketi
+> KURULMADIĞI sürece). Kalıcı ilke: `db` import eden bir dosyaya yeni bir export eklerken, o
+> export'un client component'lerce de kullanılıp kullanılmayacağı ELLE kontrol edilmeli — "saf
+> sabit, zararsız" varsayımı yeterli değil. **KALAN:** `server-only` paketinin kurulup
+> `lib/db/client.ts`'e eklenmesi (bu sınıf hatayı derleme zamanında yakalamak için) bu turda
+> ÖNERİLDİ ama YENİ npm paketi onayı gerektirdiği için (AGENT.md Kural: "Yeni npm paketi
+> kullanıcı onayı olmadan ekle" yasak) UYGULANMADI — ayrı bir karar gerektiriyor (bkz. Açık
+> Sorun #126). A13 (gerçek beden/malzeme verisi girilmesi, #122) ekran görüntülerinden GERÇEK
+> veri girilmiş gibi görünüyor (Glutensiz Somun/Izgara Tavuk/Cheddar/Zeytinyağı/Marul/Domates)
+> ama bu turda kullanıcı bunu AÇIKÇA teyit etmedi — kesin "TAMAMLANDI" denemez, A13 açık kaldı
+> (Kural: dosya/veri var/yok iddiası kesin ifadeyle sunulmamalı).
+>
+> **[TAŞINDI — 2026-09-26, 33. sohbet kapanışı]** 32. sohbetin (ON BİRİNCİ DERS #121 + DB şema
+> senkron hatası #121/#122 tam anlatısı) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı
+> (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) — içerik Kritik Kararlar/#121/#122
+> ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil. Dosya zaten 400 satır
+> eşiğinin üzerindeydi (416 satır), bu turun eklediği içerikle taşıma AYNI TURDA yapıldı.
 >
 > **[TAŞINDI — 2026-09-26, 32. sohbet kapanışı]** 31. sohbetin (A6/#109 tam anlatısı: Keto/
 > "sıcak-tahıl" filtre kaldırma kararları, `DIET_FILTERS` türetme refactoru, A7'nin bilinçli açık
@@ -130,12 +161,14 @@
 | 2026-09-25 (30. sohbet) | 29. sohbetin CURRENT FOCUS anlatısı (kategori sistemi #115 + #114 kök neden revizyonu #116) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#115/#116/GENEL DURUM'da özetli |
 | 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
 | 2026-09-26 (32. sohbet) | 31. sohbetin CURRENT FOCUS anlatısı (A6/#109 tam kapanışı: Keto/"sıcak-tahıl" kaldırma, `DIET_FILTERS` türetme refactoru) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#109/A6/A7/GENEL DURUM'da özetli |
+| 2026-09-26 (33. sohbet) | 32. sohbetin CURRENT FOCUS anlatısı (ON BİRİNCİ DERS #121 + DB şema senkron hatası #121/#122) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#121/#122/GENEL DURUM'da özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
 > `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
 > `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`,
-> `..._EKLENTI_2026-09-03.md`, `..._EKLENTI_2026-09-05.md`
+> `..._EKLENTI_2026-09-03.md`, `..._EKLENTI_2026-09-05.md`, `..._EKLENTI_2026-09-26.md`,
+> `..._EKLENTI_2026-09-26-devam2.md`
 > — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
@@ -178,6 +211,7 @@
 | 🗄️ | **[YENİ, 26. sohbet — Admin Panel]** `/admin`+`/api/admin` middleware guard'ı — `/personel` guard'ı ile AYNI desen (fail-closed, taze DB rol okuması), ama `role==='admin'` katı şartı — `staff` bu bloktan GEÇEMİYOR (bilinçli, "tek admin" kararı). | 🟡 Kod üretildi, canlı doğrulama BEKLİYOR |
 | 🗄️✅ | **[YENİ, 32. sohbet — DB TARAFI TAMAMLANDI]** `ingredients` tablosuna `is_mikes_way_default boolean NOT NULL DEFAULT false` kolonu eklendi — SADECE `productType='sandwich'` + `slot∈{veggies,sauce}` iken anlamlı, `lib/sandwich-catalog.ts` bunu okuyup "Mike's Way" hazır seçim presetini besleyecek (kod önceki turda üretildi). Migration Neon SQL Editor'de (CLI olmadan, `information_schema` ile önce doğrulanıp) ALTER TABLE ile koşuldu. Şema notu: `20260925220000_...` (metin bu sohbette var, `docs/schema-changes/` dosyası HENÜZ YAZILMADI, bkz. #121). | ✅ DB tarafı TAMAM, kod tarafı doğrulanmadı (#122) |
 | 🗄️✅ | **[YENİ, 32. sohbet — DB TARAFI TAMAMLANDI]** `sandwich_sizes.priceModifier` (integer, toplamsal TL) → `priceMultiplier` (numeric(4,2), çarpımsal) — gerçek fiyat motorunun (`lib/sandwich-pricing.ts`) ve `StepSize.tsx`'in ("×1.8") beklediği modelle uyum için (kod önceki turda üretildi). Tablo bu turda BOŞ bulundu (0 satır) — otomatik veri dönüşümü GEREKMEDİ, `price_modifier` DROP + `price_multiplier DEFAULT 1` ADD ile Neon SQL Editor'de koşuldu. | ✅ DB tarafı TAMAM, kod tarafı doğrulanmadı (#122) |
+| 🆕✅ | **[YENİ, 33. sohbet — KAPANDI, canlıda doğrulandı]** `SANDWICH_BRANCH_CONFIG` sabiti `lib/sandwich-catalog.ts`'ten (db import eden dosya) `lib/sandwich-constants.ts`'e (db import ETMEYEN yeni dosya) taşındı — 2 client component'in (`useSandwichStore.ts`/`StepSauceToastExtras.tsx`) bu sabiti import ederken `db`'yi de tarayıcı bundle'ına sızdırıp DATABASE_URL hatasıyla çökmesini önler (#124). Aynı turda Ekmek/Protein/Peynir/Sebzeler adımlarına, DB'de zaten dolu olan `item.image` alanını gösteren `<img>` deseni (Sos adımıyla birebir aynı) eklendi (#125). Kullanıcı canlıda uçtan uca (6 adım) ekran görüntüsüyle DOĞRULADI. | ✅ Kod+canlı doğrulama TAMAM |
 
 ---
 
@@ -238,6 +272,10 @@
 | 120 | 🟢 | **[YENİ, 30. sohbet — doğrulanamayan varsayım]** `components/menu/CategoryTabButton.tsx` bu sohbette HİÇ görülmedi — `id` prop'unun tipinin `lib/menu-filters.ts`'teki `CategoryTabId`'yi (artık sabit union değil, `string`) import ettiği (kendi ayrı sabit union'ı OLMADIĞI) VARSAYILDI. Kullanıcının "her şey tamam" onayı canlı build'in geçtiğini gösteriyor (dolaylı doğrulama) ama dosyanın kendisi hâlâ DOĞRUDAN görülmedi — düşük öncelik, sadece kayıt altına alınıyor. | `components/menu/CategoryTabButton.tsx` |
 
 | 121 | 🟢 | **[YENİ, 32. sohbet — ON BİRİNCİ DERS, kalıcı ilke]** `schema.ts` değiştirip GitHub'a push etmek, gerçek Neon DB tablosunun senkron güncellendiği anlamına GELMEZ — bu turda `ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` kodda/repoda vardı ama DB'de yoktu, `db.select()` yapan 3 admin sayfası (liste/yeni/düzenle) bu yüzden çöktü (bkz. Kritik Kararlar). Kalıcı ilke: her `schema.ts` değişikliğinde `db:push`/ALTER'in GERÇEKTEN koşulduğu (CLI veya Neon SQL Editor'den) AYRICA doğrulanmalı — "kod push edildi" ≠ "DB güncel". Ayrıca: bu değişikliğin `docs/schema-changes/` notu önceki turda METİN olarak yazıldı ama DOSYA olarak hiç üretilmedi (CORE §7.4) — kullanıcıya bu turda tekrar soruldu, henüz yanıt yok. | `lib/db/schema.ts`, `docs/schema-changes/` |
+| 123 | ✅ | **[GERİYE DÖNÜK KAYIT, 33. sohbet — 32. sohbette yapılmış ama hiç loglanmamış]** `app/sandwich/customize/[id]/page.tsx`'e `isCatalogReady()` guard'ı eklenmişti (boş/kısmi katalog varsa `SandwichCustomizer`'a hiç geçilmiyor) — kod `lib/sandwich-catalog.ts` header yorumunda "#123 düzeltmesi" olarak anılıyordu ama SESSION_INDEX.md'ye hiç işlenmemişti (governance/fiili kod arasında senkron kopukluğu, AGENT.md v1.5'teki arşiv-parçalama dersiyle AYNI TÜR ihlal). Bu turda dosya okunurken fark edildi, gerekçesiz kaybolmasın diye buraya geriye dönük kaydedildi. | `app/sandwich/customize/[id]/page.tsx`, `lib/sandwich-catalog.ts` |
+| 124 | ✅ | **[YENİ, 33. sohbet — KAPANDI, canlıda doğrulandı]** Customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu — `lib/sandwich-catalog.ts` (`db` import eden, server-only) içindeki `SANDWICH_BRANCH_CONFIG` sabitini 2 client component doğrudan import ediyordu, webpack `db`'yi de tarayıcı bundle'ına dahil ediyordu. Sabit `lib/sandwich-constants.ts`'e (db import etmeyen) taşınarak çözüldü — kullanıcı canlıda tüm 6 adımı ekran görüntüsüyle test etti, çökme gitti. | `lib/sandwich-catalog.ts`, `lib/sandwich-constants.ts` (yeni), `store/useSandwichStore.ts`, `components/sandwich/StepSauceToastExtras.tsx` |
+| 125 | ✅ | **[YENİ, 33. sohbet — KAPANDI, canlıda doğrulandı]** Ekmek/Protein/Peynir/Sebzeler adımlarında DB'de zaten dolu olan `ingredients.image` hiç render edilmiyordu — 5 adım bileşeninden sadece Sos adımı `<img>` basıyordu. Aynı desen 4 bileşene eklendi ("Peynirsiz" sentetik seçeneği BSC-5 gereği görselsiz bırakıldı, "Boy" adımı şema gereği zaten görselsiz — kasıtlı). Kullanıcı canlıda doğruladı. | `components/sandwich/StepBread.tsx`, `StepProtein.tsx`, `StepCheese.tsx`, `StepVeggies.tsx` |
+| 126 | 🟢 | **[YENİ, 33. sohbet]** `server-only` npm paketinin kurulup `lib/db/client.ts`'in başına eklenmesi ÖNERİLDİ — #124'teki gibi bir hatayı gelecekte derleme zamanında yakalamak için (şu an gerçek bir güvenlik ağı YOK, sadece dosya-içi yorum uyarısı var). AGENT.md Kural gereği ("Yeni npm paketi kullanıcı onayı olmadan ekle" yasak) bu turda UYGULANMADI, kullanıcı onayı bekliyor. | `lib/db/client.ts`, `package.json` |
 | 122 | 🔴 | **[YENİ, 32. sohbet]** DB şema senkron hatası düzeltildi ve kullanıcı admin/ingredients çökmesinin gittiğini DOĞRULADI, ama **kullanıcı henüz uçtan uca denemedi** (kendi ifadesi). Bu turda SADECE `lib/db/schema.ts`, admin `ingredients` sayfaları (liste/yeni/`[id]`), `IngredientForm.tsx` ve `ingredients` API route'u statik olarak incelendi — önceki turda "25 dosya" olarak push edildiği bildirilen sandviç-DB bağlama refactorunun geri kalanı (`lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, 6 `Step*.tsx`, `SandwichSummaryPanel.tsx`, `SandwichCustomizer.tsx`, `app/sandwich/customize/[id]/page.tsx`, `app/api/orders/gel-al/route.ts`, `SandwichSizeForm.tsx`) bu sohbette HİÇ GÖRÜLMEDİ. Ayrıca `sandwich_sizes` (0 satır) ve muhtemelen `ingredients` (sandviç malzemeleri) tabloları gerçek beden/malzeme verisi içermiyor — Mike's Way preseti/fiyat hesaplama gerçek veri girilmeden ANLAMLI test edilemez. | `lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, `components/sandwich/*`, `app/api/orders/gel-al/route.ts` |
 
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
@@ -276,7 +314,7 @@
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). ✅ **[32. sohbet, YENİ]** `ingredients.is_mikes_way_default` ve `sandwich_sizes.price_multiplier` (eski `price_modifier`'ın yerine) Neon SQL Editor'de ALTER TABLE ile eklendi/dönüştürüldü ve `information_schema` sorgusuyla doğrulandı — `sandwich_sizes` 0 satırdı, veri kaybı olmadı (bkz. #121). |
-| Sandviç Akışı (DB bağlantısı) | 🟡 **[32. sohbet, YENİ satır]** DB şema senkron hatası bu turda bulundu ve düzeltildi — admin `ingredients` sayfalarının (liste/yeni/düzenle) `is_mikes_way_default` kolonu eksik olduğu için çökmesi DURDU, kullanıcı doğruladı. **KALAN:** kod tarafı (pricing motoru, store, 6 step bileşeni, Mike's Way preseti) hiç canlı test edilmedi (#122); `sandwich_sizes`/sandviç `ingredients` gerçek beden/malzeme verisi içermiyor; `docs/schema-changes/` notu dosya olarak hâlâ yok (#121). |
+| Sandviç Akışı (DB bağlantısı) | 🟢 **[33. sohbet, GÜNCELLENDİ]** #124 (client bundle'a `db` sızması → DATABASE_URL çökmesi) ve #125 (4 adımda eksik ürün görseli) düzeltildi, kullanıcı canlıda 6 adımın tamamını (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/Ekstralar) ekran görüntüsüyle DOĞRULADI — hem çökme gitti hem görseller geldi. Ekran görüntülerinde gerçek beden/malzeme verisi görünüyor (Glutensiz Somun, Izgara Tavuk, Cheddar, Zeytinyağı, Marul, Domates) ama kullanıcı bunu bu turda AÇIKÇA teyit etmedi — A13'ün fiilen tamamlanıp tamamlanmadığı kesin değil, açık kaldı. **KALAN:** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi kararı bekliyor (#126); sipariş verme (Sepete Ekle → checkout) ucu hâlâ hiç test edilmedi. |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
 | Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
 | Public Menü (`/menu`) | ✅ **[30. sohbet, A9 KAPANDI]** Artık `menu_items`/`categories` DB'sine bağlı — statik `menu-data.json` KULLANILMIYOR. Karar A (`force-dynamic`, her istekte taze sorgu) — ISR denemesi (Karar B) canlı build'de kırıldı, geri dönüldü (bkz. #118, ONUNCU DERS). Kategori sekmeleri DB'den dinamik. Kullanıcı onayıyla canlı build doğrulandı. **KALAN:** `lib/db/queries/menu.ts` silinmeli (#119), `CategoryTabButton.tsx` hâlâ hiç görülmedi (#120, düşük öncelik). |
@@ -287,8 +325,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| A15 | **[YENİ, 33. sohbet]** `server-only` npm paketini kurup `lib/db/client.ts`'e eklemek isteniyor mu? (#126 — kullanıcı onayı bekliyor, bu sınıf hatayı derleme zamanında yakalamak için) | 🟢 |
 | A12 | **[YENİ, 32. sohbet]** Admin `ingredients` sayfalarını (liste/yeni/düzenle) canlıda uçtan uca test et — malzeme ekle/düzenle, Mike's Way checkbox'ının sadece sandwich+veggies/sauce'ta göründüğünü doğrula (#122) | 🔴 |
-| A13 | **[YENİ, 32. sohbet]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi gir — şu an ikisi de test/boş veri (#122) | 🔴 |
+| A13 | **[YENİ, 32. sohbet]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi gir — şu an ikisi de test/boş veri (#122). **[33. sohbet notu]** Canlı ekran görüntülerinde gerçek görünen veri var (Glutensiz Somun/Izgara Tavuk/Cheddar/Zeytinyağı/Marul/Domates) ama kullanıcı bunu bu turda AÇIKÇA "gerçek veri girdim" diye teyit etmedi — kesin TAMAMLANDI denemez, açık kalıyor. | 🟡 (düşürüldü, teyit bekliyor) |
 | A14 | **[YENİ, 32. sohbet]** `docs/schema-changes/20260925220000_...md` notunu gerçek dosya olarak `docs/schema-changes/` altına kaydet (CORE §7.4) — kullanıcıya soruldu, henüz yanıt yok (#121) | 🟢 |
 | A9 | **[TAMAMLANDI, 30. sohbet ✅]** Public `/menu` sayfası `menu_items`/`categories` DB'sine bağlandı — Karar A (her istekte taze sorgu, `force-dynamic` + `revalidatePath`), kategori sekmeleri dinamik. Kullanıcı onayıyla canlı build doğrulandı. | ✅ |
 | A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
@@ -354,6 +393,23 @@
 | 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı doğrulanmalı. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
+
+*BOWLERA SESSION_INDEX.md — v87 (v86'dan: **[33. sohbet, 2026-09-26]** #124 KAPANDI —
+customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu, kök neden:
+`lib/sandwich-catalog.ts` (db import eden) içindeki `SANDWICH_BRANCH_CONFIG` sabitini 2 client
+component doğrudan import ediyor, webpack `db`'yi tarayıcı bundle'ına sızdırıyordu — sabit
+`lib/sandwich-constants.ts`'e (db import etmeyen) taşınarak çözüldü. #125 KAPANDI — Ekmek/
+Protein/Peynir/Sebzeler adımlarında DB'de dolu olan `item.image` hiç gösterilmiyordu, Sos
+adımıyla aynı `<img>` deseni 4 bileşene eklendi. Kullanıcı canlıda 6 adımın tamamını ekran
+görüntüsüyle DOĞRULADI. ON İKİNCİ DERS (kalıcı ilke) eklendi: db import eden bir dosyadaki HER
+export, o dosyayı client bundle'ına sızdırma riski taşır — "saf sabit, zararsız" varsayımı
+yeterli değil, gerçek bir derleme-zamanı güvenlik ağı (`server-only` paketi) YOKTU (#126, yeni
+açık sorun, npm paket onayı bekliyor). GERİYE DÖNÜK KAYIT: #123 (isCatalogReady guard'ı, 32.
+sohbette kodlanmış ama SESSION_INDEX'e hiç işlenmemiş) bu turda fark edilip kapalı olarak
+kaydedildi. A13 durumu düşürüldü (🔴→🟡) — ekran görüntülerinde gerçek veri var GİBİ görünüyor
+ama kullanıcı açıkça teyit etmedi. Dosya zaten 400 satır eşiğinin üzerindeydi (416 satır); bu
+turun eklediği içerikle AYNI TURDA taşıma da yapıldı: 32. sohbetin (#121/#122) tam anlatı bloğu
+`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`).)*
 
 *BOWLERA SESSION_INDEX.md — v86 (v85'ten: **[32. sohbet, 2026-09-26]** ON BİRİNCİ DERS + DB
 şema senkron hatası bulundu/düzeltildi (#121, YENİ). Önceki turda schema.ts'e eklenen
