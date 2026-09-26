@@ -52,3 +52,84 @@ store/useSandwichStore.test.ts
 Bu migrasyon mevcut `sandwich_sizes` satırlarındaki `priceModifier` değerlerini OTOMATİK
 priceMultiplier'a çevirmez — tablo şu an muhtemelen sadece test verisi içeriyor (bu turdan önce
 gerçek menü girilmedi), ama gerçek veri girilmişse migration ÖNCESİ elle kontrol edilmeli.
+## Session: 32. sohbet (not önceki turda yazıldı, DB tarafı 32. sohbette uygulandı) — 2026-09-25
+## Açıklama: `sandwich_sizes.priceModifier` alanı, gerçek fiyat motorunun (`lib/sandwich-pricing.ts`)
+ve `StepSize.tsx` ekranının ("×1.8") beklediği çarpımsal modelle çakışıyordu (toplamalı TL yerine
+çarpan bekleniyordu). Kullanıcı kararı: şema çarpımsal modele geçsin (`priceMultiplier`), pricing
+motoru/ekran DEĞİŞMEDİ. Ayrıca "Mike's Way" hazır seçim preseti artık DB'den yönetilebilir olması
+için `ingredients` tablosuna `isMikesWayDefault` eklendi (`slot='veggies'` | `slot='sauce'` iken
+anlamlı).
+
+### ÖNCE
+```ts
+export const sandwichSizes = pgTable("sandwich_sizes", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  priceModifier: integer("price_modifier").notNull().default(0), // TL, taban fiyata eklenir
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+})
+
+// ingredients tablosunda isMikesWayDefault YOK
+```
+
+### SONRA
+```ts
+export const sandwichSizes = pgTable("sandwich_sizes", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  priceMultiplier: numeric("price_multiplier", { precision: 4, scale: 2 }).notNull().default("1"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const ingredients = pgTable("ingredients", {
+  // ...mevcut alanlar aynı...
+  isMikesWayDefault: boolean("is_mikes_way_default").notNull().default(false),
+})
+```
+
+### ETKİLENEN DOSYALAR
+`lib/db/schema.ts`, `lib/sandwich-catalog.ts` (yeni), `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`,
+`types/sandwich.ts`, `components/sandwich/Step*.tsx` (6 dosya), `components/sandwich/SandwichSummaryPanel.tsx`,
+`components/sandwich/SandwichCustomizer.tsx`, `app/sandwich/customize/[id]/page.tsx`,
+`app/api/orders/gel-al/route.ts`, `components/admin/SandwichSizeForm.tsx`,
+`app/api/admin/sandwich-sizes/route.ts` + `[id]/route.ts`, `components/admin/IngredientForm.tsx`,
+`store/useSandwichStore.test.ts`
+
+### RİSK
+Bu migrasyon mevcut `sandwich_sizes` satırlarındaki `priceModifier` değerlerini OTOMATİK
+`priceMultiplier`'a çevirmez — tablo şu an muhtemelen sadece test verisi içeriyor (bu turdan önce
+gerçek menü girilmedi), ama gerçek veri girilmişse migration ÖNCESİ elle kontrol edilmeli.
+
+### GERİ ALMA
+1. `priceMultiplier` kolonunu `priceModifier` integer'a geri çevir (mevcut satırlarda veri kaybı —
+   çarpan değerleri TL karşılığına elle dönüştürülmeli, otomatik ters migrasyon YOK).
+   `isMikesWayDefault` kolonunu DROP et.
+2. Yukarıdaki dosyaları bu commit'ten önceki haline döndür (statik `sandwich-data.json`'a geri dön).
+
+---
+
+## UYGULANDI — 2026-09-26 (32. sohbet, geriye dönük not)
+
+**Bulgu:** Yukarıdaki not bu turdan ÖNCE metin olarak yazılmıştı ama `docs/schema-changes/`
+klasörüne dosya olarak hiç düşmemişti (CORE §7.4 ihlali riski) — bu, `db.select().from(ingredients)`
+yapan 3 admin sayfasının (liste/yeni/düzenle) `is_mikes_way_default` kolonu DB'de yokken
+"column does not exist" hatasıyla çökmesine kadar fark edilmedi (bkz. Açık Sorun #121, SESSION_INDEX.md).
+
+**Doğrulama:** `information_schema.columns` sorgusu Neon SQL Editor'de koşuldu — `sandwich_sizes`
+tablosunun 0 satır olduğu doğrulandı, RİSK bölümündeki veri-kaybı senaryosu GEÇERSİZ kaldı.
+
+**Gerçek uygulama (CLI değil, Neon SQL Editor — kullanıcının Codespaces limiti dolu):**
+```sql
+ALTER TABLE ingredients
+  ADD COLUMN is_mikes_way_default boolean NOT NULL DEFAULT false;
+
+ALTER TABLE sandwich_sizes
+  DROP COLUMN price_modifier,
+  ADD COLUMN price_multiplier numeric(4,2) NOT NULL DEFAULT 1;
+```
+
+**Sonuç:** Kullanıcı admin/ingredients sayfalarının çökmesinin gittiğini doğruladı. **KAPANMADI**
+(bkz. Açık Sorun #122): yukarıdaki ETKİLENEN DOSYALAR listesindeki kod tarafı bu turda hiç
+görülmedi/canlı test edilmedi; iki tablo da gerçek beden/malzeme verisi içermiyor.
