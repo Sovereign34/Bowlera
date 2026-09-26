@@ -10,6 +10,16 @@
 > kadar → `session_arşiv_1.md`. **[2026-08-11 güncellemesi]:** `session_arşiv_1.md` da
 > hacimce şişince ÜÇÜNCÜ bir dosya açıldı — 2026-08-11'den itibaren → `session_arşiv_2.md`
 > (ilişki notu o dosyanın başlığında). Bölünme sadece hacim nedeniyledir, kural değişmedi.
+> ⚠️ **TAŞIMA NOTU (2026-09-26, bu turda — A13 teyit checkpoint'i):** Kullanıcı sandviç customize
+> akışının 2 canlı ekran görüntüsünü paylaşıp A13'ü AÇIKÇA kapattı ("A13 kapandı") — Ekmek adımında
+> Glutensiz Somun (+13 TL, 25 kcal) / Tam Buğday Somun (+12 TL, 150 kcal), Peynir adımında Cheddar
+> (+58 TL, 25 kcal, görseliyle) gerçek ürün adı/fiyat/kalori/görsel olarak DOĞRULANDI. A13 KAPANDI
+> işaretlendi (SIRADAKİ GÖREVLER + GENEL DURUM). Bu ekleme dosyayı yeniden 400 satır eşiğinin
+> üzerine çıkardı — bir önceki üst not zaten bu ikinci taşıma turunu öngörmüştü. **Aynı turda
+> taşıma yapıldı:** 33. sohbetin GÜNCEL CURRENT FOCUS tam anlatısı (#124/#125 — client bundle'a
+> `db` sızması + eksik ürün görselleri, ON İKİNCİ DERS) `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-26-devam3.md`) — içerik Kritik Kararlar/#124/#125/GENEL
+> DURUM'da zaten tam özetli, aktif takip için gerekli değil.
 > ⚠️ **TAŞIMA NOTU (2026-09-26, 33. sohbet kapanışı):** 32. sohbetin CURRENT FOCUS tam anlatısı
 > taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) ama bu turda eklenen yeni
 > içerik (#123/#124/#125/#126 + Kritik Kararlar satırı + CURRENT FOCUS'un kendisi) dosyayı YİNE
@@ -44,43 +54,17 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-26, 33. sohbet]** **İKİ YENİ HATA BULUNDU/DÜZELTİLDİ + CANLIDA DOĞRULANDI
-> (#124, #125) + ON İKİNCİ DERS (kalıcı ilke).** Kullanıcı customize sayfasında "DATABASE_URL
-> eksik — Vercel Storage → Neon entegrasyonu kontrol edilmeli (CONFIG_SCHEMA.md §2)" hatasıyla
-> karşılaştı (32. sohbetin #121/#122 düzeltmesinden SONRA, ayrı bir hata). **Kök neden (#124):**
-> `lib/sandwich-catalog.ts` `db` client'ını (server-only, `DATABASE_URL` gerektirir) import
-> ediyordu, ama bu dosyadaki saf sabit `SANDWICH_BRANCH_CONFIG`'i İKİ "use client" bileşeni
-> (`store/useSandwichStore.ts`, `StepSauceToastExtras.tsx`) doğrudan buradan import ediyordu —
-> webpack tek sabit için TÜM dosyayı (dolayısıyla `db`'yi) tarayıcı bundle'ına dahil etti,
-> DATABASE_URL tarayıcıda hiç olmadığından ilk mount'ta çöktü. **Önceki turun (32. sohbet, bkz.
-> `lib/sandwich-catalog.ts` header yorumu) "client'a import edilirse Next.js derleme hatası
-> verir" iddiası YANLIŞ ÇIKTI — gerçek bir derleme-zamanı güvenlik ağı YOKTU, bu turda header
-> yorumu da düzeltildi.** **Çözüm:** `SANDWICH_BRANCH_CONFIG` `db` import ETMEYEN yeni bir
-> dosyaya (`lib/sandwich-constants.ts`) taşındı, 2 import satırı güncellendi — mantık değişmedi,
-> 4 dosya (1 yeni + 3 güncelleme). **Canlı doğrulama sonrası kullanıcı 2. bir eksik fark etti
-> (#125):** Ekmek/Protein/Peynir/Sebzeler adımlarında `ingredients.image` (DB'de `NOT NULL`,
-> gerçek veri dolu) hiç render edilmiyordu — 5 adım bileşeninden SADECE `StepSauceToastExtras.tsx`
-> `<img>` basıyordu. "Boy" adımında görsel YOK ama bu bilinçli (şema tasarımı: `sandwich_sizes`
-> tablosunda `image` kolonu hiç yok, boy bir malzeme değil yapısal bir çarpan). Aynı `<img>`
-> deseni `StepBread.tsx`/`StepProtein.tsx`/`StepCheese.tsx`/`StepVeggies.tsx`'e eklendi
-> ("Peynirsiz" sentetik seçeneği BSC-5 gereği görselsiz bırakıldı — DB kaydı yok, uydurma
-> görsel yasak). **Kullanıcı canlıda tüm akışı (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/
-> Ekstralar) ekran görüntüleriyle test etti, hem çökmenin gittiğini hem görsellerin geldiğini
-> DOĞRULADI ("Herşey yolunda görünüyor").** **ON İKİNCİ DERS (kalıcı ilke, #121/#116/#118'in
-> devamı):** Next.js'te bir dosyanın `db`/server-only import etmesi, o dosyadaki HERHANGİ bir
-> export'un (fiyat/kalori hesaplaması olsun ya da sadece saf bir sabit olsun) bir client
-> component tarafından import edilmesini GÜVENLİ hale getirmez — webpack tüm dosyayı bundle'a
-> dahil eder, Next.js bunu ÇOĞU ZAMAN derleme hatasıyla yakalamaz (`server-only` paketi
-> KURULMADIĞI sürece). Kalıcı ilke: `db` import eden bir dosyaya yeni bir export eklerken, o
-> export'un client component'lerce de kullanılıp kullanılmayacağı ELLE kontrol edilmeli — "saf
-> sabit, zararsız" varsayımı yeterli değil. **KALAN:** `server-only` paketinin kurulup
-> `lib/db/client.ts`'e eklenmesi (bu sınıf hatayı derleme zamanında yakalamak için) bu turda
-> ÖNERİLDİ ama YENİ npm paketi onayı gerektirdiği için (AGENT.md Kural: "Yeni npm paketi
-> kullanıcı onayı olmadan ekle" yasak) UYGULANMADI — ayrı bir karar gerektiriyor (bkz. Açık
-> Sorun #126). A13 (gerçek beden/malzeme verisi girilmesi, #122) ekran görüntülerinden GERÇEK
-> veri girilmiş gibi görünüyor (Glutensiz Somun/Izgara Tavuk/Cheddar/Zeytinyağı/Marul/Domates)
-> ama bu turda kullanıcı bunu AÇIKÇA teyit etmedi — kesin "TAMAMLANDI" denemez, A13 açık kaldı
-> (Kural: dosya/veri var/yok iddiası kesin ifadeyle sunulmamalı).
+> **[GÜNCEL — 2026-09-26, A13 teyit checkpoint'i]** Kullanıcı sandviç customize akışının 2 canlı
+> ekran görüntüsünü paylaştı ve A13'ü AÇIKÇA kapattı: Ekmek adımında Glutensiz Somun (+13 TL,
+> 25 kcal)/Tam Buğday Somun (+12 TL, 150 kcal), Peynir adımında Cheddar (+58 TL, 25 kcal,
+> görseliyle) — gerçek ürün adı/fiyat/kalori/görsel DOĞRULANDI (bkz. SIRADAKİ GÖREVLER A13,
+> GENEL DURUM Sandviç Akışı satırı). **33. sohbetin tam anlatısı** (#124 — client bundle'a `db`
+> sızması → DATABASE_URL çökmesi; #125 — 4 adımda eksik ürün görseli; ON İKİNCİ DERS: `db`
+> import eden dosyadaki HERHANGİ export client component'e sızma riski taşır) bu turda arşive
+> taşındı (bkz. üst not) — özeti Kritik Kararlar #124/#125'te ve GENEL DURUM'da hâlâ tam mevcut.
+> **KALAN (değişmedi):** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only`
+> paketi kurulumu kullanıcı onayı bekliyor (A15/#126); sandviç sipariş verme ucu (Sepete Ekle→
+> checkout) hâlâ hiç canlı test edilmedi.
 >
 > **[TAŞINDI — 2026-09-26, 33. sohbet kapanışı]** 32. sohbetin (ON BİRİNCİ DERS #121 + DB şema
 > senkron hatası #121/#122 tam anlatısı) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı
@@ -162,13 +146,14 @@
 | 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
 | 2026-09-26 (32. sohbet) | 31. sohbetin CURRENT FOCUS anlatısı (A6/#109 tam kapanışı: Keto/"sıcak-tahıl" kaldırma, `DIET_FILTERS` türetme refactoru) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#109/A6/A7/GENEL DURUM'da özetli |
 | 2026-09-26 (33. sohbet) | 32. sohbetin CURRENT FOCUS anlatısı (ON BİRİNCİ DERS #121 + DB şema senkron hatası #121/#122) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#121/#122/GENEL DURUM'da özetli |
+| 2026-09-26 (A13 teyit checkpoint'i) | 33. sohbetin KENDİ CURRENT FOCUS anlatısı (#124/#125, ON İKİNCİ DERS) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam3.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#124/#125/GENEL DURUM'da özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
 > `..._EKLENTI_2026-08-12.md`, `..._EKLENTI_2026-08-12-devam2.md`, `..._EKLENTI_2026-08-12-devam3.md`,
 > `session_arsiv_2_EKLENTI_2026-08-23.md`, `..._EKLENTI_2026-08-23-devam2.md`,
 > `..._EKLENTI_2026-09-03.md`, `..._EKLENTI_2026-09-05.md`, `..._EKLENTI_2026-09-26.md`,
-> `..._EKLENTI_2026-09-26-devam2.md`
+> `..._EKLENTI_2026-09-26-devam2.md`, `..._EKLENTI_2026-09-26-devam3.md`
 > — bunların hangileri fiilen ilgili arşiv dosyasının sonuna eklendi, teyit edilmeli.
 
 ---
@@ -314,7 +299,7 @@
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). ✅ **[32. sohbet, YENİ]** `ingredients.is_mikes_way_default` ve `sandwich_sizes.price_multiplier` (eski `price_modifier`'ın yerine) Neon SQL Editor'de ALTER TABLE ile eklendi/dönüştürüldü ve `information_schema` sorgusuyla doğrulandı — `sandwich_sizes` 0 satırdı, veri kaybı olmadı (bkz. #121). |
-| Sandviç Akışı (DB bağlantısı) | 🟢 **[33. sohbet, GÜNCELLENDİ]** #124 (client bundle'a `db` sızması → DATABASE_URL çökmesi) ve #125 (4 adımda eksik ürün görseli) düzeltildi, kullanıcı canlıda 6 adımın tamamını (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/Ekstralar) ekran görüntüsüyle DOĞRULADI — hem çökme gitti hem görseller geldi. Ekran görüntülerinde gerçek beden/malzeme verisi görünüyor (Glutensiz Somun, Izgara Tavuk, Cheddar, Zeytinyağı, Marul, Domates) ama kullanıcı bunu bu turda AÇIKÇA teyit etmedi — A13'ün fiilen tamamlanıp tamamlanmadığı kesin değil, açık kaldı. **KALAN:** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi kararı bekliyor (#126); sipariş verme (Sepete Ekle → checkout) ucu hâlâ hiç test edilmedi. |
+| Sandviç Akışı (DB bağlantısı) | 🟢 **[bu turda, A13 KAPANDI]** #124 (client bundle'a `db` sızması → DATABASE_URL çökmesi) ve #125 (4 adımda eksik ürün görseli) düzeltildi, kullanıcı canlıda 6 adımın tamamını (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/Ekstralar) ekran görüntüsüyle DOĞRULADI. **A13 bu turda AÇIKÇA kapandı** ("A13 kapandı") — 2 yeni ekran görüntüsü gerçek ürün adı/fiyat/kalori/görsel gösteriyor (Ekmek: Glutensiz Somun +13TL/25kcal, Tam Buğday Somun +12TL/150kcal; Peynir: Cheddar +58TL/25kcal, görseliyle). **KALAN:** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi kararı bekliyor (#126/A15); sipariş verme (Sepete Ekle → checkout) ucu hâlâ hiç test edilmedi. |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
 | Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
 | Public Menü (`/menu`) | ✅ **[30. sohbet, A9 KAPANDI]** Artık `menu_items`/`categories` DB'sine bağlı — statik `menu-data.json` KULLANILMIYOR. Karar A (`force-dynamic`, her istekte taze sorgu) — ISR denemesi (Karar B) canlı build'de kırıldı, geri dönüldü (bkz. #118, ONUNCU DERS). Kategori sekmeleri DB'den dinamik. Kullanıcı onayıyla canlı build doğrulandı. **KALAN:** `lib/db/queries/menu.ts` silinmeli (#119), `CategoryTabButton.tsx` hâlâ hiç görülmedi (#120, düşük öncelik). |
@@ -327,7 +312,7 @@
 |---|---|---|
 | A15 | **[YENİ, 33. sohbet]** `server-only` npm paketini kurup `lib/db/client.ts`'e eklemek isteniyor mu? (#126 — kullanıcı onayı bekliyor, bu sınıf hatayı derleme zamanında yakalamak için) | 🟢 |
 | A12 | **[YENİ, 32. sohbet]** Admin `ingredients` sayfalarını (liste/yeni/düzenle) canlıda uçtan uca test et — malzeme ekle/düzenle, Mike's Way checkbox'ının sadece sandwich+veggies/sauce'ta göründüğünü doğrula (#122) | 🔴 |
-| A13 | **[YENİ, 32. sohbet]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi gir — şu an ikisi de test/boş veri (#122). **[33. sohbet notu]** Canlı ekran görüntülerinde gerçek görünen veri var (Glutensiz Somun/Izgara Tavuk/Cheddar/Zeytinyağı/Marul/Domates) ama kullanıcı bunu bu turda AÇIKÇA "gerçek veri girdim" diye teyit etmedi — kesin TAMAMLANDI denemez, açık kalıyor. | 🟡 (düşürüldü, teyit bekliyor) |
+| A13 | **[KAPANDI, bu turda ✅]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi girildi — kullanıcı 2 canlı ekran görüntüsüyle AÇIKÇA teyit etti ("A13 kapandı"): Ekmek adımında Glutensiz Somun (+13 TL/25 kcal)/Tam Buğday Somun (+12 TL/150 kcal), Peynir adımında Cheddar (+58 TL/25 kcal, görseliyle). | ✅ |
 | A14 | **[YENİ, 32. sohbet]** `docs/schema-changes/20260925220000_...md` notunu gerçek dosya olarak `docs/schema-changes/` altına kaydet (CORE §7.4) — kullanıcıya soruldu, henüz yanıt yok (#121) | 🟢 |
 | A9 | **[TAMAMLANDI, 30. sohbet ✅]** Public `/menu` sayfası `menu_items`/`categories` DB'sine bağlandı — Karar A (her istekte taze sorgu, `force-dynamic` + `revalidatePath`), kategori sekmeleri dinamik. Kullanıcı onayıyla canlı build doğrulandı. | ✅ |
 | A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
@@ -393,6 +378,16 @@
 | 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı doğrulanmalı. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
+
+*BOWLERA SESSION_INDEX.md — v88 (v87'den: **[bu turda, 2026-09-26]** A13 KAPANDI — kullanıcı
+2 canlı ekran görüntüsüyle sandviç customize akışında gerçek beden/malzeme/fiyat verisini AÇIKÇA
+teyit etti ("A13 kapandı"): Ekmek adımında Glutensiz Somun (+13 TL/25 kcal) ve Tam Buğday Somun
+(+12 TL/150 kcal), Peynir adımında Cheddar (+58 TL/25 kcal, görseliyle). SIRADAKİ GÖREVLER ve
+GENEL DURUM Sandviç Akışı satırı güncellendi. Bu ekleme dosyayı yeniden 400 satır eşiğinin
+üzerine çıkardığı için AYNI TURDA taşıma da yapıldı: 33. sohbetin KENDİ CURRENT FOCUS tam
+anlatısı (#124/#125, ON İKİNCİ DERS) `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-26-devam3.md`) — içerik Kritik Kararlar/#124/#125/GENEL
+DURUM'da zaten tam özetli.)*
 
 *BOWLERA SESSION_INDEX.md — v87 (v86'dan: **[33. sohbet, 2026-09-26]** #124 KAPANDI —
 customize sayfası ilk mount'ta "DATABASE_URL eksik" hatasıyla çöküyordu, kök neden:
