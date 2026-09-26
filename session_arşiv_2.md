@@ -1722,3 +1722,30 @@ tabloya dahil edilmemesi kararı `grep` ile KODDA DOĞRULANDI.)*
 Sorunlar/Kritik Kararlar tablosunda ve GENEL DURUM'da hâlâ özetli — turn-by-turn sürüm
 notunun kendisinin aktif dosyada kalması gerekli değildi. #109 bu arada (31. sohbette)
 KAPANDI, #108/#112/#113'ün güncel durumu SESSION_INDEX.md'nin ilgili satırlarında görülebilir.*
+---
+# session_arşiv_2.md EKLENTİSİ — 2026-09-26 (32. sohbet kapanışı)
+
+> Bu blok, SESSION_INDEX.md 400 satır eşiğini aştığı için 32. sohbet kapanışında taşındı.
+> Kendi elinizle mevcut `session_arşiv_2.md` dosyanızın SONUNA ekleyin.
+> İçerik Kritik Kararlar tablosunda (#109 satırı) ve Açık Sorunlar #109/A6/A7'de ve GENEL
+> DURUM'da zaten tam özetlidir — bu blok sadece turn-by-turn anlatı ayrıntısıdır, aktif takip
+> için gerekli değildir.
+
+---
+
+**[GÜNCEL — 2026-09-25, 31. sohbet, KAPANDI]** Açık Sorun #109 KAPANDI (A6 tamamlandı).
+**Karar 1:** Keto filtre panelinden kaldırıldı — admin sabitlerinde hiç yoktu, gerçek veride
+hiç kullanılmıyordu, kalıcı kritere dayanmadan her zaman 0 sonuç veren bir seçenek olarak
+durması güven-verme ilkesine aykırıydı. **Karar 2:** "sıcak-tahıl" de kaldırıldı, `DIET_FILTERS`
+artık `MENU_ITEM_TAGS`'tan TÜRETİLİYOR (allergen'lerle aynı desen) — yapısal senkron sağlandı.
+Etiket görünüm senkronu: yeni `MENU_ITEM_TAG_LABELS` haritası admin formu + `MenuCardBadges.tsx`
+tarafından okunuyor, eski/silinmiş id için `?? tag` fallback'i var (crash yok). 4 dosya:
+`menu-item-constants.ts`, `menu-filters.ts`, `MenuItemForm.tsx`, `MenuCardBadges.tsx`.
+**⚠️ A7 (#108, DESIGN_SYSTEM.md alerjen listesi 7→5 senkronu) bu turda KAPATILMADI** — kullanıcı
+A6 ile birlikte kapatılmasını istedi ama bu turun değişiklikleri sadece diyet tag'lerini
+kapsıyor, alerjen dokümanına hiç dokunulmadı; gerekçesiz madde düşürülmesin diye açık bırakıldı
+(Self-Correction, bkz. Açık Görevler A7).
+**⚠️ Dosya hacmi notu:** bu güncelleme dosyayı 425 satıra çıkarmıştı, 400 satır eşiği aşıldı.
+30. sohbetin (A9) tam anlatı bloğu arşive taşındı (bkz. üst not + Arşiv Taşıma Kaydı) —
+dosya artık eşiğin ALTINDA. Taşıma bloğu kullanıcıya AYRI bir dosya olarak verildi, kendi
+elinizle `session_arşiv_2.md`'nin sonuna eklemeniz gerekiyor.
