@@ -2008,3 +2008,71 @@ id'ye (`build-your-own-kasem`) gidiyor.)*
 
 *(Bu eklentiyi mevcut `session_arşiv_2.md` dosyanızın en sonuna, kendi elinizle ekleyin —
 AGENT.md Kural gereği arşiv dosyası burada tam olarak yeniden üretilmez.)*
+------
+## EKLENTİ — 2026-09-26 (35. sohbet devamı, devam7)
+> `session_arşiv_2.md`'nin SONUNA eklenecek blok. Bu dosyanın kendisi arşivin yerine geçmez,
+> sadece SESSION_INDEX.md'den bu turda çıkarılan pointer/versiyon metinlerinin TAM halini taşır.
+
+### 1) Konsolide edilen 9 tekil TAŞINDI pointer'ı (SESSION_INDEX.md CURRENT FOCUS'tan çıkarıldı)
+
+> **[TAŞINDI — 2026-09-26, bu turda (35. sohbet)]** 34. sohbetin (#127 Bowl DB bağlama) tam
+> CURRENT FOCUS anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-26-devam6.md`) — içerik Açık Sorunlar #127/#128 ve GENEL
+> DURUM'da zaten tam özetli, aktif takip için gerekli değil.
+>
+> **[TAŞINDI — 2026-09-26, bu turda]** A13 teyit checkpoint'inin tam anlatısı (kullanıcının 2
+> canlı ekran görüntüsüyle Ekmek/Peynir adımlarındaki gerçek fiyat/kalori/görseli doğrulaması)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam4.md`) —
+> içerik SIRADAKİ GÖREVLER A13 ve GENEL DURUM Sandviç Akışı satırında zaten tam özetli. **KALAN
+> (değişmedi):** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi
+> kurulumu kullanıcı onayı bekliyor (A15/#126); sandviç sipariş verme ucu (Sepete Ekle→checkout)
+> hâlâ hiç canlı test edilmedi.
+>
+> **[TAŞINDI — 2026-09-26, 33. sohbet kapanışı]** 32. sohbetin (ON BİRİNCİ DERS #121 + DB şema
+> senkron hatası #121/#122 tam anlatısı) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı
+> (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) — içerik Kritik Kararlar/#121/#122
+> ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil. Dosya zaten 400 satır
+> eşiğinin üzerindeydi (416 satır), bu turun eklediği içerikle taşıma AYNI TURDA yapıldı.
+>
+> **[TAŞINDI — 2026-09-26, 32. sohbet kapanışı]** 31. sohbetin (A6/#109 tam anlatısı: Keto/
+> "sıcak-tahıl" filtre kaldırma kararları, `DIET_FILTERS` türetme refactoru, A7'nin bilinçli açık
+> bırakılma gerekçesi) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-26.md`) — içerik Kritik Kararlar/#109/A6/A7 ve GENEL DURUM'da
+> zaten tam özetli, aktif takip için gerekli değil.
+>
+> **[TAŞINDI — 2026-09-25, 31. sohbet kapanışı]** 30. sohbetin (A9 tam anlatısı: kategori sekmeleri
+> #117, cache mimarisi ONUNCU DERS #118, teknik borç #119, açık risk #120) tam anlatı bloğu
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`) —
+> içerik Kritik Kararlar/#117/#118/#119/#120 ve GENEL DURUM'daki "Public Menü"/"Admin Panel"
+> satırlarında zaten tam özetli, aktif takip için gerekli değil. **KALAN görevler A10/A11 olarak
+> SIRADAKİ GÖREVLER'de hâlâ açık duruyor, kaybolmadı.**
+>
+> **[TAŞINDI — 2026-09-25]** 29. sohbetin (kategori sistemi #115 + #114 kök neden revizyonu #116)
+> tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`)
+> — içerik Kritik Kararlar/#115/#116/GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.
+>
+> **[TAŞINDI — 2026-09-24]** 28. sohbet (ilk gerçek admin kullanıcı testi, cache bug keşfi) ve
+> 27. sohbet (Admin Panel canlıya alınışı) tam anlatı blokları `session_arşiv_2.md`'ye
+> taşındı — içerik #110-#114 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.
+>
+> **[TAŞINDI — 2026-09-07, 400 satır eşiği beşinci kez aşıldı]** 26. sohbetin (Admin Panel
+> planlaması) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-07.md`). Kapanış gerekçesi: içerik Kritik Kararlar
+> tablosunda ve Açık Sorunlar #108-#113'te zaten tam özetli — aktif takip için gerekli değil.
+
+### 2) v92'nin tam versiyon-geçmişi paragrafı (SESSION_INDEX.md footer'ından çıkarıldı)
+
+*BOWLERA SESSION_INDEX.md — v92 (v91'den: **[35. sohbet devamı, 2026-09-26 — SELF-CORRECTION]**
+v91'in kapanış paragrafı kendi içinde çelişkiliydi: CURRENT FOCUS ve GENEL DURUM/Bowl Akışı
+satırı #128/A16'yı KAPANDI olarak işlerken, bu footer paragrafı hâlâ "#128/A16 HÂLÂ AÇIK" diye
+yazıyordu — footer, CURRENT FOCUS'a kapanış notu eklenirken senkronize edilmemişti. Bu turda
+SADECE bu footer metni düzeltildi, başka hiçbir tabloya/karara dokunulmadı. Gerçek/güncel durum
+(v91'in geri kalanıyla aynı): #127 (Bowl DB-bağlama) + #129 (`EXTRA_OPTIONS`'ın `image` alanı
+eksikliğinden doğan build hatası — düzeltme SADECE `types/index.ts`, `image?: string` opsiyonel
+yapıldı, diğer 6 dosyaya dokunulmadı) + #128 (Hero.tsx "Kaseni Oluştur" `href`'i gerçek
+`fekafel-bowl-hb0fc` id'sine güncellendi) — ÜÇÜ DE KAPANDI. Kullanıcı `#129` sonrası akışı GERÇEK
+ürün id'siyle doğrudan test etti, çalıştığını onayladı; Hero.tsx değişikliği ise henüz push/
+build/canlı doğrulanmadı (A16, 🟠, kapanmış görev ama canlı teyidi bekliyor). Yeni A17 (🟢):
+`image` opsiyonel olduğu için render tarafındaki `undefined` davranışı doğrulanmalı. Yeni A18
+(🟡): sandviç tarafındaki `build-your-own-sandwich` id'sinin `menu_items`'da var olup olmadığı
+hâlâ teyitsiz — varsa aynı 404 riski orada da mevcut.)*
