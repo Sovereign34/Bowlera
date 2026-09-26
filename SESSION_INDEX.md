@@ -37,22 +37,31 @@
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-25, 31. sohbet, KAPANDI]** Açık Sorun #109 KAPANDI (A6 tamamlandı).
-> **Karar 1:** Keto filtre panelinden kaldırıldı — admin sabitlerinde hiç yoktu, gerçek veride
-> hiç kullanılmıyordu, kalıcı kritere dayanmadan her zaman 0 sonuç veren bir seçenek olarak
-> durması güven-verme ilkesine aykırıydı. **Karar 2:** "sıcak-tahıl" de kaldırıldı, `DIET_FILTERS`
-> artık `MENU_ITEM_TAGS`'tan TÜRETİLİYOR (allergen'lerle aynı desen) — yapısal senkron sağlandı.
-> Etiket görünüm senkronu: yeni `MENU_ITEM_TAG_LABELS` haritası admin formu + `MenuCardBadges.tsx`
-> tarafından okunuyor, eski/silinmiş id için `?? tag` fallback'i var (crash yok). 4 dosya:
-> `menu-item-constants.ts`, `menu-filters.ts`, `MenuItemForm.tsx`, `MenuCardBadges.tsx`.
-> **⚠️ A7 (#108, DESIGN_SYSTEM.md alerjen listesi 7→5 senkronu) bu turda KAPATILMADI** — kullanıcı
-> A6 ile birlikte kapatılmasını istedi ama bu turun değişiklikleri sadece diyet tag'lerini
-> kapsıyor, alerjen dokümanına hiç dokunulmadı; gerekçesiz madde düşürülmesin diye açık bırakıldı
-> (Self-Correction, bkz. Açık Görevler A7).
-> **⚠️ Dosya hacmi notu:** bu güncelleme dosyayı 425 satıra çıkarmıştı, 400 satır eşiği aşıldı.
-> 30. sohbetin (A9) tam anlatı bloğu arşive taşındı (bkz. üst not + Arşiv Taşıma Kaydı) —
-> dosya artık eşiğin ALTINDA. Taşıma bloğu kullanıcıya AYRI bir dosya olarak verildi, kendi
-> elinizle `session_arşiv_2.md`'nin sonuna eklemeniz gerekiyor.
+> **[GÜNCEL — 2026-09-26, 32. sohbet]** **ON BİRİNCİ DERS (#121, kalıcı ilke) + DB şema senkron
+> hatası bulundu/düzeltildi.** Önceki turda (25 dosyalık sandviç→DB bağlama refactoru) `lib/db/schema.ts`'e
+> eklenen `ingredients.isMikesWayDefault` ve `sandwich_sizes.priceMultiplier` (priceModifier'ın
+> yerine) kodda/GitHub'da vardı, ama gerçek Neon veritabanı tablosuna HİÇ İŞLENMEMİŞTİ —
+> `docs/schema-changes/` klasöründe de bu değişikliğin dosyası yoktu (CORE §7.4 notu metin olarak
+> yazıldı ama dosyaya hiç düşmedi). Sonuç: `db.select().from(ingredients)` yapan 3 admin sayfası
+> (liste/yeni/düzenle) "column does not exist" ile çöküyordu. **Kalıcı ilke:** `schema.ts`
+> değiştirip GitHub'a push etmek, gerçek DB'nin senkron olduğu anlamına GELMEZ — `db:push`/ALTER
+> AYRICA koşulmalı, aksi halde şemadaki TÜM kolonları SELECT eden her sayfa production'da aynı
+> şekilde çöker. Kullanıcının Codespaces limiti dolu olduğu için terminal/CLI kullanılamadı —
+> teşhis Neon SQL Editor'e yapıştırılan `information_schema.columns` sorgusuyla doğrulandı
+> (kolonlar gerçekten yoktu, `sandwich_sizes` 0 satır — veri kaybı riski yoktu), düzeltme de aynı
+> yerden 2 ALTER TABLE ile koşuldu: `ingredients.is_mikes_way_default boolean NOT NULL DEFAULT
+> false` eklendi; `sandwich_sizes.price_modifier` DROP edilip `price_multiplier numeric(4,2)
+> NOT NULL DEFAULT 1` eklendi. **Kullanıcı doğruladı: admin/ingredients çökmesi gitti.** **KALAN
+> (bkz. Açık Sorun #122):** kod tarafı (pricing motoru, store, 6 step bileşeni, admin
+> sandwich-sizes formu) bu turda HİÇ görülmedi/test edilmedi; `docs/schema-changes/` notu hâlâ
+> dosya olarak yok (kullanıcıya soruldu, henüz yanıt gelmedi); iki tablo da gerçek beden/malzeme
+> verisi içermiyor.
+>
+> **[TAŞINDI — 2026-09-26, 32. sohbet kapanışı]** 31. sohbetin (A6/#109 tam anlatısı: Keto/
+> "sıcak-tahıl" filtre kaldırma kararları, `DIET_FILTERS` türetme refactoru, A7'nin bilinçli açık
+> bırakılma gerekçesi) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
+> `session_arsiv_2_EKLENTI_2026-09-26.md`) — içerik Kritik Kararlar/#109/A6/A7 ve GENEL DURUM'da
+> zaten tam özetli, aktif takip için gerekli değil.
 >
 > **[TAŞINDI — 2026-09-25, 31. sohbet kapanışı]** 30. sohbetin (A9 tam anlatısı: kategori sekmeleri
 > #117, cache mimarisi ONUNCU DERS #118, teknik borç #119, açık risk #120) tam anlatı bloğu
@@ -120,6 +129,7 @@
 | 2026-09-07 (28. sohbet) | 26. sohbetin Admin Panel planlaması tam anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar ve Açık Sorunlar #108-#113'te özetli |
 | 2026-09-25 (30. sohbet) | 29. sohbetin CURRENT FOCUS anlatısı (kategori sistemi #115 + #114 kök neden revizyonu #116) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#115/#116/GENEL DURUM'da özetli |
 | 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
+| 2026-09-26 (32. sohbet) | 31. sohbetin CURRENT FOCUS anlatısı (A6/#109 tam kapanışı: Keto/"sıcak-tahıl" kaldırma, `DIET_FILTERS` türetme refactoru) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#109/A6/A7/GENEL DURUM'da özetli |
 
 > ⚠️ **Bekleyen eklemeler (kullanıcı elle eklemeli):** `session_arsiv_1_EKLENTI_2026-08-10.md`,
 > `session_arsiv_2_EKLENTI_2026-08-11.md`, `..._EKLENTI_2026-08-11-devam4.md`,
@@ -166,6 +176,8 @@
 | 🗄️✅ | **[YENİ, 26. sohbet — Admin Panel, DB TARAFI TAMAMLANDI]** `menu_items` tablosu (`lib/menu-data.json`'dan taşındı) — `id` bilinçli `text` (uuid değil), `calories`/`protein` NOT NULL, `tags`/`allergens` DB'de kısıtsız (sadece admin form UI kısıtlar), `build-your-own-kasem` DAHİL EDİLMEDİ (grep ile doğrulandı). Migration+seed Neon'da koşuldu ve doğrulandı (13 kolon, 8 satır). Şema notu: `docs/schema-changes/20260905090000_menu_items_tablosu_eklendi.md`. | ✅ DB tarafı TAMAM |
 | 🆕 | **[YENİ, 26. sohbet — Admin Panel]** Admin yetkisi `users.role`'e AYRI bir `"admin"` değeri olarak eklendi (`"customer"\|"staff"\|"admin"`) — `"staff"`'a BAĞLANMADI (gerekçe: "tek admin hesabı" kararının staff panelinin ileride çoğalma ihtimaliyle çakışmaması). `schema.ts`/`auth.ts`/`middleware.ts`/`types/next-auth.d.ts` dört dosyada senkron güncellendi. | 🟡 Kod üretildi, kullanıcıya verildi — REPO'YA UYGULANDIĞI TEYİT EDİLMEDİ |
 | 🗄️ | **[YENİ, 26. sohbet — Admin Panel]** `/admin`+`/api/admin` middleware guard'ı — `/personel` guard'ı ile AYNI desen (fail-closed, taze DB rol okuması), ama `role==='admin'` katı şartı — `staff` bu bloktan GEÇEMİYOR (bilinçli, "tek admin" kararı). | 🟡 Kod üretildi, canlı doğrulama BEKLİYOR |
+| 🗄️✅ | **[YENİ, 32. sohbet — DB TARAFI TAMAMLANDI]** `ingredients` tablosuna `is_mikes_way_default boolean NOT NULL DEFAULT false` kolonu eklendi — SADECE `productType='sandwich'` + `slot∈{veggies,sauce}` iken anlamlı, `lib/sandwich-catalog.ts` bunu okuyup "Mike's Way" hazır seçim presetini besleyecek (kod önceki turda üretildi). Migration Neon SQL Editor'de (CLI olmadan, `information_schema` ile önce doğrulanıp) ALTER TABLE ile koşuldu. Şema notu: `20260925220000_...` (metin bu sohbette var, `docs/schema-changes/` dosyası HENÜZ YAZILMADI, bkz. #121). | ✅ DB tarafı TAMAM, kod tarafı doğrulanmadı (#122) |
+| 🗄️✅ | **[YENİ, 32. sohbet — DB TARAFI TAMAMLANDI]** `sandwich_sizes.priceModifier` (integer, toplamsal TL) → `priceMultiplier` (numeric(4,2), çarpımsal) — gerçek fiyat motorunun (`lib/sandwich-pricing.ts`) ve `StepSize.tsx`'in ("×1.8") beklediği modelle uyum için (kod önceki turda üretildi). Tablo bu turda BOŞ bulundu (0 satır) — otomatik veri dönüşümü GEREKMEDİ, `price_modifier` DROP + `price_multiplier DEFAULT 1` ADD ile Neon SQL Editor'de koşuldu. | ✅ DB tarafı TAMAM, kod tarafı doğrulanmadı (#122) |
 
 ---
 
@@ -225,6 +237,9 @@
 | 119 | 🟢 | **[YENİ, 30. sohbet — teknik borç]** `lib/db/queries/menu.ts` (Karar B'nin `unstable_cache` sarmalayıcısı, bkz. #118) artık HİÇBİR dosyadan import edilmiyor — ölü kod. Kullanıcı tarafından repodan SİLİNMELİ. | `lib/db/queries/menu.ts` |
 | 120 | 🟢 | **[YENİ, 30. sohbet — doğrulanamayan varsayım]** `components/menu/CategoryTabButton.tsx` bu sohbette HİÇ görülmedi — `id` prop'unun tipinin `lib/menu-filters.ts`'teki `CategoryTabId`'yi (artık sabit union değil, `string`) import ettiği (kendi ayrı sabit union'ı OLMADIĞI) VARSAYILDI. Kullanıcının "her şey tamam" onayı canlı build'in geçtiğini gösteriyor (dolaylı doğrulama) ama dosyanın kendisi hâlâ DOĞRUDAN görülmedi — düşük öncelik, sadece kayıt altına alınıyor. | `components/menu/CategoryTabButton.tsx` |
 
+| 121 | 🟢 | **[YENİ, 32. sohbet — ON BİRİNCİ DERS, kalıcı ilke]** `schema.ts` değiştirip GitHub'a push etmek, gerçek Neon DB tablosunun senkron güncellendiği anlamına GELMEZ — bu turda `ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` kodda/repoda vardı ama DB'de yoktu, `db.select()` yapan 3 admin sayfası (liste/yeni/düzenle) bu yüzden çöktü (bkz. Kritik Kararlar). Kalıcı ilke: her `schema.ts` değişikliğinde `db:push`/ALTER'in GERÇEKTEN koşulduğu (CLI veya Neon SQL Editor'den) AYRICA doğrulanmalı — "kod push edildi" ≠ "DB güncel". Ayrıca: bu değişikliğin `docs/schema-changes/` notu önceki turda METİN olarak yazıldı ama DOSYA olarak hiç üretilmedi (CORE §7.4) — kullanıcıya bu turda tekrar soruldu, henüz yanıt yok. | `lib/db/schema.ts`, `docs/schema-changes/` |
+| 122 | 🔴 | **[YENİ, 32. sohbet]** DB şema senkron hatası düzeltildi ve kullanıcı admin/ingredients çökmesinin gittiğini DOĞRULADI, ama **kullanıcı henüz uçtan uca denemedi** (kendi ifadesi). Bu turda SADECE `lib/db/schema.ts`, admin `ingredients` sayfaları (liste/yeni/`[id]`), `IngredientForm.tsx` ve `ingredients` API route'u statik olarak incelendi — önceki turda "25 dosya" olarak push edildiği bildirilen sandviç-DB bağlama refactorunun geri kalanı (`lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, 6 `Step*.tsx`, `SandwichSummaryPanel.tsx`, `SandwichCustomizer.tsx`, `app/sandwich/customize/[id]/page.tsx`, `app/api/orders/gel-al/route.ts`, `SandwichSizeForm.tsx`) bu sohbette HİÇ GÖRÜLMEDİ. Ayrıca `sandwich_sizes` (0 satır) ve muhtemelen `ingredients` (sandviç malzemeleri) tabloları gerçek beden/malzeme verisi içermiyor — Mike's Way preseti/fiyat hesaplama gerçek veri girilmeden ANLAMLI test edilemez. | `lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, `components/sandwich/*`, `app/api/orders/gel-al/route.ts` |
+
 > **KAPANDI (ayrıntı `session_arşiv_2.md`'de, taşıma: 2026-08-23):** #82, #83, #84, #74, #79,
 > #75 (kullanıcı kararıyla, #80 not olarak açık kaldı), #50, #76, #77 — hepsi Kritik Kararlar
 > tablosunda ve/veya GENEL DURUM'da hâlâ özet olarak duruyor; turn-by-turn kapanış anlatısı
@@ -260,7 +275,8 @@
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
 | Checkout (`/siparis`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. 🔴 **[22. sohbet]** Sandviç için checkout BLOKLU — fiyat ne olursa olsun "fiyatlandırılamadı" hatası çıkıyor, sipariş tamamlanamıyor, kök neden DOĞRULANMADI (bkz. #99). |
-| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). |
+| Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). ✅ **[32. sohbet, YENİ]** `ingredients.is_mikes_way_default` ve `sandwich_sizes.price_multiplier` (eski `price_modifier`'ın yerine) Neon SQL Editor'de ALTER TABLE ile eklendi/dönüştürüldü ve `information_schema` sorgusuyla doğrulandı — `sandwich_sizes` 0 satırdı, veri kaybı olmadı (bkz. #121). |
+| Sandviç Akışı (DB bağlantısı) | 🟡 **[32. sohbet, YENİ satır]** DB şema senkron hatası bu turda bulundu ve düzeltildi — admin `ingredients` sayfalarının (liste/yeni/düzenle) `is_mikes_way_default` kolonu eksik olduğu için çökmesi DURDU, kullanıcı doğruladı. **KALAN:** kod tarafı (pricing motoru, store, 6 step bileşeni, Mike's Way preseti) hiç canlı test edilmedi (#122); `sandwich_sizes`/sandviç `ingredients` gerçek beden/malzeme verisi içermiyor; `docs/schema-changes/` notu dosya olarak hâlâ yok (#121). |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
 | Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
 | Public Menü (`/menu`) | ✅ **[30. sohbet, A9 KAPANDI]** Artık `menu_items`/`categories` DB'sine bağlı — statik `menu-data.json` KULLANILMIYOR. Karar A (`force-dynamic`, her istekte taze sorgu) — ISR denemesi (Karar B) canlı build'de kırıldı, geri dönüldü (bkz. #118, ONUNCU DERS). Kategori sekmeleri DB'den dinamik. Kullanıcı onayıyla canlı build doğrulandı. **KALAN:** `lib/db/queries/menu.ts` silinmeli (#119), `CategoryTabButton.tsx` hâlâ hiç görülmedi (#120, düşük öncelik). |
@@ -271,6 +287,9 @@
 
 | Sıra | Görev | Öncelik |
 |---|---|---|
+| A12 | **[YENİ, 32. sohbet]** Admin `ingredients` sayfalarını (liste/yeni/düzenle) canlıda uçtan uca test et — malzeme ekle/düzenle, Mike's Way checkbox'ının sadece sandwich+veggies/sauce'ta göründüğünü doğrula (#122) | 🔴 |
+| A13 | **[YENİ, 32. sohbet]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi gir — şu an ikisi de test/boş veri (#122) | 🔴 |
+| A14 | **[YENİ, 32. sohbet]** `docs/schema-changes/20260925220000_...md` notunu gerçek dosya olarak `docs/schema-changes/` altına kaydet (CORE §7.4) — kullanıcıya soruldu, henüz yanıt yok (#121) | 🟢 |
 | A9 | **[TAMAMLANDI, 30. sohbet ✅]** Public `/menu` sayfası `menu_items`/`categories` DB'sine bağlandı — Karar A (her istekte taze sorgu, `force-dynamic` + `revalidatePath`), kategori sekmeleri dinamik. Kullanıcı onayıyla canlı build doğrulandı. | ✅ |
 | A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
 | A10 | **[YENİ, 29. sohbet]** Admin panelden gerçek ürünleri yeni 7 kategoriyle gir (DB şu an tamamen boş) | 🔴 |
@@ -335,6 +354,18 @@
 | 1c | #86 Kayıt Onayları (4. sekme) — kod+build tarafı KAPANDI. **KALAN:** test seti yazılmalı, canlı doğrulanmalı. | 🟡 |
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
+
+*BOWLERA SESSION_INDEX.md — v86 (v85'ten: **[32. sohbet, 2026-09-26]** ON BİRİNCİ DERS + DB
+şema senkron hatası bulundu/düzeltildi (#121, YENİ). Önceki turda schema.ts'e eklenen
+`ingredients.isMikesWayDefault`/`sandwich_sizes.priceMultiplier` GitHub'a push edilmişti ama
+gerçek Neon DB'sine hiç işlenmemişti — admin `ingredients` sayfaları (liste/yeni/düzenle) bu
+yüzden çöküyordu. Kullanıcının Codespaces limiti dolu olduğu için CLI kullanılamadı; teşhis +
+düzeltme Neon SQL Editor'den 2 ALTER TABLE ile yapıldı, kullanıcı çökmenin gittiğini doğruladı.
+**KAPANMADI (#122, YENİ):** kod tarafı (pricing motoru/store/6 step/Mike's Way preseti) hiç
+canlı test edilmedi, iki tablo da gerçek veri içermiyor, `docs/schema-changes/` notu hâlâ dosya
+olarak yok. A12/A13/A14 SIRADAKİ GÖREVLER'e eklendi. Bu güncelleme dosyayı 400 satır eşiğinin
+üzerine çıkardığı için AYNI TURDA taşıma da yapıldı: 31. sohbetin (A6/#109) tam anlatı bloğu
+`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`).)*
 
 *BOWLERA SESSION_INDEX.md — v85 (v84'ten: **[31. sohbet, 2026-09-25]** Açık Sorun #109 KAPANDI,
 A6 tamamlandı — Keto filtre panelinden kaldırıldı, "sıcak-tahıl" kaldırıldı, `DIET_FILTERS`
