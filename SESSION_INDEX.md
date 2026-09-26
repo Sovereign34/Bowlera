@@ -48,50 +48,17 @@
 > notu (v91 footer) bu CURRENT FOCUS'taki #128/A16 kapanışıyla çelişiyordu — footer hâlâ "HÂLÂ
 > AÇIK" yazıyordu. SADECE bu footer metni düzeltildi (v92), başka bir tablo/karar değişmedi.
 >
-> **[TAŞINDI — 2026-09-26, bu turda (35. sohbet)]** 34. sohbetin (#127 Bowl DB bağlama) tam
-> CURRENT FOCUS anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-09-26-devam6.md`) — içerik Açık Sorunlar #127/#128 ve GENEL
-> DURUM'da zaten tam özetli, aktif takip için gerekli değil.
->
-> **[TAŞINDI — 2026-09-26, bu turda]** A13 teyit checkpoint'inin tam anlatısı (kullanıcının 2
-> canlı ekran görüntüsüyle Ekmek/Peynir adımlarındaki gerçek fiyat/kalori/görseli doğrulaması)
-> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam4.md`) —
-> içerik SIRADAKİ GÖREVLER A13 ve GENEL DURUM Sandviç Akışı satırında zaten tam özetli. **KALAN
-> (değişmedi):** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi
-> kurulumu kullanıcı onayı bekliyor (A15/#126); sandviç sipariş verme ucu (Sepete Ekle→checkout)
-> hâlâ hiç canlı test edilmedi.
->
-> **[TAŞINDI — 2026-09-26, 33. sohbet kapanışı]** 32. sohbetin (ON BİRİNCİ DERS #121 + DB şema
-> senkron hatası #121/#122 tam anlatısı) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı
-> (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) — içerik Kritik Kararlar/#121/#122
-> ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil. Dosya zaten 400 satır
-> eşiğinin üzerindeydi (416 satır), bu turun eklediği içerikle taşıma AYNI TURDA yapıldı.
->
-> **[TAŞINDI — 2026-09-26, 32. sohbet kapanışı]** 31. sohbetin (A6/#109 tam anlatısı: Keto/
-> "sıcak-tahıl" filtre kaldırma kararları, `DIET_FILTERS` türetme refactoru, A7'nin bilinçli açık
-> bırakılma gerekçesi) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-09-26.md`) — içerik Kritik Kararlar/#109/A6/A7 ve GENEL DURUM'da
-> zaten tam özetli, aktif takip için gerekli değil.
->
-> **[TAŞINDI — 2026-09-25, 31. sohbet kapanışı]** 30. sohbetin (A9 tam anlatısı: kategori sekmeleri
-> #117, cache mimarisi ONUNCU DERS #118, teknik borç #119, açık risk #120) tam anlatı bloğu
-> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`) —
-> içerik Kritik Kararlar/#117/#118/#119/#120 ve GENEL DURUM'daki "Public Menü"/"Admin Panel"
-> satırlarında zaten tam özetli, aktif takip için gerekli değil. **KALAN görevler A10/A11 olarak
-> SIRADAKİ GÖREVLER'de hâlâ açık duruyor, kaybolmadı.**
->
-> **[TAŞINDI — 2026-09-25]** 29. sohbetin (kategori sistemi #115 + #114 kök neden revizyonu #116)
-> tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`)
-> — içerik Kritik Kararlar/#115/#116/GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.
->
-> **[TAŞINDI — 2026-09-24]** 28. sohbet (ilk gerçek admin kullanıcı testi, cache bug keşfi) ve
-> 27. sohbet (Admin Panel canlıya alınışı) tam anlatı blokları `session_arşiv_2.md`'ye
-> taşındı — içerik #110-#114 ve GENEL DURUM'da zaten tam özetli, aktif takip için gerekli değil.
->
-> **[TAŞINDI — 2026-09-07, 400 satır eşiği beşinci kez aşıldı]** 26. sohbetin (Admin Panel
-> planlaması) tam anlatı bloğu `session_arşiv_2.md`'ye taşındı (eklenti:
-> `session_arsiv_2_EKLENTI_2026-09-07.md`). Kapanış gerekçesi: içerik Kritik Kararlar
-> tablosunda ve Açık Sorunlar #108-#113'te zaten tam özetli — aktif takip için gerekli değil.
+> ⚠️ **TAŞIMA NOTU (2026-09-26, bu turda — 35. sohbet devamı, KONSOLİDE):** 26-34. sohbet
+> kapanışlarındaki tekil TAŞINDI pointer'larının (26/27/28/29/30/31/32/33/34. sohbet + A13
+> checkpoint'i — Admin Panel planlaması, kategori sistemi #115/#116, A9 #117-120, A6/A7 #109,
+> #121/#122 DB şema senkronu, A13 sandviç fiyat/kalori doğrulaması, #127 Bowl DB bağlama) TAM
+> metni zaten kendi eklenti dosyalarında (`session_arsiv_2_EKLENTI_2026-09-07.md`,
+> `-2026-09-25.md`, `-2026-09-25-devam2.md`, `-2026-09-26.md`, `-2026-09-26-devam2.md`,
+> `-2026-09-26-devam4.md`, `-2026-09-26-devam6.md`) arşivde duruyordu — buradaki tekil pointer'lar
+> bu turda TEK bir konsolide pointer'a indirildi (yeni eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md`,
+> aşağıdaki bloğun kendisi). Hiçbiri aktif takip için gerekli değildi; hepsi Açık Sorunlar/Kritik
+> Kararlar/GENEL DURUM'da ve SIRADAKİ GÖREVLER'de (A9/A10/A11/A13 dahil) hâlâ tam özetli — içerik
+> kaybı yok, sadece pointer metni sıkıştırıldı (§7.1 Adım 1.5).
 
 > **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
 > 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
@@ -138,6 +105,7 @@
 | 2026-09-05 (25. sohbet) | 23. sohbet devamı — MOTION SYSTEM Mobil Tactile Düzeltmesi anlatısı (MenuCard whileTap kararı) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-05.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — #107 (KAPANDI) ve Motion System P0 bölümünde özetli |
 | 2026-09-07 (28. sohbet) | 26. sohbetin Admin Panel planlaması tam anlatısı | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-07.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar ve Açık Sorunlar #108-#113'te özetli |
 | 2026-09-25 (30. sohbet) | 29. sohbetin CURRENT FOCUS anlatısı (kategori sistemi #115 + #114 kök neden revizyonu #116) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#115/#116/GENEL DURUM'da özetli |
+| 2026-09-26 (35. sohbet devamı, konsolidasyon) | 26-34. sohbet + A13'ün 9 tekil TAŞINDI pointer'ı (zaten arşivdeki içeriğe işaret ediyordu, yeni içerik değil) TEK pointer'a indirildi | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — içerik zaten Açık Sorunlar/GENEL DURUM/SIRADAKİ GÖREVLER'de özetli, kayıp yok |
 | 2026-09-25 (31. sohbet) | 30. sohbetin CURRENT FOCUS anlatısı (A9 tam kapanışı: #117/#118/#119/#120) + v80/v81 sürüm-geçmişi notları (26./27. sohbet) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-25-devam2.md`, 2 blok halinde) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#108/#109/#112/#113/#117-120/GENEL DURUM'da özetli |
 | 2026-09-26 (32. sohbet) | 31. sohbetin CURRENT FOCUS anlatısı (A6/#109 tam kapanışı: Keto/"sıcak-tahıl" kaldırma, `DIET_FILTERS` türetme refactoru) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#109/A6/A7/GENEL DURUM'da özetli |
 | 2026-09-26 (33. sohbet) | 32. sohbetin CURRENT FOCUS anlatısı (ON BİRİNCİ DERS #121 + DB şema senkron hatası #121/#122) | `session_arşiv_2.md` (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam2.md`) | ⚠️ TAM metinle üretildi, kullanıcı henüz `session_arşiv_2.md`'nin sonuna eklemedi — Kritik Kararlar/#121/#122/GENEL DURUM'da özetli |
@@ -381,23 +349,16 @@
 | 1b | Genel giriş/kayıt akış kararları: (i) guest gate middleware'i TAMAMLANDI; (ii) `/masaya-siparis` KAPSAM DIŞI BIRAKILDI (kullanıcı kararı); (iii) "Sepete Ekle" bypass component-guard'ı (#66 — karar bekliyor); (iv) KAPANDI — kayıt sayfasında zorunlu kanal seçimi zaten kodluymuş, uçtan uca teyit edildi. | 🟡 (iii) hâlâ açık |
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
-*BOWLERA SESSION_INDEX.md — v92 (v91'den: **[35. sohbet devamı, 2026-09-26 — SELF-CORRECTION]**
-v91'in kapanış paragrafı kendi içinde çelişkiliydi: CURRENT FOCUS ve GENEL DURUM/Bowl Akışı
-satırı #128/A16'yı KAPANDI olarak işlerken, bu footer paragrafı hâlâ "#128/A16 HÂLÂ AÇIK" diye
-yazıyordu — footer, CURRENT FOCUS'a kapanış notu eklenirken senkronize edilmemişti. Bu turda
-SADECE bu footer metni düzeltildi, başka hiçbir tabloya/karara dokunulmadı. Gerçek/güncel durum
-(v91'in geri kalanıyla aynı): #127 (Bowl DB-bağlama) + #129 (`EXTRA_OPTIONS`'ın `image` alanı
-eksikliğinden doğan build hatası — düzeltme SADECE `types/index.ts`, `image?: string` opsiyonel
-yapıldı, diğer 6 dosyaya dokunulmadı) + #128 (Hero.tsx "Kaseni Oluştur" `href`'i gerçek
-`fekafel-bowl-hb0fc` id'sine güncellendi) — ÜÇÜ DE KAPANDI. Kullanıcı `#129` sonrası akışı GERÇEK
-ürün id'siyle doğrudan test etti, çalıştığını onayladı; Hero.tsx değişikliği ise henüz push/
-build/canlı doğrulanmadı (A16, 🟠, kapanmış görev ama canlı teyidi bekliyor). Yeni A17 (🟢):
-`image` opsiyonel olduğu için render tarafındaki `undefined` davranışı doğrulanmalı. Yeni A18
-(🟡): sandviç tarafındaki `build-your-own-sandwich` id'sinin `menu_items`'da var olup olmadığı
-hâlâ teyitsiz — varsa aynı 404 riski orada da mevcut.)*
-
-*[**TAŞINDI/KISALTILDI — 2026-09-26, bu turda (35. sohbet)**] v90'ın (Bowl DB-bağlama #127 tam
-anlatısı) ve daha eski v88/v89/v82-v87/v80-v81/v75-v79 sürüm-geçmişi notlarının TAM metinleri
-`session_arşiv_2.md`'ye taşındı/eklendi (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam6.md`)
-— hepsi Açık Sorunlar (#99,#107,#108,#109,#112-#126) ve Kritik Kararlar/GENEL DURUM'da zaten tam
-özetli, aktif takip için gerekli değil.*
+*BOWLERA SESSION_INDEX.md — v93 (v92'den: **[35. sohbet devamı, 2026-09-26 — 400 satır eşiği
+altıncı kez aşıldı, 403 satır]** v92 güncellemesi dosyayı 403 satıra çıkardı. 26-34. sohbet +
+A13'ün (zaten kendi eklenti dosyalarında duran) 9 tekil TAŞINDI pointer'ı tek bir konsolide
+pointer'a indirildi (yeni eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md` — bu bloğun
+TAM metni, Arşiv Taşıma Kaydı'na tek satır eklendi). İçerik kaybı yok — hiçbiri yeni bilgi
+değildi, hepsi zaten Açık Sorunlar/Kritik Kararlar/GENEL DURUM/SIRADAKİ GÖREVLER'de tam özetli;
+sadece kendini tekrar eden pointer metni sıkıştırıldı. Dosya artık eşiğin altında.)*
+*[**TAŞINDI/KISALTILDI — 2026-09-26, bu turda (35. sohbet devamı)**] v92'nin tam paragrafı
+(SELF-CORRECTION: v91 footer'ının #128/A16 çelişkisinin düzeltilmesi) ve daha eski v90/v88/v89/
+v82-v87/v80-v81/v75-v79 sürüm-geçmişi notlarının TAM metinleri `session_arşiv_2.md`'ye
+taşındı/eklendi (eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md`) — hepsi
+Açık Sorunlar (#99,#107,#108,#109,#112-#130) ve Kritik Kararlar/GENEL DURUM'da zaten tam özetli,
+aktif takip için gerekli değil. Sonuç aynı: #127/#128/#129 KAPANDI, A16 canlı doğrulama bekliyor.*
