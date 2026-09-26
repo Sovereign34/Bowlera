@@ -1,0 +1,54 @@
+## Session: [bu sohbet] — 2026-09-25
+## Açıklama: sandwich_sizes.priceModifier alanı, gerçek fiyat motorunun (lib/sandwich-pricing.ts)
+ve StepSize.tsx ekranının ("×1.8") beklediği çarpımsal modelle çakışıyordu (toplamalı TL yerine
+çarpan bekleniyordu). Kullanıcı kararı: şema çarpımsal modele geçsin (priceMultiplier), pricing
+motoru/ekran DEĞİŞMEDİ. Ayrıca "Mike's Way" hazır seçim preseti artık DB'den yönetilebilir olması
+için ingredients tablosuna isMikesWayDefault eklendi (slot='veggies' | slot='sauce' iken anlamlı).
+
+### ÖNCE
+```ts
+export const sandwichSizes = pgTable("sandwich_sizes", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  priceModifier: integer("price_modifier").notNull().default(0), // TL, taban fiyata eklenir
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+})
+
+// ingredients tablosunda isMikesWayDefault YOK
+```
+
+### SONRA
+```ts
+export const sandwichSizes = pgTable("sandwich_sizes", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  priceMultiplier: numeric("price_multiplier", { precision: 4, scale: 2 }).notNull().default("1"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+})
+
+export const ingredients = pgTable("ingredients", {
+  // ...mevcut alanlar aynı...
+  isMikesWayDefault: boolean("is_mikes_way_default").notNull().default(false),
+})
+```
+
+### ETKİLENEN DOSYALAR
+lib/db/schema.ts, lib/sandwich-catalog.ts (yeni), lib/sandwich-pricing.ts, store/useSandwichStore.ts,
+types/sandwich.ts, components/sandwich/Step*.tsx (6 dosya), components/sandwich/SandwichSummaryPanel.tsx,
+components/sandwich/SandwichCustomizer.tsx, app/sandwich/customize/[id]/page.tsx,
+app/api/orders/gel-al/route.ts, components/admin/SandwichSizeForm.tsx,
+app/api/admin/sandwich-sizes/route.ts + [id]/route.ts, components/admin/IngredientForm.tsx,
+store/useSandwichStore.test.ts
+
+### GERİ ALMA
+1. `priceMultiplier` kolonunu `priceModifier` integer'a geri çevir (mevcut satırlarda veri kaybı —
+   çarpan değerleri TL karşılığına elle dönüştürülmeli, otomatik ters migrasyon YOK).
+   `isMikesWayDefault` kolonunu DROP et.
+2. Yukarıdaki dosyaları bu commit'ten önceki haline döndür (statik sandwich-data.json'a geri dön).
+
+### RİSK
+Bu migrasyon mevcut `sandwich_sizes` satırlarındaki `priceModifier` değerlerini OTOMATİK
+priceMultiplier'a çevirmez — tablo şu an muhtemelen sadece test verisi içeriyor (bu turdan önce
+gerçek menü girilmedi), ama gerçek veri girilmişse migration ÖNCESİ elle kontrol edilmeli.
