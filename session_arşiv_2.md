@@ -2076,3 +2076,16 @@ build/canlı doğrulanmadı (A16, 🟠, kapanmış görev ama canlı teyidi bekl
 `image` opsiyonel olduğu için render tarafındaki `undefined` davranışı doğrulanmalı. Yeni A18
 (🟡): sandviç tarafındaki `build-your-own-sandwich` id'sinin `menu_items`'da var olup olmadığı
 hâlâ teyitsiz — varsa aynı 404 riski orada da mevcut.)*
+## EKLENTİ — 2026-09-26 (35. sohbet devamı, devam8)
+> `session_arşiv_2.md`'nin SONUNA eklenecek blok (devam7'den SONRA). Bu dosya arşivin yerine
+> geçmez, SESSION_INDEX.md'nin footer'ından bu turda kısaltılan v94 versiyon paragrafının TAM
+> halini taşır.
+
+### v94'ün tam versiyon-geçmişi paragrafı (SESSION_INDEX.md footer'ından çıkarıldı)
+
+*BOWLERA SESSION_INDEX.md — v94 (v93'ten: **[35. sohbet devamı, 2026-09-26]** A12 KAPANDI —
+kullanıcı admin `ingredients` sayfalarını (liste/yeni/düzenle, Mike's Way checkbox'ının sadece
+sandwich+veggies/sauce'ta göründüğü) canlıda test etti, sorun bildirmedi (#122 KAPANDI). Kapanış
+kullanıcının kısa sözlü onayına dayanıyor — A13'teki gibi ekran görüntüsü paylaşılmadı, bu SIRADAKİ
+GÖREVLER A12 satırına ve Kritik Kararlar'daki ilgili satıra not olarak işlendi. Başka hiçbir
+tabloya/karara dokunulmadı.)*
