@@ -1114,3 +1114,78 @@ tabloya/karara dokunulmadı.)*
 kontrolü) 37. sohbette kullanıcının paylaştığı repo zip'i üzerinden KOD SEVİYESİNDE teyit edildi —
 zaten yaşıyordu. İçerik Açık Sorunlar #131/#132/#133 satırlarında ve GENEL DURUM → Checkout
 satırında hâlâ tam özetli, aktif takip için bu tam anlatı gerekli değil.
+
+## TAŞIMA BLOĞU — 2026-09-27 (400 satır eşiği beşinci kez aşıldı, bu turda)
+
+> Bu blok `SESSION_INDEX.md`'nin CURRENT FOCUS bölümünden, 400 satır eşiği aşıldığı için
+> taşındı (CORE.md §7.1 Adım 1). Kullanıcı bu dosyayı kendi eliyle `session_arşiv_3.md`'nin
+> SONUNA ekleyecek. Kapanış gerekçesi: içerik Açık Sorunlar #134 (KAPANDI), #135 (P0-1/P0-4
+> KAPANDI) ve GENEL DURUM → Checkout/Veritabanı satırlarında zaten tam özetli — aktif takip
+> için gerekli değil, içerik kaybı yok. Taşınan 4 paragraf: 38. sohbet (#135/#134 çifte kapanış),
+> "bu turda devamı" (#136 seçenek a + #135/1 kodlama), "bu turda" (repo zip reconciliation),
+> 37. sohbet (Quick-Add "ilk sos ücretsiz" özelliği #134).
+
+> **[GÜNCEL — 38. sohbet]** İki madde kapandı. **#135 P0-1 (verificationStatus) TAM KAPANDI:**
+> kullanıcı Codespaces kullanamadığı için (mobilde, dosyaları manuel push etti, deploy yeşil)
+> `npm test` yerine doğrudan canlıda test etti — onaysız hesapla "Siparişi Onayla" denendiğinde
+> "Hesabınız henüz onaylanmadı, lütfen şubeyle iletişime geçin" mesajıyla 403 engellendi (ekran
+> görüntüsü); aynı hesap personel panelinden onaylandıktan sonra tekrar denendi, sipariş
+> başarıyla tamamlandı (ekran görüntüsü). Her iki yön de doğrulandı. `route.test.ts` hâlâ hiç
+> koşulmadı — test borcu olarak açık kaldı, kapanışı bloklamıyor. **#134 (Quick-Add ilk sos
+> ücretsiz) KAPANDI:** kullanıcı push/build/canlı doğrulamayı kısa sözlü onayladı ("#134
+> onaylandı kapat") — ekran görüntüsü paylaşılmadı, A12 tipi bir kapanış. A21 buna göre ✅
+> işaretlendi. **Kapı hâlâ AÇIK:** #135 P0 madde 3 (admin ikinci yetki, `requireAdminSession()`
+> yok) ve 4 (DB CHECK/enum constraint yok) hiç kodlanmadı — "admin ikinci yetki"nin tam kapsamı
+> (hangi işlem için ikinci onay isteniyor) kullanıcıdan netleştirme bekliyor. #136 (numara
+> çakışması) da hâlâ karar bekliyor.
+>
+> **[GÜNCEL — bu turda, devamı]** Kullanıcı "sen karar ver, devam et" dedi. Claude #136 için
+> seçenek (a)'yı seçti (PayTR callback yorumlarındaki çakışan numaralara dokunulmadı) ve öncelik
+> sırasına göre (1→2→3→4→5) sıradaki tam-açık P0 maddesi olan **#135/1'i (verificationStatus)
+> kodladı**: `route.ts`'e DB'den taze okunan `verificationStatus==="confirmed"` kontrolü eklendi
+> (403 fail-closed, JWT'ye güvenilmedi — personel onayı session'a anında yansımayabilir).
+> `route.test.ts` (bu route'un İLK test dosyası, 5 senaryo: session yok/telefon yok/kullanıcı
+> yok/pending/confirmed) yazıldı. **ÇALIŞTIRILMADI** (bu ortamda `node_modules` yok) — kullanıcı
+> kendi ortamında `npm test` koşup teyit etmeli, ayrıca canlıda/Codespaces'te onaysız hesapla
+> gerçek bir sipariş denemesiyle 403'ün GÖZLE doğrulanması gerekiyor. **Kapı hâlâ AÇIK:** P0
+> madde 3 (admin ikinci yetki) ve 4 (DB constraint) kod yazılmamış — bkz. A22.
+>
+> **[GÜNCEL — bu turda]** Kullanıcı "#135 (canlıya çıkış listesi) üzerinde çalışıyorduk ama
+> sanırım session'a kaydetmedik" dedi. Repo zip'i indirilip kod satır satır incelendi (sadece
+> analiz — hiç kod YAZILMADI bu turda). Sonuç: #135 kaydı GERÇEKTEN stale'miş — madde 5/5b zaten
+> kodlanmış, madde 7 (PayTR) ayrı bir oturumda büyük ölçüde çözülmüş ama numarası çakışıyor (yeni
+> #136). #135 satırı ve SIRADAKİ GÖREVLER (yeni A22) buna göre güncellendi — bkz. aşağıdaki #135/#136
+> satırları ve A22. **Kapı hâlâ AÇIK:** P0 madde 1/3/4 kod yazılmamış durumda, production'a
+> çıkılmamalı.
+>
+> **[GÜNCEL — 2026-09-27, 37. sohbet]** Kullanıcı repoyu (zip) paylaştı — 36. sohbette teşhis
+> edilen `needsBowlCatalog` düzeltmesinin (quickAddSelection.signatureFlavorIds kontrolü) fiilen
+> repoda YAŞADIĞI kod üzerinden TEYİT EDİLDİ (#131(a) kapanışı doğrulandı, ayrı kanıt gerekmedi).
+> Bunun üstüne YENİ bir özellik istendi ve kodlandı: **Quick-Add sos seçiminde ilk (seçim
+> SIRASINA göre) sos ücretsiz, sonrakiler tam fiyatına.** Kullanıcı 3 soruyla kapsamı netleştirdi:
+> (1) kapsam Quick-Add + Customizer Signature Flavor adımı — ama Customizer TEK seçimli kaldığı
+> için kural orada davranışı DEĞİŞTİRMİYOR (zaten seçilen tek sos vardı), fiilen SADECE Quick-Add'i
+> etkiliyor; (2) "ilk" = kullanıcının TIKLADIĞI sıra (dizideki index 0); (3) tüm Quick-Add
+> ürünlerinde geçerli. Kod incelemesiyle `signatureFlavorIds`'in zaten sıralı bir dizi olduğu
+> (`toggle()` seçilince sona ekliyor/kaldırılınca filtreliyor) görüldü — **şema değişikliği
+> GEREKMEDİ**. 2 dosya güncellendi: `app/api/orders/gel-al/route.ts` (`priceQuickAddSelection`
+> → `priceFlavorSelection`/`priceMenuItemSelection`'a bölündü, Kural #5 — ilk sos ücretsiz mantığı
+> SADECE `priceFlavorSelection`'da), `components/menu/QuickAddSheet.tsx` (canlı fiyat/kalori
+> hesaplaması `computeQuickAddTotals`'a taşındı + AYRICA bir bug düzeltildi: eski kod
+> `signatureFlavors.filter()` kullanıyordu — bu, "ilk seçilen"i KATALOG sırasına göre yanlış
+> belirlerdi, `selectedFlavorIds.map()`'e çevrildi; "Ücretsiz" rozeti + açıklayıcı metin eklendi).
+> Kalori hiçbir zaman ücretsiz sayılmadı (CORE.md §9). **KALAN:** kullanıcı bu 2 dosyayı henüz
+> push/build/canlı doğrulamadı; `priceFlavorSelection`/`computeQuickAddTotals` için test seti
+> YOK (kullanıcıya soruldu, henüz yanıt yok) — bkz. yeni #134/A21.
+>
+> ⚠️ **TAŞIMA NOTU (2026-09-27, bu turda — 36. sohbet):** 35. sohbetin (2./3. kez devamları)
+> CURRENT FOCUS anlatısı (QuickAddSheet KARAR BİLDİRİMİ detayı, #2/#57 park, #91/A12 kapanışları,
+> #127/#129/#128/A16 build-hatası-ve-düzeltme anlatısı, footer self-correction, konsolide taşıma
+> notu) TAM metniyle `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-27.md`,
+> ayrı dosya olarak üretildi, kullanıcı kendi eliyle arşiv dosyasının sonuna ekleyecek). ⚠️
+> **DÜZELTME (bu turda, arşiv bölünmesi sonrası):** İçerik tarih olarak 2026-09-03 sonrasına
+> ait olduğu için artık `session_arşiv_3.md`'nin sonuna eklenmeli, `session_arşiv_2.md`'nin
+> değil — eklenti dosyasının adı değişmedi. Kapanış gerekçesi: hepsi Açık Sorunlar #128/#129/#131
+> (KAPANDI/kısmen kapandı), Kritik Kararlar ve GENEL DURUM'da hâlâ tam özetli — aktif takip
+> için gerekli değil, içerik kaybı yok.
+
