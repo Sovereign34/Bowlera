@@ -2089,3 +2089,82 @@ sandwich+veggies/sauce'ta göründüğü) canlıda test etti, sorun bildirmedi (
 kullanıcının kısa sözlü onayına dayanıyor — A13'teki gibi ekran görüntüsü paylaşılmadı, bu SIRADAKİ
 GÖREVLER A12 satırına ve Kritik Kararlar'daki ilgili satıra not olarak işlendi. Başka hiçbir
 tabloya/karara dokunulmadı.)*
+----
+# EKLENTİ — 2026-09-27 (36. sohbet açılışı, SESSION_INDEX.md 400 satır eşiği aşımı nedeniyle taşındı)
+
+> Bu blok, SESSION_INDEX.md'nin 35. sohbet (2./3. kez devamları) CURRENT FOCUS anlatısının TAM
+> metnidir (CORE.md §7.1 Adım 1 gereği özetlenmeden taşındı). Kapanış gerekçesi: içeriğin tamamı
+> Açık Sorunlar (#128 KAPANDI, #129 KAPANDI, #131 kısmen KAPANDI, #91 KAPANDI, A12 KAPANDI),
+> Kritik Kararlar tablosu ve GENEL DURUM'da hâlâ tam özetli — aktif takip için bu turn-by-turn
+> anlatının SESSION_INDEX.md'de durmasına gerek yoktu, sadece pointer bırakıldı.
+
+> **[GÜNCEL — 2026-09-26, 35. sohbet devamı (2. kez)]** Kullanıcı canlı ekran görüntüleriyle
+> (menüdeki ürünlerde sepete ekleme yok, ürün detay sayfası açılıp sos/içecek/ekstra satışı
+> istendi) yeni bir özellik talep etti: Bowl/Dürüm/Salata Bowl kategorisindeki HAZIR ürünlere,
+> Kâseni Oluştur/Sandviçini Oluştur customizer akışlarına HİÇ dokunmadan, opsiyonel çoklu
+> sos (signature flavor havuzu)/içecek/tatlı seçimli tam ekran "Sepete Ekle" akışı eklendi.
+> **[KARAR BİLDİRİMİ onaylandı, 5 dosya üretildi]:** `types/index.ts` (`CartItem`'a izole
+> `quickAddSelection` alanı — `customization`/`sandwichCustomization` ile AYNI izolasyon
+> deseni), `app/menu/page.tsx` (`buildBowlCatalog()` ile signature flavor'lar server-side
+> çekiliyor), `components/menu/MenuPageClient.tsx` (kategori adı eşleştirme + `QuickAddSheet`
+> state'i + `useCartStore` bağlantısı), `components/menu/MenuCard.tsx` (yeni "Sepete Ekle"
+> butonu, "Özelleştir" ile KARŞILIKLI DIŞLAYICI), yeni `components/menu/QuickAddSheet.tsx`.
+> **[SELF-CORRECTION, bu turda]:** Kategori eşleştirmesi için gerçek `categories.id` slug
+> değerleri sohbette hiç teyit edilmemişti (Kural #1 gereği tahmin edilmedi) — SESSION_INDEX.md
+> bu dosyanın KENDİSİNDE, #115 kaydında ("7 kategori: İmza Ürünler/Bowl/Dürüm/Salata Bowl/
+> Sandviç/Tatlı/İçecek seed edildi") zaten yazılıydı, bu turda fark edildi. Bu yüzden eşleştirme
+> id DEĞİL, `categories.name` (DB'de gösterilen Türkçe ad) üzerinden yapıldı — hem #115'teki
+> gerçek seed verisiyle birebir örtüşüyor hem de slug hiç bilinmeden çalışıyor. **KALAN:**
+> kullanıcı 5 dosyayı repoya uygulayıp build/push/canlı doğrulamalı; ayrıca CartDrawer/checkout/
+> personel paneli bu yeni `quickAddSelection` alanını HENÜZ okumuyor (fiyat/kalori toplamı
+> doğru yansır, sadece "hangi sos/içecek/tatlı" ayrı satır olarak GÖRÜNMÜYOR) — bkz. A19/#131.
+>
+> **[GÜNCEL — 2026-09-26, 35. sohbet devamı]** #2/#57 PARKLANDI: kullanıcı `/online-siparis`
+> sayfasının sanal POS (ödeme ağ geçidi) entegrasyonu olmadan tamamlanamayacağını belirtti —
+> dış bağımlılık (banka/ödeme kuruluşu sözleşmesi/API anahtarı gerekiyor), bu turda kod
+> üretilmedi. Hangi sanal POS sağlayıcısının kullanılacağı kararı hâlâ kullanıcıdan bekleniyor.
+>
+> **[GÜNCEL — 2026-09-26, 35. sohbet devamı]** #91 KAPANDI: kullanıcı canlıda hem role-revocation
+> 403'ü hem rate-limit'i test etti — 5'ten fazla yanlış şifre denemesinde sistem girişi bir süre
+> bekletiyor (geçici cooldown). Kısa sözlü onay, ekran görüntüsü yok.
+>
+> **[GÜNCEL — 2026-09-26, 35. sohbet devamı]** A12 KAPANDI: kullanıcı admin `ingredients`
+> sayfalarını (liste/yeni/düzenle + Mike's Way checkbox mantığı) canlıda test etti, sorun
+> bildirmedi (#122 KAPANDI). **Not:** kısa sözlü onay — A13'teki gibi ekran görüntüsü/adım adım
+> detay yok, kapanış buna dayanıyor.
+>
+> **[GÜNCEL — 2026-09-26, 35. sohbet — build hatası düzeltildi, Bowl akışı canlıda ÇALIŞIYOR,
+> #128/A16 HÂLÂ AÇIK]** #127'nin (34. sohbet) push'undan sonra YENİ bir build hatası çıktı:
+> `EXTRA_OPTIONS` sabiti (avokado/sos/çıtırlık — DB'den değil, kod içinde sabit) `image` alanı
+> taşımıyordu, ama #127'de eklenen katalog tipi bu alanı artık HERKES için zorunlu kılıyordu.
+> Düzeltme: SADECE `types/index.ts` değişti — `image` alanı `carbs`/`fat` ile aynı desende
+> **opsiyonel** yapıldı (`image?: string`), böylece hem DB'den gelen malzemeler hem kod-içi sabit
+> ekstra'lar aynı tipe uyuyor. Diğer 6 dosyaya (`bowl-catalog.ts` + 5 `Step*.tsx`) DOKUNULMADI —
+> önceki turda onaylanan/üretilen halleri geçerliliğini koruyor. #129 olarak KAPANDI (bkz. Açık
+> Sorunlar). Kullanıcı bunu pushladı ve customize sayfasına **GERÇEK ürün id'siyle DOĞRUDAN
+> giderek** (Hero.tsx CTA'sı ÜZERİNDEN DEĞİL) test etti — "Kaseni Oluştur" akışı çalışıyor onayı
+> geldi.
+> **#128/A16 KAPANDI (aynı turda):** Kullanıcı admin'den `fekafel-bowl-hb0fc` id'li ("Felafel
+> bowl"/"Kendi kasem") gerçek ürünü buldu, `Hero.tsx` paylaşıldı, "Kaseni Oluştur" `href`'i bu
+> gerçek id'ye güncellendi (dosyanın kendi niyet yorumuna da işlendi). **Not (#130, 🟢, kozmetik):**
+> ürünün DB'deki `name`'i "Felafel bowl" — customizer başlığında bu isim görünecek, "Kendi kasem"
+> beklentisiyle uyuşmuyor, admin panelden rename edilebilir. **Hâlâ TEYİT EDİLMEDİ:** Sandviç
+> tarafındaki `build-your-own-sandwich` id'sinin `menu_items`'da var olup olmadığı — `Hero.tsx`'e
+> bu turda BİLEREK dokunulmadı (Kural #5, tek dosya/tek değişiklik onayı sadece Kaseni Oluştur
+> içindi).
+>
+> **[SELF-CORRECTION — 2026-09-26, bu turda (35. sohbet devamı)]** Dosyanın en altındaki versiyon
+> notu (v91 footer) bu CURRENT FOCUS'taki #128/A16 kapanışıyla çelişiyordu — footer hâlâ "HÂLÂ
+> AÇIK" yazıyordu. SADECE bu footer metni düzeltildi (v92), başka bir tablo/karar değişmedi.
+>
+> ⚠️ **TAŞIMA NOTU (2026-09-26, bu turda — 35. sohbet devamı, KONSOLİDE):** 26-34. sohbet
+> kapanışlarındaki tekil TAŞINDI pointer'larının (26/27/28/29/30/31/32/33/34. sohbet + A13
+> checkpoint'i — Admin Panel planlaması, kategori sistemi #115/#116, A9 #117-120, A6/A7 #109,
+> #121/#122 DB şema senkronu, A13 sandviç fiyat/kalori doğrulaması, #127 Bowl DB bağlama) TAM
+> metni zaten kendi eklenti dosyalarında (`session_arsiv_2_EKLENTI_2026-09-07.md`,
+> `-2026-09-25.md`, `-2026-09-25-devam2.md`, `-2026-09-26.md`, `-2026-09-26-devam2.md`,
+> `-2026-09-26-devam4.md`, `-2026-09-26-devam6.md`) arşivde duruyordu — buradaki tekil pointer'lar
+> bu turda TEK bir konsolide pointer'a indirildi (yeni eklenti: `session_arsiv_2_EKLENTI_2026-09-26-devam7.md`,
+> aşağıdaki bloğun kendisi). Hiçbiri aktif takip için gerekli değildi; hepsi Açık Sorunlar/Kritik
+> Kararlar/GENEL DURUM'da ve SIRADAKİ GÖREVLER'de (A9/A10/A11/A13 dahil) hâlâ tam özetli — içerik
+> kaybı yok, sadece pointer metni sıkıştırıldı (§7.1 Adım 1.5).
