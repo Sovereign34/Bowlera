@@ -19,34 +19,38 @@
 > eski açık madde listesinin (1e-12, Session 1-3'ten kalma) hangilerinin gerçekten
 > önceliksiz/terk edilmiş sayılacağına dair kullanıcı kararı hâlâ bekleniyor — bu turda da
 > sorulmadı (öncelik #128/A16 ve build hatasıydı), bir sonraki oturumda sorulmalı.
+>
+> ⚠️ **TAŞIMA NOTU (2026-09-27, bu turda — 37. sohbet):** 36. sohbetin CURRENT FOCUS anlatısının
+> TAM metni (İçecek/Tatlı Sepete Ekle genişlemesi + "fiyatlandırılamadı" kök neden/düzeltme
+> anlatısı) `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-27-devam2.md`,
+> ayrı dosya olarak üretildi, kullanıcı kendi eliyle arşiv dosyasının sonuna ekleyecek). Kapanış
+> gerekçesi: içerik Açık Sorunlar #131/#132/#133 ve GENEL DURUM → Checkout satırında zaten tam
+> özetli, #131(a)'nın kod seviyesinde hâlâ geçerli olduğu bu turda ayrıca teyit edildi — aktif
+> takip için tam anlatı gerekli değil, içerik kaybı yok.
 
 ---
 
 ## 🎯 CURRENT FOCUS
 
-> **[GÜNCEL — 2026-09-27, 36. sohbet]** Kullanıcının bildirdiği 2 sorun çözüldü: **Sorun 1**
-> (İçecek/Tatlı kategorilerinde "Sepete Ekle" yoktu) — kullanıcı kararıyla kapsam genişletildi:
-> `MenuPageClient.tsx`'te kategoriler BUNDLE (Bowl/Dürüm/Salata Bowl/**+Sandviç**, gerçek
-> `signatureFlavors`/`drinkItems`/`dessertItems` ile `QuickAddSheet` açılır) ve STANDALONE
-> (İçecek/Tatlı, AYNI `QuickAddSheet` boş dizilerle açılır — yeni bileşen YAZILMADI, mevcut şart
-> zaten destekliyordu) olarak ikiye ayrıldı. **Sorun 2** ("Sipariş Onayla" → "fiyatlandırılamadı"
-> hatası) — kod incelemesiyle KESİN kök neden bulundu: `app/api/orders/gel-al/route.ts`'teki
-> `priceItem()` hazır ürün fiyatını hâlâ statik `lib/menu-data.json`'dan okuyordu, ama `/menu`
-> artık DB `menu_items`'tan besleniyordu (#117) — sadece DB'de var olan ürünler (ör. "Kendi
-> kasem") bu yüzden fiyatlandırılamıyordu. AYRICA `quickAddSelection` alanı bu fonksiyonda hiç
-> tanınmıyordu. **Düzeltme (4 dosya, KARAR BİLDİRİMİ onaylı):** yeni `lib/menu-items-catalog.ts`
-> (`bowl-catalog.ts`/`sandwich-catalog.ts` ile AYNI desende DB'den `menu_items` Map'i çeker),
-> `route.ts` (fiyatlandırma DB'ye taşındı + `quickAddSelection` için sunucu-taraflı yeniden
-> hesaplama dalı — BSC-3 — + `selectionSummary`'e ayrı satır, #131(a) KAPANDI),
-> `ConfirmPickupOrderButton.tsx` (incelerken bulunan AYRI bir eksik: sepet payload'ı
-> `quickAddSelection`'ı sunucuya hiç göndermiyordu — route düzeltmesi bu olmadan işe yaramazdı,
-> aynı turda kapatıldı). **Build hatası ve düzeltmesi:** ilk deploy'da
-> `Module '"@/types"' has no exported member 'QuickAddSelection'` hatası çıktı — `types/index.ts`
-> dosyasının kendisinde bu tip ZATEN doğru export edilmiş haldeydi (dosya bu turda tekrar
-> paylaşılıp doğrulandı), yani dosyanın İÇERİĞİ hatalı değildi. **Kesin sebep TEYİT EDİLMEDİ**
-> (Kural #1) — en olası açıklama, bu dosyanın ilk push'ta gerçek repoya gitmemiş olması; kullanıcı
-> tekrar push edip **deploy'u yeşile aldı**, ayrıca bir kök neden araştırması YAPILMADI. Bkz.
-> yeni #132/#133.
+> **[GÜNCEL — 2026-09-27, 37. sohbet]** Kullanıcı repoyu (zip) paylaştı — 36. sohbette teşhis
+> edilen `needsBowlCatalog` düzeltmesinin (quickAddSelection.signatureFlavorIds kontrolü) fiilen
+> repoda YAŞADIĞI kod üzerinden TEYİT EDİLDİ (#131(a) kapanışı doğrulandı, ayrı kanıt gerekmedi).
+> Bunun üstüne YENİ bir özellik istendi ve kodlandı: **Quick-Add sos seçiminde ilk (seçim
+> SIRASINA göre) sos ücretsiz, sonrakiler tam fiyatına.** Kullanıcı 3 soruyla kapsamı netleştirdi:
+> (1) kapsam Quick-Add + Customizer Signature Flavor adımı — ama Customizer TEK seçimli kaldığı
+> için kural orada davranışı DEĞİŞTİRMİYOR (zaten seçilen tek sos vardı), fiilen SADECE Quick-Add'i
+> etkiliyor; (2) "ilk" = kullanıcının TIKLADIĞI sıra (dizideki index 0); (3) tüm Quick-Add
+> ürünlerinde geçerli. Kod incelemesiyle `signatureFlavorIds`'in zaten sıralı bir dizi olduğu
+> (`toggle()` seçilince sona ekliyor/kaldırılınca filtreliyor) görüldü — **şema değişikliği
+> GEREKMEDİ**. 2 dosya güncellendi: `app/api/orders/gel-al/route.ts` (`priceQuickAddSelection`
+> → `priceFlavorSelection`/`priceMenuItemSelection`'a bölündü, Kural #5 — ilk sos ücretsiz mantığı
+> SADECE `priceFlavorSelection`'da), `components/menu/QuickAddSheet.tsx` (canlı fiyat/kalori
+> hesaplaması `computeQuickAddTotals`'a taşındı + AYRICA bir bug düzeltildi: eski kod
+> `signatureFlavors.filter()` kullanıyordu — bu, "ilk seçilen"i KATALOG sırasına göre yanlış
+> belirlerdi, `selectedFlavorIds.map()`'e çevrildi; "Ücretsiz" rozeti + açıklayıcı metin eklendi).
+> Kalori hiçbir zaman ücretsiz sayılmadı (CORE.md §9). **KALAN:** kullanıcı bu 2 dosyayı henüz
+> push/build/canlı doğrulamadı; `priceFlavorSelection`/`computeQuickAddTotals` için test seti
+> YOK (kullanıcıya soruldu, henüz yanıt yok) — bkz. yeni #134/A21.
 >
 > ⚠️ **TAŞIMA NOTU (2026-09-27, bu turda — 36. sohbet):** 35. sohbetin (2./3. kez devamları)
 > CURRENT FOCUS anlatısı (QuickAddSheet KARAR BİLDİRİMİ detayı, #2/#57 park, #91/A12 kapanışları,
@@ -229,6 +233,7 @@
 | 131 | 🟡 | **[35. sohbet devamı (2. kez) — 36. sohbette KISMEN KAPANDI]** Bowl/Dürüm/Salata Bowl "hızlı Sepete Ekle" (QuickAddSheet). **(a) KAPANDI (36. sohbet):** `route.ts`'in `selectionSummary`'i artık sos/içecek/tatlı seçimlerini ayrı satır olarak üretiyor, personel paneli/checkout bunu görebilir hale geldi (bkz. #99-devamı düzeltmesi). **(b) HÂLÂ AÇIK:** kategori eşleştirmesi `categories.name` üzerinden yapıldı (id/slug hâlâ teyitsiz) — admin panelden kategori ismi değiştirilirse eşleştirme KIRILIR. **YENİ (36. sohbet):** `MenuPageClient.tsx` kapsamı Sandviç'i de BUNDLE grubuna ekleyecek şekilde genişletildi, İçecek/Tatlı STANDALONE olarak kendi "Sepete Ekle"sini aldı — bkz. #132. Deploy YEŞİL (kullanıcı doğruladı) ama İçecek/Tatlı/Sandviç sepete ekleme akışının canlıda GÖZLE uçtan uca test edilmesi HÂLÂ BEKLİYOR. | `types/index.ts`, `app/menu/page.tsx`, `components/menu/{MenuPageClient,MenuCard,QuickAddSheet}.tsx`, `app/api/orders/gel-al/route.ts` |
 | 132 | 🟡 | **[YENİ, 36. sohbet]** `MenuPageClient.tsx`'te "Sandviç" kategorisi BUNDLE grubuna eklendi (QuickAddSheet ile hazır sandviç satışı). **Teyitsiz varsayım (Kural #1):** "Sandviç" kategorisinin gerçek DB `id`'sinin, customizer'ın `isCustomizable` kontrolündeki `"build-your-own"` id'siyle ÇAKIŞMADIĞI varsayıldı — çakışırsa hazır sandviçte yanlışlıkla "Özelleştir" butonu çıkabilir. Canlıda GÖZLE doğrulanmalı. | `components/menu/MenuPageClient.tsx` |
 | 133 | 🟢 | **[YENİ, 36. sohbet — ders notu, kesin teyit yok]** Deploy `Module '"@/types"' has no exported member 'QuickAddSelection'` hatasıyla kırıldı, ama paylaşılan `types/index.ts` dosyasının İÇERİĞİNDE bu tip ZATEN doğru export edilmişti — yani "dosya üretilip kullanıcıya verildi" ile "o dosyanın gerçekten push edilmiş repo hali" arasında bir kopukluk yaşanmış olabilir (kesin sebep teyit EDİLMEDİ, araştırılmadı). Kullanıcı tekrar push edip deploy'u yeşile aldı. #121'deki "schema push ≠ DB güncel" dersiyle AYNI SINIFTAN bir risk — dosya bazında da geçerli olabileceği kaydediliyor. | `types/index.ts` |
+| 134 | 🟡 | **[YENİ, 37. sohbet, KARAR BİLDİRİMİ onaylı]** Quick-Add sos seçiminde "ilk seçilen ücretsiz, sonrakiler tam fiyat" kuralı — kullanıcı 3 soruyla netleştirdi: kapsam Quick-Add (Customizer tek seçimli kaldığı için orada davranış değişmiyor), "ilk" = seçim SIRASI (dizideki index 0, deselect edilirse kalan ilk eleman ücretsiz sayılır), tüm Quick-Add ürünlerinde geçerli. Kod incelemesiyle `signatureFlavorIds`'in zaten sıralı dizi olduğu görüldü — **şema değişikliği GEREKMEDİ**. `route.ts`'te `priceFlavorSelection` (yeni, Kural #5 böldü) + `QuickAddSheet.tsx`'te `computeQuickAddTotals` (yeni) ile hem sunucu hem istemci senkron. **Yan düzeltme:** istemci eskiden `signatureFlavors.filter()` kullanıyordu (katalog sırası) — "ilk seçilen"i YANLIŞ belirlerdi, `selectedFlavorIds.map()`'e çevrildi. Kalori hiçbir promosyonla düşülmez (CORE.md §9). **KALAN:** push/build/canlı doğrulama YOK, test seti YOK (kullanıcıya soruldu, yanıt bekleniyor) — bkz. A21. | `app/api/orders/gel-al/route.ts`, `components/menu/QuickAddSheet.tsx` |
 
 ---
 
@@ -242,14 +247,14 @@
 | Auth | 🟡 Twilio/Netgsm PARKLI. Genel giriş/kayıt akışı karar olarak netleşti, guest gate middleware'i KODLANDI ve repoda doğrulandı. Masaya Sipariş kanalı middleware'in kapsamı dışında AYRI bir yüzeyde (`/masaya-siparis/*`) yaşayacak — bu yüzey henüz kodlanmadı. Gel Al akışı için "Sepete Ekle" bypass guard'ı (#66) hâlâ eksik. `/personel/*` role bazlı guard'ı ✅ TAMAMLANDI — 4 dosya senkron, canlı build yeşil doğrulandı. Telefon+şifre girişi (#82) VE şifre sıfırlama (#83) canlıda TAM doğrulandı — ikisi de KAPANDI. Login sonrası isim gösterme sorunu (#84) de canlıda düzelmiş görüldü, KAPANDI. Güvenlik denetimi SEC-01+SEC-02 kod+test+build+tsc TAMAM — **canlı manuel doğrulama KAPANDI (#91)**: role-revocation 403 + rate-limit (5'ten fazla yanlış şifrede geçici bekletme) ikisi de kullanıcı tarafından canlıda doğrulandı. ⚠️ **[26. sohbet, YENİ]** `/admin`+`/api/admin` role guard'ı (`role==='admin'`, staff giremiyor) kodlandı, 4 dosya senkron üretildi — repo entegrasyonu VE canlı doğrulama BEKLİYOR (#112). |
 | Kullanıcı Profili/Adres | 🟢 Kod tamam VE canlıda test edildi (#39 KAPANDI). ⚠️ Kaydet butonu `bg-olive-600` (kırık) → `bg-[#53502A]` (arbitrary value, çalışıyor) — kök neden #73'te açık. |
 | Kullanıcı Kaydı (rıza esaslı) | 🟢 Backend+Frontend TAMAM, canlı test BAŞARILI, oturum+isim gösterimi DOĞRULANDI (#59 KAPANDI). Kanal seçimi zorunlu adımı henüz KODLANMADI (bkz. 1b). |
-| Checkout (`/siparis`, `app/api/orders/gel-al/route.ts`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. ✅ **[#99 KAPANDI, kök neden hâlâ kesin bilinmiyor]** Sandviç checkout BLOKLU DEĞİL — canlıda 3 ekran görüntüsüyle doğrulandı. ✅ **[36. sohbet, YENİ]** Ayrı bir "fiyatlandırılamadı" hatası KESİN teşhis edilip düzeltildi: `priceItem()` statik `menu-data.json` yerine artık DB `menu_items`'tan (`lib/menu-items-catalog.ts`) fiyatlandırıyor; `quickAddSelection` sunucu tarafında BSC-3 gereği yeniden hesaplanıyor ve `selectionSummary`'e ayrı satır düşüyor (#131(a) KAPANDI). `ConfirmPickupOrderButton.tsx`'in `quickAddSelection`'ı sepet payload'ına hiç eklemediği AYRI bir eksik olarak bulunup aynı turda kapatıldı. Deploy YEŞİL — **KALAN:** İçecek/Tatlı/Sandviç quick-add akışının checkout'ta uçtan uca canlı GÖZLE testi (bkz. #131/#132). |
+| Checkout (`/siparis`, `app/api/orders/gel-al/route.ts`) | 🟢 Bowl için kod tamam VE repoda doğrulandı, SADECE Gel Al'a özel (§2.9). Masaya kendi bağımsız mini-checkout'unu kullanacak (ARCHITECTURE.md v1.8) — henüz KODLANMADI. ✅ **[#99 KAPANDI, kök neden hâlâ kesin bilinmiyor]** Sandviç checkout BLOKLU DEĞİL — canlıda 3 ekran görüntüsüyle doğrulandı. ✅ **[36. sohbet]** Ayrı bir "fiyatlandırılamadı" hatası KESİN teşhis edilip düzeltildi: `priceItem()` statik `menu-data.json` yerine artık DB `menu_items`'tan (`lib/menu-items-catalog.ts`) fiyatlandırıyor; `quickAddSelection` sunucu tarafında BSC-3 gereği yeniden hesaplanıyor ve `selectionSummary`'e ayrı satır düşüyor (#131(a) KAPANDI) — **37. sohbette repo zip'i üzerinden kod seviyesinde TEYİT EDİLDİ**, hâlâ yaşıyor. 🟡 **[37. sohbet, YENİ]** Quick-Add sos seçiminde "ilk sos ücretsiz" kuralı eklendi (#134) — kod hazır, **push/build/canlı doğrulama VE test seti hâlâ BEKLİYOR**. **KALAN:** İçecek/Tatlı/Sandviç quick-add akışının checkout'ta uçtan uca canlı GÖZLE testi (bkz. #131/#132) + #134'ün canlı doğrulaması. |
 | Veritabanı | 🟢 Neon Postgres çalışıyor. `consentRegistrations` ve `order_history` migrate edildi. `users.role` (`text`, `NOT NULL`, `DEFAULT 'customer'`) migrate edildi ve DOĞRULANDI. `consentRegistrations.ipAddress` (nullable) + `registrationBlockedAttempts` tablosu (#89) migrate edildi, 6 sorguyla DOĞRULANDI. `users` tablosu hâlâ 0 satır (#32 Twilio kısıtı). ⚠️ DB şifresi reset bekliyor (#60). ⚠️ `npm audit`: 12 açık/3 kritik (#63). ✅ **[26. sohbet]** `menu_items` tablosu (6. tablo) migrate edildi. `build-your-own-kasem` bilinçli olarak DAHİL EDİLMEDİ (grep ile doğrulandı). ✅ **[29. sohbet, YENİ]** `categories` tablosu (7. tablo, `id`/`name`/`sortOrder`) migrate edildi ve DOĞRULANDI — 7 satır. `menu_items.category` bu tabloya FK (RESTRICT). `menu_items` şu an 0 satır (8 test ürünü bilinçli olarak temizlendi, #115). `branches` veya çok-şubeli menü tablosu HÂLÂ YOK (bkz. #92/#93). ✅ **[32. sohbet, YENİ]** `ingredients.is_mikes_way_default` ve `sandwich_sizes.price_multiplier` (eski `price_modifier`'ın yerine) Neon SQL Editor'de ALTER TABLE ile eklendi/dönüştürüldü ve `information_schema` sorgusuyla doğrulandı — `sandwich_sizes` 0 satırdı, veri kaybı olmadı (bkz. #121). Bu turda (35. sohbet devamı, 2. kez) DB şeması HİÇ değişmedi — `quickAddSelection` client-side sepet state'i, DB migration GEREKTİRMEDİ. |
 | Sandviç Akışı (DB bağlantısı) | 🟢 **[bu turda, A13 KAPANDI]** #124 (client bundle'a `db` sızması → DATABASE_URL çökmesi) ve #125 (4 adımda eksik ürün görseli) düzeltildi, kullanıcı canlıda 6 adımın tamamını (Ekmek→Boy→Protein→Peynir→Sebzeler→Sos/Toast/Ekstralar) ekran görüntüsüyle DOĞRULADI. **A13 bu turda AÇIKÇA kapandı** ("A13 kapandı") — 2 yeni ekran görüntüsü gerçek ürün adı/fiyat/kalori/görsel gösteriyor (Ekmek: Glutensiz Somun +13TL/25kcal, Tam Buğday Somun +12TL/150kcal; Peynir: Cheddar +58TL/25kcal, görseliyle). **KALAN:** `docs/schema-changes/` notu hâlâ dosya olarak yok (#121); `server-only` paketi kararı bekliyor (#126/A15); sipariş verme (Sepete Ekle → checkout) ucu hâlâ hiç test edilmedi. |
 | Personel Sipariş Paneli (#62) | 🟢 Masaya sekmesi TAMAMLANDI + canlı doğrulandı. `/personel/*` + `/api/personel/*` guard'ı ikisi de canlı build yeşil. 🟡 Gel Al onay kuyruğu — 3-durumlu revizyon (KARAR A), 7 kaynak+5 test dosyası kodlandı, Codespaces'te 37/37 PASS. **SADECE canlı ortamda "Teslim Edildi" tıklama testi BEKLİYOR.** 🟡 Kayıt Onayları (4. sekme, #86) — 8 dosya kodlandı, build YEŞİL, test seti + canlı doğrulama BEKLİYOR. 🟢 Sekme rozetleri eklendi, push edildi. |
 | Admin Panel (menü/fiyat/kalori/görsel CRUD) | 🟢 **[29. sohbet]** Uçtan uca CANLIDA ÇALIŞIYOR: ürün CRUD + kategori CRUD (#115) + ImageKit görsel yükleme + `/admin`+`/api/admin` guard'ı hepsi kodlandı, deploy edildi, doğrulandı. `menu_items` şu an BİLİNÇLİ OLARAK BOŞ (8 test ürünü temizlendi, #115). **KALAN:** gerçek ürünleri girmek (A10), düzenleme formu+gerçek ImageKit yüklemesi uçtan uca canlı testi (A11). Menü verisinin geri kalanı (`sandwich-data.json`, `customizer-data.ts`) bu turun kapsamı DIŞINDA. |
 | Bowl Akışı (DB bağlantısı) | 🟢 **[GÜNCELLENDİ, 35. sohbet]** #127 (DB bağlama) + #129 (`image` opsiyonel build düzeltmesi) + #128 (Hero.tsx giriş noktası) hepsi KAPANDI — customize sayfası GERÇEK ürün id'siyle (`fekafel-bowl-hb0fc`) hem doğrudan hem artık Hero.tsx üzerinden erişilebilir durumda. **KALAN:** Hero.tsx değişikliği henüz push/canlı doğrulanmadı (A16), sandviç tarafının aynı sorunu taşıyıp taşımadığı hâlâ teyitsiz (A18). |
 | Public Menü (`/menu`) | ✅ **[30. sohbet, A9 KAPANDI]** Artık `menu_items`/`categories` DB'sine bağlı — statik `menu-data.json` KULLANILMIYOR. Karar A (`force-dynamic`, her istekte taze sorgu) — ISR denemesi (Karar B) canlı build'de kırıldı, geri dönüldü (bkz. #118, ONUNCU DERS). Kategori sekmeleri DB'den dinamik. Kullanıcı onayıyla canlı build doğrulandı. **KALAN:** `lib/db/queries/menu.ts` silinmeli (#119), `CategoryTabButton.tsx` hâlâ hiç görülmedi (#120, düşük öncelik). |
-| Menü — Hızlı Sepete Ekle (Bowl/Dürüm/Salata Bowl/Sandviç + İçecek/Tatlı) | 🟡 **[GÜNCELLENDİ, 36. sohbet]** Kapsam genişledi: BUNDLE (Bowl/Dürüm/Salata Bowl/**Sandviç**, gerçek sos/içecek/tatlı seçimli `QuickAddSheet`) + STANDALONE (İçecek/Tatlı, aynı sheet boş dizilerle — sadece ürün/fiyat/"Sepete Ekle"). Checkout artık `quickAddSelection`'ı doğru fiyatlandırıyor VE personel paneli seçimi ayrı satır görüyor (#131(a) KAPANDI). Deploy YEŞİL. **KALAN:** canlıda GÖZLE uçtan uca test (İçecek/Tatlı/Sandviç sepete ekle → checkout → personel paneli), Sandviç kategori id'sinin `isCustomizable` ile çakışmadığının teyidi (#131(b)/#132). |
+| Menü — Hızlı Sepete Ekle (Bowl/Dürüm/Salata Bowl/Sandviç + İçecek/Tatlı) | 🟡 **[GÜNCELLENDİ, 37. sohbet]** Kapsam: BUNDLE (Bowl/Dürüm/Salata Bowl/Sandviç, gerçek sos/içecek/tatlı seçimli `QuickAddSheet`) + STANDALONE (İçecek/Tatlı, aynı sheet boş dizilerle — sadece ürün/fiyat/"Sepete Ekle"). Checkout `quickAddSelection`'ı doğru fiyatlandırıyor VE personel paneli seçimi ayrı satır görüyor (#131(a) KAPANDI, 37. sohbette kod üzerinden yeniden teyit edildi). **YENİ (37. sohbet):** ilk seçilen sos ücretsiz kuralı eklendi (#134) — kod hazır, push/build/canlı doğrulama BEKLİYOR. **KALAN:** canlıda GÖZLE uçtan uca test (İçecek/Tatlı/Sandviç sepete ekle → checkout → personel paneli + #134), Sandviç kategori id'sinin `isCustomizable` ile çakışmadığının teyidi (#131(b)/#132). |
 
 ---
 
@@ -258,6 +263,7 @@
 | Sıra | Görev | Öncelik |
 |---|---|---|
 | A19 | **[GÜNCELLENDİ, 36. sohbet]** Bowl/Dürüm/Salata Bowl/Sandviç "hızlı Sepete Ekle" + İçecek/Tatlı standalone + checkout fiyatlandırma düzeltmesi (4 ek dosya) uygulandı, deploy YEŞİL (#131 kısmen KAPANDI). **KALAN:** kategori isim eşleştirmesi (`categories.name`) canlı DB verisiyle GÖZLE teyidi; İçecek/Tatlı/Sandviç sepete ekle → checkout → personel paneli uçtan uca canlı test; Sandviç id'sinin `isCustomizable` ile çakışmadığının teyidi (#132). | 🟡 |
+| A21 | **[YENİ, 37. sohbet]** Quick-Add "ilk sos ücretsiz" özelliği (#134) — `route.ts` + `QuickAddSheet.tsx` kodlandı, kullanıcıya verildi. **KALAN:** push + build + canlı doğrulama (özellikle: 2 sos seçilince ilki ücretsiz mi görünüyor, ilkini kaldırınca kalan ücretsiz oluyor mu, miktar>1'de birim başına mı uygulanıyor); `priceFlavorSelection`/`computeQuickAddTotals` için test seti yazılıp yazılmayacağı kullanıcıya soruldu, yanıt bekleniyor. | 🔴 |
 | A20 | **[YENİ, 36. sohbet]** Build hatası (`QuickAddSelection` export bulunamadı) çıktı ama dosya içeriği zaten doğruydu, kesin sebep araştırılmadı (#133) — bir dahaki sefere benzer bir "dosya üretildi ama build hâlâ eskiyi görüyor" durumu olursa, önce GERÇEK repo dosyasının (GitHub) push edilmiş hâli kontrol edilmeli. | 🟢 |
 | A16 | **[TAMAMLANDI, 35. sohbet ✅]** `Hero.tsx`'teki "Kaseni Oluştur" `href`'i gerçek `fekafel-bowl-hb0fc` id'sine güncellendi (#128 KAPANDI). **KALAN:** kullanıcı bu dosyayı henüz push/build/canlı doğrulamadı — bir sonraki turda teyit edilmeli. | 🟠 |
 | A17 | **[YENİ, 35. sohbet]** `EXTRA_OPTIONS`'ta `image` alanı opsiyonel olduğu için, `item.image`'ı doğrudan render eden bileşenler (`VisualPreview.tsx`, `Step*.tsx`) `undefined` görseli nasıl karşılıyor — bu turda GÖRÜLMEDİ, doğrulanmalı (#129) | 🟢 |
@@ -332,20 +338,19 @@
 | 1d | ARCHITECTURE.md §4.1'deki `users.role` notu güncellenmeli; §2.9a'ya Masaya kısmının TAMAMLANDIĞI + `order_history` şema genişletmesi işlenmeli | 🟡 |
 
 
-*BOWLERA SESSION_INDEX.md — v98 (v97'den: **[36. sohbet, 2026-09-27]** İçecek/Tatlı'da "Sepete
-Ekle" eksikliği + "fiyatlandırılamadı" hatası çözüldü. Kök neden KESİN teşhis edildi:
-`app/api/orders/gel-al/route.ts`'in `priceItem()`'ı hazır ürünü statik `menu-data.json`'dan
-okuyordu, `/menu` artık DB'den besleniyordu. 4 dosya üretildi/güncellendi: yeni
-`lib/menu-items-catalog.ts`, `route.ts` (DB fiyatlandırma + `quickAddSelection` sunucu-taraflı
-BSC-3 hesaplaması + `selectionSummary` satırı), `ConfirmPickupOrderButton.tsx` (payload'a
-eksik `quickAddSelection` eklendi), `MenuPageClient.tsx` (BUNDLE genişledi: +Sandviç; STANDALONE:
-İçecek/Tatlı). Ayrı bir build hatası (`QuickAddSelection` export bulunamadı, dosya içeriği
-aslında doğruydu) sonradan tekrar push ile yeşile alındı — kesin sebep TEYİT EDİLMEDİ (#133).
-#131 KISMEN KAPANDI (a şıkkı kapandı, b şıkkı + yeni #132 açık). A19 güncellendi, A20 eklendi.
-**400 satır eşiği aşıldı (401 satır):** 35. sohbetin uzun CURRENT FOCUS anlatısı
-`session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-27.md`, ayrı dosya
-olarak verildi — kullanıcı arşivin sonuna kendi eklemeli). Başka hiçbir tabloya/karara
-dokunulmadı.)*
+*BOWLERA SESSION_INDEX.md — v99 (v98'den: **[37. sohbet, 2026-09-27]** Kullanıcı repo zip'i
+paylaştı — 36. sohbetin `needsBowlCatalog` düzeltmesi kod üzerinden TEYİT EDİLDİ (#131(a) hâlâ
+yaşıyor). Yeni özellik: Quick-Add sos seçiminde ilk (seçim sırasına göre) sos ücretsiz, sonrakiler
+tam fiyat (#134) — kullanıcı 3 soruyla kapsamı/"ilk"in tanımını/geçerli ürünleri netleştirdi.
+`signatureFlavorIds`'in zaten sıralı dizi olduğu görülüp **şema değişikliği GEREKMEDİĞİ** teyit
+edildi. 2 dosya güncellendi: `route.ts` (`priceQuickAddSelection` → `priceFlavorSelection`/
+`priceMenuItemSelection`'a bölündü, Kural #5), `QuickAddSheet.tsx` (`computeQuickAddTotals`'a
+bölündü + ayrı bir bug düzeltildi: istemci "ilk seçilen"i katalog sırasına göre yanlış
+belirliyordu, seçim sırasına çevrildi). Kalite 5/5, Güvenlik 8/8. A19 değişmedi, **A21 eklendi**
+(push/build/canlı doğrulama + test seti kararı bekliyor). **400 satır eşiği aşılmadan önce**
+36. sohbetin CURRENT FOCUS anlatısı `session_arşiv_2.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-27-devam2.md`, ayrı dosya olarak verildi — kullanıcı arşivin
+sonuna kendi eklemeli). Başka hiçbir tabloya/karara dokunulmadı.)*
 
 *[**TAŞINDI/KISALTILDI — 2026-09-26, bu turda (35. sohbet devamı, 3. kez)**] v95'in tam paragrafı
 (#91 kapanışı) `session_arşiv_2.md`'ye taşınacak YENİ bir eklentide duruyor (eklenti:
