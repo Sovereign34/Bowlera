@@ -118,8 +118,8 @@ SESSION_INDEX.md           ← Anlık durum pusulası — TEK aktif hafıza dosy
 session_arşiv.md,          ← Uzak/değiştirilemez hafıza, PARÇALARA AYRILABİLİR.
 session_arşiv_1.md,          İki BAĞIMSIZ tetikleyici vardır, karıştırılmaz:
 session_arşiv_2.md,          (A) SESSION_INDEX.md 400 satırı geçince, kapanmış
-... (N)                       içerik AKTİF arşiv parçasına taşınır (Bölüm 7.1).
-                              (B) AKTİF arşiv parçasının KENDİSİ hacimce
+session_arşiv_3.md ★ AKTİF   içerik AKTİF arşiv parçasına taşınır (Bölüm 7.1).
+... (N)                       (B) AKTİF arşiv parçasının KENDİSİ hacimce
                               yönetilemez hale gelirse (kullanıcı bunu belirtir/
                               talep eder), yeni bir sonraki parça (`_N+1`) açılır
                               — bu, SESSION_INDEX'in 400 satır kuralından AYRIDIR.
@@ -603,3 +603,18 @@ tarafından fark edilmesi zor olan ("sessiz") hata sınıflarında yetersiz kala
 bu sınıflar için önleyici, araç-tabanlı kontrol (AI'ın hatırlamasına değil) zorunlu kılındı. Yeni
 bir çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının (bkz.
 v1.4/v1.5/v1.7 notları) bir tekrarı. AGENT.md v1.7 ile eşleştirildi (2026-09-22).*
+*v1.9 — Bölüm 4 (Dosya Haritası) güncellendi: `session_arşiv_2.md` (2201 satır / 188K)
+hacimce yönetilemez hale geldiği için CORE.md §4 tetikleyici (B) tetiklendi, yeni
+`session_arşiv_3.md` açıldı ve AKTİF parça olarak işaretlendi. Bölünme noktası: 2026-09-01
+(27. sohbet, #118 Adım 3 turu) kapanışı — bu tarihe kadarki bloklar `session_arşiv_2.md`'de
+kaldı, 2026-09-03'ten (23. sohbet devamı) itibaren taşınan bloklar `session_arşiv_3.md`'ye
+geçti. **Ayrıca:** `session_arşiv_2.md` içinde "TAŞIMA BLOĞU — 2026-09-01 (5. taşıma)"dan
+"TAŞIMA BLOĞU 6"ya kadar olan ~127 satırlık blok (SESSION ÖZET tablosu + Kritik Kararlar
+Session 1-2 + Açık Sorunlar #107/#108, #101-104, #112-114, #39/#50) dosyada YANLIŞLIKLA
+İKİ KEZ bulunduğu tespit edildi (muhtemelen bir eklenti yapıştırılırken tekrarlanmış);
+birebir aynı olan ikinci kopya silindi — bu bir "sıkıştırma" değil, saf kopya temizliğidir,
+kalan tek kopyada içerik kaybı YOKTUR. Gerekçe: kullanıcı arşivin hacmini küçültme yolu sordu
+(2026-09-27, 37. sohbet) — CORE.md §4'ün zaten tanımladığı tetikleyici (B) mekanizması bu
+turda fiilen uygulandı. **KALAN:** SESSION_INDEX.md'nin üst notu, yeni AKTİF parçanın
+`session_arşiv_3.md` olduğunu yansıtacak şekilde AYRICA güncellenmeli (bu teslimatın
+kapsamı dışında bırakıldı, kullanıcı isterse ayrıca üretilir).*
