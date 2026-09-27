@@ -2168,3 +2168,34 @@ tabloya/karara dokunulmadı.)*
 > aşağıdaki bloğun kendisi). Hiçbiri aktif takip için gerekli değildi; hepsi Açık Sorunlar/Kritik
 > Kararlar/GENEL DURUM'da ve SIRADAKİ GÖREVLER'de (A9/A10/A11/A13 dahil) hâlâ tam özetli — içerik
 > kaybı yok, sadece pointer metni sıkıştırıldı (§7.1 Adım 1.5).
+-----
+## [36. sohbet, 2026-09-27] CURRENT FOCUS — tam anlatı (37. sohbette SESSION_INDEX.md'den taşındı)
+
+> **[GÜNCEL — 2026-09-27, 36. sohbet]** Kullanıcının bildirdiği 2 sorun çözüldü: **Sorun 1**
+> (İçecek/Tatlı kategorilerinde "Sepete Ekle" yoktu) — kullanıcı kararıyla kapsam genişletildi:
+> `MenuPageClient.tsx`'te kategoriler BUNDLE (Bowl/Dürüm/Salata Bowl/**+Sandviç**, gerçek
+> `signatureFlavors`/`drinkItems`/`dessertItems` ile `QuickAddSheet` açılır) ve STANDALONE
+> (İçecek/Tatlı, AYNI `QuickAddSheet` boş dizilerle açılır — yeni bileşen YAZILMADI, mevcut şart
+> zaten destekliyordu) olarak ikiye ayrıldı. **Sorun 2** ("Sipariş Onayla" → "fiyatlandırılamadı"
+> hatası) — kod incelemesiyle KESİN kök neden bulundu: `app/api/orders/gel-al/route.ts`'teki
+> `priceItem()` hazır ürün fiyatını hâlâ statik `lib/menu-data.json`'dan okuyordu, ama `/menu`
+> artık DB `menu_items`'tan besleniyordu (#117) — sadece DB'de var olan ürünler (ör. "Kendi
+> kasem") bu yüzden fiyatlandırılamıyordu. AYRICA `quickAddSelection` alanı bu fonksiyonda hiç
+> tanınmıyordu. **Düzeltme (4 dosya, KARAR BİLDİRİMİ onaylı):** yeni `lib/menu-items-catalog.ts`
+> (`bowl-catalog.ts`/`sandwich-catalog.ts` ile AYNI desende DB'den `menu_items` Map'i çeker),
+> `route.ts` (fiyatlandırma DB'ye taşındı + `quickAddSelection` için sunucu-taraflı yeniden
+> hesaplama dalı — BSC-3 — + `selectionSummary`'e ayrı satır, #131(a) KAPANDI),
+> `ConfirmPickupOrderButton.tsx` (incelerken bulunan AYRI bir eksik: sepet payload'ı
+> `quickAddSelection`'ı sunucuya hiç göndermiyordu — route düzeltmesi bu olmadan işe yaramazdı,
+> aynı turda kapatıldı). **Build hatası ve düzeltmesi:** ilk deploy'da
+> `Module '"@/types"' has no exported member 'QuickAddSelection'` hatası çıktı — `types/index.ts`
+> dosyasının kendisinde bu tip ZATEN doğru export edilmiş haldeydi (dosya bu turda tekrar
+> paylaşılıp doğrulandı), yani dosyanın İÇERİĞİ hatalı değildi. **Kesin sebep TEYİT EDİLMEDİ**
+> (Kural #1) — en olası açıklama, bu dosyanın ilk push'ta gerçek repoya gitmemiş olması; kullanıcı
+> tekrar push edip **deploy'u yeşile aldı**, ayrıca bir kök neden araştırması YAPILMADI. Bkz.
+> #132/#133.
+
+**Kapanış gerekçesi (37. sohbet):** Bu anlatının teşhis ettiği #131(a) düzeltmesi (`needsBowlCatalog`
+kontrolü) 37. sohbette kullanıcının paylaştığı repo zip'i üzerinden KOD SEVİYESİNDE teyit edildi —
+zaten yaşıyordu. İçerik Açık Sorunlar #131/#132/#133 satırlarında ve GENEL DURUM → Checkout
+satırında hâlâ tam özetli, aktif takip için bu tam anlatı gerekli değil.
