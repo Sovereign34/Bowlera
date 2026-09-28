@@ -1265,3 +1265,84 @@ sonuna kendi eklemeli). Başka hiçbir tabloya/karara dokunulmadı.)*
 | 0 | **[TAMAMLANDI ✅]** #83 — "Sıfırla" → üretilen geçici kodla giriş canlıda BAŞARILI test edildi. | ✅ |
 | 0b | **[TAMAMLANDI ✅]** #82 — orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
 
+## TAŞIMA BLOĞU — 2026-09-27 (400 satır eşiği, bu turda — CURRENT FOCUS + versiyon geçmişi)
+
+> `SESSION_INDEX.md`'den taşındı (CORE.md §7.1 Adım 1). Kullanıcı bu dosyayı `session_arşiv_3.md`'nin
+> SONUNA kendi eliyle ekleyecek. İçerik: (1) CURRENT FOCUS'tan 2 kapanmış paragraf (#138 ödeme
+> sağlayıcısı netleştirmesi; #135 madde 4 DB constraint kapanışı), (2) v102-v105 versiyon paragrafları.
+> Hepsi Açık Sorunlar #135/#136/#138, A22 ve GENEL DURUM'da zaten özetli — içerik kaybı yok.
+
+> **[GÜNCEL — bu turda]** Kullanıcı önemli bir netleştirme yaptı: **PayTR kesin değil** —
+> Iyzico gibi başka bir sağlayıcı da değerlendiriliyor, karar henüz verilmedi. Bu, `#135`
+> madde 2 (refund race condition) ve madde 7'yi (PayTR callback güvenliği) doğrudan etkiliyor:
+> madde 7 TAMAMEN PayTR'a özel (webhook imza formatı/API sözleşmesi sağlayıcıya göre değişir),
+> madde 2'nin DB `WHERE` koruma kısmı sağlayıcıdan BAĞIMSIZ (genel iyi pratik, kalıcı) ama
+> "PayTR'a çift istek gitmeme" (gerçek idempotency-key) kısmı sağlayıcıya özel. **Karar:**
+> sağlayıcı netleşmeden madde 2/7'nin sağlayıcıya-özel kısımlarına daha fazla efor
+> harcanmayacak (atılabilir iş riski) — **YENİ #137** açıldı, madde 2/7 "sağlayıcı bekliyor"
+> etiketiyle bekletiliyor. Ayrıca kullanıcı, ChatGPT'nin ayrı/dış bir değerlendirmesini
+> (10 maddelik kendi numaralandırmasıyla, 8,4→8,5 puan) paylaştı — bu SESSION_INDEX'e dışarıdan
+> gelen, teyitsiz bir kaynak olarak not edildi, kendi `#135` P0/P1/P2 sıramızla birebir
+> eşleşmiyor. `#135` madde 4 (DB CHECK constraint) kullanıcı tarafından ayrıca sözlü teyit
+> edildi (zaten önceki turda kapanmıştı, ek işlem gerekmedi).
+
+> **[GÜNCEL — bu turda]** #135 P0 madde 4 (DB CHECK/enum constraint yok) **TAM KAPANDI.**
+> Kullanıcı `20260927_users_role_verification_status_check_eklendi.md` şema notundaki
+> migration'ı Neon SQL Editor'de koştu ve iki sorgu çıktısını paylaştı: (1) ön-adım
+> `SELECT DISTINCT role FROM users` → sadece `admin`/`customer` (constraint kapsamında,
+> `staff` yok ama sorun değil); (2) migration sonrası `pg_constraint` doğrulaması →
+> `chk_users_role` (`role IN ('customer','staff','admin')`) ve
+> `chk_users_verification_status` (`verification_status IN ('pending','confirmed')`)
+> ikisi de tanımlarıyla döndü. İkinci `ALTER TABLE`'ın hatasız geçmesi, `verification_status`
+> sütununda da constraint dışı bir değer olmadığını dolaylı olarak kanıtladığı için ayrıca
+> `SELECT DISTINCT verification_status` çıktısı istenmedi. Kod tarafı (`lib/db/schema.ts`
+> yorumları) zaten önceki turda güncellenmişti — bu turda SADECE SQL migration'ı fiilen
+> koşuldu ve doğrulandı. **Kapı artık SADECE #135 P0 madde 3'e (admin ikinci yetki,
+> `requireAdminSession()` yok) bağlı** — kapsamı (hangi işlem için ikinci onay isteniyor)
+> hâlâ kullanıcıdan netleştirme bekliyor. #136 (numara çakışması) da hâlâ karar bekliyor.
+
+
+*BOWLERA SESSION_INDEX.md — v105 (v104'ten: **[bu turda]** Kullanıcı önemli bir netleştirme
+yaptı: PayTR KESİN DEĞİL — Iyzico gibi başka bir sağlayıcı da değerlendiriliyor, karar henüz
+verilmedi. **YENİ #138** açıldı (`#137` bilinçli olarak ATLANDI — `#136`'nın (b) seçeneği
+ileride `#137+` ile yeniden numaralandırma öneriyor, çakışma önlendi). `#135` madde 2 (refund
+race condition) ve madde 7 (PayTR callback güvenliği) `#138`'e çapraz referanslandı — DB `WHERE`
+koruması (madde 2, sağlayıcıdan bağımsız kısım) kalıcı kabul edildi, ama PayTR'a özel idempotency-
+key (madde 2) ve TÜM madde 7 sağlayıcı netleşene kadar beklemede işaretlendi. SIRADAKİ GÖREVLER
+satır 2 (#57, online ödeme) ile çapraz referans eklendi. Kullanıcı ayrıca ChatGPT'den gelen dış/
+teyitsiz bir değerlendirmeyi (10 maddelik kendi numaralandırması, 8,4→8,5 puan) paylaştı — bu
+CURRENT FOCUS'a not düşüldü, kendi `#135` sıramızı DEĞİŞTİRMEDİ. `#135` madde 4 kullanıcı
+tarafından ayrıca sözlü teyit edildi (zaten kapalıydı, ek işlem gerekmedi). Başka hiçbir tabloya
+dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v104 (v103'ten: **[bu turda]** Dosya 400 satır eşiğini beşinci kez
+aştı (479 satır). CORE.md §7.1 Adım 1 gereği CURRENT FOCUS'taki 4 kapanmış paragraf (38. sohbet
+#135/#134 çifte kapanış, "bu turda devamı" #136+#135/1, "bu turda" repo zip reconciliation, 37.
+sohbet Quick-Add ilk-sos-ücretsiz) TAM metniyle `session_arşiv_3.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-27-devam3.md`, ayrı dosya olarak üretildi, kullanıcı kendi
+eliyle arşiv dosyasının sonuna ekleyecek). Yerine tek bir TAŞIMA NOTU pointer'ı bırakıldı. Arşiv
+Taşıma Kaydı tablosuna yeni satır eklendi. Kapanış gerekçesi: hepsi Açık Sorunlar #134/#135 ve
+GENEL DURUM'da zaten tam özetli, içerik kaybı yok. **Not:** taşımadan sonra dosya hâlâ ~415-424
+satır civarında — 400 eşiğinin tam altına inmek için ayrı, daha büyük bir sıkıştırma turu (örn.
+kapanmış SIRADAKİ GÖREVLER maddelerinin taşınması) gerekebilir, kullanıcı isterse bir sonraki
+turda yapılabilir. Başka hiçbir tabloya/karara dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v103 (v102'den: **[bu turda]** Kullanıcı checkpoint onayı verdi
+("evet, kurallara göre güncelle"). #135 P0 madde 4 (DB CHECK/enum constraint yok) **TAM
+KAPANDI**: Neon SQL Editor'de `chk_users_role`+`chk_users_verification_status` migration'ı
+koşuldu, ön-adım (`SELECT DISTINCT role`) ve doğrulama (`pg_constraint`) sorgu çıktıları
+kullanıcı tarafından paylaşıldı, ikisi de teyitli. #135 satırı, A22, CURRENT FOCUS ve GENEL
+DURUM/Veritabanı satırı buna göre güncellendi. **Kapı artık SADECE madde 3'e (admin ikinci
+yetki) bağlı** — kapsamı hâlâ netleşmedi. Başka hiçbir tabloya/karara dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v102 (v101'den: **[38. sohbet]** Kullanıcı canlıda iki testi bizzat
+koştu ve sonuçlarını ekran görüntüsüyle paylaştı (Codespaces/`npm test` yerine — mobilde
+çalışıyor, dosyaları manuel push etti, deploy yeşil). Sonuç 1: onaysız hesapla sipariş denemesi
+→ 403 + "Hesabınız henüz onaylanmadı" mesajı doğrulandı. Sonuç 2: aynı hesap onaylandıktan sonra
+sipariş başarıyla tamamlandı. Bu ikisi ile **#135 P0-1 TAM KAPANDI**, A22 buna göre güncellendi
+(`route.test.ts` hâlâ koşulmadı, borç olarak kaydedildi). Ayrıca kullanıcı **#134'ü onaylayıp
+kapattı** ("#134 onaylandı kapat") — #134 satırı, A21, GENEL DURUM/Checkout ve GENEL DURUM/Hızlı
+Sepete Ekle satırları buna göre ✅ işaretlendi (kısa sözlü onay, ekran görüntüsü yok — A12 tipi
+kapanış). Başka hiçbir tabloya/karara dokunulmadı. P0 madde 3/4 ve #136 hâlâ açık.)*
+
+
