@@ -1189,3 +1189,79 @@ satırında hâlâ tam özetli, aktif takip için bu tam anlatı gerekli değil.
 > (KAPANDI/kısmen kapandı), Kritik Kararlar ve GENEL DURUM'da hâlâ tam özetli — aktif takip
 > için gerekli değil, içerik kaybı yok.
 
+## TAŞIMA BLOĞU — 2026-09-27 (400 satır eşiği altıncı kez aşıldı, bu turda — versiyon geçmişi sıkıştırması)
+
+> Bu blok `SESSION_INDEX.md`'nin footer'ındaki VERSİYON GEÇMİŞİ'nden taşındı (CORE.md §7.1
+> Adım 1). Kullanıcı bu dosyayı kendi eliyle `session_arşiv_3.md`'nin SONUNA ekleyecek.
+> Taşınan 3 versiyon paragrafı: v101 (#136 seçenek a + #135/1 kodlama), v100 (repo zip
+> reconciliation, #135/#136 kaydı güncellendi), v99 (37. sohbet — Quick-Add "ilk sos ücretsiz"
+> #134 özelliği). Kapanış gerekçesi: üçü de Açık Sorunlar #134/#135/#136 satırlarında ve
+> GENEL DURUM'da zaten tam özetli — aktif takip için gerekli değil, içerik kaybı yok. Bu,
+> SESSION_INDEX.md'deki mevcut "v95 TAŞINDI/KISALTILDI" pointer'ının devamı niteliğinde
+> (aynı desen, bir sonraki 3 versiyonu kapsıyor).
+
+*BOWLERA SESSION_INDEX.md — v101 (v100'den: **[bu turda]** Kullanıcı "sen karar ver, devam et"
+dedi. #136 için seçenek (a) seçildi (kod yorumları değişmedi). Öncelik sırasına göre #135/1
+(verificationStatus) KODLANDI: `app/api/orders/gel-al/route.ts`'e DB-taze `verificationStatus
+==="confirmed"` kontrolü (403 fail-closed) eklendi, dosya başı niyet yorumu güncellendi.
+`route.test.ts` (bu route'un İLK testi, 5 senaryo) yazıldı ama ÇALIŞTIRILMADI (node_modules yoktu).
+#135 satırındaki madde (1) ve A22 buna göre güncellendi. P0 madde 3/4 hâlâ açık. Başka hiçbir
+tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v100 (v99'dan: **[bu turda, repo zip'i üzerinden #135 reconciliation]**
+Kullanıcı "#135'i çözüyorduk ama session'a kaydetmedik" dedi — repo kodu satır satır incelenip
+GERÇEK durum teyit edildi. #135 kaydı GÜNCELLENDİ (önceki "KOD YOK" kaydı STALE çıktı): madde 5/5b
+zaten `route.ts`'e kodlanmış (`#135/5`/`#135/5b` kod imzalarıyla teyitli); madde 7 (PayTR callback
+güvenliği) BÜYÜK ÖLÇÜDE ayrı, kaydedilmemiş bir oturumda çözülmüş ama `#110`/`#115`/`#116`
+numaralarıyla anılıyor — bu numaralar SESSION_INDEX'te ZATEN başka konulara atanmıştı, **YENİ #136
+(numara çakışması) açıldı**, kullanıcı kararı bekliyor. Madde 6 (`Hero.test.tsx`) kod karşılaştırmasıyla
+KESİN KIRIK bulundu (test eski href `build-your-own-kasem` bekliyor, kod #128'den beri
+`fekafel-bowl-hb0fc` kullanıyor) — kök neden teyitli. Madde 1/3/4 hâlâ hiç kodlanmamış, teyitli.
+Madde 8 sadece Masaya akışında merkezi, Gel Al'da değil. Madde 9/10 hiç başlamamış. **YENİ A22**
+eklendi (gate hâlâ açık, 3 P0 maddesi bekliyor). Başka hiçbir tabloya/karara dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v99 (v98'den: **[37. sohbet, 2026-09-27]** Kullanıcı repo zip'i
+paylaştı — 36. sohbetin `needsBowlCatalog` düzeltmesi kod üzerinden TEYİT EDİLDİ (#131(a) hâlâ
+yaşıyor). Yeni özellik: Quick-Add sos seçiminde ilk (seçim sırasına göre) sos ücretsiz, sonrakiler
+tam fiyat (#134) — kullanıcı 3 soruyla kapsamı/"ilk"in tanımını/geçerli ürünleri netleştirdi.
+`signatureFlavorIds`'in zaten sıralı dizi olduğu görülüp **şema değişikliği GEREKMEDİĞİ** teyit
+edildi. 2 dosya güncellendi: `route.ts` (`priceQuickAddSelection` → `priceFlavorSelection`/
+`priceMenuItemSelection`'a bölündü, Kural #5), `QuickAddSheet.tsx` (`computeQuickAddTotals`'a
+bölündü + ayrı bir bug düzeltildi: istemci "ilk seçilen"i katalog sırasına göre yanlış
+belirliyordu, seçim sırasına çevrildi). Kalite 5/5, Güvenlik 8/8. A19 değişmedi, **A21 eklendi**
+(push/build/canlı doğrulama + test seti kararı bekliyor). **400 satır eşiği aşılmadan önce**
+36. sohbetin CURRENT FOCUS anlatısı `session_arşiv_3.md`'ye taşındı (eklenti:
+`session_arsiv_2_EKLENTI_2026-09-27-devam2.md`, ayrı dosya olarak verildi — kullanıcı arşivin
+sonuna kendi eklemeli). Başka hiçbir tabloya/karara dokunulmadı.)*
+
+## TAŞIMA BLOĞU — 2026-09-27 (400 satır eşiği, bu turda — SIRADAKİ GÖREVLER kapanmış satırları)
+
+> Bu blok `SESSION_INDEX.md`'nin SIRADAKİ GÖREVLER tablosundan taşındı (CORE.md §7.1 Adım 1).
+> Kullanıcı bu dosyayı kendi eliyle `session_arşiv_3.md`'nin SONUNA ekleyecek. Taşınan 20 satırın
+> HEPSİ ✅ (KAPANDI/TAMAMLANDI) durumundaydı: A21, A12, A13, A9, A6, 91, 99, 23, 24, 25, 27, 28, 29,
+> 30, 31, -13, -3, -1, 0, 0b. Açık/bekleyen (🟠🟡🟢🔴⚪) hiçbir satır taşınmadı. Kapanış gerekçesi:
+> hepsi Açık Sorunlar/Kritik Kararlar/GENEL DURUM'da zaten özetli, içerik kaybı yok.
+
+| Sıra | Görev | Öncelik |
+|---|---|---|
+| A21 | **[KAPANDI, 38. sohbet ✅]** Quick-Add "ilk sos ücretsiz" özelliği (#134) — `route.ts` + `QuickAddSheet.tsx` kodlandı, kullanıcı push/build/canlı doğrulamayı onayladı ("#134 onaylandı kapat"). **Not:** kapanış kısa sözlü onaya dayanıyor, ekran görüntüsü paylaşılmadı. Test seti (`priceFlavorSelection`/`computeQuickAddTotals`) hâlâ yazılmadı — ayrı, düşük öncelikli borç. | ✅ |
+| A12 | **[KAPANDI, bu turda ✅]** Admin `ingredients` sayfaları (liste/yeni/düzenle) canlıda test edildi, kullanıcı sorun bildirmedi (#122 KAPANDI). **Not:** kapanış kullanıcının kısa sözlü onayına dayanıyor, ekran görüntüsü/detay paylaşılmadı — A13'teki gibi görsel kanıt yok. | ✅ |
+| A13 | **[KAPANDI, bu turda ✅]** `sandwich_sizes` + sandviç `ingredients` tablolarına gerçek beden/malzeme/fiyat verisi girildi — kullanıcı 2 canlı ekran görüntüsüyle AÇIKÇA teyit etti ("A13 kapandı"): Ekmek adımında Glutensiz Somun (+13 TL/25 kcal)/Tam Buğday Somun (+12 TL/150 kcal), Peynir adımında Cheddar (+58 TL/25 kcal, görseliyle). | ✅ |
+| A9 | **[TAMAMLANDI, 30. sohbet ✅]** Public `/menu` sayfası `menu_items`/`categories` DB'sine bağlandı — Karar A (her istekte taze sorgu, `force-dynamic` + `revalidatePath`), kategori sekmeleri dinamik. Kullanıcı onayıyla canlı build doğrulandı. | ✅ |
+| A6 | **[TAMAMLANDI, 31. sohbet ✅]** `/menu` canlı filtre ekranındaki Keto/sıcak-tahıl tag uyuşmazlığı — Keto kaldırıldı, `DIET_FILTERS` admin sabitlerinden türetilir hale getirildi, tag label senkronu eklendi (#109 KAPANDI). | ✅ |
+| 91 | **[KAPANDI, bu turda ✅]** Güvenlik denetimi (#91) — canlıda GÖZLE doğrulandı: role-revocation 403 + rate-limit (5'ten fazla yanlış şifrede geçici bekletme) ikisi de çalışıyor | ✅ |
+| 99 | **[KAPANDI, bu turda ✅]** #99 Sandviç checkout blokajı — canlıda 3 ekran görüntüsüyle doğrulandı, artık bloklu değil (kök neden kesin bilinmiyor, muhtemelen #124/#125 yan etkisi) | ✅ |
+| 23 | [TAMAMLANDI] `types/index.ts` görüldü, #68 (RegistrationChannel/FulfillmentChannel tip etkisi) netleşti ve kodlandı | ✅ |
+| 24 | [TAMAMLANDI] Vercel build yeşil doğrulandı (1d) | ✅ |
+| 25 | [TAMAMLANDI] #62'nin 3 mimari sorusu kapandı — ARCHITECTURE.md v1.12 | ✅ |
+| 27 | [TAMAMLANDI, önceki tur] `users.role` migration'ı Neon'da koşuldu, `role text` sütunu Tables görünümünde doğrulandı | ✅ |
+| 28 | [TAMAMLANDI, önceki tur] #70 kapandı — `order_history.table_number`/`status`/`customer_notes` migration'ı Neon'da koşuldu ve doğrulandı | ✅ |
+| 29 | [TAMAMLANDI, önceki tur] #62 Masaya sekmesi (10 dosya) uçtan uca kodlandı, build+deploy yeşil, canlıda gerçek test siparişiyle doğrulandı | ✅ |
+| 30 | [TAMAMLANDI, önceki tur] #89 IP delili + engellenen deneme logu — 4 dosya kodlandı, migration Neon'da koşuldu+6 sorguyla doğrulandı, test 6/6 PASS (Codespaces), Vercel deploy yeşil | ✅ |
+| 31 | [TAMAMLANDI, 26. sohbet] `menu_items` tablosu migration+seed Neon'da koşuldu ve doğrulandı (13 kolon, 8 satır) | ✅ |
+| -13 | **[TAMAMLANDI, 25. sohbet, 2026-09-05 ✅]** Motion System rapor P2 — VisualPreview Layer entrance. Kod ZATEN vardı, sadece hardcoded değerler yerine merkezi `durations.visualPreviewLayer`+`easings.easeOut` token'larına bağlandı. Görsel değişiklik YOK. | ✅ |
+| -3 | **[KAPANDI, bu turda ✅]** #91 — Güvenlik denetimi SEC-01/SEC-02 kod+test+build+tsc TAMAM, canlıda (a) role-revocation 403, (b) rate-limit (5'ten fazla yanlış şifrede geçici bekletme) ikisi de doğrulandı. | ✅ |
+| -1 | **[TAMAMLANDI ✅]** #84 — isim gösterme sorunu kullanıcı tarafından canlıda doğrulandı. | ✅ |
+| 0 | **[TAMAMLANDI ✅]** #83 — "Sıfırla" → üretilen geçici kodla giriş canlıda BAŞARILI test edildi. | ✅ |
+| 0b | **[TAMAMLANDI ✅]** #82 — orijinal kayıt şifresiyle çıkış→giriş döngüsü canlıda BAŞARILI test edildi. | ✅ |
+
