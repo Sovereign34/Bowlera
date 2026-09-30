@@ -1344,5 +1344,127 @@ sipariş başarıyla tamamlandı. Bu ikisi ile **#135 P0-1 TAM KAPANDI**, A22 bu
 kapattı** ("#134 onaylandı kapat") — #134 satırı, A21, GENEL DURUM/Checkout ve GENEL DURUM/Hızlı
 Sepete Ekle satırları buna göre ✅ işaretlendi (kısa sözlü onay, ekran görüntüsü yok — A12 tipi
 kapanış). Başka hiçbir tabloya/karara dokunulmadı. P0 madde 3/4 ve #136 hâlâ açık.)*
+-------------
+# TAŞIMA BLOĞU — 2026-09-30 (9. taşıma) — `session_arşiv_3.md`'nin SONUNA EKLE
+
+> Bu dosya SADECE YENİ EKLEMEDİR (CORE.md §7.1 Adım 1.4): `session_arşiv_3.md` yeniden üretilmedi, bu metin dosyanın sonuna elle eklenir.
+> Taşınan içerik TAM ve DEĞİŞTİRİLMEMİŞ metindir; her madde için kapanış gerekçesi aşağıdadır. Kaynak: SESSION_INDEX.md v117 kopyası (406 satır).
+
+## 1) Eski CURRENT FOCUS paragrafları (önceki oturumlar)
+
+**Kapanış gerekçeleri:**
+- #63 paragrafı: #63 KAPANDI; kalan iş Açık Sorunlar #141-#144 ve SIRADAKİ 4b'de.
+- Menü mobil filtre + görsel paragrafı: #139 KAPANDI (bu arşive taşındı); #140 açık satırı duruyor, Kâseni Oluştur ebat talebi A25'te.
+- #135 P0 madde 3 paragrafı: #135 satırı P0 kapanışlarını taşıyor. Buradaki 'Step-up onay ayrı, opsiyonel iş olarak parklandı' kararı kaybolmasın diye SIRADAKİ GÖREVLER'e yeni A26 satırı olarak alındı.
+- #135 madde 6 paragrafı: #135 satırı (madde 6, Hero.test.tsx kod düzeltildi/koşulmadı) taşıyor.
+- #135 madde 10 / #60 paragrafları (devamı 2 ve 3): #135 satırı madde 10'u, #60 satırı (bu arşivde) ve A11 kapanışı özetliyor. Kaynak dosyada 'devamı 2' cümlesi 'bakıyor,' ile yarım kalmıştı; olduğu gibi taşındı.
+
+**Taşınan TAM metin:**
+
+> **[GÜNCELLENDİ — bu turda, #63 KAPANDI]** Next 15.5.26 + React 19 yükseltmesi `main`'e alındı ve canlıda doğrulandı (Production `31e1701`). Dependabot PR #2 kapatıldı. Kalan iş: #141 (Vitest `vite` eksik, onay bekliyor), #142 (next-auth yama bekleniyor), #143 (drizzle, kod arandı, düşük risk), #144 (`legacy-peer-deps`, PostCSS/nanoid, dal koruması).
+
+> **[GÜNCEL — bu turda, menü mobil filtre + görsel]** #139 KAPANDI (mobil filtre bağlantısı + QuickAddSheet görsel düzeltmesi, canlıda 3 madde doğrulandı — detay Açık Sorunlar #139'da). **[BU TURDA, devamı]** Sandviç adımlarında malzeme görseli büyütüldü + lazy-load eklendi (#140), canlı doğrulama bekliyor; Kâseni Oluştur akışında aynısı istendi ama dosyalar henüz paylaşılmadı.
+
+> **[GÜNCEL — bu turda]** #135 P0 madde 3 **TAM KAPANDI.** Kullanıcı önerimi (sadece route-level guard, step-up onay YOK)
+> kabul etti. `lib/auth/require-admin.ts` + `/api/admin/*` altındaki 17 handler'a guard eklendi, kullanıcı push edip canlıda
+> doğruladı: admin paneli çalışıyor, girişsiz istek 401. **P0 kod maddeleri artık kapalı;** kalan kapı: madde 2 sağlayıcı kısmı
+> (#138), P1 madde 6 (`Hero.test.tsx`) ve 8. Step-up onay (kritik işlemde şifre yeniden girişi) ayrı, opsiyonel iş olarak parklandı.
+>
+> **[GÜNCEL — bu turda, devamı]** #135 madde 6 (`Hero.test.tsx`) KOD DÜZELTİLDİ, KOŞULMADI: sorun `href` + buton etiketi
+> ("Kâseni Yarat"→"Kaseni Oluştur") + eksik "Sandviçini Oluştur" CTA'sıydı. Vitest koşulamadı (Codespaces yok) — test borcu.
+>
+> **[GÜNCEL — bu turda, devamı 2]** #135 madde 10 KISMEN KODLANDI: `upload-image` artık gerçek dosya imzasına (magic bytes) bakıyor,
+> **[GÜNCEL — bu turda, devamı 3]** #60 KAPANDI (Neon şifre reset, Vercel otomatik rotasyon, redeploy, `/menu` OK). #135 madde 10 CANLIDA DOĞRULANDI: SVG yükleme reddedildi ("Sadece JPEG, PNG, WebP veya GIF..."), mevcut görsel değişmedi; normal JPG yükleme çalıştı. A11 KAPANDI. Açık: Ayran kalori/protein geçici (A10), vitest hâlâ koşulmadı. SVG reddediliyor (stored-XSS). Push/canlı yükleme testi + vitest bekliyor. Audit log/action log/rate-limit yapılmadı (şema gerektirir).
+
+## 2) Eski TAŞIMA NOTU / TAŞINDI pointer paragrafları (CURRENT FOCUS içindeydi)
+
+**Kapanış gerekçesi (hepsi için):** Bu paragraflar başka arşiv eklentilerine işaret eden işaretçilerdi; her birinin karşılığı 'Arşiv Taşıma Kaydı' tablosunda satır olarak duruyor (2026-08-23, 2026-08-23 22. sohbet 2. taşıma, 2026-09-03, 2026-09-05, 2026-09-27 sekizinci taşıma, 2026-09-27 beşinci eşik aşımı). Bilgi kaybı yok, tekrar kaldırıldı.
+
+**Taşınan TAM metin:**
+
+> ⚠️ **TAŞIMA NOTU (2026-09-27, bu turda):** #138 (ödeme sağlayıcısı belirsiz) ve #135 madde 4 (DB CHECK
+> constraint kapanışı) CURRENT FOCUS paragraflarının TAM metni `session_arşiv_3.md`'ye taşınacak eklentide:
+> `session_arsiv_2_EKLENTI_2026-09-27-devam6.md`. Özet: PayTR kesin değil (#138), madde 2/7'nin sağlayıcıya-özel
+> kısmı bekliyor; madde 4 Neon'da doğrulandı. Detay Açık Sorunlar #135/#138'de.
+
+> ⚠️ **TAŞIMA NOTU (2026-09-27, bu turda — 400 satır eşiği beşinci kez aşıldı):** 38. sohbet
+> (#135 P0-1/#134 çifte kapanış), "bu turda devamı" (#136 seçenek a + #135/1 kodlama), "bu turda"
+> (repo zip reconciliation) ve 37. sohbet (Quick-Add "ilk sos ücretsiz" #134) paragraflarının
+> TAM metni `session_arşiv_3.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-27-devam3.md`,
+> ayrı dosya olarak üretildi, kullanıcı kendi eliyle arşiv dosyasının sonuna ekleyecek). Kapanış
+> gerekçesi: hepsi Açık Sorunlar #134 (KAPANDI), #135 (P0-1/P0-4 KAPANDI) ve GENEL DURUM →
+> Checkout/Veritabanı satırlarında zaten tam özetli — aktif takip için gerekli değil, içerik
+> kaybı yok.
+
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği]** 18. sohbet (#91 SEC-01/SEC-02 detay anlatısı) ve
+> 17. sohbet (#90 detay anlatısı) blokları `session_arşiv_2.md`'ye taşındı (bkz. Arşiv Taşıma
+> Kaydı altında). Kapanış gerekçesi: her iki blok da Açık Sorunlar #91/#90 satırlarında zaten
+> tam özetli — aktif takip için gerekli değil, sadece turn-by-turn anlatı taşındı.
+>
+> **[TAŞINDI — 2026-09-03, 400 satır eşiği üçüncü kez aşıldı]** 19. sohbet (CRM/çok-şubeli
+> vizyon keşfi), 20. sohbet (SANDWICH_SPEC.md v1.0/v1.1 üretimi) ve 22. sohbet (sandviç UI
+> düzeltmeleri + checkout blokajı keşfi, geriye dönük işlendi) blokları `session_arşiv_3.md`'ye
+> taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-09-03.md`, ⚠️ bu turda arşiv bölünmesiyle
+> hedef dosya `session_arşiv_3.md`'ye düzeltildi, dosya adı değişmedi). Kapanış gerekçesi: üçü de Açık
+> Sorunlar #92/#93/#94 (19. sohbet), #95 (20. sohbet, S1/S2/S5 hâlâ bekliyor), #99-#104 (22.
+> sohbet) ve Kritik Kararlar tablosunda zaten tam özetli — aktif takip için gerekli değil,
+> sadece turn-by-turn anlatı taşındı.
+> **[TAŞINDI — 2026-08-23, 400 satır eşiği ikinci kez aşıldı]** SEKİZİNCİ DERS (21. sohbet)
+> bloğu (build hatası düzeltmesi, `sandwich-data.json` TEST VERİSİ üretimi, `Hero.tsx` CTA
+> değişikliği, 6 adım bileşeni + eksik `page.tsx` kodlanması, 7 test dosyası/27 test PASS)
+> `session_arşiv_2.md`'ye taşındı (eklenti: `session_arsiv_2_EKLENTI_2026-08-23-devam2.md`).
+> Kapanış gerekçesi: içerik Açık Sorunlar #95/#96/#97/#98'de zaten tam özetli — aktif takip
+> için gerekli değil, sadece turn-by-turn anlatı taşındı.
+
+> **[TAŞINDI — 2026-09-05, 400 satır eşiği dördüncü kez aşıldı]** 23. sohbet devamı (MOTION
+> SYSTEM Mobil Tactile Düzeltmesi — MenuCard whileTap kararı, sertlik düzeltmesi,
+> merkezileştirme anlatısı) `session_arşiv_3.md`'ye taşındı (eklenti: ⚠️ hedef bu turda düzeltildi,
+> `session_arsiv_2_EKLENTI_2026-09-05.md`). Kapanış gerekçesi: içerik artık #107 (KAPANDI) ve
+> Motion System P0 bölümünde zaten tam özetli — aktif takip için gerekli değil.
+
+## 3) Kapanmış Açık Sorun satırları
+
+**Kapanış gerekçeleri:**
+- **#39:** Rıza esaslı /hesap akışı canlıda doğrulandı, Twilio kısıtı artık engel değil; GENEL DURUM → Kullanıcı Profili/Adres satırında özetli.
+- **#60:** Neon şifre sıfırlama + Vercel yeniden dağıtım + /menu canlıda doğrulandı; SIRADAKİ GÖREVLER 4 numaralı eski satır bu turda ✅ olarak işaretlendi.
+- **#63:** Next 15.5 yükseltmesi canlıda doğrulandı, kalan uyarılar #141-#144'e ayrıldı; o satırlarda ve SIRADAKİ 4b'de özetli.
+- **#70:** order_history.table_number tipi kararlaştırıldı, migration Neon'da doğrulandı; Kritik Kararlar'daki masa numarası satırında özetli.
+- **#91:** SEC-01 (rol iptali) ve SEC-02 (login rate-limit) kod+test+canlı doğrulandı; GENEL DURUM → Auth satırında özetli.
+- **#99:** Sandviç checkout blokajı canlıda 3 ekran görüntüsüyle kalktı; GENEL DURUM → Checkout satırında özetli (kök nedenin hâlâ kesin bilinmediği orada yazılı).
+- **#107:** tokens.ts yapı çelişkisi çözüldü; kalan Motion System işi #105 satırında.
+- **#109:** Keto/sıcak-tahıl kararı uygulandı, DIET_FILTERS türetildi; GENEL DURUM → Public Menü satırında özetli. Kayıtlı RİSK (DB'de eski etiket kalırsa ham id görünür) bu arşivde de duruyor.
+- **#114:** Admin listesi önbellek sorunu kökten çözüldü (neon-http no-store); kalıcı ilke #116 satırında (açık) duruyor.
+- **#115:** Kategori sistemi uçtan uca canlıda doğrulandı; GENEL DURUM → Veritabanı ve Admin Panel satırlarında özetli. #131'in kategori eşleştirmesi bu satırdaki isimlere dayanıyor.
+- **#117:** A9: public /menu DB'ye bağlandı; GENEL DURUM → Public Menü satırında özetli.
+- **#123:** isCatalogReady guard'ı geriye dönük kaydedilmişti ve kodda yaşıyor; GENEL DURUM → Sandviç Akışı satırında özetli.
+- **#124/125:** db bundle sızması ve eksik görseller canlıda doğrulandı; Kritik Kararlar'daki 33. sohbet satırında özetli.
+- **#127:** Bowl akışı DB'ye bağlandı, build yeşil; GENEL DURUM → Bowl Akışı satırında özetli.
+- **#128:** Hero CTA gerçek ürün id'sine bağlandı, canlıda doğrulandı (A16); Bowl Akışı satırında özetli. Kök neden notu (admin id'yi manuel girmeye izin vermiyor) bu arşivde duruyor.
+- **#129:** image opsiyonel yapıldı, build yeşil; Kritik Kararlar'daki 35. sohbet satırında özetli. 'Tüketici bileşenler undefined görseli nasıl karşılıyor' işi A17'de açık.
+- **#134:** Quick-Add ilk sos ücretsiz kuralı canlıda onaylandı; GENEL DURUM → Checkout satırında özetli (test borcu notu orada).
+- **#139:** Mobil filtre + QuickAddSheet görseli canlıda onaylandı; Public Menü satırında özetli. ⚠️ Bu satırın sonundaki AÇIK not (MenuCard'da Süper Gıda/Kids Meals rozet çakışması) SIRADAKİ GÖREVLER'e yeni A31 satırı olarak taşındı.
+
+**Taşınan TAM satırlar (sütunlar: # / Öncelik / Açıklama / Etkilenen Dosya(lar)):**
+
+| # | Öncelik | Açıklama | Etkilenen Dosya(lar) |
+|---|---|---|---|
+| 39 | 🟢 | **[Bu turda ÇÖZÜLDÜ]** `/hesap` akışı artık rıza esaslı kayıt (OTP'siz) üzerinden canlıda test edildi ve DOĞRULANDI — Twilio kısıtı bu akışı artık engellemiyor. | — |
+| 60 | ✅ | **[KAPANDI, bu turda]** Neon `neondb_owner` şifresi sıfırlandı; Neon–Vercel entegrasyonu `DATABASE_URL`'yi Production+Preview'da otomatik güncelledi ("System rotated"), Redeploy yapıldı (`DZVGVJU4d` Ready), `/menu` hatasız açılıyor. Eski şifre geçersiz. Yerel `.env.local` yok (sadece mobil çalışılıyor). | Neon console, Vercel env |
+| 63 | ✅ | **[KAPANDI, bu turda — Next 15.5 yükseltmesi CANLIDA]** `chore/next-15` dalı PR #3 ile `main`'e squash-merge edildi (Production `31e1701` Ready, kullanıcı canlıda `/menu`+giriş+`/admin`'i doğruladı). Next 15.5.26 + React 19 + yeni `package-lock.json` (GitHub Actions `regenerate-lock` ile üretildi, CI build'i için sahte `IMAGEKIT_*`/`TWILIO_*` env verildi — workflow dosyaları sonradan silindi). Dependabot PR #2 (Next 16'ya sıçrama) KAPATILDI, merge edilmedi. Uyarılar 48→25'e düştü, Next.js uyarıları kapandı. **Kalan uyarılar ve borçlar: #141-#144.** | `package.json`, `package-lock.json`, `.npmrc`, 14 route/page dosyası (async params) |
+| 70 | ✅ | **[BU TURDA KAPANDI]** `order_history.table_number` tipi `text` olarak kararlaştırıldı (masa adları sayısal olmayabilir), index sadece `status` üzerine eklendi (`table_number` filtrelenmeyecek). Migration Neon'da koşuldu ve DOĞRULANDI. | `docs/schema-changes/20260809140000_order_history_status_tablenumber_customernotes_eklendi.md` |
+| 91 | ✅ | **[KAPANDI, bu turda]** Güvenlik denetimi SEC-01 (rol revocation) + SEC-02 (login rate-limit) — kod+test (33/33 PASS)+build+tsc TAMAM, kullanıcı CANLIDA test etti: (a) role-revocation 403 doğrulandı; (b) rate-limit doğrulandı — kullanıcının gözlemi: 5'ten fazla yanlış şifre denemesinde sistem bir süre girişi bekletiyor (geçici kilit/cooldown). **Not:** kapanış kullanıcının kısa sözlü onayına dayanıyor, ekran görüntüsü paylaşılmadı; 5 dosyanın (`middleware.ts`/`auth.ts`/`lib/auth/rate-limit.ts` + testler) fiilen push/deploy edildiği canlı testin başarılı olmasından ÖRTÜK olarak çıkarsanıyor, ayrıca teyit istenmedi. | `middleware.ts`, `auth.ts`, `lib/auth/rate-limit.ts` |
+| 99 | ✅ | **[KAPANDI, bu turda — 3 canlı ekran görüntüsüyle doğrulandı]** Sandviç checkout BLOKAJI artık YOK: sepette "Özel Sandviç" (156₺) görünüyor, Gel Al + Nakit seçilip "Siparişi Onayla" tıklandığında "fiyatlandırılamadı" hatası ÇIKMIYOR (156₺/174 kcal doğru gösterildi), sipariş personel paneline (Gel Al sekmesi, "Onay Bekleyen") doğru detaylarla (Ekmek/Boy/Protein/Peynir/Sebzeler/Sos) düştü. **Kök neden hâlâ kesin belirlenmedi** — önceki şüphe (`FulfillmentGate.tsx`/`ConfirmPickupOrderButton.tsx`'in `sandwichCustomization`'ı tanımaması) bu turda AYRICA doğrulanmadı, muhtemelen #124/#125 düzeltmelerinin (33. sohbet) yan etkisiyle kendiliğinden düzelmiş olabilir — bu KESİN değil, sadece bir olasılık. | `components/checkout/FulfillmentGate.tsx` veya `ConfirmPickupOrderButton.tsx` (kesin dosya hâlâ DOĞRULANMADI) |
+| 107 | ✅ | **[KAPANDI]** `tokens.ts` paylaşıldı, yapı çelişkisi çözüldü — gerçek kod düz `durations/easings/springs` export'ları kullanıyor. | `lib/motion/tokens.ts` |
+| 109 | ✅ | **[BU TURDA (31. sohbet) KAPANDI]** Karar 1: **Keto** filtre panelinden tamamen KALDIRILDI — admin'in kendi `MENU_ITEM_TAGS` sabitinde hiç yoktu, gerçek veride hiç kullanılmıyordu, kalıcı bir kritere (karb/yağ eşiği) dayanmadan sadece her zaman 0 sonuç veren bir seçenek olarak durması YASAK LİSTE'deki "context eksikken güven verme" ilkesine aykırıydı — gerçek kriter belirlenip ürünlere işlenince geri eklenebilir. Karar 2: **"sıcak-tahıl"** de kaldırıldı; `DIET_FILTERS` artık elle yazılan liste değil, `MENU_ITEM_TAGS`'tan TÜRETİLİYOR (allergen'lerle aynı desen) — böylece ikisi kendiliğinden senkron kalıyor, tekrar ayrışma riski yapısal olarak kapandı. Ayrıca etiket görünüm senkronu uygulandı: yeni `MENU_ITEM_TAG_LABELS` haritası (`menu-item-constants.ts`) admin formu VE `MenuCardBadges.tsx` tarafından okunuyor; `MenuCardBadges.tsx`'e eski/silinmiş id için `?? tag` fallback'i eklendi (crash yok, ham id gösterir). **RİSK (kapanmadı, kayıt altında):** DB'de hâlâ `sıcak-tahıl` etiketli bir ürün varsa kartında bu ham id görünmeye devam eder — DB'den elle temizlenmesi gerekir (DB şu an boş olduğu için şu an fiili risk yok, bkz. #115). | `lib/menu-item-constants.ts`, `lib/menu-filters.ts`, `components/admin/MenuItemForm.tsx`, `components/menu/MenuCardBadges.tsx` |
+| 114 | ✅ | **[BU TURDA (29. sohbet) KAPANDI — kök neden REVİZE EDİLDİ]** Admin panelde yeni ürün oluşturuldu ("Fogy"), DB'ye yazıldığı doğrulanmıştı ama listede görünmüyordu. `export const dynamic = 'force-dynamic'` (28. sohbet fix'i) DOĞRUYDU ama TEK BAŞINA YETERSİZ çıktı — asıl kök neden `neon-http` sürücüsünün iç `fetch()` çağrılarının Next.js Data Cache'inde önbelleğe alınmasıydı (bkz. #116). `lib/db/client.ts`'e `fetchOptions:{cache:'no-store'}` eklenerek KÖKTEN çözüldü, canlıda doğrulandı. | `lib/db/client.ts`, `app/admin/page.tsx` |
+| 115 | ✅ | **[BU TURDA (29. sohbet) KAPANDI]** Kategori sistemi uçtan uca kodlandı: `categories` tablosu (`id`=ASCII slug PK, `name`, `sortOrder`) + `menu_items.category`'ye FK (RESTRICT — bağlı ürün varken silme DB seviyesinde engellenir, cascade YOK, kullanıcı kararı). Admin'e `/admin/categories` (liste+ekle+sil) eklendi, `MenuItemForm.tsx`'teki serbest metin `category` alanı `<select>`'e çevrildi, `POST`/`PATCH` menu-items route'ları FK ihlalini (23503) 400 ile kullanıcı dostu mesaja çeviriyor. 7 kategori (İmza Ürünler/Bowl/Dürüm/Salata Bowl/Sandviç/Tatlı/İçecek) seed edildi. 8 test ürünü kullanıcı onayıyla `DELETE FROM menu_items` ile temizlendi. **CANLIDA DOĞRULANDI. [35. sohbet devamı (2. kez) notu]:** Bu satırdaki 7 kategori adı, yeni QuickAddSheet özelliğinin (bkz. #131) kategori eşleştirmesinin DAYANDIĞI TEK kaynak oldu — gerçek `id` (slug) değerleri hâlâ görülmedi, sadece bu satırdaki `name` değerleri kullanıldı. | `lib/db/schema.ts`, `types/index.ts`, `components/admin/MenuItemForm.tsx`, `components/admin/CategoryForm.tsx`, `components/admin/DeleteCategoryButton.tsx`, `app/admin/categories/*`, `app/api/admin/categories/*`, `app/api/admin/menu-items/*` |
+| 117 | ✅ | **[BU TURDA (30. sohbet) KAPANDI]** A9 — public `/menu` artık `menu_items`/`categories` DB'sine bağlı. Kategori sekmeleri sabit union yerine `categories` tablosundan `buildCategoryTabs()` ile dinamik üretiliyor; "vegan"/"sicak-tahil" sanal sekmeleri `DIET_FILTERS`'a taşındı. Kullanıcı onayıyla ("Her şey tamam") canlı build doğrulandı. | `app/menu/page.tsx`, `components/menu/{MenuPageClient,CategoryNav}.tsx`, `lib/menu-filters.ts`, `app/api/admin/menu-items/{route.ts,[id]/route.ts}` |
+| 123 | ✅ | **[GERİYE DÖNÜK KAYIT, 33. sohbet — 32. sohbette yapılmış ama hiç loglanmamış]** `app/sandwich/customize/[id]/page.tsx`'e `isCatalogReady()` guard'ı eklenmişti (boş/kısmi katalog varsa `SandwichCustomizer`'a hiç geçilmiyor) — kod `lib/sandwich-catalog.ts` header yorumunda "#123 düzeltmesi" olarak anılıyordu ama SESSION_INDEX.md'ye hiç işlenmemişti (governance/fiili kod arasında senkron kopukluğu, AGENT.md v1.5'teki arşiv-parçalama dersiyle AYNI TÜR ihlal). Bu turda dosya okunurken fark edildi, gerekçesiz kaybolmasın diye buraya geriye dönük kaydedildi. | `app/sandwich/customize/[id]/page.tsx`, `lib/sandwich-catalog.ts` |
+| 124/125 | ✅ | **[KAPANDI, 33. sohbet — özet, tam anlatı Kritik Kararlar tablosunda]** `db` bundle sızması (#124) ve eksik ürün görselleri (#125) — bkz. Kritik Kararlar "33. sohbet" satırı. | `lib/sandwich-catalog.ts`, `lib/sandwich-constants.ts`, `components/sandwich/Step*.tsx` |
+| 127 | ✅ | **[YENİ, 34. sohbet — KAPANDI, kullanıcı build'i yeşile aldı]** Bowl ("Kâseni Yarat") akışı sandviçteki AYNI desenle DB'ye bağlandı: yeni `lib/bowl-catalog.ts` (`buildBowlCatalog`/`isCatalogReady`), `types/index.ts`'e `CustomizerGardenCatalogItem`+`isAlwaysPaid` (Garden'daki "her zaman ücretli" tespiti artık `item.id==="avocado"` hardcode DEĞİL, DB-yönetimli bayrak — `lib/customizer-pricing.ts` + `StepGarden.tsx` ikisi de güncellendi), `store/useCustomizerStore.ts`'e `catalog` state+`setCatalog()` (statik `customizerCatalog` importu kalktı), 5 `Step*.tsx`+`VisualPreview.tsx`+`MobileSummaryDrawer.tsx` store'dan okuyacak şekilde değişti, `app/api/orders/gel-al/route.ts` BSC-3 gereği `buildBowlCatalog()` çağırıyor. **Onaylı plana 1 ekleme:** `app/menu/customize/[id]/page.tsx` server component'e çevrilince client mantığı yeni `components/customizer/BowlCustomizer.tsx`'e taşındı (plan dışıydı, Self-Correction ile bildirildi, SandwichCustomizer.tsx ile aynı mimari). **Yan düzeltme:** ölü kod `lib/customizer-data.ts` build'i kırdığı için SİLİNDİ (hiçbir gerçek kod import etmiyordu, grep ile doğrulandı). Kullanıcı onayları: Extras DB'ye taşınmadı (Soru #1), malzeme kartı görseli bu turda eklenmedi (Soru #2, kapsam dışı), admin veri girişini kullanıcı elle yapacak (Soru #3, seed script yok). | `lib/bowl-catalog.ts`, `types/index.ts`, `lib/customizer-pricing.ts`, `store/useCustomizerStore.ts`, `components/customizer/BowlCustomizer.tsx` (yeni), `app/menu/customize/[id]/page.tsx`, `components/customizer/Step{Base,Main,Garden,SignatureFlavor,Finish}.tsx`, `VisualPreview.tsx`, `MobileSummaryDrawer.tsx`, `app/api/orders/gel-al/route.ts` |
+| 128 | ✅ | **[KAPANDI, 35. sohbet]** `Hero.tsx`'teki "Kaseni Oluştur" CTA'sı sabit `build-your-own-kasem` id'sine gidiyordu (`menu_items`'a hiç girilmemişti, ilk kez 34. sohbette Bowl DB'ye bağlanınca gerçek 404 olarak ortaya çıkmıştı). Kullanıcı admin'den gerçek `fekafel-bowl-hb0fc` id'li ürünü oluşturdu, `Hero.tsx` paylaşıldı, `href` bu gerçek id'ye güncellendi (niyet yorumuna da işlendi). Kök neden (admin POST route'unun id'yi her zaman otomatik üretmesi, manuel id girilemiyor olması) DEĞİŞMEDİ — ileride yeni bir "build-your-own-*" ürünü gerekirse aynı adım tekrarlanmalı. **Sandviç tarafı (`build-your-own-sandwich`) bu turda BİLEREK dokunulmadı, hâlâ TEYİT EDİLMEDİ.** | `components/home/Hero.tsx` |
+| 129 | ✅ | **[YENİ, 35. sohbet — KAPANDI]** #127'nin (34. sohbet) eklediği Bowl katalog tipi, `image` alanını TÜM öğeler için zorunlu kılıyordu — ama `EXTRA_OPTIONS` sabiti (avokado/sos/çıtırlık, DB'den değil kod içinde sabit, `lib/customizer-pricing.ts` veya ilgili sabit dosyası) hiç `image` taşımıyor, bu yüzden build kırıldı. Düzeltme: `types/index.ts`'te `image` alanı `carbs`/`fat` ile aynı desende **opsiyonel** yapıldı (`image?: string`) — SADECE bu dosya değişti, `bowl-catalog.ts` + 5 `Step*.tsx` dosyasına dokunulmadı. Kullanıcı pushladı, customize sayfasını gerçek ürün id'siyle doğrudan test etti, akış çalıştı. **Not (izlenmeli, KOD TARAFI BU TURDA TEYİT EDİLMEDİ):** `image` artık opsiyonel olduğu için, `item.image`'ı doğrudan `<img src>` gibi kullanan tüketici bileşenler (`VisualPreview.tsx`, `Step*.tsx`, `MenuCardImage.tsx` benzerleri) `undefined` durumunu görsel olarak nasıl karşılıyor, bu turda GÖRÜLMEDİ/DOĞRULANMADI — sadece derleme (tip) seviyesinde çözüldü. | `types/index.ts` |
+| 134 | ✅ | **[KAPANDI, 38. sohbet — kullanıcı onayladı]** Quick-Add sos seçiminde "ilk seçilen ücretsiz, sonrakiler tam fiyat" kuralı — kullanıcı 3 soruyla netleştirdi: kapsam Quick-Add (Customizer tek seçimli kaldığı için orada davranış değişmiyor), "ilk" = seçim SIRASI (dizideki index 0, deselect edilirse kalan ilk eleman ücretsiz sayılır), tüm Quick-Add ürünlerinde geçerli. Kod incelemesiyle `signatureFlavorIds`'in zaten sıralı dizi olduğu görüldü — **şema değişikliği GEREKMEDİ**. `route.ts`'te `priceFlavorSelection` (yeni, Kural #5 böldü) + `QuickAddSheet.tsx`'te `computeQuickAddTotals` (yeni) ile hem sunucu hem istemci senkron. **Yan düzeltme:** istemci eskiden `signatureFlavors.filter()` kullanıyordu (katalog sırası) — "ilk seçilen"i YANLIŞ belirlerdi, `selectedFlavorIds.map()`'e çevrildi. Kalori hiçbir promosyonla düşülmez (CORE.md §9). **KAPANIŞ:** kullanıcı push/build/canlı doğrulamayı onayladı ("#134 onaylandı kapat"). **Not:** kapanış kullanıcının kısa sözlü onayına dayanıyor, ekran görüntüsü paylaşılmadı — A12'deki gibi görsel kanıt yok. `priceFlavorSelection`/`computeQuickAddTotals` için ayrı bir test seti hâlâ yazılmadı (test borcu, kapanışı geçersiz kılmaz). | `app/api/orders/gel-al/route.ts`, `components/menu/QuickAddSheet.tsx` |
+| 139 | ✅ | **[KAPANDI, bu turda — kullanıcı canlıda 3 maddeyi onayladı]** Mobil filtre bağlantısı + QuickAddSheet görsel düzeltmesi. Deploy `5bdc5a9` yeşil (Vercel ekran görüntüsü + canlı `/menu` görüntüsü: Filtrele butonu görünüyor, kart görseli tam). Kullanıcı doğrulaması: (1) alerjen kutusu işaretleniyor → `FilterCheckboxGroup` id çakışması OLMADI, (2) "N ürünü göster" butonu/rozet/çip çalışıyor, (3) QuickAddSheet görseli tam görünüyor. #73 (`bg-olive-primary`) bu bileşenlerde sorun çıkarmadı (kullanıcı görsel olarak olumlu bildirdi, ayrı kanıt yok). **AÇIK, ayrı iş:** `MenuCard`'da "Süper Gıda" rozetinin arkasında "Kids Meals" yazısı üst üste biniyor — `MenuCard.tsx` GÖRÜLMEDİ, nedeni bilinmiyor. | `components/menu/{MenuPageClient,MobileFilters,FilterTriggerButton,FilterSheet,QuickAddSheet}.tsx` |
 
 
