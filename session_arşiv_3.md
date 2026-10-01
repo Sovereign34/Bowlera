@@ -1478,3 +1478,20 @@ kapanış). Başka hiçbir tabloya/karara dokunulmadı. P0 madde 3/4 ve #136 hâ
 | A29 | **[YENİ, bu turda]** Yeni şifre route/hook/form + resolve + `validation.test.ts` (8→6) için testler; `gel-al/route.test.ts` örnek alınacak (kullanıcı dosyayı atacak). Vitest koşulamıyor (Codespaces yok) — test borcu. | 🟡 |
 | A30 | **[YENİ, bu turda]** Uzun SESSION_INDEX kopyasını (v118?) ayrı adla/zip'le yükle → fark çıkar → düşen içeriği taşıma bloğuna ekle (#149). | 🟠 |
 | A10 | **[GÜNCELLENDİ, bu turda]** Admin panelde ürünler girilmeye başladı: Ayran, Burrito, Cheesecake, Kendi kasem, Salata bowl, Soda, Su, Vegan sandviç (görselli). **KALAN:** kalan gerçek ürünlerin fotoğraf çekimi/girişi; Ayran kalori/protein değeri geçici (1 kcal/2g) — paket besin tablosundan gerçek değerle düzeltilmeli (kalori zorunluluğu, DESIGN_SYSTEM). | 🟠 |
+-----
+# session_arsiv_3_EKLENTI_2026-10-01.md
+
+> Bu dosya `session_arşiv_3.md`'nin SONUNA kullanıcı tarafından eklenecek (10. taşıma, 2026-10-01).
+> Kapanan satırların TAM metni; içerik kaybı yok. Kapanış gerekçeleri SESSION_INDEX v121 → CURRENT FOCUS (2).
+
+## KAPANMIŞ SATIRLAR (TAM METİN)
+
+| 119 | 🟢 | **[YENİ, 30. sohbet — teknik borç]** `lib/db/queries/menu.ts` (Karar B'nin `unstable_cache` sarmalayıcısı, bkz. #118) artık HİÇBİR dosyadan import edilmiyor — ölü kod. Kullanıcı tarafından repodan SİLİNMELİ. | `lib/db/queries/menu.ts` |
+
+| 122 | 🔴 | **[YENİ, 32. sohbet]** DB şema senkron hatası düzeltildi ve kullanıcı admin/ingredients çökmesinin gittiğini DOĞRULADI, ama **kullanıcı henüz uçtan uca denemedi** (kendi ifadesi). Bu turda SADECE `lib/db/schema.ts`, admin `ingredients` sayfaları (liste/yeni/`[id]`), `IngredientForm.tsx` ve `ingredients` API route'u statik olarak incelendi — önceki turda "25 dosya" olarak push edildiği bildirilen sandviç-DB bağlama refactorunun geri kalanı (`lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, 6 `Step*.tsx`, `SandwichSummaryPanel.tsx`, `SandwichCustomizer.tsx`, `app/sandwich/customize/[id]/page.tsx`, `app/api/orders/gel-al/route.ts`, `SandwichSizeForm.tsx`) bu sohbette HİÇ GÖRÜLMEDİ. Ayrıca `sandwich_sizes` (0 satır) ve muhtemelen `ingredients` (sandviç malzemeleri) tabloları gerçek beden/malzeme verisi içermiyor — Mike's Way preseti/fiyat hesaplama gerçek veri girilmeden ANLAMLI test edilemez. | `lib/sandwich-catalog.ts`, `lib/sandwich-pricing.ts`, `store/useSandwichStore.ts`, `components/sandwich/*`, `app/api/orders/gel-al/route.ts` |
+
+| 147 | 🟡 | **[YENİ, bu turda]** `requireStaffSession` (`lib/personel/api-guards.ts`) rolü JWT oturumundan okuyor, `requireAdminSession` gibi DB'den TAZE okumuyor. `auth.ts` notuna göre `middleware.ts` `/personel` ve `/api/personel` için taze DB rol kontrolü yapıyor (SEC-01, #91 canlıda doğrulanmıştı) — yani route guard ikinci katman olabilir; `middleware.ts` (matcher kapsamı) bu turda GÖRÜLMEDİ. Bu turda önce 'açık var' alarmı verildi, sonra geri çekildi; kesin karar `middleware.ts` görülünce. Yapılırsa dönüş şekli (oturum ya da null) korunarak yalnız guard içine DB okuması eklenmeli. | `lib/personel/api-guards.ts`, `middleware.ts` (görülmedi) |
+
+| A15 | **[YENİ, 33. sohbet]** `server-only` npm paketini kurup `lib/db/client.ts`'e eklemek isteniyor mu? (#126 — kullanıcı onayı bekliyor, bu sınıf hatayı derleme zamanında yakalamak için) | 🟢 |
+
+| A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
