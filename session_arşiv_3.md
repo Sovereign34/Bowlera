@@ -1495,3 +1495,24 @@ kapanış). Başka hiçbir tabloya/karara dokunulmadı. P0 madde 3/4 ve #136 hâ
 | A15 | **[YENİ, 33. sohbet]** `server-only` npm paketini kurup `lib/db/client.ts`'e eklemek isteniyor mu? (#126 — kullanıcı onayı bekliyor, bu sınıf hatayı derleme zamanında yakalamak için) | 🟢 |
 
 | A9.1 | **[YENİ, 30. sohbet — temizlik]** Kullanılmayan `lib/db/queries/menu.ts` dosyasını repodan sil (#119) | 🟢 |
+
+-----
+# session_arsiv_3_EKLENTI_2026-10-01-b.md
+
+> Bu dosya `session_arşiv_3.md`'nin SONUNA kullanıcı tarafından eklenecek (11. taşıma, 2026-10-01).
+> SESSION_INDEX v121 → v122 geçişinde çıkarılan/özetlenen satırların TAM metni; içerik kaybı yok.
+
+## ESKİ SATIRLAR / PARAGRAFLAR (TAM METİN)
+
+| E2 | **[YENİ]** Ödeme ekranı onay satırına tıklanıp okunabilen "Ön Bilgilendirme Formu" + Satış Sözleşmesi linkleri (Ön Bilgilendirme sayfası YOK, taslak + hukuk incelemesi) | 🟠 |
+
+> **[GÜNCEL — bu turda, 2026-10-01 devamı: E1 hazırlığı + açık borç temizliği]** (1) **E1:** beş dosya okundu (kod değişmedi). Bulgular: Ön Bilgilendirme Formu YOK; sözleşme/iade metinleri JSX'e gömülü (e-postada kullanılamaz); satıcı bilgisi yalnız "Bowlera (şahıs şirketi)"+VKN+adres. Kullanıcı verdi: e-posta `bowleraa34@gmail.com`; telefon YOK (yeni numara alınacak); ticari unvan BOŞ (#156). `lib/legal/seller.ts` ÜRETİLDİ (adım 1, kimse import etmiyor). Adım 2 (metinleri `lib/legal/`a taşıma + `TERMS_VERSION` artışı) kullanıcı onayı BEKLİYOR.
+
+> (2) **Borç temizliği (kullanıcı "sen karar ver" dedi):** #119 KAPANDI (GitHub ekran görüntüsünde `lib/db/queries/` altında `menu.ts` yok). #147 KAPANDI (`middleware.ts` görüldü: `/personel` ve `/api/personel` matcher'da, rol her istekte taze DB'den okunuyor, route guard 2. katman). #122 KAPANDI (ajan önerisi, kullanıcı itiraz etmedi; gerekçe: canlı doğrulamada `users` 12 / `order_history` 15 kolon koddaki şemayla birebir eşleşti). #126: kullanıcı "evet" dedi, `client.ts` üretildi. #148: `next.config.mjs` güvenlik başlıkları üretildi (CSP bilinçli yok, #155).
+
+> (3) Kullanıcı: "Push yaptım, bozulma yok, deploy yeşil" — hangi dosyaların (`client.ts`+paket, `next.config.mjs`, `seller.ts`) gittiği ve ImageKit/PayTR iFrame kontrolü AÇIKÇA teyit EDİLMEDİ (#126/#148 satırları). Dersler: (a) `server-only` Next dışında (Vitest, `tsx` scriptleri) hata fırlatır; (b) yapılandırma dosyası `next.config.mjs`'tir, `.ts` değil; (c) tek turda iki ayrı dosya push edilirse bozulmanın kaynağı ayırt edilemez — ayrı push önerildi; (d) aynı adlı SESSION_INDEX.md yüklenmesi #149'daki kayıp riskini taşır — çıktı `SESSION_INDEX_v121.md` adıyla verildi, repoda `SESSION_INDEX.md` olarak değiştirilmeli.
+
+| 151 | 🔴 | **[YENİ, 2026-10-01]** E-posta sözleşme metnini TAŞIMIYOR (sadece özet + `/satis-sozlesmesi` ve `/iptal-ve-iade` linkleri + `TERMS_VERSION`). **Ön Bilgilendirme Formu sayfası/metni HİÇ YOK**; `ConfirmPickupOrderButton.tsx` onay satırında "Ön Bilgilendirme Formu" adı geçmiyor (sadece İptal/İade Koşulları + Satış Sözleşmesi). Satıcı bilgisinin (unvan/adres/vergi no) sitede nerede yazdığı bilinmiyor. Mesafeli satışta kalıcı veri saklayıcısıyla (e-posta) gönderim beklentisi → hukuk incelemesi gerekir. | `lib/email/order-email-content.ts`, `components/order/ConfirmPickupOrderButton.tsx`, `app/satis-sozlesmesi/page.tsx`, `app/iptal-ve-iade/page.tsx` |
+
+| E1 | **[GÜNCELLENDİ, 2026-10-01]** E-postayı Yemeksepeti biçimine geçir (tam metinli, siparişe özel). Girdiler GELDİ ve okundu (`ConfirmPickupOrderButton`, `iptal-ve-iade/page`, `satis-sozlesmesi/page`, `terms-version.ts`, `order-email-content.ts`). ADIM 1 yapıldı: `lib/legal/seller.ts` üretildi (repoya konduğu TEYİTSİZ). **Sıradaki:** ADIM 2 — iki sayfanın metnini BİREBİR `lib/legal/` veri dosyasına taşı, sayfaları ondan render ettir, satıcı satırını `seller.ts`'ten oku, `TERMS_VERSION`'ı `2026-10-01-v1` yap (kullanıcı onayı BEKLİYOR). Sonra: ADIM 3 Ön Bilgilendirme Formu şablonu (taslak, hukuki metin UYDURULMAZ), ADIM 4 onay satırına link, ADIM 5 e-posta içeriği (#151/#152, #156 bloklayıcı) | 🔴 |
+
