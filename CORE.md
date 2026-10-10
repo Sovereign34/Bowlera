@@ -104,6 +104,7 @@ Her session'da şu sırayı takip et — adım atlanamaz, sıra değiştirilemez
 | Yol haritası / önceliklendirme / faz durumu | `ROADMAP.md` | — |
 | Hangi dosya neyi etkiler | `DEPENDENCIES.md` | — |
 | Secret/gizli veri, ödeme mantığı, eşzamanlılık (concurrency), KVKK/kişisel veri işleyen görev | `RISK_DOMAINS.md` | `FAILURE_PATTERNS.md` (geçmiş örnek varsa) |
+| CRM / müşteri verisi / pazarlama izni / kampanya / şube altyapısı | `TEKNIK_BORC_CRM.md` + `RISK_DOMAINS.md` | `FAILURE_PATTERNS.md`, `ARCHITECTURE.md` |
 
 ---
 
@@ -195,6 +196,12 @@ RISK_DOMAINS.md            ← YENİ (2026-09-22) — henüz yaşanmamış ama y
                              FAILURE_PATTERNS.md'den farkı: geçmişe değil geleceğe
                              bakar. Bir olay gerçekten yaşanırsa buradan
                              FAILURE_PATTERNS.md'ye FP-N olarak taşınır.
+
+TEKNIK_BORC_CRM.md        ← YENİ (2026-10-09) — CRM'in canlıya çıkması için gereken tüm
+                             işlerin numaralı (TB-CRM-NN) teknik borç listesi: önkoşullar,
+                             kararlar, CRM-1…7 aşamaları, kabul kriterleri. SESSION_INDEX'i
+                             şişirmemek için AYRI dosya; index'te yalnızca #161 satırı (ID
+                             listesi + durum) tutulur. Şube altyapısı (TB-CRM-06) CRM'den ÖNCE.
 
 TEST_MATRIX.md             ← Modül bazlı test senaryoları ve durum
 CONFIG_SCHEMA.md           ← Env değişkenleri şeması (.env.local kontratı)
@@ -618,3 +625,5 @@ kalan tek kopyada içerik kaybı YOKTUR. Gerekçe: kullanıcı arşivin hacmini 
 turda fiilen uygulandı. **KALAN:** SESSION_INDEX.md'nin üst notu, yeni AKTİF parçanın
 `session_arşiv_3.md` olduğunu yansıtacak şekilde AYRICA güncellenmeli (bu teslimatın
 kapsamı dışında bırakıldı, kullanıcı isterse ayrıca üretilir).*
+
+*v1.10 — Bölüm 3 (Tetikleyici Tablosu) ve Bölüm 4 (Dosya Haritası) güncellendi: yeni `TEKNIK_BORC_CRM.md` referansı eklendi — CRM'in canlıya çıkışı için gereken tüm işlerin numaralı teknik borç listesi (TB-CRM-01…23). Gerekçe: CRM kapsamı büyük (önkoşul + 7 aşama + şube altyapısı); SESSION_INDEX 400 satır eşiğine (390) çok yakınken her borcu index'e satır olarak eklemek zorunlu arşiv taşımasını tetiklerdi → detay ayrı dosyada, index'te tek satır (#161). Yeni çekirdek referans dosyası eklenince CORE.md'nin aynı turda güncellenmesi kuralının (bkz. v1.4/v1.5/v1.7/v1.8) bir tekrarı. AGENT.md'ye HENÜZ işlenmedi (v1.5 notundaki gibi, sadece CORE.md tarafı; AGENT.md Kural #9 dosya listesine eklenmesi kullanıcı onayına bağlı).*
