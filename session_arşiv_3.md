@@ -1516,3 +1516,42 @@ kapanış). Başka hiçbir tabloya/karara dokunulmadı. P0 madde 3/4 ve #136 hâ
 
 | E1 | **[GÜNCELLENDİ, 2026-10-01]** E-postayı Yemeksepeti biçimine geçir (tam metinli, siparişe özel). Girdiler GELDİ ve okundu (`ConfirmPickupOrderButton`, `iptal-ve-iade/page`, `satis-sozlesmesi/page`, `terms-version.ts`, `order-email-content.ts`). ADIM 1 yapıldı: `lib/legal/seller.ts` üretildi (repoya konduğu TEYİTSİZ). **Sıradaki:** ADIM 2 — iki sayfanın metnini BİREBİR `lib/legal/` veri dosyasına taşı, sayfaları ondan render ettir, satıcı satırını `seller.ts`'ten oku, `TERMS_VERSION`'ı `2026-10-01-v1` yap (kullanıcı onayı BEKLİYOR). Sonra: ADIM 3 Ön Bilgilendirme Formu şablonu (taslak, hukuki metin UYDURULMAZ), ADIM 4 onay satırına link, ADIM 5 e-posta içeriği (#151/#152, #156 bloklayıcı) | 🔴 |
 
+# session_arşiv_3.md — EKLENTİ 2026-10-10 (12. taşıma)
+> Bu bloğu `session_arşiv_3.md` dosyasının SONUNA kullanıcı elle ekler. Dosyanın kendisi yeniden üretilmez.
+
+## TAŞIMA BLOĞU — 2026-10-10 (12. taşıma, SESSION_INDEX 400 satır eşiği)
+**Taşınan:** SESSION_INDEX.md sonundaki 15 eski sürüm notu (v121, v120, v119, v117, v116, v115, v114, v113, v112, v111, v110, v109, v108, v107, v106), aşağıda BİREBİR, TAM metinle.
+**Kapanış gerekçesi:** Hepsi tamamlanmış turların sürüm-geçmişi özetidir; içerikleri Açık Sorunlar, Kritik Kararlar ve GENEL DURUM'da zaten özetlidir (örn. #63, #60, #135, A16/A18/A19, `users.email`, şifre değiştirme, E1 girdileri). Aktif takip için gerekli değil. v125 ve v127 ile yeni v128 index'te kaldı. Hiçbir Açık Sorun/Karar satırı bu taşımada düşürülmedi.
+
+---
+
+*BOWLERA SESSION_INDEX.md — v121 (v120'den, 113.486 bayt/376 satırlık kopya üzerinden: **[bu turda, 2026-10-01 devamı]** E1 girdileri okundu, `lib/legal/seller.ts` üretildi (adım 1); #119/#122/#147/A15/A9.1 KAPANDI ve eklentiye taşındı; #126 ve #148 güncellendi (`next.config.ts` kayıt hatası düzeltildi → `next.config.mjs`); yeni açık sorunlar #155 (CSP yok), #156 (telefon+ticari unvan eksik); yeni görevler E7, E8; E1 güncellendi. Kullanıcı "push yaptım, deploy yeşil" dedi, dosya bazında teyit YOK. TEST_MATRIX.md/DEPENDENCIES.md paylaşılmadı, GÜNCELLENMEDİ.)*
+
+*BOWLERA SESSION_INDEX.md — v120 (v119'dan: **[bu turda, 2026-10-01]** `users.email` (NOT NULL) + DB sıfırlama + zorunlu e-posta (kayıt/`/hesap`), Gmail SMTP sipariş e-postası canlıda çalıştı (spam'e düştü), personel paneli 403 kök nedeni (JWT'de eski rol) bulundu. Yeni Kritik Kararlar #150-#153, yeni açık sorunlar #150-#154 (ikisi AYNI numara aralığını kullanır: bu dosyada Karar ve Sorun tabloları bağımsız sayılmaya devam ediyor, 141/142'de de aynı çakışma vardı), yeni Sıradaki Görevler E1-E6, CURRENT FOCUS ve GENEL DURUM güncellendi. TEST_MATRIX.md/DEPENDENCIES.md bu turda paylaşılmadı, GÜNCELLENMEDİ. Arşive taşıma YAPILMADI (dosya 400 satırın altında).)*
+
+*BOWLERA SESSION_INDEX.md — v119 (v117 kopyası üzerinden; v118 KAYIP/işlenemedi, bkz. #149. **[bu turda]** Şifre değiştirme eklendi, minimum şifre 8→6 (kullanıcı kararı), personel şifre sıfırlaması yalnız müşteri hesaplarına kısıtlandı (canlıda doğrulandı), `params` build hatası düzeltildi. Yeni açık sorunlar #145-#149, Kritik Kararlar +2, SIRADAKİ A26-A31. 12 eski CURRENT FOCUS paragrafı + 18 kapanmış Açık Sorun satırı `session_arsiv_3_EKLENTI_2026-09-30.md`'ye taşındı; #141'e v118'den kısmi not, SIRADAKİ 4 (#60) ve -5 (#99) stale satırları işaretlendi. Dosya 406→357 satır.)*
+
+*BOWLERA SESSION_INDEX.md — v117 (v116'dan: **[bu turda]** #63 KAPANDI (Next 15.5 yükseltmesi canlıda, PR #3, Dependabot PR #2 kapatıldı, uyarılar 48→25). Yeni açık sorunlar #141 (Vitest `vite` eksik), #142 (next-auth yama bekliyor), #143 (drizzle, düşük risk), #144 (teknik borç). Sıradaki Görevler 4b güncellendi. CURRENT FOCUS'a not eklendi. Başka tabloya dokunulmadı. ⚠️ Dosya hâlâ 400 satır eşiğinin ÜSTÜNDE — taşıma bu turda YAPILMADI, ayrı karar.)*
+*BOWLERA SESSION_INDEX.md — v116 (v115'ten: **[bu turda]** #63 güncellendi: Dependabot açıldı, 48 uyarı analiz edildi, PR #2 (Next 14→16 sıçraması, build başarısız) merge EDİLMEYECEK, gerçek risk düşük (AVIF kapalı, Linux), Next 15.5.x yükseltmesi ayrı dalda planlanacak. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v115 (v114'ten: **[bu turda]** A19 KAPANDI (sandviç uçtan uca canlıda doğrulandı, toplam kullanıcı tarafından teyit edildi). A24 açıldı (kozmetik: ürün adı tutarsızlığı, "Boy: 30" birimi, Tatlı denenmedi). Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v114 (v113'ten: **[bu turda]** A19 güncellendi: Ayran ile Sepete Ekle→checkout→personel paneli→Teslim Edildi canlıda çalıştı. Tatlı/Sandviç ayrı denenmedi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v113 (v112'den: **[bu turda]** A23 güncellendi: sandviç ekmek ve Ayran değerleri kullanıcı tarafından geçici/test verisi olarak teyit edildi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v112 (v111'den: **[bu turda]** A16 ve A18 canlıda doğrulanıp KAPANDI (bowl + sandviç CTA'ları 404 vermiyor). A23 açıldı (Glutensiz Somun 25 kcal / ortak görsel şüphesi). Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v111 (v110'dan: **[bu turda]** #60 KAPANDI (Neon şifre reset + Vercel redeploy + /menu doğrulandı). #135 madde 10 canlıda doğrulandı (SVG reddi + JPG yükleme). A11 KAPANDI, A10 güncellendi (8 ürün girildi, Ayran kalori geçici). CURRENT FOCUS güncellendi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v110 (v109'dan: **[bu turda]** #135 madde 10 (P2) KISMEN işlendi: `lib/admin/image-signature.ts` + test + `upload-image/route.ts` magic-byte doğrulaması kodlandı, SVG reddediliyor (AVIF/HEIC/SVG yan etkisi kayıtlı). Push/canlı test ve vitest HENÜZ YOK. Audit log/action log/rate-limit açık. #135 satırı, Sıra, A22, CURRENT FOCUS güncellendi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v109 (v108'den: **[bu turda]** #135 madde 6 işlendi: `Hero.test.tsx` düzeltildi (etiket+href+eksik CTA, ilk teşhis eksikti), vitest KOŞULMADI. #135 satırı, Sıra/Kapı, A22, CURRENT FOCUS güncellendi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v108 (v107'den: **[bu turda]** Kullanıcı talimatıyla dosya 400 eşiğinin altına indirildi (431→~370 satır): CURRENT FOCUS'tan 2 kapanmış paragraf + v102-v105 `...-devam6.md` eklentisine taşındı. Açık satırlara dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v107 (v106'dan: **[bu turda]** #135 P0 madde 3 TAM KAPANDI — `requireAdminSession()` + 17 admin handler, canlıda doğrulandı (admin çalışıyor, girişsiz 401; 401 middleware ile aynı metin olduğundan guard'ın kendi dalları için test borcu var). #135 satırı, Sıra/Kapı, A22, CURRENT FOCUS güncellendi. Başka tabloya dokunulmadı.)*
+
+*BOWLERA SESSION_INDEX.md — v106 (v105'ten: **[bu turda]** Kullanıcı "hafızanı tazele, taşıma bloğunu ayır, hacmi düşür" dedi. v99-v101 versiyon paragrafları (`...-devam4.md`) ve SIRADAKİ GÖREVLER'den 20 kapanmış ✅ satır (`...-devam5.md`) ayrı eklentilere taşındı, yerlerine pointer bırakıldı. Açık/bekleyen hiçbir satıra dokunulmadı. Dosya 467→~425 satıra indi; 400 altına inmek için kalan tek yol eski 1e-31 listesindeki AÇIK satırların budanması — bu, dosyanın kendi notuna göre kullanıcı kararı gerektiriyor.)*
+
+--- (taşıma bloğu sonu) ---
