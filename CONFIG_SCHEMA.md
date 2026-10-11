@@ -31,6 +31,13 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 | `DATABASE_URL` | ✅ | Server-only | Neon Postgres bağlantı string'i — `users`, `consentRegistrations` (Session 8), `order_history` (Session 10) tabloları | ARCHITECTURE.md §3 (AuthenticatedUser), Karar #20 |
 | `CMS_API_TOKEN` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful erişim anahtarı | ARCHITECTURE.md §2.2 |
 | `CMS_PROJECT_ID` | ⬜ (büyüme fazı) | Server-only | Sanity/Contentful proje kimliği | ARCHITECTURE.md §2.2 |
+| `CRM_CONSENT_COLLECTION_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | Kayıt formunda pazarlama rızası kutuları + `marketing_consents` yazımı. Yalnız tam `"true"` açar. **Açmadan önce:** TB-CRM-03 (hukuk) + `consent-text.ts` onaylı metin | TEKNIK_BORC_CRM.md TB-CRM-17 |
+| `CRM_CUSTOMER_EVENTS_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | `customer_events` yazımı. Kapalıyken DB'ye gidilmez. **Açmadan önce:** TB-CRM-25 (backfill tekrarı) + hukuk | TB-CRM-18 |
+| `CRM_ATTRIBUTION_ENABLED` | ⬜ (**Production'da AÇIK** — 2026-10-11) | Server-only | Kaynak (UTM/yönlendiren) çerezi + kayıt/sipariş satırına kaynak yazımı; çerez yalnız bantta "Kabul" ile yazılır | TB-CRM-08, TB-CRM-26 |
+| `CRM_SENDING_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | **Gönderim kill switch'i** (SMS/e-posta pazarlama). Yalnız tam `"true"` açar; boş/`TRUE`/`1`/boşluklu değer KAPALI sayılır. Her gönderimden hemen önce okunur | TB-CRM-10 |
+| `CRM_SENDING_MODE` | ⬜ (varsayılan `test`) | Server-only | Gönderim modu. Yalnız tam `"live"` canlıdır; tanımsız/başka her değer `test` sayılır. `test` modunda yalnız `CRM_TEST_PHONES` listesindeki numaralara gönderilir | TB-CRM-10 |
+| `CRM_TEST_PHONES` | ⬜ (test modu için) | Server-only | Test modunda izinli telefonlar, virgülle ayrık, `users.phone` ile AYNI biçimde. Boş/tanımsız = hiçbir numaraya gönderilmez. Gerçek müşteri numarası konmaz | TB-CRM-10 |
+| `CRON_SECRET` | ✅ (cron çalışıyorsa) | Server-only | Vercel Cron endpoint'lerini yetkilendirir (`/api/cron/*`, ör. `purge-attribution`); yetkisiz çağrı 401. **Ekran görüntüsünde göründü → yenilenmeli (TB-CRM-34)** | TB-CRM-13, TB-CRM-34 |
 
 > ⚠️ **[Bu güncelleme]** `TWILIO_*` üç değişken de Session 8'de **⬜ PARKLI** durumuna
 > düşürüldü. Sebep: `app/giris/page.tsx` (Twilio OTP) arayüzden kaldırıldı, birincil
@@ -40,6 +47,12 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 > girilmiş olabilir (geçmiş kurulum) — bu tabloya göre artık "zorunlu" sayılmamaları,
 > platformdan silinmeleri gerektiği anlamına GELMEZ, sadece yeni deploy/kurulumlarda
 > zorunlu ön koşul olmadıkları anlamına gelir.
+
+> **CRM bayrakları (v1.5):** `CRM_*` değişkenlerinin hepsi Server-only'dir, `NEXT_PUBLIC_` prefix'i ALMAZ. Hepsi
+> güvenli tarafa göre okunur: bayraklar yalnız tam `"true"` ile açılır, mod yalnız tam `"live"` ile canlı olur;
+> tanımsız/yanlış yazılmış değer = KAPALI/test. Gönderim kararı `lib/crm/sending-gate.ts` üzerinden geçer;
+> `CRM_SENDING_*` değişkenlerini doğrudan okuyan ikinci bir kod yolu AÇILMAZ. Bu değişkenler Vercel'de
+> **Preview ortamına KONMAZ** (Preview aynı Neon'a bağlı, bkz. TB-CRM-10) — yalnız Production.
 
 > `NEXT_PUBLIC_` prefix'i **yalnızca** client'a güvenle açılabilecek değerler için kullanılır —
 > hiçbir API key bu prefix'i almaz (BSC-2).
@@ -99,6 +112,17 @@ DATABASE_URL=
 # CMS (büyüme fazı — ARCHITECTURE.md §2.2)
 CMS_API_TOKEN=
 CMS_PROJECT_ID=
+
+# CRM bayrakları (TEKNIK_BORC_CRM.md) — HEPSİ varsayılan KAPALI; yalnız tam "true"/"live" açar
+CRM_CONSENT_COLLECTION_ENABLED=
+CRM_CUSTOMER_EVENTS_ENABLED=
+CRM_ATTRIBUTION_ENABLED=
+CRM_SENDING_ENABLED=
+CRM_SENDING_MODE=test
+CRM_TEST_PHONES=
+
+# Cron yetkilendirme (Vercel Cron — TB-CRM-13) — değeri sohbete/ekran görüntüsüne KOYMA
+CRON_SECRET=
 ```
 
 > Bu dosya repo köküne `.env.local.example` olarak eklenir — gerçek değerler asla commit
@@ -128,6 +152,14 @@ CMS_PROJECT_ID=
 
 ---
 
+*BOWLERA CONFIG_SCHEMA.md — v1.5 — 2026-10-11*
+*v1.5 (bu güncelleme): CRM değişkenleri eklendi — `CRM_CONSENT_COLLECTION_ENABLED`, `CRM_CUSTOMER_EVENTS_ENABLED`,
+`CRM_ATTRIBUTION_ENABLED` (Production'da AÇIK), yeni `CRM_SENDING_ENABLED` (kill switch), `CRM_SENDING_MODE`,
+`CRM_TEST_PHONES` (TB-CRM-10) ve `CRON_SECRET` (TB-CRM-13/34). Yüklenen kopya v1.3 idi; önceki turda "v1.4 üretildi"
+denmişti ama repoya taşınmamış görünüyor — bu sürüm onun kapsamını da içerir. ⚠️ AÇIK: `send-order-email.ts`
+(Gmail SMTP) ve `nodemailer` için gereken env değişken adları bu dosyada YOK; kod görülmediği için UYDURULMADI —
+`send-order-email.ts` paylaşılınca eklenmeli. Netgsm değişkenleri de TB-CRM-02 netleşince eklenecek.*
+*Önceki sürüm notu (v1.3) aşağıdadır.*
 *BOWLERA CONFIG_SCHEMA.md — v1.3 — Session 11 — 2026-08-07*
 *Kaynak: INTEGRATIONS.md · ARCHITECTURE.md §4.1, §3, §2.7 · AGENT.md BSC-2 · SESSION_INDEX.md (Session 8-11 senkronu)*
 *v1.3 (bu güncelleme): `TWILIO_ACCOUNT_SID`/`TWILIO_AUTH_TOKEN`/`TWILIO_VERIFY_SERVICE_SID`
