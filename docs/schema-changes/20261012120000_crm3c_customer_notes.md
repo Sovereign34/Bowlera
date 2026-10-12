@@ -17,7 +17,7 @@ Bu değişiklik `users` ile ilişkili YENİ kişisel veri (serbest metin müşte
 `customer_notes` tablosu + `customer_notes_block_mutation()` fonksiyonu + `trg_customer_notes_append_only` (BEFORE UPDATE OR DELETE) + `(customer_id, created_at DESC)` indeksi.
 
 ### ETKİLENEN DOSYALAR
-`lib/db/schema.ts` (yalnız `customerNotes` eklenir; aşağıdaki blok). Başka kod YOK.
+`lib/db/schema.ts` (yalnız `crmCustomerNotes` eklenir; aşağıdaki blok). Başka kod YOK.
 
 ### schema.ts BLOĞU (SQL koştuktan SONRA push)
 ```ts
@@ -28,7 +28,7 @@ Bu değişiklik `users` ile ilişkili YENİ kişisel veri (serbest metin müşte
 // Risk:    `body` serbest metin = özel nitelikli veri girme riski (KVKK). Append-only olduğu için yazılan SİLİNEMEZ; silme/erase
 //          CRM-7'de ayrıca çözülmeli (trigger + FK `users` silmeyi engeller). Log'a `body` YAZILMAZ.
 // Dokunma: CHECK (1–500) ve trigger yalnız SQL'de (Drizzle ifade etmez). Uzunluk sınırı değişirse DB + kod aynı turda.
-export const customerNotes = pgTable("customer_notes", {
+export const crmCustomerNotes = pgTable("customer_notes", {
   id: uuid("id").defaultRandom().primaryKey(),
   customerId: uuid("customer_id").notNull().references(() => users.id),
   authorId: uuid("author_id").notNull().references(() => users.id),
@@ -36,8 +36,8 @@ export const customerNotes = pgTable("customer_notes", {
   body: text("body").notNull(), // 1–500 (CHECK, yalnız SQL)
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 })
-export type CustomerNoteRow = typeof customerNotes.$inferSelect
-export type NewCustomerNoteRow = typeof customerNotes.$inferInsert
+export type CrmCustomerNoteRow = typeof crmCustomerNotes.$inferSelect
+export type NewCrmCustomerNoteRow = typeof crmCustomerNotes.$inferInsert
 ```
 
 ### SQL 1 — MIGRATION (Neon SQL Editor, kod push'undan ÖNCE)
