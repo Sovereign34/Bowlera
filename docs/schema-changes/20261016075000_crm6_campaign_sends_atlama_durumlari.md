@@ -12,7 +12,7 @@ Sütun, tablo, indeks, UNIQUE (`campaign_sends_once_uq`: campaign_id + phone + c
 
 ### KURALLAR (CRM-6 kodu bunlara uyar)
 1. `skipped_*` satırları haftalık sınıra SAYILMAZ (iletilmediler). Sayım sorgusu `queued + sent` ile kalır.
-2. `UNIQUE (campaign_id, phone, channel)` skipped satırlar için de geçerlidir: bir kişiye bir kampanyada TEK satır yazılır. Bu yüzden `skipped_gate` yalnız KALICI reddedilen kişiler için yazılır (rıza yok / geri çekilmiş / bilinmiyor). Geçici reddeden (sessiz saat, haftalık sınır, kill switch, kanal doğrulanmamış, test modu listesi dışı) için satır YAZILMAZ; sonraki cron çalışmasında yeniden denenir. Aksi halde gece 22:00'de reddedilen kişi o kampanyadan bir daha mesaj alamaz.
+2. `UNIQUE (campaign_id, phone, channel)` skipped satırlar için de geçerlidir: bir kişiye bir kampanyada TEK satır yazılır. Bu yüzden `skipped_gate` yalnız KALICI reddedilen kişiler için yazılır (rıza yok / geri çekilmiş). Geçici reddeden (sessiz saat, haftalık sınır, kill switch, kanal doğrulanmamış, test modu listesi dışı, rıza durumu "bilinmiyor" = veri sorunu olabilir, karar hatası) için satır YAZILMAZ; sonraki cron çalışmasında yeniden denenir. Aksi halde gece 22:00'de reddedilen kişi o kampanyadan bir daha mesaj alamaz.
 3. `skipped_holdout` deterministik hesaplanır (kampanya + telefon özetinden); satır yazılması yeniden hesabı değiştirmez, yalnız kaydı tutar.
 4. `campaign_sends.phone` kişisel veridir; skipped satırlar da telefon taşır. Saklama/silme açık sorunu (K-08, K-24) bunları da kapsar.
 
