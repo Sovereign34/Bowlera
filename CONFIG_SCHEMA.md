@@ -34,6 +34,7 @@ Tüm değerler platform dashboard'undan (Vercel vb.) environment variable olarak
 | `CRM_CONSENT_COLLECTION_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | Kayıt formunda pazarlama rızası kutuları + `marketing_consents` yazımı. Yalnız tam `"true"` açar. **Açmadan önce:** TB-CRM-03 (hukuk) + `consent-text.ts` onaylı metin | TEKNIK_BORC_CRM.md TB-CRM-17 |
 | `CRM_CUSTOMER_EVENTS_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | `customer_events` yazımı. Kapalıyken DB'ye gidilmez. **Açmadan önce:** TB-CRM-25 (backfill tekrarı) + hukuk | TB-CRM-18 |
 | `CRM_ATTRIBUTION_ENABLED` | ⬜ (**Production'da AÇIK** — 2026-10-11) | Server-only | Kaynak (UTM/yönlendiren) çerezi + kayıt/sipariş satırına kaynak yazımı; çerez yalnız bantta "Kabul" ile yazılır | TB-CRM-08, TB-CRM-26 |
+| `NEXT_PUBLIC_META_PIXEL_ID` | ⬜ (**yalnız Production**) | Client + Server | Meta Pixel kimliği (Instagram/Facebook reklam ölçümü). Gizli değil (sayfa kaynağında görünür) → `NEXT_PUBLIC_` güvenli, API key DEĞİL. Boş/geçersiz (yalnız 10-20 rakam kabul) ise pixel hiç yüklenmez; yüklenmesi ayrıca çerez bandında "Kabul et"e bağlı. Preview'a KONMAZ (test trafiği pixel'i kirletir) | `lib/marketing/meta-pixel.ts`, `components/layout/MarketingPixels.tsx` |
 | `CRM_SENDING_ENABLED` | ⬜ (varsayılan KAPALI) | Server-only | **Gönderim kill switch'i** (SMS/e-posta pazarlama). Yalnız tam `"true"` açar; boş/`TRUE`/`1`/boşluklu değer KAPALI sayılır. Her gönderimden hemen önce okunur | TB-CRM-10 |
 | `CRM_SENDING_MODE` | ⬜ (varsayılan `test`) | Server-only | Gönderim modu. Yalnız tam `"live"` canlıdır; tanımsız/başka her değer `test` sayılır. `test` modunda yalnız `CRM_TEST_PHONES` listesindeki numaralara gönderilir | TB-CRM-10 |
 | `CRM_TEST_PHONES` | ⬜ (test modu için) | Server-only | Test modunda izinli telefonlar, virgülle ayrık, `users.phone` ile AYNI biçimde. Boş/tanımsız = hiçbir numaraya gönderilmez. Gerçek müşteri numarası konmaz | TB-CRM-10 |
@@ -121,6 +122,9 @@ CRM_SENDING_ENABLED=
 CRM_SENDING_MODE=test
 CRM_TEST_PHONES=
 
+# Meta Pixel (reklam ölçümü) — boş = pixel yüklenmez; yalnız Production'a girilir
+NEXT_PUBLIC_META_PIXEL_ID=
+
 # Cron yetkilendirme (Vercel Cron — TB-CRM-13) — değeri sohbete/ekran görüntüsüne KOYMA
 CRON_SECRET=
 ```
@@ -152,6 +156,8 @@ CRON_SECRET=
 
 ---
 
+*BOWLERA CONFIG_SCHEMA.md — v1.6 — 2026-10-16*
+*v1.6 (bu güncelleme): `NEXT_PUBLIC_META_PIXEL_ID` eklendi (§2 tablo + §4 şablon). Yalnız Production; boşsa pixel yüklenmez.*
 *BOWLERA CONFIG_SCHEMA.md — v1.5 — 2026-10-11*
 *v1.5 (bu güncelleme): CRM değişkenleri eklendi — `CRM_CONSENT_COLLECTION_ENABLED`, `CRM_CUSTOMER_EVENTS_ENABLED`,
 `CRM_ATTRIBUTION_ENABLED` (Production'da AÇIK), yeni `CRM_SENDING_ENABLED` (kill switch), `CRM_SENDING_MODE`,
