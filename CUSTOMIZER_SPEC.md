@@ -6,6 +6,8 @@
 > v1.1 (18 Temmuz 2026): 4 adımdan 5 adıma geçildi — bkz. `20260718001123_customizer_5_adim_gecisi.md`
 > v1.2 (21 Temmuz 2026): Main adımına "Bitkisel Protein" alt-varyant mekanizması eklendi
 > (Karar #11'in nihai hali) — bkz. §2.1 (yeni) ve §3.4 (yeni). SESSION_INDEX.md Açık Sorun #22.
+> v1.4 (18 Ekim 2026): Müşteriye görünen adım adları Türkçeleşti (Taban, Ana Protein, Bahçe, İmza Lezzet,
+> Son Dokunuş) — §1'deki "bilinçli İngilizce" istisnası KALDIRILDI; Garden ücretsiz kotası 4 → 1 (§2, §3, §4).
 
 ---
 
@@ -13,10 +15,11 @@
 
 Doğrusal, bilişsel yükü azaltan **5 adım**. Kullanıcı önceki adımı tamamlamadan
 sonrakine geçemez — CAVA'nın adım adım görselleştirilmiş sihirbaz UX'i referans
-alınmıştır (MASTER_PLAN §2). Adım isimleri bilinçli olarak İngilizce'dir
-(premium/global konumlandırma kararı — CONTENT_GUIDE.md §1'in Türkçe marka
-sesi kuralına bu ekranda bilinçli bir istisna uygulanır; genel hedef "ilk kez
-gören bir müşterinin 10 saniye içinde sipariş verebilmesi"dir). Sağ tarafta
+alınmıştır (MASTER_PLAN §2). Adım isimleri Türkçedir (v1.4, 18 Ekim 2026 —
+kullanıcı kararı: "yabancı kelime istemiyorum"; önceki "bilinçli İngilizce"
+istisnası kaldırıldı, CONTENT_GUIDE.md §1'in Türkçe marka sesi bu ekranda da
+geçerlidir; genel hedef "ilk kez gören bir müşterinin 10 saniye içinde sipariş
+verebilmesi"dir). Sağ tarafta
 (masaüstü) veya alt sticky çekmecede (mobil) **sabit özet panel** her zaman
 görünür: canlı kase görseli, anlık kalori/makro toplamı (ZORUNLU, her zaman
 görünür), güncel fiyat, "Sepete Ekle" butonu.
@@ -29,14 +32,22 @@ görünür), güncel fiyat, "Sepete Ekle" butonu.
 
 | Adım | İçerik | Seçim Tipi | Zorunlu mu |
 |---|---|---|---|
-| 1. Base | Jasmine Rice, Brown Rice, Quinoa, Mixed Greens, Spinach, Half Rice + Half Greens | Tekli | ✅ Zorunlu |
-| 2. Main | Grilled Chicken, Crispy Chicken, Beef, Falafel, Shrimp, Salmon, Tofu, **Plant-Based Protein** (alt-varyant, bkz. §2.1) | Tekli/çift porsiyon | ✅ Zorunlu |
-| 3. Garden | Cherry Tomato, Cucumber, Corn, Pickled Onion, Red Cabbage, Carrot, Avocado | Çoklu — max 4 ücretsiz | ⬜ Opsiyonel |
-| 4. Signature Flavor | Mediterranean Herb, Smoky BBQ, Lemon Garlic, Spicy Harissa, Teriyaki Sesame, Sweet Chili (Main'e göre filtrelenebilir, bkz. §2.1) | Tekli — sos+baharat birleşik profil | ✅ Zorunlu |
-| 5. Finish | Feta, Parmesan, Roasted Seeds, Crispy Onion, Fresh Herbs, Lime, Chili Flakes | Çoklu — max 1 ücretsiz | ⬜ Opsiyonel |
+| 1. Taban | Jasmine Rice, Brown Rice, Quinoa, Mixed Greens, Spinach, Half Rice + Half Greens | Tekli | ✅ Zorunlu |
+| 2. Ana Protein | Grilled Chicken, Crispy Chicken, Beef, Falafel, Shrimp, Salmon, Tofu, **Plant-Based Protein** (alt-varyant, bkz. §2.1) | Tekli/çift porsiyon | ✅ Zorunlu |
+| 3. Bahçe | Cherry Tomato, Cucumber, Corn, Pickled Onion, Red Cabbage, Carrot, Avocado | Çoklu — ilk 1 ücretsiz | ⬜ Opsiyonel |
+| 4. İmza Lezzet | Mediterranean Herb, Smoky BBQ, Lemon Garlic, Spicy Harissa, Teriyaki Sesame, Sweet Chili (Main'e göre filtrelenebilir, bkz. §2.1) | Tekli — sos+baharat birleşik profil | ✅ Zorunlu |
+| 5. Son Dokunuş | Feta, Parmesan, Roasted Seeds, Crispy Onion, Fresh Herbs, Lime, Chili Flakes | Çoklu — max 1 ücretsiz | ⬜ Opsiyonel |
 
-**Garden ücretlendirme kuralı:** İlk 4 seçim (Avokado hariç) ücretsizdir,
-5. ve sonrası ücretlidir. **Avokado, listede kaçıncı sırada seçilirse
+> 🆕 v1.4 — Adım adları: müşteriye görünen Türkçe adlar tek kaynakta durur
+> (`lib/customizer-labels.ts`). Kod/state alan adları (`base`, `main`, `garden`,
+> `signatureFlavor`, `finish`) İngilizce KALIR; bu belgedeki kod örnekleri ve
+> §3-§5 başlıkları o alan adlarını kullanır. Sipariş özeti satır etiketleri de
+> bu adları taşır; v1.4 ÖNCESİ siparişlerde eski "Base" etiketi kalıcıdır
+> (personel başlığı ikisini de tanır).
+
+**Bahçe (Garden) ücretlendirme kuralı:** İlk 1 seçim (Avokado hariç) ücretsizdir
+(v1.4 — önceden 4), 2. ve sonrası ücretlidir (malzemenin kendi `price`'ı kadar;
+`price` 0 ise ücretsiz kalır). Ücretsiz hak, seçim SIRASINA göredir. **Avokado, listede kaçıncı sırada seçilirse
 seçilsin her zaman ücretlidir** — premium malzeme olarak ayrı fiyatlandırılır,
 ücretsiz kotaya dahil edilmez.
 
@@ -125,7 +136,7 @@ interface CustomizerSelection {
   main: string | null
   mainVariant: string | null    // 🆕 v1.2 — SADECE main='plant-based-protein' iken anlamlı, diğer Main'ler için her zaman null
   mainPortion: 'single' | 'double'
-  garden: string[]              // max 4 ücretsiz (avokado hariç), sonrası ücretli
+  garden: string[]              // ilk 1 ücretsiz (avokado hariç; v1.4, önceden 4), sonrası ücretli
   signatureFlavor: string | null
   finish: string[]              // max 1 ücretsiz, sonrası ücretli
   extras: {
@@ -197,7 +208,7 @@ const goToStep = (step) => set((state) => {
 | 5 | Her zaman geçerli (opsiyonel — 0 finish öğesi de geçerli bir seçim) |
 
 `nextStep()` çağrısı, mevcut adım `isStepValid` değilse **no-op** olur ve UI'da
-kullanıcıya hangi seçimin eksik olduğu gösterilir (ör. "Lütfen bir base seçin").
+kullanıcıya hangi seçimin eksik olduğu gösterilir (ör. "Lütfen bir taban seçin").
 
 ### 3.4 mainVariant Varsayılan Atama Kuralı (YENİ — v1.2)
 
@@ -301,11 +312,11 @@ function getTotals(selections: CustomizerSelection): Totals {
 
   const finishItems = selections.finish.map(id => menuData.finishItems.find(f => f.id === id))
 
-  // Garden ücretlendirme: avokado her zaman ücretli, diğerlerinden ilk 4'ü ücretsiz
+  // Garden ücretlendirme: avokado her zaman ücretli, diğerlerinden ilk GARDEN_FREE_QUOTA (=1, v1.4) ücretsiz
   const avocadoSelections = gardenItems.filter(g => g.id === 'avocado')
   const otherGarden = gardenItems.filter(g => g.id !== 'avocado')
-  const freeGarden = otherGarden.slice(0, 4)
-  const paidGarden = [...otherGarden.slice(4), ...avocadoSelections]
+  const freeGarden = otherGarden.slice(0, GARDEN_FREE_QUOTA)
+  const paidGarden = [...otherGarden.slice(GARDEN_FREE_QUOTA), ...avocadoSelections]
 
   // Finish ücretlendirme: ilk 1 ücretsiz, sonrası ücretli
   const paidFinish = finishItems.slice(1)
@@ -454,7 +465,7 @@ const handleAddToCart = () => {
 [ ] Adım geçiş guard'ı var mı?              → maxReachedStep kontrolü uygulandı mı? (§3.2)
 [ ] Her adımın validasyonu tanımlı mı?       → isStepValid tüm 5 adımı kapsıyor mu? (§3.3)
 [ ] Kalori/fiyat null-safe mi?               → seçim yokken 0/"—" dönüyor mu, NaN değil? (§4)
-[ ] Garden/Finish ücretlendirme doğru mu?    → avokado her zaman ücretli, Garden 4/Finish 1 ücretsiz limiti uygulanıyor mu? (§4)
+[ ] Garden/Finish ücretlendirme doğru mu?    → avokado her zaman ücretli, Garden 1/Finish 1 ücretsiz limiti uygulanıyor mu? (§4)
 [ ] Extras çakışması kontrol edildi mi?      → garden.avocado ile extras.extraAvocado ayrı toplanıyor mu? (§4)
 [ ] VisualPreview katman sırası doğru mu?    → z-index: kase→Base→Main→Garden→Signature Flavor→Finish (§5.1)
 [ ] Mobil sticky çekmece davranışı var mı?   → açık/kapalı durumları tanımlı mı? (§6)
@@ -466,7 +477,7 @@ const handleAddToCart = () => {
 
 ---
 
-*BOWLERA CUSTOMIZER_SPEC.md — v1.3 — 2026-09-02*
+*BOWLERA CUSTOMIZER_SPEC.md — v1.4 — 2026-10-18*
 *Kaynak: MASTER_PLAN.md v2.1 §3.3, §5.2, §5.4, §5.5 · ARCHITECTURE.md §2.4 · AGENT.md (BSC-6)*
 *Değişiklik geçmişi: v1.0 (Session 1) → v1.1 (Oturum 2, 4 adımdan 5 adıma geçiş) →
 v1.2 (Oturum 4, Bitkisel Protein alt-varyant mekanizması + Signature Flavor filtreleme,
@@ -474,4 +485,5 @@ Karar #11 / Açık Sorun #22 kapanışı, bkz. SESSION_INDEX.md) →
 v1.3 (bu turda, kök neden düzeltmesi — §4'e Double porsiyon fiyat/kalori çarpanı kuralı
 eklendi: bu bölüm ÖNCEDEN mainPortion'ın etkisini hiç tanımlamıyordu, kod da bu yüzden
 onu okumuyordu; KARAR: Double iken main'in price/calories/protein/carbs/fat'ı TAM 2x,
-canlı ekran görüntüsüyle bildirilip kullanıcı onayıyla netleştirildi)*
+canlı ekran görüntüsüyle bildirilip kullanıcı onayıyla netleştirildi) →
+v1.4 (18 Ekim 2026, kullanıcı kararı — adım adları Türkçeleşti [§1 "bilinçli İngilizce" istisnası kaldırıldı, §2 tablo + not] ve Garden ücretsiz kotası 4 → 1 [§2, §3, §4, §7 kontrol listesi]; kod: lib/customizer-labels.ts, lib/customizer-pricing.ts GARDEN_FREE_QUOTA)*
