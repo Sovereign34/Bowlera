@@ -70,3 +70,28 @@
 raporlandı). UI seviyesi testler (page.tsx, SummaryPanel, AddToCartButton) ❓ olarak
 işaretlendi — bu session'da içerik/test sonucu görülmedi. AddToCartButton'ın Oturum 4'ten
 Oturum 3'e kapsam kayması not edildi.*
+------
+# TEST_MATRIX — Checkpoint 19 ekleme (2026-10-19)
+> Mevcut TEST_MATRIX.md bu oturumda YÜKLENMEDİ; aşağıdaki satırlar dosyanın sonuna eklenecek.
+> Durum sütunu: ✅ görüldü · 🟡 kod var, çalıştırılmadı · ⏳ donanım/canlı bekliyor.
+
+| Alan | Test dosyası / senaryo | Durum |
+|---|---|---|
+| Zil sesleri | `lib/personel/alert-sounds.test.ts` (4) | 🟡 koşu sonucu görülmedi |
+| Zil tekrarı | `lib/personel/alert-ringer.test.ts` (5) | 🟡 |
+| Zil hook | `hooks/useNewEntryAlert.test.ts` (7) | 🟡 |
+| Fiş sorguları | `lib/personel/print-jobs-queries.test.ts` (7) | 🟡 (SQL kuralları mock'la DOĞRULANAMAZ) |
+| Yazıcı API | `app/api/personel/yazici/route.test.ts` (6) | 🟡 |
+| Fiş şablonu | `lib/personel/ticket-format.test.ts` (7) | 🟡 |
+| Tarayıcı yazdırma | `lib/personel/print-silent.test.ts` (3) | 🟡 |
+| QZ köprüsü | `lib/personel/qz-printer.test.ts` (7) + `print-dispatch.test.ts` (3) | 🟡 |
+| Yazıcı döngüsü | `hooks/usePrintStation.test.ts` (6) | 🟡 |
+| Yazıcı paneli | `components/personel/YaziciPanel.test.tsx` (5) | 🟡 |
+| Neon tabloları | `site_settings` + `print_jobs` var | ✅ (kullanıcı ekranı 15:03) |
+| Canlı: zil | bekleyen kayıt/sipariş → sipariş ve kayıt melodisi ayrı, onayda susar | ⏳ |
+| Canlı: QZ | QZ Tray kur → izin 'Remember' → 'Yazıcıları bul' → test fişi (80/58 mm) | ⏳ DONANIM |
+| Canlı: fiş | tanınan müşteri siparişi → mutfak+kasa yazıcısı, yenilemede ÇİFT FİŞ YOK | ⏳ DONANIM |
+| Canlı: fiş | ilk sipariş onaylanana kadar BASILMAZ | ⏳ |
+| Canlı: Masaya | dine-in 'pending' + doğrulanmamış müşteri davranışı | ⏳ |
+| Canlı: admin | 'Kendi kasem' listede yok, Hero 'Kâseni Oluştur' çalışıyor, DELETE 403 | ⏳ |
+| Canlı: hero | admin'den görsel yükle → ana sayfada görünür, 'kaldır' → yer tutucu | ⏳ |
