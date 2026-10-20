@@ -29,7 +29,7 @@ sağlık/lezzetten ödün vermeyen; süslü jargon yok, malzeme odaklı dürüst
 | Zanaatkar odaklı | "Toprağın Doğallığı, Şeflerin Dokunuşuyla Kâsende" | "Hemen Sipariş Ver" |
 | Kişiselleştirme odaklı | "Senin Kaselerin, Senin Kuralların" | "Kendi Kâseni Tasarla" |
 
-**CTA kütüphanesi:** "Sağlığı Keşfet" · "Ekspres Sipariş" · "Sepete Ekle" · "Kâseni Onayla"
+**CTA kütüphanesi:** "Sağlığı Keşfet" · "Ekspres Sipariş" · "Sepete Ekle" · "Kâseni Onayla" · "Kâseni Oluşturmaya Başla"
 
 > Yeni CTA üretilirken bu kütüphaneye eklenir, tek seferlik/rastgele CTA metni üretilmez —
 > tutarlılık için.
@@ -60,8 +60,14 @@ somon ve közlenmiş biberle — 520 kcal, 35g protein."
 
 | Öncelik | Anahtar Kelimeler |
 |---|---|
-| Birincil | "sağlıklı kase yemek", "poke bowl istanbul", "kendi kaseni yarat" |
-| İkincil | "kinoa salatası sipariş", "vegan kase alternatifleri", "avokadolu somon kase" |
+| Birincil | **"kâseni oluştur"** (kullanıcı kararı, 2026-10-20 — 1 numaralı hedef) · "kendi kaseni yarat" |
+| Teyit bekliyor | "sağlıklı kase yemek", "poke bowl istanbul", "kinoa salatası sipariş", "vegan kase alternatifleri", "avokadolu somon kase" |
+
+> ⚠️ **Teyit bekliyor** satırı v1.0'dan (2026-07-17) kalma ve marka konsepti "sağlıklı"dan
+> "yediğinin farkında olma"ya geçmeden ÖNCE yazıldı (bkz. SESSION_INDEX, marka konsepti kararı).
+> Hangilerinin birincil/ikincil kalacağı kullanıcı kararıyla netleşir; o zamana kadar yeni
+> metinde "sağlıklı" iddiası öne çıkarılmaz. "Kâseni oluştur" yazımı: arama motorları â/a farkını
+> büyük ölçüde eşler, sayfa metninde sitenin kullandığı yazım ("Kâseni Oluştur") korunur.
 
 **Yerel SEO:** Her şube için ayrı Google Business Profile; NAP (isim/adres/telefon) bilgileri
 "Şubeler" sayfasıyla birebir eşleşmeli — tutarsızlık yerel arama sıralamasını düşürür.
@@ -75,10 +81,10 @@ somon ve közlenmiş biberle — 520 kcal, 35g protein."
 
 ```json
 {
-  "@context": "http://schema.org",
+  "@context": "https://schema.org",
   "@type": "Restaurant",
   "name": "Bowlera - [Şube Adı]",
-  "servesCuisine": ["Healthy Bowls", "Poke Bowls", "Salads"],
+  "servesCuisine": ["[mutfak türleri — konsept kararına göre belirlenir]"],
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "[Cadde/Mahalle No]",
@@ -124,5 +130,8 @@ somon ve közlenmiş biberle — 520 kcal, 35g protein."
 
 ---
 
-*BOWLERA CONTENT_GUIDE.md — v1.0 — Session 1 — 2026-07-17*
+*BOWLERA CONTENT_GUIDE.md — v1.1 — 2026-10-20 — §4: birincil anahtar kelime "kâseni oluştur" olarak
+güncellendi, eski liste "teyit bekliyor"a alındı (konsept değişikliği). §5: JSON-LD `@context` https'e
+çevrildi, `servesCuisine` eski "Healthy Bowls" değeri yer tutucuya alındı. §2: CTA kütüphanesine "Kâseni Oluşturmaya Başla" eklendi (/kaseni-olustur sayfası). Başka bölüme dokunulmadı.*
+*Önceki: v1.0 — Session 1 — 2026-07-17*
 *Kaynak: MASTER_PLAN.md §6, §7 · DESIGN_SYSTEM.md §5.1 · ARCHITECTURE.md §3*
