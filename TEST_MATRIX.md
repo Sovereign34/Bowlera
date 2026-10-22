@@ -95,3 +95,26 @@ Oturum 3'e kapsam kayması not edildi.*
 | Canlı: Masaya | dine-in 'pending' + doğrulanmamış müşteri davranışı | ⏳ |
 | Canlı: admin | 'Kendi kasem' listede yok, Hero 'Kâseni Oluştur' çalışıyor, DELETE 403 | ⏳ |
 | Canlı: hero | admin'den görsel yükle → ana sayfada görünür, 'kaldır' → yer tutucu | ⏳ |
+
+------
+# TEST_MATRIX — Checkpoint 25 ekleme (2026-10-22)
+> Durum sütunu: ✅ görüldü (kullanıcı ekranı) · 🟡 kod var, çalıştırılmadı/görülmedi · ⏳ canlı bekliyor · ❓ dosya görülmedi.
+
+| Alan | Test dosyası / senaryo | Durum |
+|---|---|---|
+| Sipariş kapısı | `lib/verification/order-gate.test.ts` (7: 403+code, gerçek `PENDING_ACCOUNT_RESPONSE` uyumu, null/string gövde, `verifyHref` encode) | ✅ |
+| Doğrulama kutusu | `components/order/PhoneVerifyPrompt.test.tsx` (2) | ✅ |
+| Login sonrası yol | `lib/verification/post-login.test.ts` (7: callbackUrl, açık yönlendirme, personel/admin, oturum null, giriş sayfası döngüsü) | ✅ (`lib/verification` 4 dosya/25 PASS; satır ekranda görülmedi) |
+| Doğrulama paketi | `vitest run lib/verification components/verification components/order components/registration hooks` | ✅ 11 dosya / 56 PASS |
+| Tip + build | `tsc --noEmit` temiz; sahte `IMAGEKIT_*` env'li `npm run build` yeşil | ✅ (Codespaces `.env.local`'de `IMAGEKIT_*` yok → düz build düşer, Vercel etkilenmez) |
+| Gel Al onayı | `lib/personel/gel-al-queries.test.ts`: `confirmPickupOrder` SADECE `orderHistory` günceller (1 UPDATE) + DB hatası reject | 🟡 5b sonrası koşu görülmedi |
+| Gel Al route | `app/api/personel/gel-al/[id]/route.test.ts` (`confirmPickupOrder(id)` tek parametre) | ❓ dosya görülmedi |
+| Masaya route | `app/api/personel/orders/[id]/route.test.ts` (`preparing` artık `users` yazmaz) | ❓ dosya görülmedi |
+| Kayıt formu | `useRegistrationForm` login sonrası `/menu` bekleyen eski test | ❓ koşu/dosya görülmedi |
+| Canlı: banner | menüde/sitede 'personel onayı bekliyor' banner'ı YOK | ✅ (kullanıcı ekranı) |
+| Canlı: callbackUrl | sipariş kapısı 401 → giriş → `/siparis`'e dönüş → sipariş alındı | ✅ (kullanıcı beyanı) |
+| Canlı: doğrulama kutusu | doğrulanmamış hesapla 'Siparişi Onayla' → 'Önce telefonunu doğrula' kutusu → `/dogrula?next=%2Fsiparis` → dönüş | ⏳ |
+| Canlı: login yönlendirme | doğrulanmamış müşteri girişte `/dogrula`'ya düşer; personel/admin düşmez | ⏳ |
+| Canlı: `/dogrula` `next` | `app/dogrula/page.tsx` `next` parametresini okuyor, doğrulayınca hedefe dönüyor | ⏳ (kod görülmedi) |
+| Canlı: Masaya | 'preparing' müşteriyi artık `confirmed` YAPMAZ; sonra Gel Al → 403 + kutu | ⏳ |
+| Canlı: Gel Al | 'Onayla' siparişi Hazırlanıyor'a alır, hesap durumu DEĞİŞMEZ | ⏳ |
