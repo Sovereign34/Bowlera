@@ -118,3 +118,18 @@ Oturum 3'e kapsam kayması not edildi.*
 | Canlı: `/dogrula` `next` | `app/dogrula/page.tsx` `next` parametresini okuyor, doğrulayınca hedefe dönüyor | ⏳ (kod görülmedi) |
 | Canlı: Masaya | 'preparing' müşteriyi artık `confirmed` YAPMAZ; sonra Gel Al → 403 + kutu | ⏳ |
 | Canlı: Gel Al | 'Onayla' siparişi Hazırlanıyor'a alır, hesap durumu DEĞİŞMEZ | ⏳ |
+
+------
+# TEST_MATRIX — Checkpoint 26 ekleme (2026-10-22 15:45)
+> Durum sütunu: ✅ görüldü · 🟡 kod var, koşulmadı · ⏳ canlı bekliyor · ❓ dosya görülmedi.
+
+| Alan | Test dosyası / senaryo | Durum |
+|---|---|---|
+| Tip kontrolü | `rm -rf .next` sonrası `npx tsc --noEmit` (5c silmeleri + 5d sonrası) | ✅ temiz (ilk 6 hata eski `.next/types` önbelleğiydi) |
+| Kayıt Onayları kaldırma | silinen dosyalara import kalmadı (`tsc` temiz); `git ls-files \| grep -i kayit` ile silme teyidi | 🟡 teyit görülmedi |
+| Personel sayfası | `app/personel/page.tsx` 5 sekme (Masaya, Şifre Talepleri, Gel Al, Müşteriler, Ürünler) çalışıyor | ⏳ canlı |
+| Admin etiketi | `app/admin/musteriler/[id]/page.tsx:76` doğrulanmamış hesapta 'Doğrulama: Teyitsiz' | ✅ kod (`grep`), ⏳ canlı |
+| 5a/5b testleri | `vitest run lib/personel "app/api/personel" components/personel hooks` | 🟡 koşulmadı |
+| Yazıcı | `YaziciPanel`/`usePrintStation`/`qz-printer` testleri dosyada var; sekme sayfaya BAĞLI DEĞİL | 🟡 / ⏳ donanım (#171, #176) |
+| Güvenlik | `npm audit --omit=dev` 9 açık (3 orta, 6 yüksek); GitHub 39 uyarı | 🟡 high paket adları görülmedi (#144) |
+
