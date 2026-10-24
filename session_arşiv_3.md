@@ -1720,3 +1720,4 @@ Kapanış gerekçesi: admin düzenleme formu ve ImageKit yüklemesi canlıda uç
 
 | 4 | **[KAPANDI — #60 ✅, arşive taşındı; bu turda işaretlendi]** ~~Neon DB şifresini resetle, `.env.local`'i güncelle (#60, güvenlik)~~ | ✅ |
 Kapanış gerekçesi: #60 (Neon şifre reseti) zaten kapalı ve arşive taşınmıştı; bu satır yalnız işaret kalıntısıydı.
+https://github.com/Sovereign34/Bowlera_site
